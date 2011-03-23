@@ -1,0 +1,378 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Comic DataMapper Model
+ *
+ * Use this basic model as a comic for creating new models.
+ * It is not recommended that you include this file with your application,
+ * especially if you use a Comic library (as the classes may collide).
+ *
+ * To use:
+ * 1) Copy this file to the lowercase name of your new model.
+ * 2) Find-and-replace (case-sensitive) 'Comic' with 'Your_model'
+ * 3) Find-and-replace (case-sensitive) 'comic' with 'your_model'
+ * 4) Find-and-replace (case-sensitive) 'comics' with 'your_models'
+ * 5) Edit the file as desired.
+ *
+ * @license		MIT License
+ * @category	Models
+ * @author		Phil DeJarnett
+ * @link		http://www.overzealous.com
+ */
+class Comic extends DataMapper {
+
+	// Uncomment and edit these two if the class has a model name that
+	//   doesn't convert properly using the inflector_helper.
+	// var $model = 'comic';
+	// var $table = 'comics';
+
+	// You can override the database connections with this option
+	// var $db_params = 'db_config_name';
+
+	// --------------------------------------------------------------------
+	// Relationships
+	//   Configure your relationships below
+	// --------------------------------------------------------------------
+
+	// Insert related models that Comic can have just one of.
+	var $has_one = array();
+
+	// Insert related models that Comic can have more than one of.
+	var $has_many = array('chapter');
+
+	/* Relationship Examples
+	 * For normal relationships, simply add the model name to the array:
+	 *   $has_one = array('user'); // Comic has one User
+	 *
+	 * For complex relationships, such as having a Creator and Editor for
+	 * Comic, use this form:
+	 *   $has_one = array(
+	 *   	'creator' => array(
+	 *   		'class' => 'user',
+	 *   		'other_field' => 'created_comic'
+	 *   	)
+	 *   );
+	 *
+	 * Don't forget to add 'created_comic' to User, with class set to
+	 * 'comic', and the other_field set to 'creator'!
+	 *
+	 */
+
+	// --------------------------------------------------------------------
+	// Validation
+	//   Add validation requirements, such as 'required', for your fields.
+	// --------------------------------------------------------------------
+
+	var $validation = array(
+		'name' => array(
+			'rules' => array('required', 'unique', 'max_length' => 256),
+			'label' => 'Name'
+		),
+                'stub' => array(
+			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
+			'label' => 'Stub'
+		),
+                'uniqid' => array(
+			'rules' => array('required', 'max_length' => 256),
+			'label' => 'Uniqid'
+		),
+                'hidden' => array(
+			'rules' => array(),
+			'label' => 'Hidden'
+		),
+                'description' => array(
+			'rules' => array(),
+			'label' => 'Description'
+		),
+                'thumbnail' => array(
+			'rules' => array('max_length' => 512),
+			'label' => 'Thumbnail'
+		),
+                'lastseen' => array(
+			'rules' => array(),
+			'label' => 'Lastseen'
+		),
+                'creator' => array(
+			'rules' => array('required'),
+			'label' => 'Creator'
+		),
+                'editor' => array(
+			'rules' => array('required'),
+			'label' => 'Editor'
+		)
+	);
+
+	// --------------------------------------------------------------------
+	// Default Ordering
+	//   Uncomment this to always sort by 'name', then by
+	//   id descending (unless overridden)
+	// --------------------------------------------------------------------
+
+	// var $default_order_by = array('name', 'id' => 'desc');
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Constructor: calls parent constructor
+	 */
+    function __construct($id = NULL)
+	{
+		parent::__construct($id);
+    }
+
+	// --------------------------------------------------------------------
+	// Post Model Initialisation
+	//   Add your own custom initialisation code to the Model
+	// The parameter indicates if the current config was loaded from cache or not
+	// --------------------------------------------------------------------
+	function post_model_init($from_cache = FALSE)
+	{
+	}
+
+	// --------------------------------------------------------------------
+	// Custom Methods
+	//   Add your own custom methods here to enhance the model.
+	// --------------------------------------------------------------------
+
+	/* Example Custom Method
+	function get_open_comics()
+	{
+		return $this->where('status <>', 'closed')->get();
+	}
+	*/
+
+	// --------------------------------------------------------------------
+	// Custom Validation Rules
+	//   Add custom validation rules for this model here.
+	// --------------------------------------------------------------------
+
+	/* Example Rule
+	function _convert_written_numbers($field, $parameter)
+	{
+	 	$nums = array('one' => 1, 'two' => 2, 'three' => 3);
+	 	if(in_array($this->{$field}, $nums))
+		{
+			$this->{$field} = $nums[$this->{$field}];
+	 	}
+	}
+	*/
+
+
+
+
+        public function add_comic($name, $hidden = 0, $description = "")
+        {
+            $this->name = $name;
+            $this->stub = $name;
+            if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
+            $this->uniqid = uniqid();
+            $this->description = $description;
+
+            if (!$this->add_comic_dir())
+            {
+                log_message('error', 'add_comic: failed creating dir');
+                return false;
+            }
+            if(!$this->update_comic_db())
+            {
+                log_message('error', 'add_comic: failed writing to database');
+                $this->remove_comic_dir();
+                return false;
+            }
+
+            return true;
+        }
+
+        public function remove_comic()
+        {
+            if (!$this->remove_comic_db())
+            {
+                log_message('error', 'remove_comic: failed to delete database entry');
+                return false;
+            }
+
+            if(!$this->remove_comic_dir())
+            {
+                log_message('error', 'remove_comic: failed to delete dir');
+                return false;
+            }
+
+            return true;
+        }
+
+        public function update_comic_db($data = array())
+        {
+
+            // Check if we're updating or creating a new entry by looking at $data["id"].
+            // False is pushed if the ID was not found.
+            if(isset($data["id"]))
+            {
+                $this->where("id", $data["id"])->get();
+                if ($this->result_count() == 0)
+                {
+                    log_message('error', 'update_comic_db: failed to find requested id');
+                    return false;
+                }
+            }
+            else // let's set the creator name if it's a new entry
+            {
+                $this->creator = $this->logged_id();
+            }
+
+            // always set the editor name
+            $this->editor = $this->logged_id();
+
+            //
+            foreach($data as $key => $value)
+            {
+                $this->$key = $value;
+            }
+
+            // let's save and give some error check. Push false if fail, true if good.
+            $success = $this->save();
+            if (!$success)
+            {
+                if (!$this->valid)
+                {
+                    log_message('error', 'update_comic_db: failed validation');
+                } else {
+                    log_message('error', 'update_comic_db: failed to save');
+                }
+                return false;
+            }
+
+            return $this;
+        }
+
+        public function remove_comic_db()
+        {
+            if ($this->result_count() != 1)
+            {
+                log_message('error', 'remove_comic_db: id not found, entry not removed');
+                return false;
+            }
+
+            $chapters = new Chapter();
+            $chapters->where("comic_id", $this->id)->get();
+            foreach($chapters->all as $chapter)
+            {
+                $chapter->remove_chapter_db();
+            }
+
+            $temp = $this->get_clone();
+            $success = $this->delete();
+            if(!$success)
+            {
+                log_message('error', 'remove_comic_db: id found but entry not removed');
+                return false;
+            }
+
+            return $temp;
+        }
+
+        public function add_comic_dir()
+        {
+            if (!mkdir("content/comics/".$this->stub."_".$this->uniqid))
+            {
+                log_message('error', 'add_comic_dir: folder could not be created');
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public function remove_comic_dir()
+        {
+            $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
+            if (!delete_files($dir, TRUE))
+            {
+                log_message('error', 'remove_comic_dir: files inside folder could not be removed');
+                return false;
+            }
+            else
+            {
+                if(!rmdir($dir))
+                {
+                    log_message('error', 'remove_comic_dir: folder could not be removed');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public function add_comic_thumb($filedata)
+        {
+            if($this->thumbnail != "") $this->remove_comic_thumb();
+
+            $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
+            if (!copy($filedata["server_path"], $dir.$filedata["name"]))
+            {
+                log_message('error', 'add_comic_thumb: failed to create/copy the image');
+                return false;
+            }
+            $CI =& get_instance();
+            $CI->load->library('image_lib');
+
+            $image =  "thumb_".$filedata["name"];
+
+            $img_config['image_library'] = 'GD2';
+            $img_config['source_image'] = $filedata["server_path"];
+            $img_config["new_image"] = $dir.$image;
+            $img_config['maintain_ratio'] = TRUE;
+            $img_config['width'] = 250;
+            $img_config['height'] = 250;
+            $img_config['maintain_ratio'] = TRUE;
+            $img_config['master_dim'] = 'width';
+            $CI->image_lib->initialize($img_config);
+
+            if(!$CI->image_lib->resize())
+            {
+                log_message('error', 'add_comic_thumb: failed to create thumbnail');
+                return false;
+            }
+            $CI->image_lib->clear();
+
+            $this->thumbnail = $filedata["name"];
+            $this->save();
+
+            return $filedata["name"];
+        }
+
+
+        public function remove_comic_thumb()
+        {
+            $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
+            if (!unlink($dir.$this->thumbnail))
+            {
+                log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete image');
+                return false;
+            }
+
+            if (!unlink($dir."thumb_".$this->thumbnail))
+            {
+                log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete thumbnail');
+                return false;
+            }
+
+            $this->thumbnail = "";
+            if(!$this->save())
+            {
+                log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to remove from database');
+                return false;
+            }
+
+            return true;
+        }
+
+        public function get_thumb($full = FALSE)
+        {
+            return base_url()."content/comics/".$this->stub."_".$this->uniqid."/".($full ? "" : "thumb_").$this->thumbnail;
+        }
+
+}
+
+/* End of file comic.php */
+/* Location: ./application/models/comic.php */

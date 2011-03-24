@@ -210,6 +210,7 @@ class Comic extends DataMapper {
                 $this->where("id", $data["id"])->get();
                 if ($this->result_count() == 0)
                 {
+                    set_notice('error', 'The ID of the comic you wanted to edit doesn\'t exist.');
                     log_message('error', 'update_comic_db: failed to find requested id');
                     return false;
                 }
@@ -234,8 +235,10 @@ class Comic extends DataMapper {
             {
                 if (!$this->valid)
                 {
+                    set_notice('error', 'One or more of the fields you inputted didn\'t respect the values required.');
                     log_message('error', 'update_comic_db: failed validation');
                 } else {
+                    set_notice('error', 'Failed saving the Comic to database for unknown reasons.');
                     log_message('error', 'update_comic_db: failed to save');
                 }
                 return false;
@@ -248,6 +251,7 @@ class Comic extends DataMapper {
         {
             if ($this->result_count() != 1)
             {
+                set_notice('error', 'You tried removing a comic that doesn\'t exist');
                 log_message('error', 'remove_comic_db: id not found, entry not removed');
                 return false;
             }
@@ -263,6 +267,7 @@ class Comic extends DataMapper {
             $success = $this->delete();
             if(!$success)
             {
+                set_notice('error', 'The comic couldn\'t be removed from the database for unknown reasons.');
                 log_message('error', 'remove_comic_db: id found but entry not removed');
                 return false;
             }
@@ -274,13 +279,11 @@ class Comic extends DataMapper {
         {
             if (!mkdir("content/comics/".$this->stub."_".$this->uniqid))
             {
+                set_notice('error', 'The directory could not be created. Please, check file permissions.');
                 log_message('error', 'add_comic_dir: folder could not be created');
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         public function remove_comic_dir()
@@ -288,6 +291,7 @@ class Comic extends DataMapper {
             $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
             if (!delete_files($dir, TRUE))
             {
+                set_notice('error', 'The files inside the comic directory could not be removed. Please, check the file permissions.');
                 log_message('error', 'remove_comic_dir: files inside folder could not be removed');
                 return false;
             }
@@ -295,6 +299,7 @@ class Comic extends DataMapper {
             {
                 if(!rmdir($dir))
                 {
+                    set_notice('error', 'The directory could not be removed. Please, check file permissions.');
                     log_message('error', 'remove_comic_dir: folder could not be removed');
                     return false;
                 }
@@ -310,6 +315,7 @@ class Comic extends DataMapper {
             $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
             if (!copy($filedata["server_path"], $dir.$filedata["name"]))
             {
+                set_notice('error', 'Failed to create the thumbnail image for the comic. Check file permissions.');
                 log_message('error', 'add_comic_thumb: failed to create/copy the image');
                 return false;
             }
@@ -330,6 +336,7 @@ class Comic extends DataMapper {
 
             if(!$CI->image_lib->resize())
             {
+                set_notice('error', 'Failed to create the thumbnail image for the comic. Resize function didn\'t work');
                 log_message('error', 'add_comic_thumb: failed to create thumbnail');
                 return false;
             }
@@ -347,12 +354,14 @@ class Comic extends DataMapper {
             $dir = "content/comics/".$this->stub."_".$this->uniqid."/";
             if (!unlink($dir.$this->thumbnail))
             {
+                set_notice('error', 'Failed to remove the thumbnail\'s original image. Please, check file permissions.');
                 log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete image');
                 return false;
             }
 
             if (!unlink($dir."thumb_".$this->thumbnail))
             {
+                set_notice('error', 'Failed to remove the thumbnail image. Please, check file permissions.');
                 log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete thumbnail');
                 return false;
             }
@@ -360,6 +369,7 @@ class Comic extends DataMapper {
             $this->thumbnail = "";
             if(!$this->save())
             {
+                set_notice('error', 'Failed to remove the thumbnail image from the database.');
                 log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to remove from database');
                 return false;
             }

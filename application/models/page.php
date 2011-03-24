@@ -267,6 +267,7 @@ class Page extends DataMapper {
                 $this->where("id", $data["id"])->get();
                 if ($chapter->result_count() == 0)
                 {
+                    set_notice('error', 'There isn\'t a page in the database related to this ID.');
                     log_message('error', 'update_page_db: failed to find requested id');
                     return false;
                 }
@@ -275,6 +276,7 @@ class Page extends DataMapper {
             {    // let's also check that the related comic is defined, and exists
                 if(!isset($this->chapter_id))
                 {
+                    set_notice('error', 'There was no selected chapter.');
                     log_message('error', 'update_page_db: chapter_id was not set');
                     return false;
                 }
@@ -283,6 +285,7 @@ class Page extends DataMapper {
                 $chapter->where("id", $this->chapter_id)->get();
                 if($chapter->result_count() == 0)
                 {
+                    set_notice('error', 'The selected chapter doesn\'t exist.');
                     log_message('error', 'update_page_db: chapter_id does not exist in comic database');
                     return false;
                 }
@@ -305,10 +308,12 @@ class Page extends DataMapper {
             {
                 if (!$this->valid)
                 {
+                    set_notice('error', 'One or more fields had wrong types of value.');
                     log_message('error', 'update_page_db: failed validation');
                 }
                 else
                 {
+                    set_notice('error', 'Failed to write to database for unknown reasons.');
                     log_message('error', 'update_page_db: failed to save');
                 }
                 return false;
@@ -324,6 +329,7 @@ class Page extends DataMapper {
         {
             if(!$this->delete())
             {
+                set_notice('error', 'Failed to remove the page from the database.');
                 log_message('error', 'remove_page_db: failed remove page entry');
                 return false;
             }
@@ -335,6 +341,7 @@ class Page extends DataMapper {
             $dir = "content/comics/".$comicstub."_".$uniqid."/".$chapterstub."_".$uniqid2."/";
             if (!copy($filedata["server_path"], $dir.$filedata["name"]))
             {
+                set_notice('error', 'Failed to add the page\'s file. Please, check file permissions.');
                 log_message('error', 'add_page_file: failed to create/copy the image');
                 return false;
             }
@@ -353,6 +360,7 @@ class Page extends DataMapper {
 
             if(!$CI->image_lib->resize())
             {
+                set_notice('error', 'Failed to create the thumbnail of the page.');
                 log_message('error', 'add_page_file: failed to create thumbnail');
                 return false;
             }
@@ -366,12 +374,14 @@ class Page extends DataMapper {
             $dir = "content/comics/".$comicname."_".$uniqid."/".$chaptername."_".$uniqid2."/";
             if (!unlink($dir.$this->filename))
             {
+                set_notice('error', 'Failed to remove the page\'s file. Please, check file permissions.');
                 log_message('error', 'remove_page_file: failed to delete image');
                 return false;
             }
 
             if (!unlink($dir."thumb_".$this->filename))
             {
+                set_notice('error', 'Failed to remove the page\'s thumbnail. Please, check file permissions.');
                 log_message('error', 'remove_page_file: failed to delete thumbnail');
                 return false;
             }

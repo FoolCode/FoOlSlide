@@ -195,6 +195,7 @@ class Chapter extends DataMapper {
             $comic->where("id", $this->comic_id)->get();
             if($comic->result_count() == 0)
             {
+                set_notice('error', 'The comic ID you were adding the chapter to does not exist.');
                 log_message('error', 'add_chapter: comic_id does not exist in comic database');
                 return false;
             }
@@ -206,7 +207,6 @@ class Chapter extends DataMapper {
             }
             if(!$this->update_chapter_db())
             {
-                log_message('error', 'add_chapter: failed writing to database');
                 $this->remove_chapter_dir($comic->stub, $comic->uniqid);
                 return false;
             }
@@ -243,6 +243,7 @@ class Chapter extends DataMapper {
                 $this->where("id", $data["id"])->get();
                 if ($this->result_count() == 0)
                 {
+                    set_notice('error', 'The chapter you were referring to does not exist.');
                     log_message('error', 'update_chapter_db: failed to find requested id');
                     return false;
                 }
@@ -251,6 +252,7 @@ class Chapter extends DataMapper {
             {    // let's also check that the related comic is defined, and exists
                 if(!isset($this->comic_id))
                 {
+                    set_notice('error', 'You didn\'t select a chapter to refer to.');
                     log_message('error', 'update_chapter_db: comic_id was not set');
                     return false;
                 }
@@ -259,6 +261,7 @@ class Chapter extends DataMapper {
                 $comic->where("id", $this->comic_id)->get();
                 if($comic->result_count() == 0)
                 {
+                    set_notice('error', 'The comic you were referring to does not exist.');
                     log_message('error', 'update_chapter_db: comic_id does not exist in comic database');
                     return false;
                 }
@@ -267,6 +270,7 @@ class Chapter extends DataMapper {
                 $team->where("id", $this->team_id)->get();
                 if($team->result_count() == 0)
                 {
+                    set_notice('error', 'The team you were referring this chapter to for doesn\'t exist.');
                     log_message('error', 'update_chapter_db: team_id does not exist in team database');
                     return false;
                 }
@@ -290,8 +294,10 @@ class Chapter extends DataMapper {
                 if (!$this->valid)
                 {
                     log_message('error', $this->error->string);
+                    set_notice('error', 'One or more of the fields inputted had the wrong kind of values.');
                     log_message('error', 'update_chapter_db: failed validation');
                 } else {
+                    set_notice('error', 'Failed to save to database for unknown reasons.');
                     log_message('error', 'update_chapter_db: failed to save');
                 }
                 return false;
@@ -307,6 +313,7 @@ class Chapter extends DataMapper {
         {
             if ($this->result_count() == 0)
             {
+                set_notice('error', 'Couldn\'t find related chapter ID for removal.');
                 log_message('error', 'remove_chapter_db: id not found, entry not removed');
                 return false;
             }
@@ -321,6 +328,7 @@ class Chapter extends DataMapper {
             $success = $this->delete();
             if(!$success)
             {
+                set_notice('error', 'Failed to remove the chapter from the database for unknown reasons.');
                 log_message('error', 'remove_chapter_db: id found but entry not removed');
                 return false;
             }
@@ -334,6 +342,7 @@ class Chapter extends DataMapper {
             $dir = "content/comics/".$comicstub."_".$uniqid."/".$this->stub."_".$this->uniqid;
             if (!mkdir($dir))
             {
+                set_notice('error', 'Failed to create the chapter directory. Please, check file permissions.');
                 log_message('error', 'add_chapter_dir: folder could not be created');
                 return false;
             }
@@ -346,6 +355,7 @@ class Chapter extends DataMapper {
             $dir = "content/comics/".$comicstub."_".$uniqid."/".$this->stub."_".$this->uniqid."/";
             if (!delete_files($dir, TRUE))
             {
+                set_notice('error', 'Failed to remove the files inside the chapter directory. Please, check file permissions.');
                 log_message('error', 'remove_chapter_dir: files inside folder could not be removed');
                 return false;
             }
@@ -353,6 +363,7 @@ class Chapter extends DataMapper {
             {
                 if(!rmdir($dir))
                 {
+                    set_notice('error', 'Failed to remove the chapter directory. Please, check file permissions.');
                     log_message('error', 'remove_chapter_dir: folder could not be removed');
                     return false;
                 }

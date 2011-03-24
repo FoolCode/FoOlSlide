@@ -195,6 +195,7 @@ class Team extends DataMapper {
                 $this->where("id", $data["id"])->get();
                 if ($this->result_count() == 0)
                 {
+                    set_notice('error', 'Failed to find the selected team\'s ID.');
                     log_message('error', 'update_team_db: failed to find requested id');
                     return false;
                 }
@@ -218,10 +219,12 @@ class Team extends DataMapper {
             {
                 if ( $this->valid )
                 {
+                    set_notice('error', 'One or more fields contained the wrong value types.');
                     log_message('error', 'update_team: failed validation');
                 } 
                 else
                 {
+                    set_notice('error', 'Failed to update the team in the database for unknown reasons.');
                     log_message('error', 'update_team: failed to save');
                 }
                 return false;
@@ -237,6 +240,7 @@ class Team extends DataMapper {
         {
             if($this->result_count() != 1)
             {
+                set_notice('error', 'Failed to remove the chapter directory. Please, check file permissions.');
                 log_message('error', 'remove_team: id not found');
                 return false;
             }
@@ -249,6 +253,7 @@ class Team extends DataMapper {
                 {
                     if(!$chapter->remove_chapter())
                     {
+                        set_notice('error', 'Failed removing the chapters while removing the team.');
                         log_message('error', 'remove_team: failed removing chapter');
                         return false;
                     }
@@ -264,6 +269,7 @@ class Team extends DataMapper {
 
             if(!$this->delete())
             {
+                set_notice('error', 'Failed to delete the team for unknown reasons.');
                 log_message('error', 'remove_team: failed removing team');
                 return false;
             }
@@ -277,6 +283,7 @@ class Team extends DataMapper {
         {
             if (count($array) < 1)
             {
+                set_notice('error', 'There were no groups selected.');
                 log_message('error', 'get_groups: input array empty');
                 return false;
             }
@@ -287,6 +294,7 @@ class Team extends DataMapper {
                 $team->where("name", $array[0])->get();
                 if($team->result_count() < 1)
                 {
+                    set_notice('error', 'There\'s no team under this ID.');
                     log_message('error', 'get_groups: team not found');
                     return false;
                 }
@@ -303,6 +311,7 @@ class Team extends DataMapper {
                     $team->where('name', $arra[$key])->get();
                     if($team->result_count() < 1)
                     {
+                        set_notice('error', 'There\'s no teams under this ID.');
                         log_message('error', 'get_groups: team not found');
                         return false;
                     }
@@ -318,7 +327,8 @@ class Team extends DataMapper {
                     }
                 }
             }
-
+            
+            set_notice('error', 'There\'s no group found with this ID.');
             log_message('error', 'get_groups: no case matched');
             return false;
         }

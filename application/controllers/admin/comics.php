@@ -20,7 +20,7 @@ class Comics extends Admin_Controller {
 
 	function manage($page = 1)
         {
-            $data["title"] = "Comics » manager";
+            $this->viewdata["function_title"] = "manage";
 
             $comics = new Comic();
             $comics->order_by('name', 'ASC');
@@ -44,7 +44,7 @@ class Comics extends Admin_Controller {
                 return false;
             }
 
-            $data["title"] = "Comic » ".$comic->name;
+            $this->viewdata["function_title"] = $comic->name;
             $data["comic"] = $comic;
 
             if($chapter_id != "")
@@ -55,7 +55,7 @@ class Comics extends Admin_Controller {
 
                 $data["chapter"] = $chapter->get();
                 $data["teams"] = $team->get_teams_name($chapter->team_id, $chapter->joint_id);
-                $data["title"] = "Comic » ".$comic->name." » " .(($chapter->name != "") ? $chapter->name : $chapter->chapter.".".$chapter->subchapter);
+                $this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter.".".$chapter->subchapter);
 
                 
                 $data["pages"] = $chapter->get_pages();
@@ -87,8 +87,8 @@ class Comics extends Admin_Controller {
 
         function add_new()
         {
-            $data["title"] = "Comics » Add new";
-            $this->viewdata["main_content_view"] = $this->load->view("admin/comics/add_new.php", $data, TRUE);
+            $this->viewdata["function_title"] = "Add new";
+            $this->viewdata["main_content_view"] = $this->load->view("admin/comics/add_new.php",NULL, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
 

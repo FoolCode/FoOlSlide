@@ -197,10 +197,12 @@ class Joint extends DataMapper {
                     {
                         if($joint->valid)
                         {
+                            set_notice('error', 'One or more fields had wrong value types.');
                             log_message('error', 'add_joint: validation failed');
                         }
                         else
                         {
+                            set_notice('error', 'Couldn\'t save Joint to database due to an unknown error.');
                             log_message('error', 'add_joint: saving failed');
                         }
                         return false;
@@ -216,6 +218,7 @@ class Joint extends DataMapper {
         {
             if(!$this->delete_all())
             {
+                set_notice('error', 'The joint couldn\'t be removed.');
                 log_message('error', 'remove_joint: failed deleting');
                 return false;
             }
@@ -233,10 +236,12 @@ class Joint extends DataMapper {
             {
                 if($joint->valid)
                 {
+                    set_notice('error', 'One or more fields had wrongly inpiutted data.');
                     log_message('error', 'add_team (joint.php): validation failed');
                 }
                 else
                 {
+                    set_notice('error', 'Couldn\'t add team to joint for unknown reasons.');
                     log_message('error', 'add_team (joint.php): saving failed');
                 }
                 return false;
@@ -248,6 +253,7 @@ class Joint extends DataMapper {
             $this->where('team_id', $team_id)->get();
             if (!$this->delete())
             {
+                set_notice('error', 'Couldn\'t remove the team from the joint.');
                 log_message('error', 'remove_team (joint.php): removing failed');
                 return false;
             }
@@ -259,6 +265,7 @@ class Joint extends DataMapper {
             $joints->where('team_id', $team_id)->get();
             if (!$joints->delete_all())
             {
+                set_notice('error', 'Couldn\'t remove the team from all the joints.');
                 log_message('error', 'remove_team_from_all (joint.php): removing failed');
                 return false;
             }

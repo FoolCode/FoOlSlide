@@ -7,6 +7,7 @@ class Comics extends Admin_Controller {
 		parent::__construct();
                 $this->ion_auth->logged_in() or redirect('auth/login');
                 $this->ion_auth->is_admin() or redirect('admin');
+                $this->ion_auth->is_admin() or die(1);
                 $this->load->model('files_model');
                 $this->load->library('form_validation');
                 $this->load->library('pagination');
@@ -116,7 +117,6 @@ class Comics extends Admin_Controller {
                     $comic = new Comic();
                     if (!$comic->add_comic($name, $hidden, $description))
                     {
-                        set_notice('error', 'There was an error while adding the comic.');
                         $this->add_new();
                     }
                     else
@@ -146,14 +146,12 @@ class Comics extends Admin_Controller {
 
                     if(!$groups_id = $this->team_model->get_teams_id($groups))
                     {
-                        set_notice('error', 'There was an error while looking for the group(s).');
                         $this->add_new();
                         return false;
                     }
 
                     if (!$comic = $this->comic_model->add_chapter($name, $comic_id, $chapter, $subchapter, $groups_id["team_id"], $groups_id["joint_id"], $hidden, $description))
                     {
-                        set_notice('error', 'There was an error while adding the chapter.');
                         $this->add_new();
                         return false;
                     }
@@ -221,7 +219,8 @@ class Comics extends Admin_Controller {
                         log_message("error", "Controller: comics.php/remove: failed comic removal");
                         return false;
                     }
-                    redirect("admin/comics/manage");
+                    $this->session->set_flashdata('notices', array('notice','The comic '.$comic->name.' has been removed'));
+                    redirect("/admin/comics/manage");
                     break;
                 case("chapter"):
                     $chapter = new Chapter();

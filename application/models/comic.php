@@ -93,11 +93,11 @@ class Comic extends DataMapper {
 			'label' => 'Lastseen'
 		),
                 'creator' => array(
-			'rules' => array('required'),
+			'rules' => array(''),
 			'label' => 'Creator'
 		),
                 'editor' => array(
-			'rules' => array('required'),
+			'rules' => array(''),
 			'label' => 'Editor'
 		)
 	);
@@ -167,7 +167,14 @@ class Comic extends DataMapper {
             if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
             $this->uniqid = uniqid();
             $this->description = $description;
-
+            $this->validate();
+            if(!$this->valid)
+            {
+                set_notice('error', 'Some of the fields you have inputted have values of the wrong type.');
+                return false;
+            }
+            
+            
             if (!$this->add_comic_dir())
             {
                 log_message('error', 'add_comic: failed creating dir');
@@ -185,15 +192,15 @@ class Comic extends DataMapper {
 
         public function remove_comic()
         {
-            if (!$this->remove_comic_db())
-            {
-                log_message('error', 'remove_comic: failed to delete database entry');
-                return false;
-            }
-
             if(!$this->remove_comic_dir())
             {
                 log_message('error', 'remove_comic: failed to delete dir');
+                return false;
+            }
+            
+            if (!$this->remove_comic_db())
+            {
+                log_message('error', 'remove_comic: failed to delete database entry');
                 return false;
             }
 

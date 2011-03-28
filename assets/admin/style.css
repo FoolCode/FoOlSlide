@@ -22,18 +22,7 @@ body
     overflow-y:scroll;
 }
 
-.wrapper
-{
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -4em;
-}
 
-#footer, .push
-{
-    height: 3em;
-}
 
 a
 {
@@ -142,7 +131,17 @@ textarea:focus, textarea:hover
 #header
 {
     background:#333;
-    padding:10px;
+    padding:7px;
+}
+
+#header a
+{
+    color:#bbb;
+}
+
+#header a:hover
+{
+    color:#fff;
 }
 
 #header .title
@@ -150,8 +149,40 @@ textarea:focus, textarea:hover
     color:#f6f6f6;
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     font-weight:normal;
-    font-size:23px;
+    font-size:18px;
 }
+
+#header .logout
+{
+    float:right;
+    margin:2px 15px 0;
+}
+
+#footer
+{
+    font-family: Cambria, Georgia, Times, Times New Roman, serif;
+    background:#333;
+    clear:both;
+    margin-top:1em;
+}
+#footer .text
+{
+    padding:0.5em 1em 0;
+}
+
+.wrapper
+{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -3em;
+}
+
+#footer, .push
+{
+    height: 2em;
+}
+
 
 #sidebar
 {
@@ -212,7 +243,17 @@ textarea:focus, textarea:hover
 }
 
 
+#background
+{
+    position:fixed;
+    bottom:20px; right:30px;
+    z-index:-1;
+}
 
+#background img
+{
+    width:800px;
+}
 
 
 
@@ -365,23 +406,4 @@ textarea:focus, textarea:hover
 {
     text-align:right;
     margin:12px;
-}
-
-
-
-
-
-
-
-
-#footer
-{
-    font-family: Cambria, Georgia, Times, Times New Roman, serif;
-    background:#333;
-    clear:both;
-    margin-top:1em;
-}
-#footer .text
-{
-    padding:1em 1em 0;
 }

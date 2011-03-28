@@ -34,7 +34,7 @@ class Comics extends Admin_Controller {
 
 
 
-        function comic($stub, $chapter_id = "", $page_id = "")
+        function comic($stub = NULL, $chapter_id = "", $page_id = "")
         {
             $comic = new Comic();
             $comic->where("stub", $stub)->get();
@@ -138,19 +138,17 @@ class Comics extends Admin_Controller {
                 case "chapter":
                     $comic_id = $this->input->post('comic_id');
                     $name = $this->input->post('name');
-                    $chapter = $this->input->post('number');
+                    $number = $this->input->post('number');
                     $subchapter = $this->input->post('subchapter');
                     $groups = $this->input->post('groups');
                     $hidden = $this->input->post('hidden');
                     $description = $this->input->post('description');
 
-                    if(!$groups_id = $this->team_model->get_teams_id($groups))
-                    {
-                        $this->add_new();
-                        return false;
-                    }
+                    $team = new Team();
+                    $groups_id = $team->get_teams_id($groups);
 
-                    if (!$comic = $this->comic_model->add_chapter($name, $comic_id, $chapter, $subchapter, $groups_id["team_id"], $groups_id["joint_id"], $hidden, $description))
+                    $chapter = new chapter();
+                    if (!$comic = $chapter->add_chapter($name, $comic_id, $number, $subchapter, $groups_id["team_id"], $groups_id["joint_id"], $hidden, $description))
                     {
                         $this->add_new();
                         return false;
@@ -159,7 +157,7 @@ class Comics extends Admin_Controller {
                     {
                         $comics = new Comic();
                         $chapter->where("id", $comic->id)->get();
-                        redirect("admin/comics/comic/".$chapter->number);
+                        redirect("admin/comics/comic/".$comic->stub."/".$chapter->number);
                     }
             }
 
@@ -217,10 +215,9 @@ class Comics extends Admin_Controller {
                     if(!$comic->remove_comic())
                     {
                         log_message("error", "Controller: comics.php/remove: failed comic removal");
-                        return false;
                     }
-                    $this->session->set_flashdata('notices', array('notice','The comic '.$comic->name.' has been removed'));
-                    redirect("/admin/comics/manage");
+                    flash_notice('notice','The comic '.$comic->name.' has been removed');
+                    redirect("admin/comics/manage");
                     break;
                 case("chapter"):
                     $chapter = new Chapter();
@@ -228,7 +225,6 @@ class Comics extends Admin_Controller {
                     if(!$comic = $chapter->remove_chapter())
                     {
                         log_message("error", "Controller: comics.php/remove: failed chapter removal");
-                        return false;
                     }
                     redirect("admin/comics/comic/".$comic->stub);
                     break;
@@ -238,7 +234,6 @@ class Comics extends Admin_Controller {
                     if(!$data = $page->remove_page())
                     {
                         log_message("error", "Controller: comics.php/remove: failed page removal");
-                        return false;
                     }
                     redirect("admin/comics/comic/".$data["comic"]->stub."/".$data["chapter"]->id);
                     break;

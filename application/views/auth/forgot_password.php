@@ -1,14 +1,22 @@
-<h1>Forgot Password</h1>
-<p>Please enter your email address so we can send you an email to reset your password.</p>
-
 <div id="infoMessage"><?php echo $message;?></div>
 
 <?php echo form_open("auth/forgot_password");?>
 
-      <p>Email Address:<br />
-      <?php echo form_input($email);?>
-      </p>
-      
-      <p><?php echo form_submit('submit', 'Submit');?></p>
-      
+<table class="form">
+    <tr>
+      	<td>Email:</td>
+        <?php $email["placeholder"] = "required"; ?>
+      	<td><?php echo form_input($email);?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <?php echo form_submit(NULL, 'Submit'); ?>
+        </td>
+    </tr>
+</table>
+
 <?php echo form_close();?>
+<div class="smalltext">
+    <a href="<?= site_url('auth/login'); ?>">Back to login</a>
+</div>

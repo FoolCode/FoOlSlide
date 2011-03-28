@@ -1,4 +1,4 @@
-<div id="login" class='mainInfo'>
+<div id="login" class='mainInfo login_form'>
 
     <div class="pageTitleBorder"></div>
 	
@@ -28,4 +28,9 @@
       
     <?php echo form_close();?>
 
+</div>
+
+<div class="smalltext">
+    <a href="<?= site_url('auth/create_user'); ?>">Register</a>
+    | <a href="<?= site_url('auth/forgot_password'); ?>">Forgot your password?</a>
 </div>

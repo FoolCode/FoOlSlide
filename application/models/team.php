@@ -318,14 +318,15 @@ class Team extends DataMapper {
                     $id_array[$key] = $team->id;
                 }
                 $joint = new Joint();
-                if(!$joint->check_joint($id_array) && $create_joint)
+                if(!$joint_id = $joint->check_joint($id_array) && $create_joint)
                 {
-                    if(!$joint->add_joint($id_array))
+                    if(!$joint_id = $joint->add_joint($id_array))
                     {
                         log_message('error', 'get_groups: could not create new joint');
                         return false;
                     }
                 }
+                return array("team_id" => 0, "joint_id" => $joint_id);
             }
             
             set_notice('error', 'There\'s no group found with this ID.');

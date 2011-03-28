@@ -1,8 +1,5 @@
-<div class='mainInfo'>
+    <div class='mainInfo register_form'>
 
-	<h1>Create User</h1>
-	<p>Please enter the users information below.</p>
-	
 	<div id="infoMessage"><?php echo $message;?></div>
 	
     <?php echo form_open("auth/create_user");?>
@@ -29,12 +26,16 @@
                 echo form_input($password_confirm); ?></td>
     </tr>
     <tr>
-        <td><?= form_reset() ?> </td>
-        <td><?php echo form_submit('submit', 'Create User');?></td>
+        <td><?= form_reset(NULL,'Reset fields') ?> </td>
+        <td><?php echo form_submit('submit', 'Submit');?></td>
     </tr>
 </table>
 
       
     <?php echo form_close();?>
 
+</div>
+
+<div class="smalltext">
+    <a href="<?= site_url('auth/login'); ?>">Back to login</a>
 </div>

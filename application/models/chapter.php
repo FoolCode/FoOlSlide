@@ -69,15 +69,15 @@ class Chapter extends DataMapper {
 			'label' => 'Name'
 		),
                 'comic_id' => array(
-			'rules' => array('is_numeric', 'required', 'max_length' => 256),
+			'rules' => array('is_int', 'required', 'max_length' => 256),
 			'label' => 'Comic ID'
 		),
                 'team_id' => array(
-			'rules' => array('is_numeric', 'max_length' => 256),
+			'rules' => array('is_int', 'max_length' => 256),
 			'label' => 'Team ID'
 		),
                 'joint_id' => array(
-			'rules' => array('is_numeric', 'max_length' => 256),
+			'rules' => array('is_int', 'max_length' => 256),
 			'label' => 'Joint ID'
 		),
                 'stub' => array(
@@ -85,11 +85,11 @@ class Chapter extends DataMapper {
 			'label' => 'Stub'
 		),
                 'chapter' => array(
-			'rules' => array('is_numeric', 'required'),
+			'rules' => array('is_int', 'required'),
 			'label' => 'Chapter number'
 		),
                 'subchapter' => array(
-			'rules' => array('is_numeric'),
+			'rules' => array('is_int'),
 			'label' => 'Subchapter number'
 		),
                 'uniqid' => array(
@@ -97,7 +97,7 @@ class Chapter extends DataMapper {
 			'label' => 'Uniqid'
 		),
                 'hidden' => array(
-			'rules' => array('is_numeric'),
+			'rules' => array('is_int'),
 			'label' => 'Hidden'
 		),
                 'description' => array(
@@ -178,7 +178,7 @@ class Chapter extends DataMapper {
 	*/
 
 
-        public function add_chapter($name = "", $comic_id, $chapter, $subchapter = 0, $team_id = 0, $joint_id = 0, $hidden = 0, $description = "")
+        public function add_chapter($name, $comic_id, $chapter, $subchapter = 0, $team_id = 0, $joint_id = 0, $hidden = 0, $description = "")
         {
             $this->name = $name;
             $this->comic_id = $comic_id;
@@ -186,7 +186,7 @@ class Chapter extends DataMapper {
             $this->joint_id = $joint_id;
             $this->chapter = $chapter;
             if ($subchapter >= 1) $this->subchapter = $subchapter; else $this->subchapter = 0;
-            $this->stub = $chapter."_".$subchapter."_".$name;
+            $this->stub = $this->stub($chapter."_".$subchapter."_".$name);
             if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
             $this->uniqid = uniqid();
             $this->description = $description;
@@ -211,22 +211,22 @@ class Chapter extends DataMapper {
                 return false;
             }
 
-            return true;
+            return $comic;
         }
 
         public function remove_chapter()
         {
-            if (!$this->remove_chapter_db())
-            {
-                log_message('error', 'remove_chapter: failed to delete database entry');
-                return false;
-            }
-
             $comic = new Comic();
             $comic->where("id", $this->comic_id)->get();
             if(!$this->remove_chapter_dir($comic->stub, $comic->uniqid))
             {
                 log_message('error', 'remove_chapter: failed to delete dir');
+                return false;
+            }
+            
+            if (!$this->remove_chapter_db())
+            {
+                log_message('error', 'remove_chapter: failed to delete database entry');
                 return false;
             }
 

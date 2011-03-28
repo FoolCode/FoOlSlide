@@ -19,6 +19,10 @@
                     location.href = href;
                 }
             }
+            function addField()
+            {
+                
+            }
         </script>
 
 </head>
@@ -28,9 +32,23 @@
 <body>
 
     <div class="wrapper">
+        
+        <div id="background">
+            <img src="http://i.imgur.com/zfFXd.png" />
+        </div>
 
 <div id="header">
-	<div class="title">FoOlSlide control panel</div>
+    <div class="logout">
+        <?php
+            if(logged_in())
+            {
+                ?>
+        <a href="<?= site_url('auth/logout'); ?>">Logout</a>
+                <?php
+            }
+        ?>
+    </div>
+    <div class="title">FoOlSlide control panel</div>
 
 </div>
 
@@ -59,6 +77,15 @@
         <?php
         if (isset($this->notices))
         foreach($this->notices as $key => $value)
+        {
+            if($value["type"] == 'error') $color = 'red';
+            if($value["type"] == 'warn') $color = 'yellow';
+            if($value["type"] == 'notice') $color = 'green';
+            echo '<div class="alert '.$color.'">'.$value["message"].'</div>';
+        }
+        $flashdata = $this->session->flashdata('notices');
+        if(!empty($flashdata))
+        foreach($flashdata as $key => $value)
         {
             if($value["type"] == 'error') $color = 'red';
             if($value["type"] == 'warn') $color = 'yellow';

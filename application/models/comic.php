@@ -264,8 +264,8 @@ class Comic extends DataMapper {
             }
 
             $chapters = new Chapter();
-            $chapters->where("comic_id", $this->id)->get();
-            foreach($chapters->all as $chapter)
+            $chapters->where("comic_id", $this->id)->get_iterated();
+            foreach($chapters as $chapter)
             {
                 $chapter->remove_chapter_db();
             }

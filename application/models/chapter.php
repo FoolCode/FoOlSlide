@@ -311,16 +311,9 @@ class Chapter extends DataMapper {
 
         public function remove_chapter_db()
         {
-            if ($this->result_count() == 0)
-            {
-                set_notice('error', 'Couldn\'t find related chapter ID for removal.');
-                log_message('error', 'remove_chapter_db: id not found, entry not removed');
-                return false;
-            }
-
             $pages = new Page();
-            $pages->where('chapter_id', $this->id)->get();
-            foreach($pages->all as $page)
+            $pages->where('chapter_id', $this->id)->get_iterated();
+            foreach($pages as $page)
             {
                 $page->remove_page_db();
             }

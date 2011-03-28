@@ -102,7 +102,7 @@
 
 </div>
 
-<div id="footer"><div class="text">FoOlRulez FoOlSlide</div></div>
+<div id="footer"><div class="text"></div></div>
 </body>
 
 </html>

@@ -130,6 +130,12 @@ class Comics extends Admin_Controller {
                             {
                                 log_message("error", "Controller: comics.php/add: image failed being added to folder");
                             }
+                            if ( ! unlink($data["full_path"]))
+                            {
+                                set_notice('error', 'comics.php/add: couldn\'t remove cache file '.$data["full_path"]);
+                                return false;
+                            }
+                            
                         }
 
                         redirect("admin/comics/comic/".$comics->stub);
@@ -186,6 +192,7 @@ class Comics extends Admin_Controller {
                     }
                     if ( ! unlink($data["full_path"]))
                     {
+                       set_notice('error', 'comics.php/upload: couldn\'t remove cache file '.$data["full_path"]);
                        return false;
                     }
 

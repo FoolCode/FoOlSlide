@@ -15,6 +15,7 @@ class Files_model extends CI_Model {
             $chapter = new Chapter();
             $chapter->where("id", $data["chapter_id"])->get();
             $uniqid = uniqid();
+            $overwrite = ($data["overwrite"] == 1);
             $cachedir = 'content/cache/'.$data["raw_name"]."_".$uniqid;
             if(!mkdir($cachedir))
             {

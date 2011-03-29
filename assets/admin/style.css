@@ -347,9 +347,19 @@ textarea:focus, textarea:hover
 
 #center table.form tr td
 {
-    border-bottom: 1px dotted #aaa;
+    border-bottom: 1px solid #ddd;
+    border-color:rgba(20,20,20,0.1);
     height:33px;
-    padding: 5px 5px;
+    padding: 5px;
+    padding-left:20px;
+}
+
+#center table.form tr td:first-child
+{
+    width:25%;
+    border-right:1px solid #aaa;
+    border-right:1px solid rgba(20,20,20,0.2);
+    padding:5px;
 }
 
 
@@ -364,7 +374,13 @@ textarea:focus, textarea:hover
 {
     padding:8px 8px 5px 8px;
     border-bottom: 1px solid #999;
+    border-color:rgba(20,20,20,0.3);
     margin-top:5px;
+}
+
+.list.comics .item:hover, .list.chapters .item:hover
+{
+       border-color:rgba(20,20,20,0.8); 
 }
 
 .list.comics .item .title, .list.chapters .item .title
@@ -388,20 +404,61 @@ textarea:focus, textarea:hover
     padding: 8px 0;
 }
 
-.list.pages .imagebox
+
+.list.pages > table
 {
-    border: 1px solid #999;
-    height:200px;
-    padding:5px;
-    float:left;
-    margin:5px;
+    width:100%;
+    text-align:center;
 }
 
-.list.pages .imagebox img
+.list.pages > table tr
 {
-    max-width:200px;
-    max-height:200px;
+    width:100%;
+    height:200px;
 }
+
+.list.pages > table td
+{
+    width:30%;
+    height:220px;
+    max-width:180px;
+    border: 1px solid #999;
+    margin:5px;
+    text-align:center;
+    position:relative;
+    background:rgba(20,20,20,0.1);
+}
+
+
+.list.pages > table img
+{
+    max-height:100%;
+    max-width:100%;
+}
+
+.list.pages > table td .controls
+{
+    position:absolute;
+    bottom:0px;
+    right:0px;
+    padding: 3px;
+    background:#333;
+    background:rgba(20,20,20,0.6);
+    display:block;
+    color:#fff;
+    text-shadow:none;
+    font-size:12px;
+    text-align:right;
+}
+
+.list.pages > table td .controls:hover
+{
+    display:block;
+    background:rgba(20,20,20,0.9);
+    color:#fff;
+}
+
+
 
 .list .navi
 {

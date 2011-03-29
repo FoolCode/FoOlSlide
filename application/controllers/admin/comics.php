@@ -188,6 +188,7 @@ class Comics extends Admin_Controller {
                     {
                         $data = $this->upload->data();
                         $data["chapter_id"] = $this->input->post('chapter_id');
+                        $data["overwrite"] = $this->input->post('overwrite');
                         $this->files_model->compressed_chapter($data);
                     }
                     if ( ! unlink($data["full_path"]))
@@ -195,7 +196,11 @@ class Comics extends Admin_Controller {
                        set_notice('error', 'comics.php/upload: couldn\'t remove cache file '.$data["full_path"]);
                        return false;
                     }
-
+                    $chapter = new Chapter();
+                    $chapter->where('id', $data["chapter_id"])->get();
+                    $comic = new Comic();
+                    $comic->where('id', $chapter->comic_id)->get();
+                    redirect('admin/comics/comic/'.$comic->stub.'/'.$data["chapter_id"]);
                     break;
                 case "page":
                     $config['allowed_types'] = 'gif|jpg|png';

@@ -54,7 +54,7 @@
 	 * Columns in your meta table,
 	 * id not required.
 	 **/
-	$config['columns']             = array('nickname');
+	$config['columns']             = array();
 	
 	/**
 	 * A database column which is used to

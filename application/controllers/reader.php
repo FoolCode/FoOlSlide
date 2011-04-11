@@ -30,10 +30,18 @@ class Reader extends Public_Controller {
         public function lista($page = 1)
         {
             $comic = new Comic();
-            $comic->get_paged_iterated($page, 20);
-            $data["comic"] = $comic;
+            //$comic->include_related('chapter');
+            $comic->get_paged($page, 20);
+            foreach($comic->all as $item)
+            {
+                $chapter = new Chapter();
+                $chapter->where('comic_id', $item->id)->limit('1')->get();
+                $item->chapter = $chapter;
+            }
+            
+            $this->template->set('comic', $comic);
             $this->template->title('Comic list');
-            $this->template->build('list', $data);
+            $this->template->build('list');
             
         }
         

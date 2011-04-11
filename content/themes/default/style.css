@@ -7,6 +7,7 @@ body
 	margin:0 auto;
 	padding:0;
 	background:#f6f6f6;
+        background-image:url('http://dl.getdropbox.com/u/22432998/stripe_15ebad07cf94da02e114766d21e979e3.png');
 }
 
 a
@@ -48,11 +49,8 @@ h2
 {
 	background:#999;
 	background:rgba(80,80,80,0.6);
-	margin: 6px;
+	//margin: 6px;
 	padding:10px;
-	-webkit-border-radius:4px;
-	border-radius:4px;
-	-moz-border-radius:4px;
 }
 
 #navig #title
@@ -291,17 +289,26 @@ h2
 	padding:1px 15px 5px 15px;	
 	border-radius:4px;
 	-webkit-border-radius:4px;
-	-moz-border-radius:4px;}
-
-.theList .chapter
-{
-	width:910px;margin:3px 0 3px;
-	padding:4px 10px;
-	border: 1px solid #f6f6f6;
-	text-align:left;
-	border-radius:4px;
-	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
+}
+
+.theList .element
+{
+	width:95%;
+        margin:3px 0 3px;
+	padding:4px 10px;
+	border-bottom: 1px solid #f6f6f6;
+	text-align:left;
+        font-size:18px;
+        position:relative;
+}
+
+.theList .element .details
+{
+    position:absolute;
+    bottom:1px;
+    right:5px;
+    font-size:13px;
 }
 
 .listed

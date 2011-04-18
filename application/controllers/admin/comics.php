@@ -45,7 +45,7 @@ class Comics extends Admin_Controller {
                 return false;
             }
 
-            $this->viewdata["function_title"] = $comic->name;
+            $this->viewdata["function_title"] = '<a href="'.site_url('admin/comics/comic').'/'.$comic->stub.'">'.$comic->name.'</a>';
             $data["comic"] = $comic;
 
             if($chapter_id != "")
@@ -156,7 +156,7 @@ class Comics extends Admin_Controller {
                     $chapter = new chapter();
                     if (!$comic = $chapter->add_chapter($name, $comic_id, $number, $subchapter, $groups_id["team_id"], $groups_id["joint_id"], $hidden, $description))
                     {
-                        $this->add_new();
+                        redirect("admin/comics/comic/".$comic->stub);
                         return false;
                     }
                     else

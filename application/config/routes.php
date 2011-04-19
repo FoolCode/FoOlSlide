@@ -41,6 +41,7 @@
 $route['default_controller'] = "index";
 $route['admin'] = "admin/index";
 $route['reader/list'] = 'reader/lista';
+$route['admin/users/users'] = 'admin/users/usersa';
 $route['404_override'] = '';
 
 

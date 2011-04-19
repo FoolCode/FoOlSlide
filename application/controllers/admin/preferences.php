@@ -22,22 +22,83 @@ class Preferences extends Admin_Controller {
         {
             $this->viewdata["function_title"] = "General";
             
-            $this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", NULL, TRUE);
+            
+            $form = array();
+
+
+            $form[] = array(
+                'Site title',
+                array(
+                     'type'        => 'input',
+                     'name'        => 'fs_gen_site_title',
+                     'id'          => 'site_title',
+                     'maxlength'   => '200',
+                     'placeholder' => 'manga reader'
+                )
+            );
+
+            $form[] = array(
+                'Back URL',
+                array(
+                     'type'        => 'input',
+                     'name'        => 'fs_gen_back_url',
+                     'id'          => 'back_url',
+                     'maxlength'   => '200',
+                     'placeholder' => 'http://'
+                )
+            );
+
+            $form[] = array(
+                'Default team',
+                array(
+                     'type'        => 'input',
+                     'name'        => 'fs_gen_default_team',
+                     'id'          => 'default_team',
+                     'maxlength'   => '200',
+                     'placeholder' => 'Anonymous'
+                )
+            );
+
+            $form[] = array(
+                'Show Anonymous as team?',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_gen_anon_team_show',
+                     'id'          => 'anon_team_show',
+                     'placeholder' => ''
+                )
+            );
+
+            $form[] = array(
+                "",
+                array(
+                     'type'        => 'submit',
+                     'name'        => 'submit',
+                     'id'          => 'submit',
+                     'value' => 'Save'
+                )
+            );
+            
+            if($post = $this->input->post())
+            {
+                $this->_submit($post);
+            }
+            
+            $table = tabler($form, FALSE);
+
+            $data['table'] = $table;
+            
+            
+            $this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
         
-        function submit()
+        function _submit($post)
         {
-            $post = $this->input->post();
-            var_dump($this->input->post());
-            $goto = $post['goto'];
-            unset($post['goto']); /*
             foreach($post as $key => $item)
             {
-                $this->update('preferences', array('value' => $value), array('name', $name));
+                $this->db->update('preferences', array('value' => $item), array('name' => $key));
             }
-            //redirect($goto);
-            */
         }
         
         

@@ -8,10 +8,10 @@ class tools
             $object->$field = preg_replace('/[^a-z0-9_]/i', '', $object->$field);
         }
         
-        public function stub($input)
+        public function stubr($input)
         {
-            $input = strtolower(str_replace(" ", "_", $input));
-            return preg_replace('/[^a-z0-9_]/i', '', $input);
+            $input->name = strtolower(str_replace(" ", "_", $input->name));
+            return preg_replace('/[^a-z0-9_]/i', '', $input->name);
         }
 
         public function logged_id()

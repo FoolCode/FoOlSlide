@@ -66,7 +66,8 @@ class Comic extends DataMapper {
 	var $validation = array(
 		'name' => array(
 			'rules' => array('required', 'unique', 'max_length' => 256),
-			'label' => 'Name'
+			'label' => 'Name',
+			'type'	=> 'input'
 		),
                 'stub' => array(
 			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
@@ -78,15 +79,18 @@ class Comic extends DataMapper {
 		),
                 'hidden' => array(
 			'rules' => array(),
-			'label' => 'Hidden'
+			'label' => 'Hidden',
+			'type'	=> 'checkbox'
 		),
                 'description' => array(
 			'rules' => array(),
-			'label' => 'Description'
+			'label' => 'Description',
+			'type'	=> 'textfield'
 		),
                 'thumbnail' => array(
 			'rules' => array('max_length' => 512),
-			'label' => 'Thumbnail'
+			'label' => 'Thumbnail',
+			'type'	=> 'image'
 		),
                 'lastseen' => array(
 			'rules' => array(),

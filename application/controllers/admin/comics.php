@@ -34,7 +34,7 @@ class Comics extends Admin_Controller {
 
 
 
-        function comic($stub = NULL, $chapter_id = "", $page_id = "")
+        function comic($stub = NULL, $chapter_id = "")
         {
             $comic = new Comic();
             $comic->where("stub", $stub)->get();
@@ -79,6 +79,7 @@ class Comics extends Admin_Controller {
                     $chapters[$key]->joint = $teams;
                 }
             }
+			
             $data["chapters"] = $chapters;
 
             $this->viewdata["main_content_view"] = $this->load->view("admin/comics/comic.php", $data, TRUE);

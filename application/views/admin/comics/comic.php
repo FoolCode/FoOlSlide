@@ -2,6 +2,7 @@
     <a href="<?= site_url('admin/comics/'.$comic->stub.'/edit_comic'); ?>" onclick="slideToggle('#edit_comic'); slideToggle('#info_comic'); return false;">Edit comic data</a>
     | <a href="#" onclick="confirmPlug('<?php echo site_url('admin/comics/remove/comic/'.$comic->id); ?>', 'Do you really want to delete this comic and all its chapters and pages?'); return false;">Delete comic</a>
 </div>
+
 <div id="info_comic"><table class="form">
     <tr>
         <td>

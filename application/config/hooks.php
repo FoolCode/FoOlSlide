@@ -10,7 +10,13 @@
 |
 */
 
-
+$hook['post_controller_constructor'][] = array(
+                                 'class'    => '',
+                                 'function' => 'load_defaults',
+                                 'filename' => 'loader.php',
+                                 'filepath' => 'hooks',
+                                 'params'   => array()
+                                 );
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

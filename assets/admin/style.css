@@ -370,7 +370,7 @@ textarea:focus, textarea:hover
 .list
 {}
 
-.list.comics .item, .list.chapters .item
+.list.comics .item, .list.chapters .item, .list .item
 {
     padding:8px 8px 5px 8px;
     border-bottom: 1px solid #999;
@@ -378,28 +378,28 @@ textarea:focus, textarea:hover
     margin-top:5px;
 }
 
-.list.comics .item:hover, .list.chapters .item:hover
+.list.comics .item:hover, .list.chapters .item:hover, .list .item:hover
 {
        border-color:rgba(20,20,20,0.8); 
 }
 
-.list.comics .item .title, .list.chapters .item .title
+.list.comics .item .title, .list.chapters .item .title, .list .item .title
 {
     font-size:17px;
 }
 
-.list.comics .item .smalltext, .list.chapters .item .smalltext
+.list.comics .item .smalltext, .list.chapters .item .smalltext, .list .item .smalltext
 {
     font-size:11px;
     margin-top:2px;
 }
 
-.list.comics .item .info, .list.chapters .item .info
+.list.comics .item .info, .list.chapters .item .info, .list .item .info
 {
     float:right;
 }
 
-.list.comics .item form, .list.chapters .item form
+.list.comics .item form, .list.chapters .item form, .list .item form
 {
     padding: 8px 0;
 }

@@ -18,15 +18,24 @@ class Admin_Controller extends MY_Controller {
                         ),
                     "comics" => array(
                         "name" => "Comics",
-                        "level" => "team",
+                        "level" => "mod",
                         "content" => array(
-                                "manage" => array("level" => "team", "name" => "Manage"),
-                                "add_new" => array("level" => "team","name" => "Add new")
+                                "manage" => array("level" => "mod", "name" => "Manage"),
+                                "add_new" => array("level" => "mod","name" => "Add new")
                             )
+                        ),
+                    "users" => array(
+                        "name" => "Users",
+                        "level" => "mod",
+                         "content" => array(
+                               "users" => array("level" => "mod", "name" => "User list"),
+                               "teams" => array("level" => "mod", "name" => "Team list"),
+                               "home_team" => array("level" => "mod", "name" => "Home team")
+                             )
                         ),
                     "preferences" => array(
                         "name" => "Preferences",
-                        "level" => "team",
+                        "level" => "admin",
                          "content" => array(
                                "general" => array("level" => "admin", "name" => "General")
                              )

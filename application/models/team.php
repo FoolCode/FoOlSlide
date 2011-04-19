@@ -66,35 +66,42 @@ class Team extends DataMapper {
 	var $validation = array(
 		'name' => array(
 			'rules' => array('required', 'unique', 'max_length' => 256),
-			'label' => 'Name'
+			'label' => 'Name',
+			'type'	=> 'input'
 		),
                 'stub' => array(
-			'rules' => array('required','stub', 'unique', 'max_length' => 256),
+			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
 			'label' => 'Stub'
 		),
                 'url' => array(
 			'rules' => array('max_length' => 256),
-			'label' => 'URL'
+			'label' => 'URL',
+			'type'	=> 'input'
 		),
                 'forum' => array(
 			'rules' => array('max_length' => 256),
-			'label' => 'Forum'
+			'label' => 'Forum',
+			'type'	=> 'input'
 		),
-                'IRC' => array(
+                'irc' => array(
 			'rules' => array('max_length' => 256),
-			'label' => 'IRC'
+			'label' => 'IRC',
+			'type'	=> 'input'
 		),
                 'twitter' => array(
 			'rules' => array(),
-			'label' => 'Twitter'
+			'label' => 'Twitter username',
+			'type'	=> 'input'
 		),
                 'facebook' => array(
 			'rules' => array(),
-			'label' => 'Facebook'
+			'label' => 'Facebook',
+			'type'	=> 'input'
 		),
                 'facebookid' => array(
 			'rules' => array('max_length' => 512),
-			'label' => 'Facebook page ID'
+			'label' => 'Facebook page ID',
+			'type'	=> 'input'
 		),
                 'lastseen' => array(
 			'rules' => array(),
@@ -207,17 +214,22 @@ class Team extends DataMapper {
 
             // always set the editor name
             $this->editor = $this->logged_id();
+			
 
+					
             //
             foreach($data as $key => $value)
             {
                 $this->$key = $value;
             }
+			
+			
+			if(!isset($this->stub)) $this->stub = $this->stubr();
 
-            // let's save and give some error check. Push false if fail, true if good.
+			// let's save and give some error check. Push false if fail, true if good.
             if (!$this->save())
             {
-                if ( $this->valid )
+                if ( ! $this->valid )
                 {
                     set_notice('error', 'One or more fields contained the wrong value types.');
                     log_message('error', 'update_team: failed validation');

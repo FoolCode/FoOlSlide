@@ -224,7 +224,7 @@ class Team extends DataMapper {
             }
 			
 			
-			if(!isset($this->stub)) $this->stub = $this->stubr();
+			if(!isset($this->stub)) $this->stub = $this->stub();
 
 			// let's save and give some error check. Push false if fail, true if good.
             if (!$this->save())

@@ -7,7 +7,19 @@ if (!function_exists('tabler'))
         $result = array();
         $CI =& get_instance();
         
-        
+		
+		$rows[] = array(
+                "",
+                array(
+                     'type'        => 'submit',
+                     'name'        => 'submit',
+                     'id'          => 'submit',
+                     'value'       => 'Save'
+                )
+            );
+		
+        $echo = "";
+
         foreach($rows as $rowk => $row)
         {
             foreach ($row as $colk => $column)
@@ -34,46 +46,71 @@ if (!function_exists('tabler'))
             }
         }
         
-        $echo = "";
-        
+        // echo '<pre>'; print_r($result); echo '</pre>';
 		if ($list && $edit)
 		{
 			$echo .= '<div class="smalltext">
-				<a href="" onclick="slideToggle(\'.form.plain\'); slideToggle(\'.form.edit\'); return false;">Edit data</a>
+				<a href="" onclick="slideToggle(\'.plain\'); slideToggle(\'.edit\'); return false;">Edit data</a>
 					</div>';
 		}
 		
         if ($list)
         {
-            $echo .= '<table class="form plain">';
+            $echo .= '<div class="plain"><table class="form">';
             foreach($result as $rowk => $row)
             {
-				if ($row[1]['table'] != 'Save'){
+				if ($row[1]['table'] != 'Save' && $row[0]['table'] != 'id'){
 					$echo .= '<tr>';
 					foreach($row as $column)
 					{
-						$echo .= '<td>'.$column['table'].'</td>';
+						$echo .= '<td>';
+						if (is_array($column['table']))
+						{
+							foreach($column['table'] as $mini)
+							{
+								$echo .= ''.$mini->name.' ';
+							}
+						}
+						else $echo .= $column['table'];
+						$echo .= '</td>';
 					}
 					$echo .= '</tr>';
 				}
             }
-            $echo .= '</table>';
+            $echo .= '</table></div>';
         }
         
 		
         if ($edit)
         {
-            $echo .= '<table class="form edit"'.(($list && $edit)?'style="display:none;"':'').'>';
+            $echo .= '<div class="edit" '.(($list && $edit)?'style="display:none;"':'').'><table class="form">';
             foreach($result as $rowk => $row)
             {
-                $echo .= '<tr>';
-                foreach($row as $column)
-                {
-                    $echo .= '<td>'.$column['form'].'</td>';
-                }
-                $echo .= '</tr>';
+				if (false)
+				{
+					//$echo .= $row[1]['form'];
+				}
+				else
+				{
+					$echo .= '<tr>';
+					foreach($row as $column)
+						{
+							$echo .= '<td>';
+							if (is_array($column['form']))
+							{
+								foreach($column['form'] as $mini)
+								{
+									$echo .= ''.$mini.' ';
+								}
+							}
+							else $echo .= $column['form'];
+							$echo .= '</td>';
+						}
+					$echo .= '</tr>';
+				}
+                
             }
-            $echo .= '</table>';
+            $echo .= '</table></div>';
         }
         return $echo;
     }
@@ -84,6 +121,7 @@ if (!function_exists('formize'))
 {
     function formize($column)
     {
+		// FIX THIS ABSURDITY: no need to always check in database this bull!
         $CI =& get_instance();
         $query = $CI->db->get_where('preferences', array('name' => $column['name']), 1);
         $qarray = array();
@@ -91,16 +129,39 @@ if (!function_exists('formize'))
         {
             $column['value'] = $row->value;
         }
-        
-        
+                
         if($column['type'] == 'checkbox')
         {
            $column['value'] = '1';
         }
-         
+        
         $formize = 'form_'.$column['type'];
+		$type = $column['type'];
         unset($column['type']);
-        return $formize($column);
+		
+		if(is_array($column['value']))
+		{
+			$result = array();
+			$column['name'] .= '[]';
+			$minion = $column['value'];
+			foreach($minion as $mini)
+			{
+				$column['value'] = $mini->name;
+				$result[] = $formize($column);
+			}
+		}
+		else
+		{
+			//echo '<pre>'; print_r($column); echo '</pre>';
+			if($type == 'hidden')
+			{
+				$result = $formize($column['name'], $column['value']);
+			}
+			else $result = $formize($column);
+		}
+		
+		
+        return $result;
     }
 }
 
@@ -140,6 +201,11 @@ if (!function_exists('ormer'))
 		$rows = $db->validation;
 		foreach($rows as $key => $row)
 		{
+			if($key == 'id')
+			{
+				$row['type'] = 'hidden';
+			}
+			
 			if(!isset($row['value'])) $row['value'] = '';
 			
 			if(isset($row['type']))
@@ -155,17 +221,8 @@ if (!function_exists('ormer'))
 				);
 			}
 		}
-		
-		$result[] = array(
-                "",
-                array(
-                     'type'        => 'submit',
-                     'name'        => 'submit',
-                     'id'          => 'submit',
-                     'value'       => 'Save'
-                )
-            );
-		
+		//		echo '<pre>'; print_r($result); echo '</pre>';
+
 		return $result;
 	}
 }

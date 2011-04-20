@@ -1,4 +1,8 @@
-<div class="smalltext">
+<?php
+
+echo $table;
+
+/*<div class="smalltext">
     <a href="<?php site_url('/admin/comics/'.$comic->stub.'/edit_comic'); ?>" onclick="slideToggle('#edit_chapter'); slideToggle('#info_chapter'); return false;">Edit chapter data</a>
     | <a href="#" onclick="confirmPlug('<?php echo site_url('admin/comics/remove/chapter/'.$chapter->id); ?>', 'Do you really want to delete this chapter and all its pages?'); return false;">Delete chapter</a>
 </div>
@@ -137,7 +141,7 @@
 <?php echo form_close(); ?>
 </div>
 
-
+*/ ?>
 
 <div class="section">Pages:</div>
 <div class="smalltext"><a href="<?= site_url('admin/comics/'.$comic->stub.'/add_chapter'); ?>" onclick="slideToggle('#addnew_page'); return false;">Add new</a>

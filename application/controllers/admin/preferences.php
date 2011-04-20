@@ -69,16 +69,6 @@ class Preferences extends Admin_Controller {
                 )
             );
 
-            $form[] = array(
-                "",
-                array(
-                     'type'        => 'submit',
-                     'name'        => 'submit',
-                     'id'          => 'submit',
-                     'value' => 'Save'
-                )
-            );
-            
             if($post = $this->input->post())
             {
                 $this->_submit($post);

@@ -51,6 +51,10 @@ td
     padding: 3px;
 }
 
+form {
+	display:block;
+}
+
 
 input[type="text"], input[type="password"]
 {

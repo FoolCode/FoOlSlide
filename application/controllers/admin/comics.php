@@ -50,12 +50,38 @@ class Comics extends Admin_Controller {
 
             if($chapter_id != "")
             {
+				if($this->input->post())
+				{
+					$chapter = new Chapter();
+					if($chapter->update_chapter($this->input->post()))
+					{
+						redirect('/admin/comics/comic/'.$comic->stub.'/'.$chapter->id);
+					}
+				}
+				
                 $chapter = new Chapter();
                 $chapter->where('id', $chapter_id);
-                $team = new Team();
-
-                $data["chapter"] = $chapter->get();
-                $data["teams"] = $team->get_teams_name($chapter->team_id, $chapter->joint_id);
+				$data["chapter"] = $chapter->get();
+				
+                $team = new Team();                
+				$teams = $team->get_teams_name($chapter->team_id, $chapter->joint_id);
+				
+				$table = ormer($chapter);
+				
+				$table[] = array(
+					'Teams',
+					array(
+						'name' => 'team',
+						'type' => 'input',
+						'value' => $teams
+					)
+				);
+				
+				$table = tabler($table);
+				
+				$data["table"] = $table;
+				
+                
                 $this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter.".".$chapter->subchapter);
 
                 
@@ -87,14 +113,14 @@ class Comics extends Admin_Controller {
         }
 
 
-        function add_new()
+        function add_new($comic)
         {
             $this->viewdata["function_title"] = "Add new";
             $this->viewdata["main_content_view"] = $this->load->view("admin/comics/add_new.php",NULL, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
 
-        function add($type)
+        function _add($type)
         {
             switch($type){
                 case "comic":
@@ -142,6 +168,7 @@ class Comics extends Admin_Controller {
                         redirect("admin/comics/comic/".$comics->stub);
                     }
                     break;
+					/*
                 case "chapter":
                     $comic_id = $this->input->post('comic_id');
                     $name = $this->input->post('name');
@@ -165,7 +192,7 @@ class Comics extends Admin_Controller {
                         $comics = new Comic();
                         $chapter->where("id", $comic->id)->get();
                         redirect("admin/comics/comic/".$comic->stub."/".$chapter->number);
-                    }
+                    } */
             }
 
         }

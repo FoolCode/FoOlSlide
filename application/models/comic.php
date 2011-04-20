@@ -90,7 +90,8 @@ class Comic extends DataMapper {
                 'thumbnail' => array(
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail',
-			'type'	=> 'image'
+			'type'	=> 'file',
+			'display' => 'image'
 		),
                 'lastseen' => array(
 			'rules' => array(),

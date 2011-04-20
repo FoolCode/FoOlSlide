@@ -7,8 +7,13 @@ class tools
             $object->$field = strtolower(str_replace(" ", "_", $object->$field));
             $object->$field = preg_replace('/[^a-z0-9_]/i', '', $object->$field);
         }
+		
+		public function rule_checkbox($object, $field, $param = '')
+        {
+			if ($object->$field == 1) $object->$field = 1; else $object->$field = 0;
+        }
         
-        public function stubr($input)
+        public function stub($input)
         {
             $input->name = strtolower(str_replace(" ", "_", $input->name));
             return preg_replace('/[^a-z0-9_]/i', '', $input->name);

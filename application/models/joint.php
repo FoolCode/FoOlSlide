@@ -177,6 +177,24 @@ class Joint extends DataMapper {
 
         }
 
+		// $teams is an array of names
+		public function add_joint_via_name($teams)
+		{
+			$result = array();
+			foreach($teams as $team)
+			{
+				$tea = new Team();
+				$tea->where('name', $team)->get();
+				if($tea->result_count() == 0)
+				{
+					set_notice('error', 'One of the named teams does not exist.');
+                    log_message('error', 'add_joint_via_name: team does not exist');
+				}
+				$result[] = $tea->id;
+			}
+			$this->add_joint($result);
+		}
+		
         // $teams is an array of IDs
         public function add_joint($teams)
         {

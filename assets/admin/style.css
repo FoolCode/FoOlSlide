@@ -203,11 +203,25 @@ textarea:focus, textarea:hover
 
 
 
+
+
+#background
+{
+    position:fixed;
+    bottom:0px; right:30px;
+    z-index:-1;
+}
+
+#background img
+{
+    width:800px;
+}
+
 #header
 {
-    background:#444;
-    padding:7px;
-	text-shadow:1px 0px 1px #111;
+    background:#BCE3F5;
+    padding:10px;
+	border-bottom:1px solid #156F9C;
 }
 
 #header a
@@ -222,27 +236,41 @@ textarea:focus, textarea:hover
 
 #header .title
 {
-    color:#f6f6f6;
+    color:#fff;
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     font-weight:normal;
-    font-size:18px;
+    font-size:20px;
+	text-shadow:0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000, 0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000;
 }
 
 #header .logout
 {
     float:right;
     margin:2px 15px 0;
+	color:#156F9C;
+	text-shadow:0px 0px 1px #fff;
+}
+
+#header .logout a
+{
+	color:#156F9C;
+}
+
+#header .logout a:hover
+{
+	color:#333;
 }
 
 #footer
 {
     font-family: Cambria, Georgia, Times, Times New Roman, serif;
-    background:#444;
+    background:#BCE3F5;
     clear:both;
     margin-top:1em;
-	text-shadow:0px 1px 1px #111;
 	color:#888;
+	display:none;
 }
+
 #footer .text
 {
     padding:0.5em 1em 0;
@@ -270,8 +298,7 @@ textarea:focus, textarea:hover
     min-width:190px;
     min-height:500px;
     color:#333;
-    margin:0px 10px 10px 0;
-    border-right:1px solid #666;
+    margin:15px 10px 10px 0;
 }
 
 #sidebar a
@@ -279,39 +306,57 @@ textarea:focus, textarea:hover
     color:#333
 }
 
+#sidebar .collection
+{
+	background: #F5F5F5;
+	background:rgba(246,246,246,0.6);
+	padding: 0 0 5px 0;
+	margin-top:5px;
+	border-radius:4px;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+	border:1px solid #bbb;
+}
+
 #sidebar .group
 {
     padding:3px 3px 3px 10px;
-    margin-top:8px;
-    border-bottom:1px solid #222;
+    margin:0px 0px 5px;
     font-style:italic;
     color:#888;
-    font-size: 16px;
+    font-size: 17px;
+	border-bottom:1px solid #ccc;
+	
+	border-top-left-radius:4px;
+	-moz-border-radius-topleft:4px;
+	-webkit-border-top-left-radius:4px;
+	border-top-right-radius:4px;
+	-moz-border-radius-topright:4px;
+	-webkit-border-top-right-radius:4px;
+	
+	
+	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
+	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
+    background-image: -o-linear-gradient(#FDFDFD, #EEECEC);
 
 }
 
 #sidebar .element
 {
     padding:3px 3px 3px 15px;
-    margin:4px 6px 0px 8px;
-    border-left:5px solid #666;
-    border-radius:4px;
+    margin:4px 3px 0px 3px;
+    border-bottom:1px solid transparent;
+    border-top:1px solid transparent;
+	border-radius:4px;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
-    border-top-left-radius:0px;
-    -webkit-top-left-radius:0px;
-    -moz-border-radius-topleft:0px;
-    border-bottom-left-radius:0px;
-    -webkit-bottom-left-radius:0px;
-    -moz-border-radius-bottomleft:0px;
+	
 }
 
 #sidebar .element:hover
 {
-    background:#888;
-    color:#fafafa;
-    border-color:#000;
-    text-shadow:none;
+    border-top-color:#bbb;
+	border-bottom-color:#fff;
 }
 
 #sidebar .active
@@ -322,19 +367,6 @@ textarea:focus, textarea:hover
 }
 
 
-#background
-{
-    position:fixed;
-    bottom:20px; right:30px;
-    z-index:-1;
-}
-
-#background img
-{
-    width:800px;
-}
-
-
 
 
 
@@ -342,8 +374,8 @@ textarea:focus, textarea:hover
 
 #content_wrap
 {
-    width:960px;
-    margin:0 auto;
+    width:95%;
+    margin:0 0 0 10px;
     color:#666;
     color:rgba(0,0,0,0.6);
     text-shadow: 1px 1px #f6f6f6;
@@ -377,6 +409,7 @@ textarea:focus, textarea:hover
     font-size:23px;
     font-style:italic;
     margin-bottom:10px;
+	text-indent:15px;
 }
 
 #center > .section

@@ -258,3 +258,22 @@ if (!function_exists('ormer'))
 		return $result;
 	}
 }
+
+if (!function_exists('buttoner'))
+{
+    function buttoner($texturl)
+    {
+		if(is_array($texturl))
+		{
+			$echo = '<div class="gbuttons">';
+			foreach($texturl as $key => $item)
+			{
+				$echo .= '<a class="gbutton" ';
+				if(isset($texturl['onclick'])) $echo .= 'onclick="'.addslashes($texturl['onclick']).'" ';
+				if(isset($texturl['href'])) $echo .= 'href="'.addslashes($texturl['href']).'" ';
+				$echo .= '>'.$texturl['text'].'</a>';
+			}
+			$echo .= '<div class="clearer_r"></div></div>';
+		}
+	}
+}

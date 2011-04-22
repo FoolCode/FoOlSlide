@@ -48,16 +48,18 @@ class Admin_Controller extends MY_Controller {
                 foreach ($this->sidebar as $key => $item) {
                     if ( ($this->ion_auth->is_admin() || $this->ion_auth->is_group($item["level"]))  &&  !empty($item))
                     {
-			$result .= '<div class="group">'.$item["name"].'</div>';
-			foreach ($item["content"] as $subkey => $subitem)
-			{
-                                if ( ($this->ion_auth->is_admin() || $this->ion_auth->is_group($subitem["level"])) )
-				{
-				//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
-                                $is_active = "";
-                                    $result .= '<a href="'.site_url(array("admin", $key, $subkey)).'"><div class="element'.$is_active.'">'.$subitem["name"].'</div></a>';
-				}
-			}
+						$result .= '<div class="collection">';
+						$result .= '<div class="group">'.$item["name"].'</div>';
+						foreach ($item["content"] as $subkey => $subitem)
+						{
+											if ( ($this->ion_auth->is_admin() || $this->ion_auth->is_group($subitem["level"])) )
+							{
+							//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
+											$is_active = "";
+												$result .= '<a href="'.site_url(array("admin", $key, $subkey)).'"><div class="element'.$is_active.'">'.$subitem["name"].'</div></a>';
+							}
+						}
+						$result .= '</div>';
                     }
 
 

@@ -34,7 +34,7 @@
     <div class="wrapper">
         
         <div id="background">
-            <img src="http://i.imgur.com/zfFXd.png" />
+            <img src="<?php echo base_url() ?>assets/admin/images/admin_background.png" />
         </div>
 
 <div id="header">

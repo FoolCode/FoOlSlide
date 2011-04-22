@@ -53,7 +53,7 @@ class Comics extends Admin_Controller {
 				if($this->input->post())
 				{
 					$chapter = new Chapter();
-					if($chapter->update_chapter($this->input->post()))
+					if($chapter->update_chapter_db($this->input->post()))
 					{
 						redirect('/admin/comics/comic/'.$comic->stub.'/'.$chapter->id);
 					}
@@ -107,20 +107,58 @@ class Comics extends Admin_Controller {
             }
 			
             $data["chapters"] = $chapters;
+			
+			$comic->thumbnail = $comic->get_thumb();
+			
+			$table = ormer($comic);
+			
+			
+			$table = tabler($table);
+			$data['table'] = $table;
 
             $this->viewdata["main_content_view"] = $this->load->view("admin/comics/comic.php", $data, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
 
 
-        function add_new($comic)
+        function add_new($stub = "")
         {
-            $this->viewdata["function_title"] = "Add new";
+			$this->viewdata["function_title"] = "Add new";
+			
+			if($stub != "")
+			{
+				$comic = new Comic();
+				$comic->where('stub', $stub)->get();
+				$this->viewdata["extra_title"][] = "Chapter in ".$comic->name;
+				$chapter = new Chapter();
+				$chapter->comic_id = $comic->id;
+				
+				$table = ormer($chapter);
+				
+				$table[] = array(
+					'Teams',
+					array(
+						'name' => 'team',
+						'type' => 'input',
+						'value' => array()
+					)
+				);
+				
+				$table = tabler($table, FALSE, TRUE);
+				
+				$data["table"] = $table;
+				
+				$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
+				$this->load->view("admin/default.php", $this->viewdata);
+				return true;
+			}
+            
+			$this->viewdata["extra_title"][] = "Comic";
             $this->viewdata["main_content_view"] = $this->load->view("admin/comics/add_new.php",NULL, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
 
-        function _add($type)
+        function add($type)
         {
             switch($type){
                 case "comic":
@@ -167,32 +205,7 @@ class Comics extends Admin_Controller {
 
                         redirect("admin/comics/comic/".$comics->stub);
                     }
-                    break;
-					/*
-                case "chapter":
-                    $comic_id = $this->input->post('comic_id');
-                    $name = $this->input->post('name');
-                    $number = $this->input->post('number');
-                    $subchapter = $this->input->post('subchapter');
-                    $groups = $this->input->post('groups');
-                    $hidden = $this->input->post('hidden');
-                    $description = $this->input->post('description');
-
-                    $team = new Team();
-                    $groups_id = $team->get_teams_id($groups);
-
-                    $chapter = new chapter();
-                    if (!$comic = $chapter->add_chapter($name, $comic_id, $number, $subchapter, $groups_id["team_id"], $groups_id["joint_id"], $hidden, $description))
-                    {
-                        redirect("admin/comics/comic/".$comic->stub);
-                        return false;
-                    }
-                    else
-                    {
-                        $comics = new Comic();
-                        $chapter->where("id", $comic->id)->get();
-                        redirect("admin/comics/comic/".$comic->stub."/".$chapter->number);
-                    } */
+                    break;					
             }
 
         }

@@ -34,12 +34,16 @@ if (!function_exists('tabler'))
                     if(!isset($column['value'])) $column['value'] = "";
                     if(is_array($column))
                     {
-                        $result[$rowk][$colk]["table"] = $column['value'];
-                        if(isset($column['type'])) $result[$rowk][$colk]["form"] = formize($column);
+                        $result[$rowk][$colk]["table"] = writize($column);
+                        if(isset($column['type'])) 
+						{
+							$result[$rowk][$colk]["form"] = formize($column);
+							$result[$rowk][$colk]["type"] = $column['type'];
+						}
                     }
                     else 
                     {
-                        $result[$rowk][$colk]["table"] = $column;
+                        $result[$rowk][$colk]["table"] = writize($column);
                         $result[$rowk][$colk]["form"] = $column;
                     }    
                 }
@@ -49,8 +53,9 @@ if (!function_exists('tabler'))
         // echo '<pre>'; print_r($result); echo '</pre>';
 		if ($list && $edit)
 		{
-			$echo .= '<div class="smalltext">
-				<a href="" onclick="slideToggle(\'.plain\'); slideToggle(\'.edit\'); return false;">Edit data</a>
+			$echo .= '<div class="gbuttons">
+				<a class="gbutton" href="" onclick="slideToggle(\'.plain\'); slideToggle(\'.edit\'); return false;">Edit data</a>
+					<div class="clearer_r"></div>
 					</div>';
 		}
 		
@@ -59,22 +64,30 @@ if (!function_exists('tabler'))
             $echo .= '<div class="plain"><table class="form">';
             foreach($result as $rowk => $row)
             {
-				if ($row[1]['table'] != 'Save' && $row[0]['table'] != 'id'){
-					$echo .= '<tr>';
-					foreach($row as $column)
+				if ($row[1]['type'] == 'hidden')
+				{
+					//$echo .= $row[1]['form'];
+				}
+				else
+				{
+					if ($row[1]['table'] != 'Save' && $row[0]['table'] != 'id')
 					{
-						$echo .= '<td>';
-						if (is_array($column['table']))
+						$echo .= '<tr>';
+						foreach($row as $column)
 						{
-							foreach($column['table'] as $mini)
+							$echo .= '<td>';
+							if (is_array($column['table']))
 							{
-								$echo .= ''.$mini->name.' ';
+								foreach($column['table'] as $mini)
+								{
+									$echo .= ''.$mini->name.' ';
+								}
 							}
+							else $echo .= $column['table'];
+							$echo .= '</td>';
 						}
-						else $echo .= $column['table'];
-						$echo .= '</td>';
+						$echo .= '</tr>';
 					}
-					$echo .= '</tr>';
 				}
             }
             $echo .= '</table></div>';
@@ -86,9 +99,9 @@ if (!function_exists('tabler'))
             $echo .= '<div class="edit" '.(($list && $edit)?'style="display:none;"':'').'><table class="form">';
             foreach($result as $rowk => $row)
             {
-				if (false)
+				if ($row[1]['type'] == 'hidden')
 				{
-					//$echo .= $row[1]['form'];
+					$echo .= $row[1]['form'];
 				}
 				else
 				{
@@ -149,11 +162,16 @@ if (!function_exists('formize'))
 				$column['value'] = $mini->name;
 				$result[] = $formize($column);
 			}
+			if(empty($result))
+			{
+				$column['value'] = "";
+				$result[] = $formize($column);
+			}
 		}
 		else
 		{
-			//echo '<pre>'; print_r($column); echo '</pre>';
-			if($type == 'hidden')
+			// echo '<pre>'; print_r($column); echo '</pre>';
+			if($type == 'hidden' && isset($column["value"]))
 			{
 				$result = $formize($column['name'], $column['value']);
 			}
@@ -163,6 +181,18 @@ if (!function_exists('formize'))
 		
         return $result;
     }
+}
+
+function writize($column)
+{
+	//echo '<pre>'; print_r($column); echo '</pre>';
+
+	if(isset($column['display']))
+	{
+		if($column['display'] == 'image')
+		$column['value'] = '<img src="'.$column['value'].'" />';
+	}
+	return $column['value'];
 }
 
 
@@ -207,6 +237,7 @@ if (!function_exists('ormer'))
 			}
 			
 			if(!isset($row['value'])) $row['value'] = '';
+			if(!isset($row['display'])) $row['display'] = '';
 			
 			if(isset($row['type']))
 			{	
@@ -216,7 +247,8 @@ if (!function_exists('ormer'))
 					array(
 						'name' => addslashes($key),
 						'value' => addslashes($row['value']),
-						'type' => addslashes($row['type'])
+						'type' => addslashes($row['type']),
+						'display' => addslashes($row['display'])
 					)
 				);
 			}

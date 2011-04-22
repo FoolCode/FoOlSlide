@@ -85,12 +85,12 @@ class Comic extends DataMapper {
                 'description' => array(
 			'rules' => array(),
 			'label' => 'Description',
-			'type'	=> 'textfield'
+			'type'	=> 'textarea'
 		),
                 'thumbnail' => array(
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail',
-			'type'	=> 'file',
+			'type'	=> 'upload',
 			'display' => 'image'
 		),
                 'lastseen' => array(

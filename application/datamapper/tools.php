@@ -15,8 +15,10 @@ class tools
         
         public function stub($input)
         {
-            $input->name = strtolower(str_replace(" ", "_", $input->name));
-            return preg_replace('/[^a-z0-9_]/i', '', $input->name);
+			if(isset($input->stub)) $val = $input->stub;
+			else $val = $input->name;
+            $val = strtolower(str_replace(" ", "_", $val));
+            return preg_replace('/[^a-z0-9_]/i', '', $val);
         }
 
         public function logged_id()

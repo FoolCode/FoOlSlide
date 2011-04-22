@@ -43,12 +43,12 @@
             if(logged_in())
             {
                 ?>
-        <a href="<?= site_url('auth/logout'); ?>">Logout</a>
+        <a href="<?= site_url('auth/logout'); ?>">Logout <?php echo $this->ion_auth->get_user()->username; ?></a>
                 <?php
             }
         ?>
     </div>
-    <div class="title">FoOlSlide control panel</div>
+    <div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide control panel</div>
 
 </div>
 
@@ -102,7 +102,7 @@
 
 </div>
 
-<div id="footer"><div class="text"></div></div>
+<div id="footer"><div class="text">FoOlSlide Version <?php echo get_setting('fs_priv_version') ?></div></div>
 </body>
 
 </html>

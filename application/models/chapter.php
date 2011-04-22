@@ -71,7 +71,8 @@ class Chapter extends DataMapper {
 		),
                 'comic_id' => array(
 			'rules' => array('is_int', 'required', 'max_length' => 256),
-			'label' => 'Comic ID'
+			'label' => 'Comic ID',
+			'type'	=> 'hidden'
 		),
                 'team_id' => array(
 			'rules' => array('is_int', 'max_length' => 256),
@@ -187,19 +188,9 @@ class Chapter extends DataMapper {
         
 		public function add_chapter($data)
 		{
-           /* $this->name = $name;
-            $this->comic_id = $comic_id;
-            $this->team_id = $team_id;
-            $this->joint_id = $joint_id;
-            $this->chapter = $chapter;
-            if ($subchapter >= 1) $this->subchapter = $subchapter; else $this->subchapter = 0;
-            $this->stub = $this->stub($chapter."_".$subchapter."_".$name);
-            if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
-            
-            $this->description = $description; */
 			$this->to_stub = $data['chapter']."_".$data['subchapter']."_".$data['name'];
-			if (!isset($this->uniqid)) $this->uniqid = uniqid();
-			if (!isset($this->stub)) $this->stub = $this->stub();
+			$this->uniqid = uniqid();
+			$this->stub = $this->stub();
 
             $comic = new Comic;
             $comic->where("id", $data['comic_id'])->get();
@@ -245,14 +236,6 @@ class Chapter extends DataMapper {
 
         public function update_chapter_db($data = array())
         {
-			foreach($data as $key => $value)
-            {
-                $this->$key = $value;
-            }
-
-			if (!isset($this->uniqid)) $this->uniqid = uniqid();
-			if (!isset($this->stub)) $this->stub = $this->stub();
-
             // Check if we're updating or creating a new entry by looking at $data["id"].
             // False is pushed if the ID was not found.
             if(isset($data["id"]))
@@ -264,6 +247,7 @@ class Chapter extends DataMapper {
                     log_message('error', 'update_chapter_db: failed to find requested id');
                     return false;
                 }
+				$old_stub = $this->stub;
             }
             else // let's set the creator name if it's a new entry
             {    // let's also check that the related comic is defined, and exists
@@ -289,24 +273,48 @@ class Chapter extends DataMapper {
             // always set the editor name
             $this->editor = $this->logged_id();
 			
+			unset($data["creator"]);
+			unset($data["editor"]);
+			foreach($data as $key => $value)
+            {
+                $this->$key = $value;
+            }
+
+			if (!isset($this->uniqid)) $this->uniqid = uniqid();
+			if (!isset($this->stub)) $this->stub = $this->stub();
+			
+			$this->stub = $this->chapter.'_'.$this->subchapter.'_'.$this->name;
+			$this->stub = $this->stub();
+			
+			if($old_stub != $this->stub)
+			{
+				$comic = new Comic();
+				$comic->where('id', $this->comic_id)->get();
+				$dir_old = "content/comics/".$comic->stub."_".$comic->uniqid."/".$old_stub."_".$this->uniqid;
+				$dir_new = "content/comics/".$comic->stub."_".$comic->uniqid."/".$this->stub."_".$this->uniqid;
+				rename($dir_old, $dir_new);
+			}
+			
+			
 			if(count($data['team']) > 1)
 			{
 				$this->team_id = 0;
 				$joint = new Joint();
-				$this->joint_id = $joint->add_joint($data['team']);
+				$this->joint_id = $joint->add_joint_via_name($data['team']);
 				
 			}
 			else if(count($data['team']) == 1)
 			{
 				$this->joint_id = 0;
 				$team = new Team();
-				$team->where("name", $data['team'])->get();
+				$team->where("name", $data['team'][0])->get();
 				if($team->result_count() == 0)
 				{
 					set_notice('error', 'The team you were referring this chapter to for doesn\'t exist.');
 					log_message('error', 'update_chapter_db: team_id does not exist in team database');
 					return false;
 				}
+				$this->team_id = $team->id;
 			}
 			else 
 			{

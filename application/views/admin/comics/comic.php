@@ -1,4 +1,12 @@
 <?php
+$this->buttoner[] = array(
+	'text' => 'Delete comic',
+	'href' => site_url('/admin/comics/delete/comic/'.$comic->id),
+	'plug' => 'Do you really want to delete this comic and its chapters?'
+);
+
+echo buttoner();
+
 echo form_open_multipart("");
 echo $table;
 echo form_close();
@@ -7,8 +15,16 @@ echo form_close();
 
 
 <div class="section">Chapters:</div>
-<div class="smalltext"><a href="<?= site_url('/admin/comics/'.$comic->stub.'/add_chapter'); ?>" onclick="slideToggle('#addnew_chapter'); return false;">Add new</a></div>
-
+<?php
+	$this->buttoner = array(
+		array(
+			'href' => site_url('/admin/comics/add_new/'.$comic->stub),
+			'text' => 'Add chapter'
+		)
+	);
+			
+	echo buttoner();
+?>
 
 
 <div class="list chapters">

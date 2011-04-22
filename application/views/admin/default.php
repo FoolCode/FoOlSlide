@@ -23,6 +23,16 @@
             {
                 
             }
+			
+			function confirmSlide()
+			{
+				jQuery(this).show();
+				
+			}
+			function confirmSlideUp()
+			{
+				
+			}
         </script>
 
 </head>

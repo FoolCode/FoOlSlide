@@ -20,6 +20,7 @@ body
     padding:0;
     text-align:left;
     overflow-y:scroll;
+	font-weight:normal;
 }
 
 *
@@ -99,6 +100,7 @@ input[type="text"]:hover, input[type="password"]:hover
 
 input[type="button"], input[type="submit"], input[type="reset"]
 {
+	display:block;
 	font-size:11px;
 	padding:3px 10px 4px 10px;
 	border:1px solid #999;
@@ -110,10 +112,11 @@ input[type="button"], input[type="submit"], input[type="reset"]
 	border-radius:3px;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
-	
+	background:#eee;
 	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
 	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
     background-image: -o-linear-gradient(#FDFDFD, #EEECEC); 
+    background-image: linear-gradient(#FDFDFD, #EEECEC); 
 }
 
 input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover
@@ -179,7 +182,8 @@ textarea:focus, textarea:hover
 	padding:3px;
 	border:1px solid #999;
 	margin: 0 4px 0 0;
-		
+	min-width:50px;
+	text-align:center;
 	border-radius:3px;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
@@ -199,6 +203,15 @@ textarea:focus, textarea:hover
 {
 	color:#333;
 	border:1px solid #444;
+}
+
+.gbutton.red
+{
+	display:none;
+	border-color: red;
+	background-image: -moz-linear-gradient(#FDFDFD, #EC9E9E);
+	background-image: -webkit-linear-gradient(#FDFDFD, #EC9E9E);
+    background-image: -o-linear-gradient(#FDFDFD, #EC9E9E); 
 }
 
 
@@ -240,7 +253,7 @@ textarea:focus, textarea:hover
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     font-weight:normal;
     font-size:20px;
-	text-shadow:0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000, 0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000,0px 0px 1px #000;
+	color:#156F9C;
 }
 
 #header .logout
@@ -409,7 +422,7 @@ textarea:focus, textarea:hover
     font-size:23px;
     font-style:italic;
     margin-bottom:10px;
-	text-indent:15px;
+	text-indent:10px;
 }
 
 #center > .section

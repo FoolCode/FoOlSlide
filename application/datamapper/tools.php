@@ -16,6 +16,7 @@ class tools
         public function stub($input)
         {
 			if(isset($input->stub)) $val = $input->stub;
+			else if(isset($input->to_stub)) $val = $input->to_stub;
 			else $val = $input->name;
             $val = strtolower(str_replace(" ", "_", $val));
             return preg_replace('/[^a-z0-9_]/i', '', $val);

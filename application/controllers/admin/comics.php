@@ -9,7 +9,7 @@ class Comics extends Admin_Controller {
                 $this->ion_auth->is_admin() or redirect('admin');
                 $this->ion_auth->is_admin() or die(1);
                 $this->load->model('files_model');
-                $this->load->library('form_validation');
+                //$this->load->library('form_validation');
                 $this->load->library('pagination');
                 $this->viewdata['controller_title'] = "Comics";
         }
@@ -53,10 +53,7 @@ class Comics extends Admin_Controller {
 				if($this->input->post())
 				{
 					$chapter = new Chapter();
-					if($chapter->update_chapter_db($this->input->post()))
-					{
-						redirect('/admin/comics/comic/'.$comic->stub.'/'.$chapter->id);
-					}
+					$chapter->update_chapter_db($this->input->post());
 				}
 				
                 $chapter = new Chapter();
@@ -91,6 +88,29 @@ class Comics extends Admin_Controller {
                 $this->load->view("admin/default.php", $this->viewdata);
                 return true;
             }
+			
+			if($this->input->post())
+			{
+				$comic->update_comic_db($this->input->post());
+				
+				$config['upload_path'] = 'content/cache/';
+				$config['allowed_types'] = 'jpg|png|gif';
+				$this->load->library('upload', $config);
+				$field_name = "thumbnail";
+				if (count($_FILES) > 0 && $this->upload->do_upload($field_name))
+				{
+					$up_data = $this->upload->data();
+					if(!$this->files_model->comic_thumb($comic, $up_data))
+					{
+						log_message("error", "Controller: comics.php/comic: image failed being added to folder");
+					}
+					if ( ! unlink($up_data["full_path"]))
+					{
+						set_notice('error', 'comics.php/comic: couldn\'t remove cache file '.$data["full_path"]);
+						return false;
+					}
+				}
+			}
 
             $chapters = new Chapter();
             $chapters->where('comic_id', $comic->id)->include_related('team')
@@ -108,7 +128,7 @@ class Comics extends Admin_Controller {
 			
             $data["chapters"] = $chapters;
 			
-			$comic->thumbnail = $comic->get_thumb();
+			if($comic->get_thumb())$comic->thumbnail = $comic->get_thumb();
 			
 			$table = ormer($comic);
 			
@@ -125,8 +145,17 @@ class Comics extends Admin_Controller {
         {
 			$this->viewdata["function_title"] = "Add new";
 			
+			//$stub stands for $comic, but there's already a $comic here
 			if($stub != "")
 			{
+				if($this->input->post())
+				{
+					$chapter = new Chapter();
+					if($comic = $chapter->add_chapter($this->input->post()))
+					{
+						redirect('/admin/comics/comic/'.$comic->stub.'/'.$chapter->id);
+					}
+				}
 				$comic = new Comic();
 				$comic->where('stub', $stub)->get();
 				$this->viewdata["extra_title"][] = "Chapter in ".$comic->name;
@@ -140,7 +169,7 @@ class Comics extends Admin_Controller {
 					array(
 						'name' => 'team',
 						'type' => 'input',
-						'value' => array()
+						'value' => array('value' => get_setting('fs_gen_default_team'))
 					)
 				);
 				
@@ -152,63 +181,44 @@ class Comics extends Admin_Controller {
 				$this->load->view("admin/default.php", $this->viewdata);
 				return true;
 			}
-            
-			$this->viewdata["extra_title"][] = "Comic";
-            $this->viewdata["main_content_view"] = $this->load->view("admin/comics/add_new.php",NULL, TRUE);
-            $this->load->view("admin/default.php", $this->viewdata);
-        }
-
-        function add($type)
-        {
-            switch($type){
-                case "comic":
-                    $name = $this->input->post('name');
-                    $hidden = $this->input->post('hidden');
-                    $description = $this->input->post('description');
-
-                    $config['upload_path'] = 'content/cache/';
-                    $config['allowed_types'] = 'jpg|png|gif';
-                    $this->load->library('upload', $config);
-                    if ( ! $this->upload->do_upload())
-                    {
-                        $did_upload = FALSE;
-                    }
-                    else
-                    {
-                        $data = $this->upload->data();
-                        $did_upload = TRUE;
-                    }
-
-                    $comic = new Comic();
-                    if (!$comic->add_comic($name, $hidden, $description))
-                    {
-                        $this->add_new();
-                    }
-                    else
-                    {
-                        $comics = new Comic();
-                        $comics->where("id", $comic->id)->get();
-
-                        if($did_upload)
-                        {
-                            if(!$this->files_model->comic_thumb($comics, $data))
+			else
+			{
+				$comic = new Comic();
+				if($this->input->post())
+				{
+					if($comic->add_comic($this->input->post()))
+					{
+						$config['upload_path'] = 'content/cache/';
+						$config['allowed_types'] = 'jpg|png|gif';
+						$this->load->library('upload', $config);
+						$field_name = "thumbnail";
+						if (count($_FILES) > 0 && $this->upload->do_upload($field_name))
+						{
+						    $up_data = $this->upload->data();
+							if(!$this->files_model->comic_thumb($comic, $up_data))
                             {
-                                log_message("error", "Controller: comics.php/add: image failed being added to folder");
+                                log_message("error", "Controller: comics.php/add_new: image failed being added to folder");
                             }
-                            if ( ! unlink($data["full_path"]))
+                            if ( ! unlink($up_data["full_path"]))
                             {
-                                set_notice('error', 'comics.php/add: couldn\'t remove cache file '.$data["full_path"]);
+                                set_notice('error', 'comics.php/add_new: couldn\'t remove cache file '.$data["full_path"]);
                                 return false;
                             }
-                            
-                        }
-
-                        redirect("admin/comics/comic/".$comics->stub);
-                    }
-                    break;					
-            }
-
+						}
+						redirect('/admin/comics/comic/'.$comic->stub);
+					}
+				}
+				
+				$table = ormer($comic);
+				$table = tabler($table, FALSE, TRUE);
+				$data['table'] = $table;
+            
+				$this->viewdata["extra_title"][] = "Comic";
+				$this->viewdata["main_content_view"] = $this->load->view("admin/form.php",$data, TRUE);
+				$this->load->view("admin/default.php", $this->viewdata);
+			}
         }
+
 
         function upload($type)
         {
@@ -222,7 +232,6 @@ class Comics extends Admin_Controller {
                     if ( ! $this->upload->do_upload())
                     {
                         print_r($error = array('error' => $this->upload->display_errors()));
-                        //$this->load->view('upload_form', $error);
                         return false;
                     }
                     else
@@ -258,7 +267,7 @@ class Comics extends Admin_Controller {
             return true;
         }
 
-        function remove($type, $id)
+        function delete($type, $id)
         {
             switch($type)
             {
@@ -279,6 +288,7 @@ class Comics extends Admin_Controller {
                     {
                         log_message("error", "Controller: comics.php/remove: failed chapter removal");
                     }
+					set_notice('notice', 'Chapter deleted.');
                     redirect("admin/comics/comic/".$comic->stub);
                     break;
                 case("page"):

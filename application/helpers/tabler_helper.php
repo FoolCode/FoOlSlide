@@ -53,10 +53,11 @@ if (!function_exists('tabler'))
         // echo '<pre>'; print_r($result); echo '</pre>';
 		if ($list && $edit)
 		{
-			$echo .= '<div class="gbuttons">
-				<a class="gbutton" href="" onclick="slideToggle(\'.plain\'); slideToggle(\'.edit\'); return false;">Edit data</a>
-					<div class="clearer_r"></div>
-					</div>';
+			$CI->buttoner[] = array(
+				'text' => 'Edit',
+				'href' => '',
+				'onclick' => "slideToggle('.plain'); slideToggle('.edit'); return false;"
+			);
 		}
 		
         if ($list)
@@ -159,7 +160,9 @@ if (!function_exists('formize'))
 			$minion = $column['value'];
 			foreach($minion as $mini)
 			{
+				if(isset($mini->name))
 				$column['value'] = $mini->name;
+				else $column['value'] = $mini;
 				$result[] = $formize($column);
 			}
 			if(empty($result))
@@ -189,7 +192,7 @@ function writize($column)
 
 	if(isset($column['display']))
 	{
-		if($column['display'] == 'image')
+		if($column['display'] == 'image' && $column['value'])
 		$column['value'] = '<img src="'.$column['value'].'" />';
 	}
 	return $column['value'];
@@ -238,6 +241,7 @@ if (!function_exists('ormer'))
 			
 			if(!isset($row['value'])) $row['value'] = '';
 			if(!isset($row['display'])) $row['display'] = '';
+			if(!isset($row['placeholder'])) $row['placeholder'] = '';
 			
 			if(isset($row['type']))
 			{	
@@ -248,7 +252,8 @@ if (!function_exists('ormer'))
 						'name' => addslashes($key),
 						'value' => addslashes($row['value']),
 						'type' => addslashes($row['type']),
-						'display' => addslashes($row['display'])
+						'display' => addslashes($row['display']),
+						'placeholder' => addslashes($row['placeholder'])
 					)
 				);
 			}
@@ -261,19 +266,37 @@ if (!function_exists('ormer'))
 
 if (!function_exists('buttoner'))
 {
-    function buttoner($texturl)
+    function buttoner()
     {
-		if(is_array($texturl))
+		$CI =& get_instance();
+		$texturl = $CI->buttoner;
+
+		$echo = '<div class="gbuttons">';
+		foreach($texturl as $key => $item)
 		{
-			$echo = '<div class="gbuttons">';
-			foreach($texturl as $key => $item)
+			$echo .= '<a class="gbutton" ';
+			if(isset($item['onclick'])) $echo .= 'onclick="'.($item['onclick']).'" ';
+			if(isset($item['href'])) $echo .= 'href="'.($item['href']).'" ';
+			if (isset($item['plug'])) $echo .= 'onclick="confirmPlug(\''.$item['href'].'\', \''.addslashes($item['plug']).'\'); return false;"';
+			if (isset($item['slide']) && $item['slide']) $echo .= 'onclick="confirmSlide(); return false;"';
+			$echo .= '>'.$item['text'].'</a>';
+			if (isset($item['slide']) && $item['slide'])
 			{
-				$echo .= '<a class="gbutton" ';
-				if(isset($texturl['onclick'])) $echo .= 'onclick="'.addslashes($texturl['onclick']).'" ';
-				if(isset($texturl['href'])) $echo .= 'href="'.addslashes($texturl['href']).'" ';
-				$echo .= '>'.$texturl['text'].'</a>';
+				$echo .= '<a class="gbutton red" href="'.$item['href'].'">DO IT!</a>';
 			}
-			$echo .= '<div class="clearer_r"></div></div>';
 		}
+		$echo .= '<div class="clearer_r"></div></div>';
+		return $echo;
 	}
 }
+
+/*
+if (!function_exists('buttoner_add'))
+{
+    function buttoner_add($title, $href, $onclick, $plug)
+    {
+		$CI =& get_instance();
+	}
+}
+ * 
+ */

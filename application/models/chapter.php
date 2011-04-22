@@ -89,7 +89,8 @@ class Chapter extends DataMapper {
                 'chapter' => array(
 			'rules' => array('is_int', 'required'),
 			'label' => 'Chapter number',
-			'type'	=> 'input'
+			'type'	=> 'input',
+			'placeholder' => 'required'
 		),
                 'subchapter' => array(
 			'rules' => array('is_int'),
@@ -200,13 +201,14 @@ class Chapter extends DataMapper {
                 log_message('error', 'add_chapter: comic_id does not exist in comic database');
                 return false;
             }
+			$this->comic_id = $data['comic_id'];
 
             if (!$this->add_chapter_dir($comic->stub, $comic->uniqid))
             {
                 log_message('error', 'add_chapter: failed creating dir');
                 return false;
             }
-            if(!$this->update_chapter_db())
+            if(!$this->update_chapter_db($data))
             {
                 $this->remove_chapter_dir($comic->stub, $comic->uniqid);
                 return false;
@@ -238,7 +240,7 @@ class Chapter extends DataMapper {
         {
             // Check if we're updating or creating a new entry by looking at $data["id"].
             // False is pushed if the ID was not found.
-            if(isset($data["id"]))
+            if(isset($data["id"]) && $data['id'] != "")
             {
                 $this->where("id", $data["id"])->get();
                 if ($this->result_count() == 0)
@@ -253,7 +255,7 @@ class Chapter extends DataMapper {
             {    // let's also check that the related comic is defined, and exists
                 if(!isset($this->comic_id))
                 {
-                    set_notice('error', 'You didn\'t select a chapter to refer to.');
+                    set_notice('error', 'You didn\'t select a comic to refer to.');
                     log_message('error', 'update_chapter_db: comic_id was not set');
                     return false;
                 }
@@ -286,7 +288,7 @@ class Chapter extends DataMapper {
 			$this->stub = $this->chapter.'_'.$this->subchapter.'_'.$this->name;
 			$this->stub = $this->stub();
 			
-			if($old_stub != $this->stub)
+			if(isset($old_stub) && $old_stub != $this->stub)
 			{
 				$comic = new Comic();
 				$comic->where('id', $this->comic_id)->get();

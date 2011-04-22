@@ -67,7 +67,8 @@ class Comic extends DataMapper {
 		'name' => array(
 			'rules' => array('required', 'unique', 'max_length' => 256),
 			'label' => 'Name',
-			'type'	=> 'input'
+			'type'	=> 'input',
+			'placeholder' => 'required'
 		),
                 'stub' => array(
 			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
@@ -165,19 +166,11 @@ class Comic extends DataMapper {
 
 
 
-        public function add_comic($name, $hidden = 0, $description = "")
+        public function add_comic($data = array())
         {
-            $this->name = $name;
-            $this->stub = $name;
-            if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
+			$this->to_stub = $data['name'];
             $this->uniqid = uniqid();
-            $this->description = $description;
-            $this->validate();
-            if(!$this->valid)
-            {
-                set_notice('error', 'Some of the fields you have inputted have values of the wrong type.');
-                return false;
-            }
+			$this->stub = $this->stub();
             
             
             if (!$this->add_comic_dir())
@@ -185,7 +178,7 @@ class Comic extends DataMapper {
                 log_message('error', 'add_comic: failed creating dir');
                 return false;
             }
-            if(!$this->update_comic_db())
+            if(!$this->update_comic_db($data))
             {
                 log_message('error', 'add_comic: failed writing to database');
                 $this->remove_comic_dir();
@@ -217,7 +210,7 @@ class Comic extends DataMapper {
 
             // Check if we're updating or creating a new entry by looking at $data["id"].
             // False is pushed if the ID was not found.
-            if(isset($data["id"]))
+            if(isset($data["id"]) && $data['id'] != '')
             {
                 $this->where("id", $data["id"])->get();
                 if ($this->result_count() == 0)
@@ -226,6 +219,7 @@ class Comic extends DataMapper {
                     log_message('error', 'update_comic_db: failed to find requested id');
                     return false;
                 }
+				$old_stub = $this->stub;
             }
             else // let's set the creator name if it's a new entry
             {
@@ -235,11 +229,26 @@ class Comic extends DataMapper {
             // always set the editor name
             $this->editor = $this->logged_id();
 
+			unset($data["creator"]);
+			unset($data["editor"]);
             //
             foreach($data as $key => $value)
             {
                 $this->$key = $value;
             }
+			
+			if (!isset($this->uniqid)) $this->uniqid = uniqid();
+			if (!isset($this->stub)) $this->stub = $this->stub();
+			
+			$this->stub = $this->name;
+			$this->stub = $this->stub();
+			
+			if(isset($old_stub) && $old_stub != $this->stub)
+			{
+				$dir_old = "content/comics/".$old_stub."_".$this->uniqid;
+				$dir_new = "content/comics/".$this->stub."_".$this->uniqid;
+				rename($dir_old, $dir_new);
+			}
 
             // let's save and give some error check. Push false if fail, true if good.
             $success = $this->save();
@@ -391,8 +400,10 @@ class Comic extends DataMapper {
 
         public function get_thumb($full = FALSE)
         {
+			if($this->thumbnail != "")
             return base_url()."content/comics/".$this->stub."_".$this->uniqid."/".($full ? "" : "thumb_").$this->thumbnail;
-        }
+			return false;
+		}
 
 }
 

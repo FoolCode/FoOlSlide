@@ -1,5 +1,13 @@
 <?php
 
+$this->buttoner[] = array(
+	'text' => 'Delete chapter',
+	'href' => site_url('/admin/comics/delete/chapter/'.$chapter->id),
+	'plug' => 'Do you really want to delete this chapter and its pages?'
+);
+
+echo buttoner();
+
 echo form_open();
 echo $table;
 echo form_close();

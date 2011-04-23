@@ -188,6 +188,7 @@ class Page extends DataMapper {
             $this->chapter_id = $chapter_id;
             if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
             $this->description = $description;
+			$overwrite = $filedata["overwrite"];
 
             $chapter = new Chapter();
             $chapter->where("id", $chapter_id)->get();
@@ -216,6 +217,13 @@ class Page extends DataMapper {
             $imagedata = getimagesize($filedata["server_path"]);
             $thumbdata = getimagesize($dir."thumb_".$filedata["name"]);
 
+			$page = new Page();
+			$page->where('chapter_id', $this->chapter_id)->where('filename', $filedata["name"])->get();
+			if($page->result_count() > 0)
+            {
+                $this->id = $page->id;
+            }
+			
             $this->filename = $filedata["name"];
             $this->thumbnail = "thumb_";
             $this->height = $imagedata["0"];
@@ -229,7 +237,7 @@ class Page extends DataMapper {
             if(!$this->update_page_db())
             {
                 log_message('error', 'add_page: failed writing to database');
-                $this->remove_page_file($comic->stub, $comic->uniqid, $chapter->stub, $chapter->uniqid, $data["filename"]);
+                $this->remove_page_file($comic->stub, $comic->uniqid, $chapter->stub, $chapter->uniqid, $this->filename);
                 return false;
             }
 
@@ -355,7 +363,7 @@ class Page extends DataMapper {
             $img_config['width'] = 250;
             $img_config['height'] = 250;
             $img_config['maintain_ratio'] = TRUE;
-            $img_config['master_dim'] = 'width';
+            $img_config['master_dim'] = 'auto';
             $CI->image_lib->initialize($img_config);
 
             if(!$CI->image_lib->resize())

@@ -15,35 +15,64 @@ echo form_close();
 ?>
 
 <div class="section">Pages:</div>
-<div class="smalltext"><a href="<?= site_url('admin/comics/'.$comic->stub.'/add_chapter'); ?>" onclick="slideToggle('#addnew_page'); return false;">Add new</a>
- | <a href="#" onclick="confirmPlug('<?php echo site_url('admin/comics/remove_pages/'.$comic->id.'/'.$chapter->id.'/all'); ?>', 'Are you sure that you want to remove all the images related to this chapter?'); return false;">Remove all pages</a>
-</div>
 
-<div id="addnew_page" style="display:none">
+
 <?php
-    echo form_open_multipart('admin/comics/upload/compressed_chapter');
-    echo form_hidden('chapter_id', $chapter->id);
+$session_name = $this->session->get_js_session(TRUE);
+$session_data = $this->session->get_js_session();
 ?>
-    <table class="form">
-     <tr>
-        <td>Via compressed archive (ZIP only)</td>
-        <td>
-            <?php
-                $data = array(
-                    'name'        => 'userfile',
-                    'id'          => 'chapter_userfile',
-                );
 
-                echo form_upload($data);
-            ?>
-        </td>
-    </tr>
-    <tr>
-        <td><?php echo form_reset(array("value" => "Reset fields")) ?></td>
-        <td><?php echo form_submit(array("value" => "Upload")); ?></td>
-    </tr>
-    </table>
+<div class="uploadify">
+	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
+	<script type="text/javascript">
+		
+	function deleteImage(id)
+	{
+		jQuery.post('<?php echo site_url('/admin/comics/delete/page/')?>', {id: id}, function(){
+			jQuery('#image_' + id).hide();
+		});
+	}
+	
+	function deleteAllPages()
+	{
+		jQuery.post('<?php echo site_url('/admin/comics/delete/allpages/')?>', {id: <?php echo $chapter->id ?>}, function(){
+			location.reload();
+		});
+	}
+			
+	jQuery(document).ready(function() {
+	  jQuery('#file_upload').uploadify({
+		'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
+		'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+		'cancelImg' : '<?php echo site_url(); ?>assets/uploadify/cancel.png',
+		'preventCaching' : false,
+		'multi' : true,
+		'buttonText' : 'Upload zip and images',
+		'width': 200,
+		'auto'      : true,
+		'requeueErrors' : false,
+		'postData' : {
+				'chapter_id' : <?php echo $chapter->id; ?>,
+				'uploader' : 'uploadify',
+				'overwrite' : '1',
+				'<?php echo $session_name;?>' : "<?php echo $session_data;?>"
+			},
+		onUploadComplete : function(){
+			php_session = $.evalJSON(response).session;
+			jQuery("#uploadify").uploadifySettings( "scriptData", {'<?php echo $session_name;?>' : '"' + php_session + '"'} ); 
+			location.reload();
+		}
+	  });
+	});
+	</script>
+	<div id="file_upload">Upload</div>
 </div>
+<?php
+$this->buttoner = array();
+$this->buttoner[] = array('href' => 'JavaScript:deleteAllPages()', 'text' => 'Delete all pages', 'plug' => 'Do you really want to delete all the images in this chapter?');
+echo buttoner();
+?>
 
 <div class="list pages">
     <table>
@@ -54,8 +83,8 @@ echo form_close();
     {
         $count++;
         echo '<td>
-                <a href="'.site_url().'"><div class="controls">Delete</div></a>
-                <img src="'.$item["thumb_url"].'" />
+                <div class="controls gbutton" onclick="deleteImage('.$item['id'].')">Delete</div>
+                <img id="image_'.$item['id'].'" src="'.$item["thumb_url"].'" />
              </td>';
         if ($count%4==0) echo '</tr><tr>';
     }

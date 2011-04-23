@@ -37,9 +37,19 @@ echo form_close();
                 <div class="title"><a href="'.site_url("admin/comics/comic/".$comic->stub."/".$item->id).'">'. (($item->name != "") ? $item->name : "Chapter ".$item->chapter.".".$item->subchapter).'</a></div>
                 <div class="smalltext info">
                     Chapter #'.$item->chapter.'
-                    Sub #'.$item->subchapter.'
-                    By <a href="'.site_url("/admin/users/team/".$item->team_stub).'">'.$item->team_name.'</a>
-                </div>
+                    Sub #'.$item->subchapter;
+					if(isset($item->jointers))
+					{
+						echo ' By ';
+						foreach($item->jointers as $key2 => $jointe)
+						{
+							if($key2>0) echo " | ";
+							echo '<a href="'.site_url("/admin/users/teams/".$jointe->stub).'">'.$jointe->name.'</a>';
+						}
+					}
+					else echo '
+                    By <a href="'.site_url("/admin/users/teams/".$item->team_stub).'">'.$item->team_name.'</a>';
+                echo '</div>
                 <div class="smalltext">
                     <a href="#" onclick="">Quick tools</a>
                 </div>';

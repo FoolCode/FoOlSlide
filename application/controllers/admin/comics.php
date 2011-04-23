@@ -2,8 +2,8 @@
 
 class Comics extends Admin_Controller {
 
-	function __construct()
-	{
+		function __construct()
+		{
 		parent::__construct();
                 $this->ion_auth->logged_in() or redirect('auth/login');
                 $this->ion_auth->is_admin() or redirect('admin');
@@ -19,16 +19,23 @@ class Comics extends Admin_Controller {
             redirect('/admin/comics/comics');
         }
 
-	function manage($page = 1)
-        {
-            $this->viewdata["function_title"] = "manage";
-
+		function manage($page = 1)
+        {	
+            $this->viewdata["function_title"] = '<a href="'.site_url('/admin/comics/manage/').'">manage</a>';
             $comics = new Comic();
-            $comics->order_by('name', 'ASC');
-            $comics->get_paged_iterated($page, 10);
+			
+			if($this->input->post('search'))
+			{
+				$search = $this->input->post('search');
+				$comics->ilike('name', $search)->limit(20);
+				$this->viewdata["extra_title"][] = 'Searching: '.htmlspecialchars(($search));
+			}            
+			
+			$comics->order_by('name', 'ASC');
+            $comics->get_paged_iterated($page, 20);
             $data["comics"] = $comics;
 
-            $this->viewdata["main_content_view"] = $this->load->view("admin/comics/comics.php", $data, TRUE);
+            $this->viewdata["main_content_view"] = $this->load->view("admin/comics/manage.php", $data, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
 
@@ -116,17 +123,18 @@ class Comics extends Admin_Controller {
             $chapters->where('comic_id', $comic->id)->include_related('team')
                    ->order_by('chapter', 'DESC')->order_by('subchapter', 'DESC')->get();
             foreach($chapters->all as $key => $item)
-            {
-                $temp = array();
-                if ($item->joint_id != 0)
+            {	
+                if ($item->joint_id > 0)
                 {
                     $teams = new Team();
-                    $teams->where_related_joint('id', $item->joint);
-                    $chapters[$key]->joint = $teams;
+					$jointers = $teams->get_teams_name(0, $item->joint_id);					
+					$item->jointers = $jointers;
+					unset($jointers);
+					unset($teams);
                 }
             }
-			
-            $data["chapters"] = $chapters;
+
+			$data["chapters"] = $chapters;
 			
 			if($comic->get_thumb())$comic->thumbnail = $comic->get_thumb();
 			
@@ -176,7 +184,7 @@ class Comics extends Admin_Controller {
 				$table = tabler($table, FALSE, TRUE);
 				
 				$data["table"] = $table;
-				
+					
 				$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
 				$this->load->view("admin/default.php", $this->viewdata);
 				return true;
@@ -223,15 +231,51 @@ class Comics extends Admin_Controller {
         function upload($type)
         {
             $config['upload_path'] = 'content/cache/';
+			
+			if($this->input->post('uploader') == 'uploadify')
+			{			
+				$config['allowed_types'] = 'zip|gif|jpg|jpeg|png';
+				$this->load->library('upload', $config);
+				if ( ! $this->upload->do_upload('Filedata'))
+				{
+					log_message('error',print_r($_FILES, true));
+					print_r($error = array('error' => $this->upload->display_errors()));
+					log_message('error',$this->upload->display_errors());
+					return false;
+				}
+				else
+				{
+					$data = $this->upload->data();
+					$data["chapter_id"] = $this->input->post('chapter_id');
+					$data["overwrite"] = $this->input->post('overwrite');
+					
+					if($data['file_ext'] != ".zip")
+					$this->files_model->page($data);
+					else
+					$this->files_model->compressed_chapter($data);
+				}
+				if ( ! unlink($data["full_path"]))
+				{
+				   set_notice('error', 'comics.php/upload: couldn\'t remove cache file '.$data["full_path"]);
+				   return false;
+				}
+				
+				$output['session'] = $this->session->get_js_session();
+				echo json_encode($output);
+				die();
+				return true;
+			}
 
             switch($type)
             {
                 case "compressed_chapter":
                     $config['allowed_types'] = 'zip';
                     $this->load->library('upload', $config);
-                    if ( ! $this->upload->do_upload())
+                    if ( ! $this->upload->do_upload('Filedata'))
                     {
+						log_message('error',print_r($_FILES, true));
                         print_r($error = array('error' => $this->upload->display_errors()));
+						log_message('error',$this->upload->display_errors());
                         return false;
                     }
                     else
@@ -250,8 +294,17 @@ class Comics extends Admin_Controller {
                     $chapter->where('id', $data["chapter_id"])->get();
                     $comic = new Comic();
                     $comic->where('id', $chapter->comic_id)->get();
+					
+					if($this->input->post('uploader') == 'uploadify')
+					{
+						$output['session'] = $this->session->get_js_session();
+						echo json_encode($output);
+						return;
+					}
+					
                     redirect('admin/comics/comic/'.$comic->stub.'/'.$data["chapter_id"]);
                     break;
+					
                 case "page":
                     $config['allowed_types'] = 'gif|jpg|png';
                     $this->load->library('upload', $config);
@@ -267,7 +320,7 @@ class Comics extends Admin_Controller {
             return true;
         }
 
-        function delete($type, $id)
+        function delete($type, $id = 0)
         {
             switch($type)
             {
@@ -277,6 +330,7 @@ class Comics extends Admin_Controller {
                     if(!$comic->remove_comic())
                     {
                         log_message("error", "Controller: comics.php/remove: failed comic removal");
+						return false;
                     }
                     flash_notice('notice','The comic '.$comic->name.' has been removed');
                     redirect("admin/comics/manage");
@@ -287,19 +341,31 @@ class Comics extends Admin_Controller {
                     if(!$comic = $chapter->remove_chapter())
                     {
                         log_message("error", "Controller: comics.php/remove: failed chapter removal");
+						return false;
                     }
 					set_notice('notice', 'Chapter deleted.');
                     redirect("admin/comics/comic/".$comic->stub);
                     break;
                 case("page"):
                     $page = new Page();
-                    $page->where('id', $id)->get();
+                    $page->where('id', $this->input->post('id'))->get();
                     if(!$data = $page->remove_page())
                     {
                         log_message("error", "Controller: comics.php/remove: failed page removal");
+						return false;
                     }
-                    redirect("admin/comics/comic/".$data["comic"]->stub."/".$data["chapter"]->id);
+					echo 'success';
                     break;
+				case("allpages"):
+					$chapter = new Chapter();
+					$chapter->where('id', $this->input->post('id'))->get();
+					if(!$chapter->remove_all_pages())
+					{
+						log_message("error", "Controller: comics.php/remove: failed all pages removal");
+						return false;
+					}
+					echo 'success';
+					break;
             }
         }
 }

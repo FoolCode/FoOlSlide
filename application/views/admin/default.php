@@ -82,7 +82,7 @@
             echo ' » '.$item;
     }
     ?></div>
-
+	<div class="content">
     <div class="errors">
         <?php
         if (isset($this->notices))
@@ -107,7 +107,7 @@
 
     <?= $main_content_view; ?>
 
-    </div></div>
+    </div></div></div>
             <div class="push"></div>
 
 </div>

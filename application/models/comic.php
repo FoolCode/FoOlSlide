@@ -352,7 +352,7 @@ class Comic extends DataMapper {
             $img_config['width'] = 250;
             $img_config['height'] = 250;
             $img_config['maintain_ratio'] = TRUE;
-            $img_config['master_dim'] = 'width';
+            $img_config['master_dim'] = 'auto';
             $CI->image_lib->initialize($img_config);
 
             if(!$CI->image_lib->resize())

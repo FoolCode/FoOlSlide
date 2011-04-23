@@ -80,7 +80,7 @@ form {
 }
 
 
-input[type="text"], input[type="password"]
+input[type="text"], input[type="password"], select
 {
     border:1px solid #ddd;
     padding:5px 9px;
@@ -155,6 +155,16 @@ textarea
 textarea:focus, textarea:hover
 {
     border-color:#bbb;
+}
+
+.smartsearch
+{
+	float:right;
+}
+
+.smartsearch input
+{
+	font-size:10px;
 }
 
 
@@ -423,15 +433,21 @@ textarea:focus, textarea:hover
     font-style:italic;
     margin-bottom:10px;
 	text-indent:10px;
+	border-bottom:1px solid #bbb;
+	padding-bottom:5px;
+	display:block;
 }
 
-#center > .section
+#center .section
 {
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     font-size:23px;
     font-style:italic;
     margin:10px 0 10px;
     padding:10px 0 0;
+	text-indent:10px;
+	padding-bottom:5px;
+	border-bottom:1px solid #bbb;
 }
 
 #center > .smalltext
@@ -563,24 +579,13 @@ textarea:focus, textarea:hover
 .list.pages > table td .controls
 {
     position:absolute;
-    bottom:0px;
+    bottom:4px;
     right:0px;
-    padding: 3px;
-    background:#333;
-    background:rgba(20,20,20,0.6);
     display:block;
-    color:#fff;
-    text-shadow:none;
-    font-size:12px;
-    text-align:right;
+    font-size:11px;
+    text-align:center;
 }
 
-.list.pages > table td .controls:hover
-{
-    display:block;
-    background:rgba(20,20,20,0.9);
-    color:#fff;
-}
 
 
 

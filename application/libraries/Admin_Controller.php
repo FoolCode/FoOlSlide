@@ -29,6 +29,7 @@ class Admin_Controller extends MY_Controller {
                         "level" => "mod",
                          "content" => array(
                                "users" => array("level" => "mod", "name" => "User list"),
+                               "you" => array("level" => "member", "name" => "Your profile"),
                                "teams" => array("level" => "mod", "name" => "Team list"),
                                "home_team" => array("level" => "mod", "name" => "Home team")
                              )

@@ -33,7 +33,8 @@ class Preferences extends Admin_Controller {
                      'name'        => 'fs_gen_site_title',
                      'id'          => 'site_title',
                      'maxlength'   => '200',
-                     'placeholder' => 'manga reader'
+                     'placeholder' => 'manga reader',
+					 'preferences' => 'fs_gen'
                 )
             );
 
@@ -44,7 +45,8 @@ class Preferences extends Admin_Controller {
                      'name'        => 'fs_gen_back_url',
                      'id'          => 'back_url',
                      'maxlength'   => '200',
-                     'placeholder' => 'http://'
+                     'placeholder' => 'http://',
+					 'preferences' => 'fs_gen'
                 )
             );
 
@@ -55,7 +57,8 @@ class Preferences extends Admin_Controller {
                      'name'        => 'fs_gen_default_team',
                      'id'          => 'default_team',
                      'maxlength'   => '200',
-                     'placeholder' => 'Anonymous'
+                     'placeholder' => 'Anonymous',
+					 'preferences' => 'fs_gen'
                 )
             );
 
@@ -65,7 +68,8 @@ class Preferences extends Admin_Controller {
                      'type'        => 'checkbox',
                      'name'        => 'fs_gen_anon_team_show',
                      'id'          => 'anon_team_show',
-                     'placeholder' => ''
+                     'placeholder' => '',
+					 'preferences' => 'fs_gen'
                 )
             );
 

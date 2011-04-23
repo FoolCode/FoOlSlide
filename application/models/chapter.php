@@ -298,6 +298,17 @@ class Chapter extends DataMapper {
 			}
 			
 			
+			if(is_array($data['team']))
+			{
+				foreach($data['team'] as $key => $value) 
+				{ 
+					if($value == "") 
+					{ 
+						unset($data['team'][$key]); 
+					} 
+				}
+			}
+			
 			if(count($data['team']) > 1)
 			{
 				$this->team_id = 0;
@@ -312,7 +323,7 @@ class Chapter extends DataMapper {
 				$team->where("name", $data['team'][0])->get();
 				if($team->result_count() == 0)
 				{
-					set_notice('error', 'The team you were referring this chapter to for doesn\'t exist.');
+					set_notice('error', 'The team you were referring this chapter to doesn\'t exist.');
 					log_message('error', 'update_chapter_db: team_id does not exist in team database');
 					return false;
 				}
@@ -418,6 +429,7 @@ class Chapter extends DataMapper {
             foreach($pages->all as $key => $item)
             {
                 $return[$key]['object'] = $item;
+                $return[$key]['id'] = $item->id;
                 $return[$key]['width'] = $item->width;
                 $return[$key]['height'] = $item->height;
                 $return[$key]['url'] = base_url()."content/comics/".$comic->stub."_".$comic->uniqid."/".$this->stub."_".$this->uniqid."/".$item->filename;
@@ -425,6 +437,21 @@ class Chapter extends DataMapper {
             }
             return $return;
         }
+		
+		public function remove_all_pages()
+		{
+			log_message('error','here');
+			$page = new Page();
+			$page->where('chapter_id', $this->id)->get_iterated();
+			foreach($page as $key => $item)
+			{
+				if(!$item->remove_page())
+				{
+					log_message('error', 'remove_all_pages: page could not be removed');
+				}
+			}
+			return true;
+		}
 
 }
 

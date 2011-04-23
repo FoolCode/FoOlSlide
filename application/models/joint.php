@@ -38,7 +38,7 @@ class Joint extends DataMapper {
 	var $has_one = array();
 
 	// Insert related models that Joint can have more than one of.
-	var $has_many = array('team');
+	var $has_many = array();
 
 	/* Relationship Examples
 	 * For normal relationships, simply add the model name to the array:
@@ -65,7 +65,7 @@ class Joint extends DataMapper {
 
 	var $validation = array(
 		'joint_id' => array(
-			'rules' => array('required', 'unique', 'max_length' => 256),
+			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Name'
 		),
                 'team_id' => array(
@@ -192,7 +192,7 @@ class Joint extends DataMapper {
 				}
 				$result[] = $tea->id;
 			}
-			$this->add_joint($result);
+			return $this->add_joint($result);
 		}
 		
         // $teams is an array of IDs

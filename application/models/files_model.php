@@ -11,7 +11,7 @@ class Files_model extends CI_Model {
         }
 
         public function compressed_chapter($data)
-        {
+        {					
             $chapter = new Chapter();
             $chapter->where("id", $data["chapter_id"])->get();
             $uniqid = uniqid();
@@ -31,12 +31,16 @@ class Files_model extends CI_Model {
 
             foreach($dirarray as $key => $value)
             {
+				$value['overwrite'] = $overwrite;
                 $page = new Page();
+				$error = false;
                 if(!$page->add_page($value, $chapter->id, 0, ""))
                 {
                     log_message('error', 'compressed_chapter: one page in the loop failed being added');
-                    return false;
+                    $error = true;
                 }
+				if($error) set_notice('error', 'Some pages weren\'t uploaded');
+
             }
 
             // Let's delete all the cache
@@ -59,13 +63,16 @@ class Files_model extends CI_Model {
         // This is just a plug to adapt the variable names for the comic_model
         public function page($data)
         {
+			log_message('error', 'page!');
             // $data["chapter_id"];
             // $data["raw_name"];
             $file["server_path"] = $data["full_path"];
             $file["name"] = $data["file_name"];
+			$file["size"] = $data["file_size"];
+			$file['overwrite'] = ($data["overwrite"] == 1);
 
             $page = new Page();
-            if (!$page->add_page($file, $data["chapter_id"], $data["hidden"], $data["description"]))
+            if (!$page->add_page($file, $data["chapter_id"], 0, ""))
             {
                 log_message('error', 'page: function add_page failed');
                 return false;

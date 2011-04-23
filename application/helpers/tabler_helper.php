@@ -65,7 +65,7 @@ if (!function_exists('tabler'))
             $echo .= '<div class="plain"><table class="form">';
             foreach($result as $rowk => $row)
             {
-				if ($row[1]['type'] == 'hidden')
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden')
 				{
 					//$echo .= $row[1]['form'];
 				}
@@ -84,6 +84,7 @@ if (!function_exists('tabler'))
 									$echo .= ''.$mini->name.' ';
 								}
 							}
+							else if($column['table'] == "")$echo .= 'N/A';
 							else $echo .= $column['table'];
 							$echo .= '</td>';
 						}
@@ -137,21 +138,17 @@ if (!function_exists('formize'))
     {
 		// FIX THIS ABSURDITY: no need to always check in database this bull!
         $CI =& get_instance();
-        $query = $CI->db->get_where('preferences', array('name' => $column['name']), 1);
-        $qarray = array();
-        foreach($query->result() as $row)
-        {
-            $column['value'] = $row->value;
-        }
+		if(isset($column['preferences']))
+        $column['value'] = get_setting($column['name']);
                 
         if($column['type'] == 'checkbox')
         {
-           $column['value'] = '1';
         }
         
         $formize = 'form_'.$column['type'];
 		$type = $column['type'];
         unset($column['type']);
+        unset($column['preferences']);
 		
 		if(is_array($column['value']))
 		{
@@ -170,6 +167,8 @@ if (!function_exists('formize'))
 				$column['value'] = "";
 				$result[] = $formize($column);
 			}
+			$column['value'] = "";
+			$result[] = $formize($column);
 		}
 		else
 		{
@@ -189,11 +188,16 @@ if (!function_exists('formize'))
 function writize($column)
 {
 	//echo '<pre>'; print_r($column); echo '</pre>';
-
+	if(!is_array($column))
+	{
+		return $column;
+	}
+	
 	if(isset($column['display']))
 	{
 		if($column['display'] == 'image' && $column['value'])
 		$column['value'] = '<img src="'.$column['value'].'" />';
+		//if($column['display'] == 'hidden') return '';
 	}
 	return $column['value'];
 }
@@ -269,6 +273,7 @@ if (!function_exists('buttoner'))
     function buttoner()
     {
 		$CI =& get_instance();
+		if(!isset($CI->buttoner)) return "";
 		$texturl = $CI->buttoner;
 
 		$echo = '<div class="gbuttons">';
@@ -278,12 +283,12 @@ if (!function_exists('buttoner'))
 			if(isset($item['onclick'])) $echo .= 'onclick="'.($item['onclick']).'" ';
 			if(isset($item['href'])) $echo .= 'href="'.($item['href']).'" ';
 			if (isset($item['plug'])) $echo .= 'onclick="confirmPlug(\''.$item['href'].'\', \''.addslashes($item['plug']).'\'); return false;"';
-			if (isset($item['slide']) && $item['slide']) $echo .= 'onclick="confirmSlide(); return false;"';
+		//	if (isset($item['slide']) && $item['slide']) $echo .= 'onclick="confirmSlide(); return false;"';
 			$echo .= '>'.$item['text'].'</a>';
-			if (isset($item['slide']) && $item['slide'])
-			{
-				$echo .= '<a class="gbutton red" href="'.$item['href'].'">DO IT!</a>';
-			}
+		//	if (isset($item['slide']) && $item['slide'])
+		//	{
+		//		$echo .= '<a class="gbutton red" href="'.$item['href'].'">DO IT!</a>';
+		//	}
 		}
 		$echo .= '<div class="clearer_r"></div></div>';
 		return $echo;

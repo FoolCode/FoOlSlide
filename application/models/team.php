@@ -355,21 +355,29 @@ class Team extends DataMapper {
             if ($joint_id > 0)
             {
                 $joint = new Joint();
-                $joint->where("id", $joint_id)->get();
+                $joint->where("joint_id", $joint_id)->get();
                 if($joint->result_count() < 1)
                 {
                     log_message('error', 'get_teams_name: joint -> joint not found');
                     return false;
                 }
-
-                $team->where_related($joint)->get();
+				
+				$teamarray = array();
+				$team = new Team();
+				foreach($joint->all as $key => $join)
+				{
+					$team->where('id', $join->team_id);
+					$team->get();
+					$teamarray[] = $team->get_clone();
+				}
+                
                 if($team->result_count() < 1)
                 {
                     log_message('error', 'get_teams_name: joint -> no teams found');
                     return false;
                 }
 
-                return $team->all;
+                return $teamarray;
             }
 
             $team = new Team();

@@ -24,6 +24,65 @@ class Users extends Admin_Controller {
             $this->viewdata["main_content_view"] = $this->load->view('auth/index', $data, TRUE);
             $this->load->view("admin/default", $this->viewdata);
         }
+		
+		function user($id)
+		{
+			if($post = $this->input->post())
+			{
+				unset($post['submit']);
+				//print_r($post);
+				$this->ion_auth->update_user($id, $post);
+			}
+			
+            $data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+            $user = $this->ion_auth->get_user_array($id);
+			$this->viewdata["function_title"] = "User: ".$user['username'];
+			
+			$form = array();
+					
+			$form[] = array('Username', 
+				array(
+					'value' => $user['username'],
+					'type' => 'input',
+					'name' => 'username'
+				)
+			);
+			$form[] = array('Email', 
+				array(
+					'value' => $user['email'],
+					'type' => 'input',
+					'name' => 'email'
+				)
+			);
+			$form[] = array('Reset password', array(
+                     'type'        => 'checkbox',
+                     'name'        => 'reset_password',
+					 'display'	=> 'hidden'
+                )
+			);
+			
+			$groups = $this->ion_auth->get_groups();
+			$options = array();
+			foreach($groups as $item)
+			{
+				$options[$item->id] = $item->description;
+			}
+			
+			
+			
+			$data['dropdown'] = form_dropdown('group_id', $options, $user['group_id']);
+			
+			$data['table'] = tabler($form, TRUE, TRUE);
+
+            $this->viewdata["main_content_view"] = $this->load->view('auth/edit_user', $data, TRUE);
+            $this->load->view("admin/default", $this->viewdata);
+		}
+		
+		function you()
+		{
+			$user = $this->ion_auth->get_user();
+			redirect('/admin/users/user/'.$user->id);
+		}
         
         function teams($stub = "")
         {

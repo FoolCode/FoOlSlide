@@ -7,13 +7,15 @@ if (!defined('BASEPATH'))
 
 <div id="page">
 	<div class="inner">
-		<a href="<?php echo $chapter->next_page($current_page); ?>" onclick="changePage('<?php echo $current_page; ?>'); return false;">
-			<img src="<?php echo $pages[$current_page-1]['url'] ?>"  />
+		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return changePage('<?php echo $current_page; ?>');" >
+			<img src="<?php echo $pages[$current_page - 1]['url'] ?>"  />
 		</a>
 		<div class="number">
-			<div class="initnumber">1</div>
+			<div class="initnumber"><?php echo $current_page ?></div>
 			<div class="on">on</div>
 			<div class="finalnumber"><?php echo count($pages); ?></div>
+			<div id="myFire"></div>
+			<div id="myLoading"></div>
 
 
 
@@ -32,26 +34,31 @@ if (!defined('BASEPATH'))
 
 	var next_chapter = "<?php echo $next_chapter; ?>";
 	
-	var preload_next = 4;
+	var preload_next = 7;
 
-	var preload_back = 2;
+	var preload_back = 1;
 
-	var current_page = <?php echo $current_page; ?> - 1;
+	var current_page = <?php echo $current_page - 1; ?>;
 	
 	function changePage(id)
 	{
 		id = parseInt(id);
-		if(id == pages.length) 
+		if(id > pages.length-1) 
 		{
 			location.href = next_chapter;
+			return false;
 		}
+		
 		preload(id);
+		next = parseInt(id+1);
 		jQuery('#page img').attr('src', pages[id].url);
-		jQuery('#page a').attr('onclick', 'changePage(' + parseInt(id+1) + '); return false;');
-		jQuery('.initnumber').text(id+1);
+		jQuery('#page .inner a').attr('onClick', 'return changePage(\'' + next + '\')');
+		jQuery('.initnumber').text(next);
 		jQuery("html, body").stop(true,true);
-		jQuery.scrollTo('#page', 400);
+		jQuery.scrollTo('#page', 500, { easing:'elasout' });
 		current_page = id;
+		blinker();
+		lightMyFire();
 		
 		return false;
 	}
@@ -83,22 +90,61 @@ if (!defined('BASEPATH'))
 		jQuery.preload(array, {
 			threshold: 200,
 			enforceCache: true,
-			// placeholder: 'http://foolrulez.org/manga/themes/default/images/ajax-loader.gif',
 			onComplete:function(data)
 			{
 				pages[arraydata[data.index]].loaded = true;
+				lightMyFire();
 			}
 	
 		});
 	}
 	
+	//borrowed from jQuery easing plugin
+	//http://gsgd.co.uk/sandbox/jquery.easing.php
+	$.easing.elasout = function(x, t, b, c, d) {
+		var s=1.70158;var p=0;var a=c;
+		if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+		if (a < Math.abs(c)) { a=c; var s=p/4; }
+		else var s = p/(2*Math.PI) * Math.asin (c/a);
+		return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+	};
+	
+	function blinker()
+	{
+		if(pages[current_page].loaded == undefined)
+		{
+			jQuery('#myLoading').fadeIn(200).delay(500).fadeOut(200);
+			setTimeout('blinker()', 1000);
+		}
+		
+	}
+	
 	function countNextLoaded()
 	{
-		for(i = current_page; i < )
+		result = 0;
+		for(i = current_page; i < pages.length; i++)
+		{
+			if(pages[i].loaded) result++;
+		}
+		return result;
 	}
 
+	function lightMyFire()
+	{
+		num = countNextLoaded();
+		if(num > 15) num = 15;
+		
+		light = "";
+		for(i = 0; i < num; i++)
+		{
+			light += '<div class="light"></div>';
+		}
 
-isSpread = false;
+		jQuery('#myFire').html(light);
+	}
+	
+
+	isSpread = false;
 
 	jQuery(document).ready(function() {
 		
@@ -128,9 +174,6 @@ isSpread = false;
 		timeStamp37 = 0;
 		timeStamp39 = 0;
 		
-		jQuery('#page').bind("contextmenu", function(e) {
-			e.preventDefault();
-		});
-
+		changePage(currentpage)
 	});
 </script>

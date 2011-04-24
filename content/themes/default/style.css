@@ -247,7 +247,7 @@ input[type="text"]
 
 #page img
 {
-	max-width:900px;
+	max-width:1000px;
 	margin:0 auto;
 	display:block;
 	padding:2px;
@@ -261,8 +261,8 @@ input[type="text"]
 	padding:10px 10px 10px 40px;
 	color:#999;
 	position:absolute;
-	top:60px;
-	right:5px;
+	top:100px;
+	right:10px;
 	border-radius:5px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -305,7 +305,29 @@ input[type="text"]
 	min-width:30px;
 }
 
-#page .number .numberlist
+#myFire
 {
+	position:absolute;
+	bottom:10px;
+	left:20px;
+	width:10px;
+}
 
+#myFire .light
+{
+	height:5px;
+	width:7px;
+	margin: 3px 0 0 0;
+	background: #2DC532;
+}
+
+#myLoading
+{
+	position:absolute;
+	bottom:10px;
+	left:7px;
+	width:10px;
+	height:85%;
+	background:red;
+	display:none;
 }

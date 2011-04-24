@@ -57,14 +57,15 @@ $session_data = $this->session->get_js_session();
 				'uploader' : 'uploadify',
 				'overwrite' : '1',
 				'<?php echo $session_name;?>' : "<?php echo $session_data;?>"
-			},
-		onUploadComplete : function(){
-			php_session = $.evalJSON(response).session;
+			}
+	  });
+	});
+	
+	function onUploadComplete() {
+			php_session = jQuery.evalJSON(response).session;
 			jQuery("#uploadify").uploadifySettings( "scriptData", {'<?php echo $session_name;?>' : '"' + php_session + '"'} ); 
 			location.reload();
 		}
-	  });
-	});
 	</script>
 	<div id="file_upload">Upload</div>
 </div>

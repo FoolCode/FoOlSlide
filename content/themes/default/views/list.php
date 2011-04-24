@@ -1,32 +1,47 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
-<div class="content">
-    <div class="list">
-        <div class="title">List of available series:</title>
-        <?php
-            foreach($comic->all as $key => $item)
-            {
-                echo '<div class="element">';
-                echo $item->stub;
-                echo '<div class="details">Latest chapter: '.$item->chapter->chapter.'</div>';
-                echo '</div>';
-            }
-        ?>
-    </div>
-    
-    <div class="list">
-        <?php
-            $chapters = new Chapter();
-            $chapters->order_by('created')->limit(6)->get();
-
-            foreach($chapters->all as $chapter)
-            {
-                $comic = new Comic();
-                $comic->where('id', $chapter->comic_id)->get();
-                echo '<div class="element">';
-                echo $comic->name.': Chapter '.$item->chapter;
-                echo '</div>';
-            }
-        ?>
-    </div>
+<div class="list">
+     <?php
+	 
+		// Create a "Chapter" object. It can contain more than one chapter!
+		$chapters = new Chapter();
+		
+		// With each, get the comic they depends from
+		$chapters->include_related('comic');
+		
+		// Lets group these 25 releases by comic, so it looks like less of a mess.
+		$chapters->order_by_related('comic', 'name');
+		
+		// Select the latest 25 released chapters
+		$chapters->order_by('created', 'DESC')->limit(25);
+		
+		// Get the chapters! Let's use get_iterated() instead of get() to save some RAM
+		$chapters->get_iterated();
+		
+		
+		
+		$current_comic = "";
+		$current_comic_closer = "";
+		
+		
+		// Let's loop over every chapter. The array is just $chapters because we used get_iterated(), else it would be $chapters->all
+		foreach($chapters as $key => $chapter)
+		{
+			if ($current_comic != $chapter->comic_id)
+			{
+				if ($key > 0) echo '</div>';
+				echo '<div class="group"><div class="title">'.$chapter->comic_name.'</div>';
+				$current_comic = $chapter->comic_id;
+			}
+			
+			echo '<div class="element">
+					<div class="title">Chapter '.$chapter->chapter .'</div>
+					<div class="meta_r">'.$chapter->created.'</div>
+				</div>';
+	 
+		}
+		
+		// Closing the last comic group
+		echo '</div>';
+	?>
 </div>

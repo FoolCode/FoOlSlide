@@ -4,26 +4,54 @@
 	<head>
 		<title><?php echo $template['title']; ?></title>
 		<?php echo $template['metadata']; ?>
-                <?php echo link_tag('content/themes/default/style.css')?>
+		<?php echo link_tag('content/themes/default/style.css') ?>
 
 	</head>
 	<body>
-            <div id="content">
-                <div id="navig">
-                        <a href="<?php echo "";?>"><div id="title"><?php echo "TITLE"; ?></div></a> 
-                                <?php echo'<div style="float:left; margin:2px 5px 0; padding-top:6px; font-size:11px;"><a href="">Go back to site &crarr;</a></div>'; ?>
+        <div id="header">
 
-                                        			
-                        <div class="clearer"></div>	
-            </div>
-            
-		<?php echo $template['body']; ?>
-                
-            <div id="theFooter">
-                    <div style="text-align:right; font-size:11px; margin:6px 0 2px 0;"><a title="Download or update your FoOlReader, made by FoOlRulez team" href="http://foolrulez.org/blog/foolreader">Powered by FoOlReader</a> | <a title="FoOlRulez.org website" href="http://foolrulez.org">FoOlRulez.org</a></div>
-            </div>
+			<div id="navig">
+				<ul>
+					<li>
+						<a href="<?php echo site_url('/reader/') ?>">Home</a>
+					</li>
+					<li style="width:280px;">
+						<?php
+						echo form_open("/reader/search/");
+						echo form_input(array('name' => 'search', 'placeholder' => 'To search, type and hit enter', 'id' => 'searchbox'));
+						echo form_close();
+						?>
+						<a href="<?php echo site_url('/reader/search/') ?>">Search</a>
+					</li>
+					<div class="clearer"></div>
+				</ul>
+			</div>
+
+			<a href="<?php echo ""; ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
+<?php echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">Go back to site &crarr;</a></div>'; ?>
+			<div class="clearer"></div>	
+        </div>
 
 
-            </div>
+
+
+		<div id="content">				
+			<div class="title">
+			<?php echo '' ?>
+			</div>
+
+			<?php
+			echo $template['body'];
+			?>
+
+		</div>
+
+        <div id="footer">
+			<div class="text">
+<?php echo get_setting('fs_gen_footer_text'); ?>
+			</div>
+        </div>
+
+
 	</body>
 </html>

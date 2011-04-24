@@ -49,6 +49,16 @@ class Preferences extends Admin_Controller {
 					 'preferences' => 'fs_gen'
                 )
             );
+			
+			$form[] = array(
+                'Footer text',
+                array(
+                     'type'        => 'textarea',
+                     'name'        => 'fs_gen_footer_text',
+                     'placeholder' => '',
+					 'preferences' => 'fs_gen'
+                )
+            );
 
             $form[] = array(
                 'Default team',
@@ -73,7 +83,7 @@ class Preferences extends Admin_Controller {
                 )
             );
 
-            if($post = $this->input->post())
+			if($post = $this->input->post())
             {
                 $this->_submit($post);
             }

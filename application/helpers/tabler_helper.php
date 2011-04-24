@@ -253,11 +253,11 @@ if (!function_exists('ormer'))
 				$result[] = array(
 					$row['label'],
 					array(
-						'name' => addslashes($key),
-						'value' => addslashes($row['value']),
-						'type' => addslashes($row['type']),
-						'display' => addslashes($row['display']),
-						'placeholder' => addslashes($row['placeholder'])
+						'name' => ($key),
+						'value' => ($row['value']),
+						'type' => ($row['type']),
+						'display' => ($row['display']),
+						'placeholder' => ($row['placeholder'])
 					)
 				);
 			}

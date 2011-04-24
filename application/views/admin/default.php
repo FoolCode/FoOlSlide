@@ -6,7 +6,7 @@
 	<title>FoOlSlide Administration</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?= base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
         <script type="text/javascript">
             function slideDown(item) { jQuery(item).slideDown(); }
             function slideUp(item) { jQuery(item).slideUp(); }

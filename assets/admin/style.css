@@ -114,7 +114,7 @@ input[type="button"], input[type="submit"], input[type="reset"]
 	-webkit-border-radius:3px;
 	background:#eee;
 	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
-	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#FDFDFD), to(#EEECEC));
     background-image: -o-linear-gradient(#FDFDFD, #EEECEC); 
     background-image: linear-gradient(#FDFDFD, #EEECEC); 
 }
@@ -199,7 +199,7 @@ textarea:focus, textarea:hover
 	-webkit-border-radius:3px;
 
 	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
-	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#FDFDFD), to(#EEECEC));
     background-image: -o-linear-gradient(#FDFDFD, #EEECEC); 
 }
 
@@ -214,19 +214,6 @@ textarea:focus, textarea:hover
 	color:#333;
 	border:1px solid #444;
 }
-
-.gbutton.red
-{
-	display:none;
-	border-color: red;
-	background-image: -moz-linear-gradient(#FDFDFD, #EC9E9E);
-	background-image: -webkit-linear-gradient(#FDFDFD, #EC9E9E);
-    background-image: -o-linear-gradient(#FDFDFD, #EC9E9E); 
-}
-
-
-
-
 
 #background
 {
@@ -359,7 +346,7 @@ textarea:focus, textarea:hover
 
 
 	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
-	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#FDFDFD), to(#EEECEC));
     background-image: -o-linear-gradient(#FDFDFD, #EEECEC);
 
 }

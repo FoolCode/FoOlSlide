@@ -11,6 +11,8 @@ body
 	background-image: url('http://dl.dropbox.com/u/279080/bg_slide.png');
 	// background-image:url('http://i.imgur.com/Nf0Ab.jpg');
     overflow-y:scroll;
+	background:url('http://i.imgur.com/goqEm.png') fixed;
+
 }
 
 a
@@ -82,7 +84,7 @@ input[type="text"]
 #header
 {
 	background:#fcfcfc;
-	background:rgba(255,255,255,0.7);
+	background:rgba(255,255,255,0.9);
 	color:#E26A51;
 	border-top:none;
 	border-bottom:6px solid #52A9E3;
@@ -131,6 +133,7 @@ input[type="text"]
 	background:#fcfcfc;
 	padding:10px 10px 10px;
 	color:#F58C5B;
+	background:rgba(255,255,255,0.9);
 
 	border-bottom:none;
 	border-top:6px solid #F58C5B;
@@ -242,6 +245,7 @@ input[type="text"]
 #page .inner
 {
 	margin: 0 auto;
+	min-height:1000px;
 	position:relative;
 }
 
@@ -260,14 +264,22 @@ input[type="text"]
 	background:#333;
 	padding:10px 10px 10px 40px;
 	color:#999;
-	position:absolute;
-	top:100px;
+	position:fixed;
+	top:170px;
 	right:10px;
 	border-radius:5px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	z-index:-1;
-	border: 2px solid #999;
+
+	
+	box-shadow: inset 1px 2px 4px #000;
+	-moz-box-shadow: inset 1px 2px 4px #000;
+	-webkit-box-shadow: inset 1px 2px 4px #000;
+
+	background-image: -moz-linear-gradient(#505050, #303030);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#505050), to(#303030));
+    background-image: -o-linear-gradient(#505050, #303030); 
 }
 
 #page .initnumber
@@ -282,6 +294,9 @@ input[type="text"]
 	-moz-border-radius:1000px;
 	-webkit-border-radius:1000px;
 	min-width:30px;
+	box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
+	-moz-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
+	-webkit-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
 }
 
 #page .on
@@ -303,20 +318,35 @@ input[type="text"]
 	-moz-border-radius:1000px;
 	-webkit-border-radius:1000px;
 	min-width:30px;
-}
+	box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
+	-moz-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
+	-webkit-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;}
 
 #myFire
 {
 	position:absolute;
 	bottom:10px;
+	left:23px;
+	width:10px;
+}
+
+#myFireHidden
+{
+	position:absolute;
+	bottom:8px;
 	left:20px;
 	width:10px;
+	height:85%;
+	padding:2px;
+	box-shadow: inset 0px 0px 3px #000;
+	-moz-box-shadow: inset 0px 0px 3px #000;
+	-webkit-box-shadow: inset 0px 0px 3px #000;
 }
 
 #myFire .light
 {
-	height:5px;
-	width:7px;
+	height:7px;
+	width:8px;
 	margin: 3px 0 0 0;
 	background: #2DC532;
 }
@@ -330,4 +360,18 @@ input[type="text"]
 	height:85%;
 	background:red;
 	display:none;
+}
+
+
+#myLoadingHidden
+{
+	position:absolute;
+	bottom:8px;
+	left:5px;
+	width:10px;
+	height:85%;
+	padding:2px;
+	box-shadow: inset 0px 0px 3px #000;
+	-moz-box-shadow: inset 0px 0px 3px #000;
+	-webkit-box-shadow: inset 0px 0px 3px #000;
 }

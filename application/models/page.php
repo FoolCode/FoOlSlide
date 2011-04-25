@@ -185,6 +185,12 @@ class Page extends DataMapper {
 
         public function add_page($filedata, $chapter_id, $hidden = 0, $description = "")
         {
+			if (!$imagedata = @getimagesize($filedata["server_path"]))
+			{
+				log_message('error', 'add_page: uploaded file doesn\'t seem to be an image');
+				return false;
+			}
+			
             $this->chapter_id = $chapter_id;
             if ($hidden == 1) $this->hidden = 1; else $this->hidden = 0;
             $this->description = $description;
@@ -214,7 +220,8 @@ class Page extends DataMapper {
             }
 
             $dir = "content/comics/".$comic->stub."_".$comic->uniqid."/".$chapter->stub."_".$chapter->uniqid."/";
-            $imagedata = getimagesize($filedata["server_path"]);
+            
+			$imagedata = @getimagesize($filedata["server_path"]);
             $thumbdata = getimagesize($dir."thumb_".$filedata["name"]);
 
 			$page = new Page();
@@ -253,7 +260,7 @@ class Page extends DataMapper {
             }
 
             $chapter = new Chapter();
-            $chapter->where("id", $data->chapter_id)->get();
+            $chapter->where("id", $this->chapter_id)->get();
             $comic = new Comic();
             $comic->where("id", $chapter->comic_id)->get();
 

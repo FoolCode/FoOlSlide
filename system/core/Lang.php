@@ -134,7 +134,7 @@ class CI_Lang {
 		// Because killer robots like unicorns!
 		if ($line === FALSE)
 		{
-			log_message('error', 'Could not find the language line "'.$line.'"');
+		//	log_message('error', 'Could not find the language line "'.$line.'"');
 		}
 
 		return $line;

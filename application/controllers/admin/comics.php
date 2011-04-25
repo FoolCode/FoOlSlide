@@ -16,7 +16,7 @@ class Comics extends Admin_Controller {
 
         function index()
         {
-            redirect('/admin/comics/comics');
+            redirect('/admin/comics/manage');
         }
 
 		function manage($page = 1)
@@ -234,11 +234,11 @@ class Comics extends Admin_Controller {
 			
 			if($this->input->post('uploader') == 'uploadify')
 			{			
-				$config['allowed_types'] = 'zip|gif|jpg|jpeg|png';
+				$config['allowed_types'] = 'png|zip|gif|jpg|jpeg';
 				$this->load->library('upload', $config);
 				if ( ! $this->upload->do_upload('Filedata'))
 				{
-					log_message('error',print_r($_FILES, true));
+					log_message('error', 'durr'.print_r($_FILES, true));
 					print_r($error = array('error' => $this->upload->display_errors()));
 					log_message('error',$this->upload->display_errors());
 					return false;
@@ -260,9 +260,8 @@ class Comics extends Admin_Controller {
 				   return false;
 				}
 				
-				$output['session'] = $this->session->get_js_session();
-				echo json_encode($output);
-				die();
+				echo 1;
+
 				return true;
 			}
 
@@ -319,6 +318,13 @@ class Comics extends Admin_Controller {
 
             return true;
         }
+		
+		function get_sess_id()
+		{
+			//$sess['session'] = $this->session->get_js_session();
+			//echo json_encode($sess);
+			echo $this->session->get_js_session();
+		}
 
         function delete($type, $id = 0)
         {

@@ -63,7 +63,6 @@ class Files_model extends CI_Model {
         // This is just a plug to adapt the variable names for the comic_model
         public function page($data)
         {
-			log_message('error', 'page!');
             // $data["chapter_id"];
             // $data["raw_name"];
             $file["server_path"] = $data["full_path"];

@@ -15,7 +15,9 @@ if (!defined('BASEPATH'))
 			<div class="on">on</div>
 			<div class="finalnumber"><?php echo count($pages); ?></div>
 			<div id="myFire"></div>
+			<div id="myFireHidden"></div>
 			<div id="myLoading"></div>
+			<div id="myLoadingHidden"></div>
 
 
 
@@ -132,7 +134,7 @@ if (!defined('BASEPATH'))
 	function lightMyFire()
 	{
 		num = countNextLoaded();
-		if(num > 15) num = 15;
+		if(num > 12) num = 12;
 		
 		light = "";
 		for(i = 0; i < num; i++)

@@ -17,12 +17,33 @@ class Preferences extends Admin_Controller {
             redirect('/admin/preferences/general');
         }
         
+		function _submit($post)
+        {
+            foreach($post as $key => $item)
+            {
+                $this->db->update('preferences', array('value' => $item), array('name' => $key));
+            }
+			
+				$CI =& get_instance();
+				$array = $CI->db->get('preferences')->result_array();
+				$result = array();
+				foreach($array as $item)
+				{
+					$result[$item['name']] = $item['value'];
+				}
+				$CI->fs_options = $result;
+        }
         
         function general()
         {
             $this->viewdata["function_title"] = "General";
             
-            
+            if($post = $this->input->post())
+            {
+                $this->_submit($post);
+				
+            }
+			
             $form = array();
 
 
@@ -82,11 +103,6 @@ class Preferences extends Admin_Controller {
 					 'preferences' => 'fs_gen'
                 )
             );
-
-			if($post = $this->input->post())
-            {
-                $this->_submit($post);
-            }
             
             $table = tabler($form, FALSE);
 
@@ -96,14 +112,141 @@ class Preferences extends Admin_Controller {
             $this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
             $this->load->view("admin/default.php", $this->viewdata);
         }
-        
-        function _submit($post)
+		
+		function advertising()
         {
-            foreach($post as $key => $item)
+            $this->viewdata["function_title"] = "Advertising";
+            
+			if($post = $this->input->post())
             {
-                $this->db->update('preferences', array('value' => $item), array('name' => $key));
+                $this->_submit($post);
+				
+				$ad_before = '<!DOCTYPE html>
+						<html>
+						  <head>
+							<title>FoOlSlide ads</title>
+							<style>body{margin:0; padding:0; overflow:hidden;}</style>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+						  </head>
+						  <body>';
+				$ad_after = '</body>
+						</html>';
+				
+				$ads = array('fs_ads_top_banner' => 'ads_top.html', 'fs_ads_bottom_banner' => 'ads_bottom.html', 'fs_ads_right_banner' => 'ads_right.html');
+				foreach($ads as $ad => $adfile)
+				{
+					if(!write_file('./content/ads/'.$adfile, $ad_before.$this->input->post($ad).$ad_after))
+					{
+						log_message('error', 'preferences.php/advertising: couldn\'t update HTML files');
+						set_notice('error', 'Couldn\'t save the advertising code in the HTML');
+					}
+				}
+				
             }
-        }
-        
+            
+            $form = array();
+
+
+            $form[] = array(
+                'Top banner',
+                array(
+                     'type'        => 'textarea',
+                     'name'        => 'fs_ads_top_banner',
+                     'placeholder' => 'Insert the HTML provided by your advertiser',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+            $form[] = array(
+                'Reload every pageview? (for ProjectWondeful.com ads)',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_top_banner_reload',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+			
+            $form[] = array(
+                'Active',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_top_banner_active',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+			$form[] = array(
+                'Right banner',
+                array(
+                     'type'        => 'textarea',
+                     'name'        => 'fs_ads_right_banner',
+                     'placeholder' => 'Insert the HTML provided by your advertiser',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+            $form[] = array(
+                'Reload every pageview? (for ProjectWondeful.com ads)',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_right_banner_reload',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+			
+            $form[] = array(
+                'Active',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_right_banner_active',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+			$form[] = array(
+                'Top banner',
+                array(
+                     'type'        => 'textarea',
+                     'name'        => 'fs_ads_bottom_banner',
+                     'placeholder' => 'Insert the HTML provided by your advertiser',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+            $form[] = array(
+                'Reload every pageview? (for ProjectWondeful.com ads)',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_bottom_banner_reload',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+			
+			
+            $form[] = array(
+                'Active',
+                array(
+                     'type'        => 'checkbox',
+                     'name'        => 'fs_ads_bottom_banner_active',
+                     'placeholder' => '',
+					 'preferences' => 'fs_ads'
+                )
+            );
+            
+            $table = tabler($form, FALSE);
+
+            $data['table'] = $table;
+            
+            
+            $this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
+            $this->load->view("admin/default.php", $this->viewdata);
+        }    
         
 }

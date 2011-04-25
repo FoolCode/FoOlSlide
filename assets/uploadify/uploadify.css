@@ -34,7 +34,7 @@ THE SOFTWARE.
 	-webkit-border-radius:3px;
 	
 	background-image: -moz-linear-gradient(#FDFDFD, #EEECEC);
-	background-image: -webkit-linear-gradient(#FDFDFD, #EEECEC);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#FDFDFD), to(#EEECEC));
     background-image: -o-linear-gradient(#FDFDFD, #EEECEC); 
 }
 .uploadify:hover .uploadifyButton:hover {

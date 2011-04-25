@@ -1,8 +1,7 @@
 <?php
-
 $this->buttoner[] = array(
 	'text' => 'Delete chapter',
-	'href' => site_url('/admin/comics/delete/chapter/'.$chapter->id),
+	'href' => site_url('/admin/comics/delete/chapter/' . $chapter->id),
 	'plug' => 'Do you really want to delete this chapter and its pages?'
 );
 
@@ -11,7 +10,6 @@ echo buttoner();
 echo form_open();
 echo $table;
 echo form_close();
-
 ?>
 
 <div class="section">Pages:</div>
@@ -27,45 +25,53 @@ $session_data = $this->session->get_js_session();
 	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
 	<script type="text/javascript">
 		
-	function deleteImage(id)
-	{
-		jQuery.post('<?php echo site_url('/admin/comics/delete/page/')?>', {id: id}, function(){
-			jQuery('#image_' + id).hide();
-		});
-	}
-	
-	function deleteAllPages()
-	{
-		jQuery.post('<?php echo site_url('/admin/comics/delete/allpages/')?>', {id: <?php echo $chapter->id ?>}, function(){
-			location.reload();
-		});
-	}
-			
-	jQuery(document).ready(function() {
-	  jQuery('#file_upload').uploadify({
-		'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
-		'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
-		'cancelImg' : '<?php echo site_url(); ?>assets/uploadify/cancel.png',
-		'preventCaching' : false,
-		'multi' : true,
-		'buttonText' : 'Upload zip and images',
-		'width': 200,
-		'auto'      : true,
-		'requeueErrors' : false,
-		'postData' : {
-				'chapter_id' : <?php echo $chapter->id; ?>,
-				'uploader' : 'uploadify',
-				'overwrite' : '1',
-				'<?php echo $session_name;?>' : "<?php echo $session_data;?>"
-			}
-	  });
-	});
-	
-	function onUploadComplete() {
-			php_session = jQuery.evalJSON(response).session;
-			jQuery("#uploadify").uploadifySettings( "scriptData", {'<?php echo $session_name;?>' : '"' + php_session + '"'} ); 
-			location.reload();
+		function deleteImage(id)
+		{
+			jQuery.post('<?php echo site_url('/admin/comics/delete/page/') ?>', {id: id}, function(){
+				jQuery('#image_' + id).hide();
+			});
 		}
+	
+		function deleteAllPages()
+		{
+			jQuery.post('<?php echo site_url('/admin/comics/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
+				location.reload();
+			});
+		}
+	
+		function updateSession()
+		{
+			jQuery.post('<?php echo site_url('/admin/comics/get_sess_id'); ?>', 
+			function(result){
+						
+				jQuery('#file_upload').uploadifySettings( 'postData', {
+					'ci_sessionz' : result, 
+					'chapter_id' : <?php echo $chapter->id; ?>,
+					'uploader' : 'uploadify',
+					'overwrite' : '1'
+				}, false );
+				setTimeout('updateSession()', 6000);
+			});
+		}
+			
+		jQuery(document).ready(function() {
+			jQuery('#file_upload').uploadify({
+				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
+				'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+				'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
+				'checkExisting' : false,
+				'preventCaching' : false,
+				'multi' : true,
+				'buttonText' : 'Upload zip and images',
+				'width': 200,
+				'auto'      : true,
+				'requeueErrors' : true,
+				'postData' : {}
+			});
+		});
+	
+		updateSession();
+	
 	</script>
 	<div id="file_upload">Upload</div>
 </div>
@@ -78,19 +84,18 @@ echo buttoner();
 <div class="list pages">
     <table>
         <tr>
-<?php
-    $count = 0;
-    foreach ($pages as $item)
-    {
-        $count++;
-        echo '<td>
-                <div class="controls gbutton" onclick="deleteImage('.$item['id'].')">Delete</div>
-                <img id="image_'.$item['id'].'" src="'.$item["thumb_url"].'" />
+			<?php
+			$count = 0;
+			foreach ($pages as $item) {
+				$count++;
+				echo '<td>
+                <div class="controls gbutton" onclick="deleteImage(' . $item['id'] . ')">Delete</div>
+                <img id="image_' . $item['id'] . '" src="' . $item["thumb_url"] . '" />
              </td>';
-        if ($count%4==0) echo '</tr><tr>';
-    }
-
-?>     </tr>
+				if ($count % 4 == 0)
+					echo '</tr><tr>';
+			}
+			?>     </tr>
     </table>
 
 </div>

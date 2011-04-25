@@ -317,7 +317,7 @@ if(jQuery)(
 					}
 					
 					// Triggered when a file upload successfully completes
-					function onUploadComplete(file) {
+					function onUploadComplete(file, datar) {
 						var stats = swfuploadify.getStats();
 						swfuploadify.queue.queueLength = stats.files_queued;
 						if (swfuploadify.queue.uploadQueue[0] == '*') {

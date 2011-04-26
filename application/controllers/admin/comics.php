@@ -140,6 +140,15 @@ class Comics extends Admin_Controller {
 			
 			$table = ormer($comic);
 			
+			$table[] = array(
+					'Licensed nations',
+					array(
+						'name' => 'licensed',
+						'type' => 'input',
+						'value' => '',
+						'help' => 'Insert the nations where the comic is licensed to disable availability for the nation.'
+					)
+				);
 			
 			$table = tabler($table);
 			$data['table'] = $table;
@@ -218,6 +227,16 @@ class Comics extends Admin_Controller {
 				}
 				
 				$table = ormer($comic);
+				$table[] = array(
+					'Licensed nations',
+					array(
+						'name' => 'licensed',
+						'type' => 'nation',
+						'value' => array(),
+						'help' => 'Insert the nations where the comic is licensed to disable availability for the nation.'
+					)
+				);
+				
 				$table = tabler($table, FALSE, TRUE);
 				$data['table'] = $table;
             

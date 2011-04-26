@@ -31,7 +31,7 @@ class Reader extends Public_Controller {
 		$this->template->build('list');
 	}
 
-	public function read($comic, $chapter, $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
+	public function read($comic, $language = 'en', $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
 		$comice = new Comic();
 		$comice->where('stub', $comic)->get();
 		if ($comice->result_count() == 0) {
@@ -39,7 +39,7 @@ class Reader extends Public_Controller {
 		}
 
 		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comice->id)->where('chapter', $chapter);
+		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('chapter', $chapter);
 
 		if ($subchapter == 'page')
 			$current_page = $team;

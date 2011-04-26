@@ -137,7 +137,7 @@ if (!defined('BASEPATH'))
 		if(num > 12) num = 12;
 		
 		light = "";
-		for(i = 0; i < num; i++)
+		for(i = 1; i < num; i++)
 		{
 			light += '<div class="light"></div>';
 		}
@@ -175,7 +175,7 @@ if (!defined('BASEPATH'))
 
 		timeStamp37 = 0;
 		timeStamp39 = 0;
-		
-		changePage(currentpage)
+
+		changePage(current_page);
 	});
 </script>

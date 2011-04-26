@@ -11,3 +11,9 @@ function load_defaults()
 	}
 	$CI->fs_options = $result;    
 }
+
+
+function get_location()
+{
+	
+}

@@ -99,6 +99,11 @@ class Chapter extends DataMapper {
 			'label' => 'Volume number',
 			'type' => 'input'
 		),
+		'language' => array(
+			'rules' => array(),
+			'label' => 'Language',
+			'type' => 'language'
+		),
 		'uniqid' => array(
 			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Uniqid'
@@ -270,6 +275,8 @@ class Chapter extends DataMapper {
 			$this->uniqid = uniqid();
 		if (!isset($this->stub))
 			$this->stub = $this->stub();
+		if (!isset($data['hidden']) || $data['hidden'] != 1)
+			$this->hidden = 0;
 
 		$this->stub = $this->chapter . '_' . $this->subchapter . '_' . $this->name;
 		$this->stub = $this->stub();
@@ -412,17 +419,17 @@ class Chapter extends DataMapper {
 		$comic->where('id', $this->comic_id)->get();
 		$chapter = new Chapter();
 
-		$chapter->where('comic_id', $comic->id)->where('chapter', $this->chapter)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
+		$chapter->where('comic_id', $comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
 		if ($chapter->result_count() == 0) {
 			$chapter = new Chapter();
-			$chapter->where('comic_id', $comic->id)->having('chapter > ', $this->chapter)->order_by('chapter', 'asc')->limit(1)->get();
+			$chapter->where('comic_id', $comic->id)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
 			if ($chapter->result_count() == 0) {
 				return site_url('/reader/read/' . $comic->stub);
 			}
 		}
 
 		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comic->id)->where('chapter', $chapter->chapter)->where('subchapter', $chapter->subchapter)->get();
+		$chaptere->where('comic_id', $comic->id)->where('chapter', $chapter->chapter)->where('language', $this->language)->where('subchapter', $chapter->subchapter)->get();
 
 		$done = false;
 		if ($chaptere->result_count() > 0) {
@@ -442,7 +449,7 @@ class Chapter extends DataMapper {
 			$chapter = $chaptere;
 		}
 
-		$url = '/reader/read/' . $comic->stub . '/' . $chapter->chapter . '/';
+		$url = '/reader/read/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
 
 		if ($chapter->subchapter != 0) {
 			$url .= $chapter->subchapter . '/';
@@ -467,17 +474,14 @@ class Chapter extends DataMapper {
 		return site_url($url);
 	}
 
-	
-	
-	public function next_page($page)
-	{
+	public function next_page($page) {
 		$url = current_url();
-		if(!$post = strpos($url, '/page'))
-		{
-			return current_url().'/page/'.($page+1);
+		if (!$post = strpos($url, '/page')) {
+			return current_url() . '/page/' . ($page + 1);
 		}
-		return substr(current_url(), 0 , $post).'/page/'.($page+1);
+		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
 	}
+
 }
 
 /* End of file chapter.php */

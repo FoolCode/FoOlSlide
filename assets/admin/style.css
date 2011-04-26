@@ -88,8 +88,9 @@ input[type="text"], input[type="password"], select
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     font-size:15px;
-    width:300px;
+    width:400px;
     color:#333;
+	margin-top:2px;
 }
 
 input[type="text"]:focus, input[type="password"]:focus,
@@ -141,7 +142,7 @@ input:-moz-placeholder {
 textarea
 {
     font-family:monospace;
-    width:300px;
+    width:400px;
     height:130px;
     border-radius:4px;
     -webkit-border-radius:4px;
@@ -477,7 +478,7 @@ textarea:focus, textarea:hover
     border-bottom: 1px solid #ddd;
     border-color:rgba(20,20,20,0.1);
     height:33px;
-    padding: 5px;
+    padding: 3px;
     padding-left:20px;
 }
 
@@ -487,8 +488,14 @@ textarea:focus, textarea:hover
     border-right:1px solid #aaa;
     border-right:1px solid rgba(20,20,20,0.2);
     padding:5px;
+	vertical-align:top;
 }
 
+#center table.form .help
+{
+	margin:3px 0px;
+	font-size:11px;
+}
 
 
 

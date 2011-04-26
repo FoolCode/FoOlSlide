@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 
-<head>
-	<title>FoOlSlide Administration</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<head>
+		<title>FoOlSlide Administration</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?= base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
         <script type="text/javascript">
             function slideDown(item) { jQuery(item).slideDown(); }
             function slideUp(item) { jQuery(item).slideUp(); }
@@ -19,100 +19,99 @@
                     location.href = href;
                 }
             }
-            function addField()
-            {
-                
-            }
 			
-			function confirmSlide()
-			{
-				jQuery(this).show();
-				
-			}
-			function confirmSlideUp()
-			{
-				
-			}
+            function addField(e)
+            {
+				if(jQuery(e).val().length > 0)
+				{
+					jQuery(e).clone().val('').insertAfter(e);
+					jQuery(e).attr('onKeyUp', '');
+					jQuery(e).attr('onChange', '');
+				}
+            }
         </script>
 
-</head>
+	</head>
 
 
 
-<body>
+	<body>
 
-    <div class="wrapper">
-        
-        <div id="background">
-            <img src="<?php echo base_url() ?>assets/admin/images/admin_background.png" />
-        </div>
+		<div class="wrapper">
 
-<div id="header">
-    <div class="logout">
-        <?php
-            if(logged_in())
-            {
-                ?>
-        <a href="<?= site_url('auth/logout'); ?>">Logout <?php echo $this->ion_auth->get_user()->username; ?></a>
-                <?php
-            }
-        ?>
-    </div>
-    <div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide control panel</div>
+			<div id="background">
+				<img src="<?php echo base_url() ?>assets/admin/images/admin_background.png" />
+			</div>
 
-</div>
+			<div id="header">
+				<div class="logout">
+					<?php
+					if (logged_in()) {
+						?>
+						<a href="<?= site_url('auth/logout'); ?>">Logout <?php echo $this->ion_auth->get_user()->username; ?></a>
+						<?php
+					}
+					?>
+				</div>
+				<div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide control panel</div>
 
-        <div id="content_wrap">
+			</div>
 
-<div id="sidebar">
-	<?= $sidebar ?>
-</div>
+			<div id="content_wrap">
 
-<div class="spacer"></div>
+				<div id="sidebar">
+					<?= $sidebar ?>
+				</div>
+
+				<div class="spacer"></div>
 
 
-<div id="center">
+				<div id="center">
 
-    <div class="title"><?php
-    echo $controller_title; 
-    if (isset($function_title)) echo ' » '.$function_title;
-    if (isset($extra_title) && !empty($extra_title))
-    {
-        foreach($extra_title as $item)
-            echo ' » '.$item;
-    }
-    ?></div>
-	<div class="content">
-    <div class="errors">
-        <?php
-        if (isset($this->notices))
-        foreach($this->notices as $key => $value)
-        {
-            if($value["type"] == 'error') $color = 'red';
-            if($value["type"] == 'warn') $color = 'yellow';
-            if($value["type"] == 'notice') $color = 'green';
-            echo '<div class="alert '.$color.'">'.$value["message"].'</div>';
-        }
-        $flashdata = $this->session->flashdata('notices');
-        if(!empty($flashdata))
-        foreach($flashdata as $key => $value)
-        {
-            if($value["type"] == 'error') $color = 'red';
-            if($value["type"] == 'warn') $color = 'yellow';
-            if($value["type"] == 'notice') $color = 'green';
-            echo '<div class="alert '.$color.'">'.$value["message"].'</div>';
-        }
-        ?>
-    </div>
+					<div class="title"><?php
+					echo $controller_title;
+					if (isset($function_title))
+						echo ' » ' . $function_title;
+					if (isset($extra_title) && !empty($extra_title)) {
+						foreach ($extra_title as $item)
+							echo ' » ' . $item;
+					}
+					?></div>
+					<div class="content">
+						<div class="errors">
+							<?php
+							if (isset($this->notices))
+								foreach ($this->notices as $key => $value) {
+									if ($value["type"] == 'error')
+										$color = 'red';
+									if ($value["type"] == 'warn')
+										$color = 'yellow';
+									if ($value["type"] == 'notice')
+										$color = 'green';
+									echo '<div class="alert ' . $color . '">' . $value["message"] . '</div>';
+								}
+							$flashdata = $this->session->flashdata('notices');
+							if (!empty($flashdata))
+								foreach ($flashdata as $key => $value) {
+									if ($value["type"] == 'error')
+										$color = 'red';
+									if ($value["type"] == 'warn')
+										$color = 'yellow';
+									if ($value["type"] == 'notice')
+										$color = 'green';
+									echo '<div class="alert ' . $color . '">' . $value["message"] . '</div>';
+								}
+							?>
+						</div>
 
-    <?= $main_content_view; ?>
+						<?= $main_content_view; ?>
 
-    </div></div></div>
+					</div></div></div>
             <div class="push"></div>
 
-</div>
+		</div>
 
-<div id="footer"><div class="text">FoOlSlide Version <?php echo get_setting('fs_priv_version') ?></div></div>
-</body>
+		<div id="footer"><div class="text">FoOlSlide Version <?php echo get_setting('fs_priv_version') ?></div></div>
+	</body>
 
 </html>

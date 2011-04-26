@@ -111,17 +111,13 @@ if (!function_exists('formize')) {
 		if (isset($column['preferences']))
 			$column['value'] = get_setting($column['name']);
 
+		//if($column['type'] == 'input' || $column['type'] == 'nation') $column['value'] = set_value($column['name']);
+		
 		if ($column['type'] == 'checkbox') {
 			if($column['value'] == 1) $column['checked'] = 'checked';
 			$column['value'] = 1;
 		}
 
-		if ($column['type'] == 'language') {
-			$lang = config_item('fs_languages');
-			if (!isset($column['value']) || $column['value'] == "")
-				$column['value'] = get_setting('fs_gen_default_lang');
-			return form_dropdown($column['name'], $lang, $column['value']);
-		}
 
 		$formize = 'form_' . $column['type'];
 		$type = $column['type'];
@@ -146,6 +142,7 @@ if (!function_exists('formize')) {
 				$result[] = $formize($column);
 			}
 			$column['value'] = "";
+			$column['onKeyUp'] = "addField(this);";
 			$result[] = $formize($column);
 		} else {
 			// echo '<pre>'; print_r($column); echo '</pre>';
@@ -305,6 +302,22 @@ if (!function_exists('form_nation')) {
 		{
 			$nationcodes[$code] = $nations[$key]; 
 		}
-		return form_dropdown($column['name'], $nationcodes, $column['value']);
+		if(isset($column['onKeyUp']))
+		{
+			$column['onChange'] = 'onChange="'.$column['onKeyUp'].'"';
+			unset($column['onKeyUp']);
+		}
+		else $column['onChange'] = '';
+		return form_dropdown($column['name'], $nationcodes, $column['value'], $column['onChange']);
+	}
+}
+
+if (!function_exists('form_language')) {
+	function form_language($column)
+	{
+		$lang = config_item('fs_languages');
+		if (!isset($column['value']) || $column['value'] == "")
+			$column['value'] = get_setting('fs_gen_default_lang');
+		return form_dropdown($column['name'], $lang, $column['value']);
 	}
 }

@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "index";
+$route['default_controller'] = "reader";
 $route['admin'] = "admin/index";
 $route['reader/list'] = 'reader/lista';
 $route['admin/users/users'] = 'admin/users/usersa';

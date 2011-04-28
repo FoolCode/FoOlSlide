@@ -3,63 +3,10 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-/**
- * Chapter DataMapper Model
- *
- * Use this basic model as a chapter for creating new models.
- * It is not recommended that you include this file with your application,
- * especially if you use a Chapter library (as the classes may collide).
- *
- * To use:
- * 1) Copy this file to the lowercase name of your new model.
- * 2) Find-and-replace (case-sensitive) 'Chapter' with 'Your_model'
- * 3) Find-and-replace (case-sensitive) 'chapter' with 'your_model'
- * 4) Find-and-replace (case-sensitive) 'chapters' with 'your_models'
- * 5) Edit the file as desired.
- *
- * @license		MIT License
- * @category	Models
- * @author		Phil DeJarnett
- * @link		http://www.overzealous.com
- */
 class Chapter extends DataMapper {
 
-	// Uncomment and edit these two if the class has a model name that
-	//   doesn't convert properly using the inflector_helper.
-	// var $model = 'chapter';
-	// var $table = 'chapters';
-	// You can override the database connections with this option
-	// var $db_params = 'db_config_name';
-	// --------------------------------------------------------------------
-	// Relationships
-	//   Configure your relationships below
-	// --------------------------------------------------------------------
-	// Insert related models that Chapter can have just one of.
 	var $has_one = array('comic', 'team', 'joint');
-	// Insert related models that Chapter can have more than one of.
 	var $has_many = array('page');
-
-	/* Relationship Examples
-	 * For normal relationships, simply add the model name to the array:
-	 *   $has_one = array('user'); // Chapter has one User
-	 *
-	 * For complex relationships, such as having a Creator and Editor for
-	 * Chapter, use this form:
-	 *   $has_one = array(
-	 *   	'creator' => array(
-	 *   		'class' => 'user',
-	 *   		'other_field' => 'created_chapter'
-	 *   	)
-	 *   );
-	 *
-	 * Don't forget to add 'created_chapter' to User, with class set to
-	 * 'chapter', and the other_field set to 'creator'!
-	 *
-	 */
-	// --------------------------------------------------------------------
-	// Validation
-	//   Add validation requirements, such as 'required', for your fields.
-	// --------------------------------------------------------------------
 	var $validation = array(
 		'name' => array(
 			'rules' => array('max_length' => 256),
@@ -136,60 +83,21 @@ class Chapter extends DataMapper {
 		)
 	);
 
-	// --------------------------------------------------------------------
-	// Default Ordering
-	//   Uncomment this to always sort by 'name', then by
-	//   id descending (unless overridden)
-	// --------------------------------------------------------------------
-	// var $default_order_by = array('name', 'id' => 'desc');
-	// --------------------------------------------------------------------
-
-	/**
-	 * Constructor: calls parent constructor
-	 */
 	function __construct($id = NULL) {
 		parent::__construct($id);
 	}
 
-	// --------------------------------------------------------------------
-	// Post Model Initialisation
-	//   Add your own custom initialisation code to the Model
-	// The parameter indicates if the current config was loaded from cache or not
-	// --------------------------------------------------------------------
 	function post_model_init($from_cache = FALSE) {
 		
 	}
 
-	// --------------------------------------------------------------------
-	// Custom Methods
-	//   Add your own custom methods here to enhance the model.
-	// --------------------------------------------------------------------
+	public function get($limit = NULL, $offset = NULL) {
+		$CI = & get_instance();
+		if (!$CI->ion_auth->is_admin())
+			$this->where('hidden', 0);
 
-	/* Example Custom Method
-	  function get_open_chapters()
-	  {
-	  return $this->where('status <>', 'closed')->get();
-	  }
-	 */
-
-	// --------------------------------------------------------------------
-	// Custom Validation Rules
-	//   Add custom validation rules for this model here.
-	// --------------------------------------------------------------------
-
-	/* Example Rule
-	  function _convert_written_numbers($field, $parameter)
-	  {
-	  $nums = array('one' => 1, 'two' => 2, 'three' => 3);
-	  if(in_array($this->{$field}, $nums))
-	  {
-	  $this->{$field} = $nums[$this->{$field}];
-	  }
-	  }
-	 */
-
-
-	//public function add_chapter($name, $comic_id, $chapter, $subchapter = 0, $team_id = 0, $joint_id = 0, $hidden = 0, $description = "")
+		return parent::get($limit, $offset);
+	}
 
 	public function add_chapter($data) {
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
@@ -244,7 +152,8 @@ class Chapter extends DataMapper {
 				return false;
 			}
 			$old_stub = $this->stub;
-		} else { // let's set the creator name if it's a new entry	// let's also check that the related comic is defined, and exists
+		}
+		else { // let's set the creator name if it's a new entry	// let's also check that the related comic is defined, and exists
 			if (!isset($this->comic_id)) {
 				set_notice('error', 'You didn\'t select a comic to refer to.');
 				log_message('error', 'update_chapter_db: comic_id was not set');
@@ -302,7 +211,8 @@ class Chapter extends DataMapper {
 			$this->team_id = 0;
 			$joint = new Joint();
 			$this->joint_id = $joint->add_joint_via_name($data['team']);
-		} else if (count($data['team']) == 1) {
+		}
+		else if (count($data['team']) == 1) {
 			$this->joint_id = 0;
 			$team = new Team();
 			$team->where("name", $data['team'][0])->get();
@@ -312,7 +222,8 @@ class Chapter extends DataMapper {
 				return false;
 			}
 			$this->team_id = $team->id;
-		} else {
+		}
+		else {
 			set_notice('error', 'You haven\'t selected any team related to this chapter.');
 			log_message('error', 'update_chapter_db: team_id does not defined');
 			return false;
@@ -326,12 +237,14 @@ class Chapter extends DataMapper {
 				log_message('error', $this->error->string);
 				set_notice('error', 'One or more of the fields inputted had the wrong kind of values.');
 				log_message('error', 'update_chapter_db: failed validation');
-			} else {
+			}
+			else {
 				set_notice('error', 'Failed to save to database for unknown reasons.');
 				log_message('error', 'update_chapter_db: failed to save');
 			}
 			return false;
-		} else {
+		}
+		else {
 			return true;
 		}
 	}
@@ -370,7 +283,8 @@ class Chapter extends DataMapper {
 			set_notice('error', 'Failed to remove the files inside the chapter directory. Please, check file permissions.');
 			log_message('error', 'remove_chapter_dir: files inside folder could not be removed');
 			return false;
-		} else {
+		}
+		else {
 			if (!rmdir($dir)) {
 				set_notice('error', 'Failed to remove the chapter directory. Please, check file permissions.');
 				log_message('error', 'remove_chapter_dir: folder could not be removed');
@@ -413,8 +327,75 @@ class Chapter extends DataMapper {
 		return $return;
 	}
 
+	public function url() {
+		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . $this->title() . '</a>';
+	}
+
+	public function title() {
+		$echo = _('Chapter') . ' ' . $this->chapter;
+		if ($this->subchapter)
+			$echo .= '.' . $this->subchapter;
+		if ($this->name != "")
+			$echo .= ': ' . $this->name;
+
+		return $echo;
+	}
+
+	public function href() {
+		$comic = new Comic();
+		$comic->where('id', $this->comic_id)->get();
+		$chapter = new Chapter();
+
+
+		$chaptere = new Chapter();
+		$chaptere->where('comic_id', $comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
+
+		$done = false;
+		if ($chaptere->result_count() > 0) {
+			foreach ($chaptere->all as $chap) {
+				if ($chap->team_id == $this->team_id && $chap->joint_id == $this->joint_id) {
+					$chapter = $chap;
+					$done = true;
+					break;
+				}
+			}
+
+			if (!$done) {
+				// This is a pretty random way to select the next chapter version, needs refinement
+				$chapter = $chaptere->all['0'];
+			}
+		}
+		else {
+			$chapter = $chaptere;
+		}
+
+		$url = '/reader/read/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
+
+		if ($chapter->subchapter != 0) {
+			$url .= $chapter->subchapter . '/';
+			$subchapter = true;
+		}
+
+		if (isset($done) && $done == false) {
+			if (!isset($subchapter) && !$subchapter) {
+				$url .= $chapter->subchapter . '/';
+			}
+
+			if ($chapter->team_id != 0) {
+				$team = new Team();
+				$team->where('id', $team_id)->get();
+				$url .= $team->stub . '/';
+			}
+
+			if ($chapter->joint_id != 0)
+				$url .= '0/' . $chapter->joint_id . '/';
+		}
+
+		return site_url($url);
+	}
+
 	// This is meant to give the next chapter URL to the javascript
-	public function next() {
+	public function next($type = "read") {
 		$comic = new Comic();
 		$comic->where('id', $this->comic_id)->get();
 		$chapter = new Chapter();
@@ -424,7 +405,9 @@ class Chapter extends DataMapper {
 			$chapter = new Chapter();
 			$chapter->where('comic_id', $comic->id)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
 			if ($chapter->result_count() == 0) {
-				return site_url('/reader/read/' . $comic->stub);
+				if (!$short)
+					return site_url('/' . $comic->stub);
+				return site_url('/reader/' . $type . '/' . $comic->stub);
 			}
 		}
 
@@ -445,11 +428,13 @@ class Chapter extends DataMapper {
 				// This is a pretty random way to select the next chapter version, needs refinement
 				$chapter = $chaptere->all['0'];
 			}
-		} else {
+		}
+		else {
 			$chapter = $chaptere;
 		}
 
-		$url = '/reader/read/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
+
+		$url = '/reader/' . $type . '/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
 
 		if ($chapter->subchapter != 0) {
 			$url .= $chapter->subchapter . '/';

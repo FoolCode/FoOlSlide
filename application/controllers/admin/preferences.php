@@ -136,18 +136,19 @@ class Preferences extends Admin_Controller {
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_top_banner',
-				'placeholder' => 'Insert the HTML provided by your advertiser',
+				'help' => 'Insert the HTML provided by your advertiser',
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview? (for ProjectWondeful.com ads)',
+			'Reload every pageview?',
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_top_banner_reload',
 				'placeholder' => '',
-				'preferences' => 'fs_ads'
+				'preferences' => 'fs_ads',
+				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
 			)
 		);
 
@@ -167,18 +168,19 @@ class Preferences extends Admin_Controller {
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_right_banner',
-				'placeholder' => 'Insert the HTML provided by your advertiser',
+				'help' => 'Insert the HTML provided by your advertiser',
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview? (for ProjectWondeful.com ads)',
+			'Reload every pageview?',
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_right_banner_reload',
 				'placeholder' => '',
-				'preferences' => 'fs_ads'
+				'preferences' => 'fs_ads',
+				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
 			)
 		);
 
@@ -194,22 +196,23 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Top banner',
+			'Bottom banner',
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_bottom_banner',
-				'placeholder' => 'Insert the HTML provided by your advertiser',
+				'help' => 'Insert the HTML provided by your advertiser',
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview? (for ProjectWondeful.com ads)',
+			'Reload every pageview?',
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_bottom_banner_reload',
 				'placeholder' => '',
-				'preferences' => 'fs_ads'
+				'preferences' => 'fs_ads',
+				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
 			)
 		);
 

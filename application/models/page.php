@@ -3,25 +3,6 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-/**
- * Page DataMapper Model
- *
- * Use this basic model as a page for creating new models.
- * It is not recommended that you include this file with your application,
- * especially if you use a Page library (as the classes may collide).
- *
- * To use:
- * 1) Copy this file to the lowercase name of your new model.
- * 2) Find-and-replace (case-sensitive) 'Page' with 'Your_model'
- * 3) Find-and-replace (case-sensitive) 'page' with 'your_model'
- * 4) Find-and-replace (case-sensitive) 'pages' with 'your_models'
- * 5) Edit the file as desired.
- *
- * @license		MIT License
- * @category	Models
- * @author		Phil DeJarnett
- * @link		http://www.overzealous.com
- */
 class Page extends DataMapper {
 
 	var $has_one = array('chapter');
@@ -70,6 +51,10 @@ class Page extends DataMapper {
 		'mime' => array(
 			'rules' => array('required'),
 			'label' => 'Mime type'
+		),
+		'grayscale' => array(
+			'rules' => array('required'),
+			'label' => 'Is it grayscale?'
 		),
 		'thumbwidth' => array(
 			'rules' => array('required'),
@@ -141,7 +126,7 @@ class Page extends DataMapper {
 		$dir = "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $chapter->stub . "_" . $chapter->uniqid . "/";
 
 		$imagedata = @getimagesize($filedata["server_path"]);
-		$thumbdata = getimagesize($dir . "thumb_" . $filedata["name"]);
+		$thumbdata = @getimagesize($dir . "thumb_" . $filedata["name"]);
 
 		$page = new Page();
 		$page->where('chapter_id', $this->chapter_id)->where('filename', $filedata["name"])->get();
@@ -158,6 +143,16 @@ class Page extends DataMapper {
 		$this->thumbheight = $thumbdata["0"];
 		$this->thumbwidth = $thumbdata["1"];
 		$this->thumbsize = filesize($dir . "thumb_" . $filedata["name"]);
+
+		$is_bw = $this->is_bw();
+		if ($is_bw == "bw")
+			$this->grayscale = 1;
+		else if ($is_bw == "rgb")
+			$this->grayscale = 0;
+		else {
+			log_message('error', 'add_page: error while determining if black and white or RGB');
+			return false;
+		}
 
 		if (!$this->update_page_db()) {
 			log_message('error', 'add_page: failed writing to database');
@@ -298,11 +293,78 @@ class Page extends DataMapper {
 		return true;
 	}
 
+	public function optipng() {
+		if ($this->mime != 'image/png')
+			return false;
+		$chapter = new Chapter($this->chapter_id);
+		$comic = new Comic($chapter->comic_id);
+		$rel = 'content/comics/"' . $comic->directory() . '/' . $chapter->directory() . '/' . $this->filename;
+		$abs = realpath($rel);
+		$output = array();
+		exec('optipng -o7 ' . $abs, $output);
+	}
+
+	public function is_bw() {
+		$chapter = new Chapter($this->chapter_id);
+		$comic = new Comic($chapter->comic_id);
+		$rel = 'content/comics/' . $comic->directory() . '/' . $chapter->directory() . '/' . $this->thumbnail . $this->filename;
+
+		switch ($this->mime) {
+			case "image/jpeg":
+				$im = imagecreatefromjpeg($rel); //jpeg file
+				break;
+			case "image/gif":
+				$im = imagecreatefromgif($rel); //gif file
+				break;
+			case "image/png":
+				$im = imagecreatefrompng($rel); //png file
+				break;
+			default:
+				log_message('error', 'page.php/is_bw(): no mime found');
+				return false;
+		}
+
+		$imgw = imagesx($im);
+		$imgh = imagesy($im);
+
+		$r = array();
+		$g = array();
+		$b = array();
+
+		$c = 0;
+
+		for ($i = 0; $i < $imgw; $i++) {
+			for ($j = 0; $j < $imgh; $j++) {
+
+				// get the rgb value for current pixel
+
+				$rgb = ImageColorAt($im, $i, $j);
+
+				// extract each value for r, g, b
+
+				$r[$i][$j] = ($rgb >> 16) & 0xFF;
+				$g[$i][$j] = ($rgb >> 8) & 0xFF;
+				$b[$i][$j] = $rgb & 0xFF;
+
+				// count gray pixels (r=g=b)
+
+				if ($r[$i][$j] == $g[$i][$j] && $r[$i][$j] == $b[$i][$j]) {
+					$c++;
+				}
+			}
+		}
+
+		if ($c == ($imgw * $imgh)) {
+			return "bw";
+		}
+		else {
+			return "rgb";
+		}
+	}
+
 	public function page_url($thumbnail = FALSE) {
-		$chapter = new Chapter();
-		$chapter->where('id', $this->chapter_id)->get();
-		$comic = new Comic();
-		$comic->where('chapter_id', $chapter->comic_id)->get();
+		$chapter = new Chapter($this->chapter_id);
+		$comic = new Comic($chapter->comic_id);
 		return base_url() . "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $chapter->stub . "_" . $chapter->uniqid . "/" . ($thumbnail ? $page->thumbnail : "") . $page->filename;
 	}
 

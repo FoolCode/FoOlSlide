@@ -27,7 +27,7 @@ $config['db_params'] = '';
 // Uncomment to enable the production cache
 // $config['production_cache'] = 'datamapper/cache';
 $config['extensions_path'] = 'datamapper';
-$config['extensions'] = array('tools');
+$config['extensions'] = array('tools', 'array', 'json');
 
 /* End of file datamapper.php */
 /* Location: ./application/config/datamapper.php */

@@ -45,13 +45,14 @@ $session_data = $this->session->get_js_session();
 			function(result){
 						
 				jQuery('#file_upload').uploadifySettings( 'postData', {
-					'ci_sessionz' : result, 
+					'ci_sessionz' : result.session, 
+					'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
 					'chapter_id' : <?php echo $chapter->id; ?>,
 					'uploader' : 'uploadify',
 					'overwrite' : '1'
 				}, false );
 				setTimeout('updateSession()', 6000);
-			});
+			}, 'json');
 		}
 			
 		jQuery(document).ready(function() {

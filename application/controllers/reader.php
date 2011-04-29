@@ -146,27 +146,18 @@ class Reader extends Public_Controller {
 
 		$teames = array();
 		foreach ($teams as $key => $tea) {
-			$teames[$key]["id"] = $tea->id;
-			$teames[$key]["name"] = $tea->name;
-			$teames[$key]["twitter"] = $tea->twitter;
-			$teames[$key]["facebook"] = $tea->facebook;
-			$teames[$key]["irc"] = $tea->irc;
+			$teames[$key] = $tea->to_array();
 		}
 
-		$result['comic'] = array('id' => $comice->id, 'name' => $comice->name);
+		$result['comic'] = $comice->to_array();
+		$result['chapter'] = $chaptere->to_array();
 		$result['next_chapter'] = $next_chapter;
 		$result['teams'] = $teames;
 		$result['pages'] = $pages;
 
-		//header('Content-type: application/json');
+		header('Content-type: application/json');
 		echo json_encode($result);
-		/*
-		  $this->template->set('chapter', $chaptere);
-		  $this->template->set('current_page', $current_page);
-		  $this->template->set('pages', $pages);
-		  $this->template->set('next_chapter', $next_chapter);
-		  $this->template->title($comice->name . ' :: Chapter ' . $chaptere->chapter);
-		  $this->template->build('read'); */
+
 	}
 
 	/*

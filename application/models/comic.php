@@ -283,6 +283,11 @@ class Comic extends DataMapper {
 			return base_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
 		return false;
 	}
+	
+	public function directory()
+	{
+		return $this->stub.'_'.$this->uniqid;
+	}
 
 }
 

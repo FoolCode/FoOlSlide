@@ -340,13 +340,17 @@ class Comics extends Admin_Controller {
 		
 		function get_sess_id()
 		{
-			//$sess['session'] = $this->session->get_js_session();
-			//echo json_encode($sess);
-			echo $this->session->get_js_session();
+			echo json_encode(array('session' => $this->session->get_js_session(), 'csrf' => $this->security->get_csrf_hash()));
 		}
 
         function delete($type, $id = 0)
         {
+			if(!isAjax())
+			{
+				echo 'You can\'t delete chapters from outside the admin panel through this link.';
+				log_message("error", "Controller: comics.php/remove: failed comic removal");
+				return false;
+			}
             switch($type)
             {
                 case("comic"):
@@ -358,38 +362,37 @@ class Comics extends Admin_Controller {
 						return false;
                     }
                     flash_notice('notice','The comic '.$comic->name.' has been removed');
-                    redirect("admin/comics/manage");
+                    echo json_encode(array('href' => site_url("admin/comics/manage")));
                     break;
                 case("chapter"):
-                    $chapter = new Chapter();
-                    $chapter->where('id', $id)->get();
+                    $chapter = new Chapter($id);
                     if(!$comic = $chapter->remove_chapter())
                     {
                         log_message("error", "Controller: comics.php/remove: failed chapter removal");
 						return false;
                     }
 					set_notice('notice', 'Chapter deleted.');
-                    redirect("admin/comics/comic/".$comic->stub);
+                    echo json_encode(array('href' => site_url("admin/comics/comic/".$comic->stub)));
                     break;
                 case("page"):
-                    $page = new Page();
-                    $page->where('id', $this->input->post('id'))->get();
-                    if(!$data = $page->remove_page())
+                    $page = new Page($this->input->post('id'));
+					$chapter = new Chapter($page->chapter_id);
+					$comic = new Chapter($chapter->comic_id);
+					if(!$data = $page->remove_page())
                     {
                         log_message("error", "Controller: comics.php/remove: failed page removal");
 						return false;
                     }
-					echo 'success';
+					echo json_encode(array('href' => site_url("admin/comics/comic/".$comic->stub."/".$chapter->id)));
                     break;
 				case("allpages"):
-					$chapter = new Chapter();
-					$chapter->where('id', $this->input->post('id'))->get();
+					$chapter = new Chapter($this->input->post('id'));
 					if(!$chapter->remove_all_pages())
 					{
 						log_message("error", "Controller: comics.php/remove: failed all pages removal");
 						return false;
 					}
-					echo 'success';
+					echo json_encode(array('href' => site_url("admin/comics/comic/".$comic->stub."/".$chapter->id)));
 					break;
             }
         }

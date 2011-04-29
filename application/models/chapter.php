@@ -306,6 +306,11 @@ class Chapter extends DataMapper {
 		}
 		return true;
 	}
+	
+	public function directory()
+	{
+		return $this->stub.'_'.$this->uniqid;
+	}
 
 	public function get_pages() {
 		$comic = new Comic();

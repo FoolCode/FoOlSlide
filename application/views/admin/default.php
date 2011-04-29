@@ -16,7 +16,9 @@
                 var plug = confirm(text);
                 if (plug)
                 {
-                    location.href = href;
+                    jQuery.post(href, function(result){
+						location.href = result.href;
+					}, 'json');
                 }
             }
 			

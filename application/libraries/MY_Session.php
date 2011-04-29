@@ -38,15 +38,12 @@ class MY_Session extends CI_Session {
 	function sess_read() {
 		// Get encoded session data from $_POST
 		$session = $this->CI->input->post('ci_sessionz');
-			log_message('error', 'DERPES POST [ ' . print_r($this->CI->input->post(),true) . ' ] ');
 		
 		if ($session !== FALSE) {
 			$this->js_session = $session = base64_decode($session);
-			log_message('error', 'FLASH POST [ ' . $session . ' ] ');
 		} else {
 			// Fetch the cookie
 			$this->js_session = $session = $this->CI->input->cookie($this->sess_cookie_name);
-			log_message('error', 'JS COOKIE [ ' . $session . ' ] ');
 		}
 
 		// No cookie?  Goodbye cruel world!...

@@ -91,59 +91,222 @@ class Chapter extends DataMapper {
 		
 	}
 
+	/**
+	 * This function can determine if it's a team member accessing to protected
+	 * chapter functions.
+	 *
+	 * @author	Woxxy
+	 * @return	DataMapper Returns true if the chapter is of the team of the user;
+	 */
+	public function is_team() {
+		if (!$this->teams) {
+			$team = new Team();
+			$this->teams = $team->get_teams($this->team_id, $this->joint_id);
+		}
+	}
+
+	/**
+	 * Overwrite of the get() function to add filters to the search.
+	 * Refer to DataMapper ORM for get() function details.
+	 *
+	 * @author	Woxxy
+	 * @param	integer|NULL $limit Limit the number of results.
+	 * @param	integer|NULL $offset Offset the results when limiting.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
 	public function get($limit = NULL, $offset = NULL) {
+		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
-		if (!$CI->ion_auth->is_admin())
+
+		// Check if the user is allowed to see protected chapters.
+		if (!$CI->ion_extra->is_allowed())
 			$this->where('hidden', 0);
 
 		return parent::get($limit, $offset);
 	}
 
-	public function add_chapter($data) {
-		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
-		$this->uniqid = uniqid();
-		$this->stub = $this->stub();
+	/**
+	 * Overwrite of the get_iterated() function to add filters to the search.
+	 * Refer to DataMapper ORM for get_iterated() function details.
+	 *
+	 * @author	Woxxy
+	 * @param	integer|NULL $limit Limit the number of results.
+	 * @param	integer|NULL $offset Offset the results when limiting.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function get_iterated($limit = NULL, $offset = NULL) {
+		// Get the CodeIgniter instance, since it isn't set in this file.
+		$CI = & get_instance();
 
-		$comic = new Comic;
-		$comic->where("id", $data['comic_id'])->get();
-		if ($comic->result_count() == 0) {
-			set_notice('error', 'The comic ID you were adding the chapter to does not exist.');
-			log_message('error', 'add_chapter: comic_id does not exist in comic database');
-			return false;
-		}
-		$this->comic_id = $data['comic_id'];
+		// Check if the user is allowed to see protected chapters.
+		if (!$CI->ion_extra->is_allowed())
+			$this->where('hidden', 0);
+		
+		/**
+		 * @todo figure out why those variables don't get unset... it would be
+		 * way better to use the iterated in almost all cases in FoOlSlide
+		 */
 
-		if (!$this->add_chapter_dir($comic->stub, $comic->uniqid)) {
-			log_message('error', 'add_chapter: failed creating dir');
-			return false;
-		}
-		if (!$this->update_chapter_db($data)) {
-			$this->remove_chapter_dir($comic->stub, $comic->uniqid);
-			return false;
-		}
-
-		return $comic;
+		return parent::get_iterated($limit, $offset);
 	}
 
-	public function remove_chapter() {
-		$comic = new Comic();
-		$comic->where("id", $this->comic_id)->get();
-		if (!$this->remove_chapter_dir($comic->stub, $comic->uniqid)) {
+	/**
+	 * Comodity get() function that fetches extra data for the chapter selected.
+	 * It doesn't get the pages. For pages, see: $this->get_pages()
+	 *
+	 * @author	Woxxy
+	 * @param	integer|NULL $limit Limit the number of results.
+	 * @param	integer|NULL $offset Offset the results when limiting.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function get_bulk($limit = NULL, $offset = NULL) {
+		// Call the get()
+		$result = $this->get($limit, $offset);
+		// Return instantly on false.
+		if (!$result)
+			return $result;
+
+		// For each item we fetched, add the data, beside the pages
+		foreach ($this->all as $item) {
+			$item->comic = new Comic($this->comic_id);
+			$teams = new Team();
+			$item->teams = $teams->get_teams($this->team_id, $this->joint_id);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Sets the $this->comic variable if it hasn't been done before
+	 *
+	 * @author	Woxxy
+	 * @return	True on success, false on failure.
+	 */
+	public function get_comic() {
+		// Check if the variable is not yet set, in order to save a databse read.
+		if (!isset($this->comic)) {
+			$comic = new Comic($this->comic_id);
+			// For how difficult for this to happen, let's check if the search
+			// for the comic produced no results.
+			if ($comic->result_count() == 0) {
+				set_notice('error', 'There\'s no comic related to this chapter.');
+				log_message('error', 'get_comic: comic not found');
+				return false;
+			}
+			// Set the comic
+			$this->comic = $comic;
+		}
+
+		// All good, return true.
+		return true;
+	}
+
+	/**
+	 * Function to create a new entry for a chapter from scratch. It creates
+	 * both a directory and a database entry, and removes them if something
+	 * goes wrong.
+	 *
+	 * @author	Woxxy
+	 * @param	array $data with the minimal values, or the function will return
+	 * 			false and do nothing.
+	 * @return	Returns true on success, false on failure.
+	 */
+	public function add($data) {
+		// Let's make so subchapters aren't empty, so it's at least 0 for all
+		// the addition of the chapter.
+		$data['subchapter'] = (is_int($data['subchapter'])) ? $data['subchapter'] : 0;
+
+		// Create a stub that is humanly readable, for the worst cases.
+		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
+
+		// uniqid prevents us from having sad moments due to identical directory names
+		$this->uniqid = uniqid();
+
+		// Stub function converts the $this->to_stub if available, and processes it.
+		$this->stub = $this->stub();
+
+		// Check if comic_id is set and confirm there's a corresponding comic
+		// If not, make an error message and stop adding the chapter
+		$comic = new Comic($data['comic_id']);
+		if ($comic->result_count() == 0) {
+			set_notice('error', 'The comic you were adding the chapter to doesn\'t exist.');
+			log_message('error', 'add: comic_id does not exist in comic database');
+			return false;
+		}
+
+		// The comic exists? Awesome, set it as soon as possible.
+		$this->comic_id = $data['comic_id'];
+
+		// Create the directory. The GUI error messages are inside the function.
+		if (!$this->add_chapter_dir($comic->stub, $comic->uniqid)) {
+			log_message('error', 'add: failed creating dir');
+			return false;
+		}
+
+		// Hoping we got enough $data, let's throw it to the database function.
+		// In case it fails, it will remove the directory.
+		if (!$this->update_chapter_db($data)) {
+			$this->remove_chapter_dir($comic->stub, $comic->uniqid);
+			log_message('error', 'add: failed adding to database');
+			return false;
+		}
+
+		// Oh, since we already have the comic, let's put it into its variable.
+		// This is very comfy for redirection!
+		$this->comic = $comic;
+
+		// All good? Return true!
+		return true;
+	}
+
+	/**
+	 * Removes chapter from database, all its pages, and its directory.
+	 * There's no going back from this!
+	 *
+	 * @author	Woxxy
+	 * @return	Returns the comic the chapter derives from.
+	 */
+	public function remove() {
+		// Get comic and check if existant. We don't want to have empty stub on this!
+		$comic = new Comic($this->comic_id);
+		if ($this->result_count() == 0) {
+			set_notice('error', 'You\'re trying to delete something that doesn\'t even have a related comic\'?');
+			log_message('error', 'update_chapter_db: failed to find requested id');
+			return false;
+		}
+
+		// Remove all the chapter files. GUI errors inside the function.
+		if (!$this->remove_chapter_dir()) {
 			log_message('error', 'remove_chapter: failed to delete dir');
 			return false;
 		}
 
+		// Remove the chapter from DB, and all its pages too.
 		if (!$this->remove_chapter_db()) {
 			log_message('error', 'remove_chapter: failed to delete database entry');
 			return false;
 		}
 
+		// Return the $comic for redirects.
 		return $comic;
 	}
 
+	/**
+	 * Handles both creating of new chapters in the database and editing old ones.
+	 * It determines if it should update or not by checking if $this->id has
+	 * been set. It can get the values from both the $data array and direct 
+	 * variable assignation. Be aware that array > variables. The latter ones
+	 * will be overwritten. Particularly, the variables that the user isn't
+	 * allowed to set personally are unset and reset with the automated values.
+	 * It's quite safe to throw stuff at it.
+	 *
+	 * @author	Woxxy
+	 * @param	array $data contains the minimal data
+	 * @return	Returns the comic the chapter derives from.
+	 */
 	public function update_chapter_db($data = array()) {
-		// Check if we're updating or creating a new entry by looking at $data["id"].
-		// False is pushed if the ID was not found.
+		// Check if we're updating or creating a new chapter by looking at $data["id"].
+		// False is returned if the chapter ID was not found.
 		if (isset($data["id"]) && $data['id'] != "") {
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0) {
@@ -151,45 +314,65 @@ class Chapter extends DataMapper {
 				log_message('error', 'update_chapter_db: failed to find requested id');
 				return false;
 			}
+			// Save the stub in case it gets changed (different chapter number/name etc.)
+			// Stub is always automatized.
 			$old_stub = $this->stub;
 		}
-		else { // let's set the creator name if it's a new entry	// let's also check that the related comic is defined, and exists
+		else { // if we're here, it means that we're creating a new chapter
+			// Set the creator name if it's a new chapter.	
 			if (!isset($this->comic_id)) {
 				set_notice('error', 'You didn\'t select a comic to refer to.');
 				log_message('error', 'update_chapter_db: comic_id was not set');
 				return false;
 			}
 
-			$comic = new Comic();
-			$comic->where("id", $this->comic_id)->get();
+			// Check that the related comic is defined, and exists.
+			$comic = new Comic($this->comic_id);
 			if ($comic->result_count() == 0) {
 				set_notice('error', 'The comic you were referring to does not exist.');
 				log_message('error', 'update_chapter_db: comic_id does not exist in comic database');
 				return false;
 			}
 
+			// Set the creator. This happens only on new chapter creation.
 			$this->creator = $this->logged_id();
 		}
 
-		// always set the editor name
+		// Always set the editor
 		$this->editor = $this->logged_id();
 
+		// Unset the sensible variables. 
+		// Not even admins should touch these, for database stability.
 		unset($data["creator"]);
 		unset($data["editor"]);
+		unset($data["uniqid"]);
+		unset($data["stub"]);
+		unset($data["team_id"]);
+		unset($data["joint_id"]);
+
+		// Loop over the array and assign values to the variables.
 		foreach ($data as $key => $value) {
 			$this->$key = $value;
 		}
 
+		// Double check that we have all the necessary automated variables
 		if (!isset($this->uniqid))
 			$this->uniqid = uniqid();
 		if (!isset($this->stub))
 			$this->stub = $this->stub();
+
+		// This is necessary to make the checkbox work.
+		// @todo make the checkbox work consistently across the whole framework
 		if (!isset($data['hidden']) || $data['hidden'] != 1)
 			$this->hidden = 0;
 
+		// Prepare a new stub.
 		$this->stub = $this->chapter . '_' . $this->subchapter . '_' . $this->name;
+		// stub() is also able to restub the $this->stub. Already stubbed values won't change.
 		$this->stub = $this->stub();
 
+		// If the new stub is different from the old one (if the chapter was 
+		// already existing), rename the folder.
 		if (isset($old_stub) && $old_stub != $this->stub) {
 			$comic = new Comic();
 			$comic->where('id', $this->comic_id)->get();
@@ -199,43 +382,67 @@ class Chapter extends DataMapper {
 		}
 
 
-		if (is_array($data['team'])) {
-			foreach ($data['team'] as $key => $value) {
-				if ($value == "") {
-					unset($data['team'][$key]);
+		// $data['team'] must be an array of team NAMES
+		if (isset($data['team'])) {
+			// Remove the empty values in the array of team names.
+			// It happens that the POST contains extra empty values.
+			if (is_array($data['team'])) {
+				foreach ($data['team'] as $key => $value) {
+					if ($value == "") {
+						unset($data['team'][$key]);
+					}
 				}
 			}
-		}
 
-		if (count($data['team']) > 1) {
-			$this->team_id = 0;
-			$joint = new Joint();
-			$this->joint_id = $joint->add_joint_via_name($data['team']);
-		}
-		else if (count($data['team']) == 1) {
-			$this->joint_id = 0;
-			$team = new Team();
-			$team->where("name", $data['team'][0])->get();
-			if ($team->result_count() == 0) {
-				set_notice('error', 'The team you were referring this chapter to doesn\'t exist.');
-				log_message('error', 'update_chapter_db: team_id does not exist in team database');
+			// In case there's more than a team name in array, get the joint_id.
+			// The joint model is able to create new joints on the fly, do not worry.
+			// Worry rather that the team names must exist.
+			if (count($data['team']) > 1) {
+				// Set team_id to 0 since it's a joint.
+				$this->team_id = 0;
+				$joint = new Joint();
+				// If the search returns false, something went wrong.
+				// GUI errors are inside the function.
+				if (!$this->joint_id = $joint->add_joint_via_name($data['team'])) {
+					log_message('error', 'update_chapter_db: error with joint_id');
+					return false;
+				}
+			}
+			// In case there's only one team in the array, find the team.
+			// return false in case one of the names doesn't exist.
+			else if (count($data['team']) == 1) {
+				// Set joint_id to 0 since it's a single team
+				$this->joint_id = 0;
+				$team = new Team();
+				$team->where("name", $data['team'][0])->get();
+				if ($team->result_count() == 0) {
+					set_notice('error', 'The team you were referring this chapter to doesn\'t exist.');
+					log_message('error', 'update_chapter_db: team_id does not exist in team database');
+					return false;
+				}
+				$this->team_id = $team->id;
+			}
+			else {
+				set_notice('error', 'You must select at least one team for this chapter');
+				log_message('error', 'update_chapter_db: team_id not defined');
 				return false;
 			}
-			$this->team_id = $team->id;
 		}
-		else {
+		else if (!isset($this->team)) { // If we're here it means that this is a new chapter with no teams assigned.
+			// The system doesn't allow chapters without related teams. It must be at
+			// least "anonymous" or a default anonymous team.
 			set_notice('error', 'You haven\'t selected any team related to this chapter.');
 			log_message('error', 'update_chapter_db: team_id does not defined');
 			return false;
 		}
 
 
-		// let's save and give some error check. Push false if fail, true if good.
+		// Save with validation. Push false if fail, true if good.
 		$success = $this->save();
 		if (!$success) {
 			if (!$this->valid) {
 				log_message('error', $this->error->string);
-				set_notice('error', 'One or more of the fields inputted had the wrong kind of values.');
+				set_notice('error', 'Check that you have inputted all the required fields.');
 				log_message('error', 'update_chapter_db: failed validation');
 			}
 			else {
@@ -245,17 +452,29 @@ class Chapter extends DataMapper {
 			return false;
 		}
 		else {
+			// Here we go!
 			return true;
 		}
 	}
 
+	/**
+	 * Removes the chapter from the database, but before it removes all the 
+	 * related pages from the database (not the files).
+	 *
+	 * @author	Woxxy
+	 * @return	Returns true if success, false if failure.
+	 */
 	public function remove_chapter_db() {
+		// get all the pages of this chapter. Use iterated because they could be many.
 		$pages = new Page();
 		$pages->where('chapter_id', $this->id)->get_iterated();
+
+		// remove them with the page model function
 		foreach ($pages as $page) {
 			$page->remove_page_db();
 		}
 
+		// And now, remove the chapter itself. There should be little chance for this to fail.
 		$success = $this->delete();
 		if (!$success) {
 			set_notice('error', 'Failed to remove the chapter from the database for unknown reasons.');
@@ -263,11 +482,26 @@ class Chapter extends DataMapper {
 			return false;
 		}
 
+		// It's gone.
 		return true;
 	}
 
-	public function add_chapter_dir($comicstub, $uniqid) {
-		$dir = "content/comics/" . $comicstub . "_" . $uniqid . "/" . $this->stub . "_" . $this->uniqid;
+	/**
+	 * Creates the necessary empty folder for a chapter
+	 * 
+	 * @author	Woxxy
+	 * @return	Returns true if success, false if failure.
+	 */
+	public function add_chapter_dir() {
+		// Get the comic if we didn't yet.
+		if (!$this->get_comic()) {
+			set_notice('error', 'No comic related to this chapter.');
+			log_message('error', 'add_chapter_dir: comic did not exist');
+			return false;
+		}
+
+		// Create the directory and return false on failure. It's most likely file permissions anyway.
+		$dir = "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid;
 		if (!mkdir($dir)) {
 			set_notice('error', 'Failed to create the chapter directory. Please, check file permissions.');
 			log_message('error', 'add_chapter_dir: folder could not be created');
@@ -277,14 +511,32 @@ class Chapter extends DataMapper {
 		return true;
 	}
 
-	public function remove_chapter_dir($comicstub, $uniqid) {
-		$dir = "content/comics/" . $comicstub . "_" . $uniqid . "/" . $this->stub . "_" . $this->uniqid . "/";
+	/**
+	 * Removes the chapter folder with all the data that was inside of it.
+	 * This means pages and props too.
+	 *
+	 * @author	Woxxy
+	 * @return	Returns true if success, false if failure.
+	 */
+	public function remove_chapter_dir() {
+		// Get the comic if we didn't yet.
+		if (!$this->get_comic()) {
+			set_notice('error', 'No comic related to this chapter.');
+			log_message('error', 'remove_chapter_dir: comic did not exist');
+			return false;
+		}
+
+		// Create the direcotry name
+		$dir = "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/";
+
+		// Delete all files inside of it
 		if (!delete_files($dir, TRUE)) {
 			set_notice('error', 'Failed to remove the files inside the chapter directory. Please, check file permissions.');
 			log_message('error', 'remove_chapter_dir: files inside folder could not be removed');
 			return false;
 		}
 		else {
+			// On success of emptying, remove the chapter directory itself.
 			if (!rmdir($dir)) {
 				set_notice('error', 'Failed to remove the chapter directory. Please, check file permissions.');
 				log_message('error', 'remove_chapter_dir: folder could not be removed');
@@ -295,47 +547,89 @@ class Chapter extends DataMapper {
 		return true;
 	}
 
+	/**
+	 * Comfy function to just empty the chapter off pages.
+	 *
+	 * @author	Woxxy
+	 * @return	boolean true, doesn't have error check.
+	 */
 	public function remove_all_pages() {
-		log_message('error', 'here');
 		$page = new Page();
+		// Lets get the pages in iterated because there could be many
 		$page->where('chapter_id', $this->id)->get_iterated();
+		// Loop and remove each. The page model will take care of database and directories.
+		$return = true;
 		foreach ($page as $key => $item) {
 			if (!$item->remove_page()) {
+				// Set false to say there was a failure, but don't stop removal.
+				$return = false;
 				log_message('error', 'remove_all_pages: page could not be removed');
 			}
 		}
-		return true;
-	}
-	
-	public function directory()
-	{
-		return $this->stub.'_'.$this->uniqid;
-	}
-
-	public function get_pages() {
-		$comic = new Comic();
-		$comic->where('id', $this->comic_id)->get();
-		$pages = new Page();
-		$pages->where('chapter_id', $this->id)->get();
-
-		$return = array();
-
-		foreach ($pages->all as $key => $item) {
-			//$return[$key]['object'] = $item;
-			$return[$key]['id'] = $item->id;
-			$return[$key]['width'] = $item->width;
-			$return[$key]['height'] = $item->height;
-			$return[$key]['url'] = base_url() . "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->filename;
-			$return[$key]['thumb_url'] = base_url() . "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->thumbnail . $item->filename;
-		}
-		$chapter->pages = $pages;
+		// Even if false is returned all removable pages will be removed.
 		return $return;
 	}
 
+	/**
+	 * Returns directory name without slashes
+	 *
+	 * @author	Woxxy
+	 * @return	string Directory name.
+	 */
+	public function directory() {
+		return $this->stub . '_' . $this->uniqid;
+	}
+
+	/**
+	 * Returns all the pages in a complete array, useful for displaying or sending
+	 * to a json function.
+	 *
+	 * @author	Woxxy
+	 * @return	array all pages with their data
+	 */
+	public function get_pages() {
+		// if we already used the function, no need to recalc it
+		if (isset($this->pages)) return $this->pages;
+
+		// Check that the comic is loaded, else load it.
+		$this->get_comic();
+
+		// Get the pages in filename order. Without order_by it would get them by ID which doesn't really work nicely.
+		$pages = new Page();
+		$pages->where('chapter_id', $this->id)->order_by('filename')->get();
+
+		// Create the array with all page details for simple return.
+		$return = array();
+		foreach ($pages->all as $key => $item) {
+			$return[$key] = $item->to_array();
+			// Let's add to it the object itelf? Uncomment next line to do so.
+			// $return[$key]['object'] = $item;
+			// The URLs need to be completed. This function will also trigger the load balancing if enabled.
+			$return[$key]['url'] = balance_url() . "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->filename;
+			$return[$key]['thumb_url'] = balance_url() . "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->thumbnail . $item->filename;
+		}
+
+		// Put the pages in a comfy variable.
+		$this->pages = $return;
+		return $return;
+	}
+
+	/**
+	 * Returns a ready to use html <a> link that points to the reader
+	 *
+	 * @author	Woxxy
+	 * @return	string <a> to reader
+	 */
 	public function url() {
 		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . $this->title() . '</a>';
 	}
 
+	/**
+	 * Returns a nicely built title for a chapter
+	 *
+	 * @author	Woxxy
+	 * @return	string the formatted title for the chapter, with chapter and subchapter
+	 */
 	public function title() {
 		$echo = _('Chapter') . ' ' . $this->chapter;
 		if ($this->subchapter)
@@ -346,81 +640,90 @@ class Chapter extends DataMapper {
 		return $echo;
 	}
 
+	/**
+	 * Returns the href to the reader. This will create the shortest possible URL.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
 	public function href() {
-		$comic = new Comic();
-		$comic->where('id', $this->comic_id)->get();
+		// If we already used this function, no need to recalc it.
+		if (isset($this->href))
+			return $this->href;
+
+		// We need the comic
+		$this->get_comic();
+
+		// Identify the chapter through data, not ID. This allows us to find out if there are multiple similar chapters.
 		$chapter = new Chapter();
+		$chapter->where('comic_id', $this->comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
 
+		// This part of the URL won't change for sure.
+		$url = '/reader/read/' . $this->comic->stub . '/' . $this->language . '/' . $this->chapter . '/';
 
-		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
+		// Find out if there are multiple versions of the chapter, it means there are multiple groups with the same chapter.
+		// Let's set the whole URL with subchapters, teams and maybe joint too in it.
+		if ($chapter->result_count() > 1) {
 
-		$done = false;
-		if ($chaptere->result_count() > 0) {
-			foreach ($chaptere->all as $chap) {
-				if ($chap->team_id == $this->team_id && $chap->joint_id == $this->joint_id) {
-					$chapter = $chap;
-					$done = true;
-					break;
-				}
-			}
+			$url .= $this->subchapter . '/';
 
-			if (!$done) {
-				// This is a pretty random way to select the next chapter version, needs refinement
-				$chapter = $chaptere->all['0'];
-			}
-		}
-		else {
-			$chapter = $chaptere;
-		}
-
-		$url = '/reader/read/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
-
-		if ($chapter->subchapter != 0) {
-			$url .= $chapter->subchapter . '/';
-			$subchapter = true;
-		}
-
-		if (isset($done) && $done == false) {
-			if (!isset($subchapter) && !$subchapter) {
-				$url .= $chapter->subchapter . '/';
-			}
-
-			if ($chapter->team_id != 0) {
-				$team = new Team();
-				$team->where('id', $team_id)->get();
+			if ($this->team_id != 0) {
+				$team = new Team($this->team_id);
 				$url .= $team->stub . '/';
 			}
+			else if ($this->joint_id != 0)
+				$url .= '0/' . $this->joint_id . '/';
 
-			if ($chapter->joint_id != 0)
-				$url .= '0/' . $chapter->joint_id . '/';
+			// save the value in a variable for reuse.
+			$this->href = site_url($url);
+		}
+		else { // There's only one chapter like this.
+			// If possiblee can make it even shorter without subchapter!
+			if ($this->subchapter != 0) {
+				$url .= $this->subchapter . '/';
+			}
+			// Save the value in a variable for reuse.
+			$this->href = site_url($url);
 		}
 
-		return site_url($url);
+
+		return $this->href;
 	}
 
-	// This is meant to give the next chapter URL to the javascript
-	public function next($type = "read") {
-		$comic = new Comic();
-		$comic->where('id', $this->comic_id)->get();
+	/**
+	 * Returns the URL of the reader for the next chapter
+	 *
+	 * @author	Woxxy
+	 * @return	string the href to the next chapter
+	 */
+	public function next() {
+		// If we've already used this function, it's ready for use, no need to calc it again
+		if (isset($this->next))
+			return $this->next;
+
+		// Needs the comic
+		$this->get_comic();
 		$chapter = new Chapter();
 
-		$chapter->where('comic_id', $comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
+		// Check if there are subchapters for this chapter.
+		$chapter->where('comic_id', $this->comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
 		if ($chapter->result_count() == 0) {
+			// There aren't subchapters for this chapter. Then let's look for the next chapter
 			$chapter = new Chapter();
-			$chapter->where('comic_id', $comic->id)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
+			$chapter->where('comic_id', $this->comic->id)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
 			if ($chapter->result_count() == 0) {
-				if (!$short)
-					return site_url('/' . $comic->stub);
-				return site_url('/reader/' . $type . '/' . $comic->stub);
+				// There's no next chapter. Redirect to the comic page.
+				return site_url('/reader/read/' . $this->comic->stub);
 			}
 		}
 
+		// We do have a chapter or more. Get them.
 		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comic->id)->where('chapter', $chapter->chapter)->where('language', $this->language)->where('subchapter', $chapter->subchapter)->get();
+		$chaptere->where('comic_id', $this->comic->id)->where('chapter', $chapter->chapter)->where('language', $this->language)->where('subchapter', $chapter->subchapter)->get();
 
 		$done = false;
-		if ($chaptere->result_count() > 0) {
+		// Do we have more than a next chapter? Make so it has the same teams on it.
+		if ($chaptere->result_count() > 1) {
 			foreach ($chaptere->all as $chap) {
 				if ($chap->team_id == $this->team_id && $chap->joint_id == $this->joint_id) {
 					$chapter = $chap;
@@ -428,47 +731,47 @@ class Chapter extends DataMapper {
 					break;
 				}
 			}
-
+			// What if the teams changed, and the old teams stopped working on it? Get a different team.
+			// There must be multiple teams on the next chapter for this to happen. Rare but happens.
 			if (!$done) {
-				// This is a pretty random way to select the next chapter version, needs refinement
+				/**
+				 * @todo This is a pretty random way to select the next chapter version, needs refinement.
+				 */
 				$chapter = $chaptere->all['0'];
 			}
 		}
+		// There's only one chapter, simply use it.
 		else {
 			$chapter = $chaptere;
 		}
 
+		// This is a heavy function. Let's play it smart and cache the value.
+		// Send to the href function that returns a nice URL.
+		$this->next = $chapter->href();
 
-		$url = '/reader/' . $type . '/' . $comic->stub . '/' . $chapter->language . '/' . $chapter->chapter . '/';
-
-		if ($chapter->subchapter != 0) {
-			$url .= $chapter->subchapter . '/';
-			$subchapter = true;
-		}
-
-		if (isset($done) && $done == false) {
-			if (!isset($subchapter) && !$subchapter) {
-				$url .= $chapter->subchapter . '/';
-			}
-
-			if ($chapter->team_id != 0) {
-				$team = new Team();
-				$team->where('id', $team_id)->get();
-				$url .= $team->stub . '/';
-			}
-
-			if ($chapter->joint_id != 0)
-				$url .= '0/' . $chapter->joint_id . '/';
-		}
-
-		return site_url($url);
+		// finally, return the URL.
+		return $this->next;
 	}
 
-	public function next_page($page) {
+	/**
+	 * Returns the URL for the next page in the same chapter. It's used for
+	 * page-change in systems that don't support JavaScript.
+	 *
+	 * @author	Woxxy
+	 * @todo	this function has a quite rough method to work, though it saves 
+	 * 			lots of calc power. Maybe it can be written more elegantly?
+	 * @return	string with href to next page
+	 */
+	public function next_page($page, $max = 0) {
+		if ($max != 0 && $max > $page)
+			return $this->next();
+
 		$url = current_url();
+		// If the page hasn't been set yet, just add to the URL.
 		if (!$post = strpos($url, '/page')) {
 			return current_url() . '/page/' . ($page + 1);
 		}
+		// Just remove everything after the page segment and readd it with proper number.
 		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
 	}
 

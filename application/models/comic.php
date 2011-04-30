@@ -71,6 +71,15 @@ class Comic extends DataMapper {
 
 		return parent::get($limit, $offset);
 	}
+	
+	public function get_iterated($limit = NULL, $offset = NULL)
+	{
+		$CI = & get_instance();
+		if (!$CI->ion_auth->is_admin())
+			$this->where('hidden', 0);
+
+		return parent::get_iterated($limit, $offset);
+	}
 
 	public function add_comic($data = array()) {
 		$this->to_stub = $data['name'];

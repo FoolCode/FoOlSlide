@@ -11,15 +11,11 @@ if (!defined('BASEPATH'))
 			<img src="<?php echo $pages[$current_page - 1]['url'] ?>"  />
 		</a>
 		<div class="number">
-			<div class="initnumber"><?php echo $current_page ?></div>
-			<div class="on">on</div>
-			<div class="finalnumber"><?php echo count($pages); ?></div>
+			
+			
 			<div id="myFire"></div>
-			<div id="myFireHidden"></div>
-			<div id="myLoading"></div>
-			<div id="myLoadingHidden"></div>
-
-
+			<div class="number2"></div>
+			<div class="number3"></div>
 
 		</div>
 	</div>

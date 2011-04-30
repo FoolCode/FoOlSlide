@@ -89,6 +89,15 @@ class Page extends DataMapper {
 
 		return parent::get($limit, $offset);
 	}
+	
+	public function get_iterated($limit = NULL, $offset = NULL)
+	{
+		$CI = & get_instance();
+		if (!$CI->ion_auth->is_admin())
+			$this->where('hidden', 0);
+
+		return parent::get_iterated($limit, $offset);
+	}
 
 	public function add_page($filedata, $chapter_id, $hidden = 0, $description = "") {
 		if (!$imagedata = @getimagesize($filedata["server_path"])) {
@@ -337,17 +346,14 @@ class Page extends DataMapper {
 			for ($j = 0; $j < $imgh; $j++) {
 
 				// get the rgb value for current pixel
-
 				$rgb = ImageColorAt($im, $i, $j);
 
 				// extract each value for r, g, b
-
 				$r[$i][$j] = ($rgb >> 16) & 0xFF;
 				$g[$i][$j] = ($rgb >> 8) & 0xFF;
 				$b[$i][$j] = $rgb & 0xFF;
 
 				// count gray pixels (r=g=b)
-
 				if ($r[$i][$j] == $g[$i][$j] && $r[$i][$j] == $b[$i][$j]) {
 					$c++;
 				}

@@ -23,7 +23,7 @@
 		$chapters->order_by('created', 'DESC')->limit(25);
 		
 		// Get the chapters! Let's use get_iterated() instead of get() to save some RAM
-		$chapters->get_iterated();
+		$chapters->get();
 		
 		
 		

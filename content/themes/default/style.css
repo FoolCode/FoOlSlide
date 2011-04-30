@@ -246,8 +246,6 @@ input[type="text"]
 	background-image: -moz-linear-gradient(#666, #505050);
 	background-image: -webkit-gradient(linear, left top, left bottom,from(#666), to(#505050));
     background-image: -o-linear-gradient(#666, #505050); 
-	//background-image:url('http://dl.getdropbox.com/u/22432998/bg.png');
-
 }
 
 .list > .title
@@ -349,118 +347,83 @@ input[type="text"]
 
 #page .number
 {
-	background:#333;
-	padding:10px 10px 10px 40px;
+	padding:0px 0px 0px 0px;
+	height:160px;
+	width:80px;
 	color:#999;
 	position:fixed;
 	top:170px;
-	right:10px;
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	z-index:0;
-	opacity:0.7;
-
-
-	box-shadow: inset 1px 2px 4px #000;
-	-moz-box-shadow: inset 1px 2px 4px #000;
-	-webkit-box-shadow: inset 1px 2px 4px #000;
-
-	background-image: -moz-linear-gradient(#505050, #303030);
-	background-image: -webkit-gradient(linear, left top, left bottom,from(#505050), to(#303030));
-    background-image: -o-linear-gradient(#505050, #303030); 
+	right:0px;
+	z-index:8;
+	opacity:0.9;
 }
 
-#page .initnumber
+
+#page .number2
 {
-	background:#999;
-	color:#ddd;
-	padding:10px;	
-	font-size:25px;
-	font:Verdana;
-	text-align:center;
-	border-radius:1000px;
-	-moz-border-radius:1000px;
-	-webkit-border-radius:1000px;
-	min-width:30px;
-	box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
-	-moz-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
-	-webkit-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
+	background:#fff;
+	padding:0px 0px 0px 0px;
+	height:120px;
+	width:60px;
+	color:#999;
+	position:absolute;
+	top:20px;
+	right:0px;
+	border-top-left-radius:80px;
+	border-bottom-left-radius:80px;
+	-webkit-border-top-left-radius:80px;
+	-webkit-border-bottom-left-radius:80px;
+	-moz-border-radius-topleft:80px;
+	-moz-border-radius-bottomleft:80px;
+	z-index:10;
 }
 
-#page .on
+
+#page .number3
 {
-	font-size:22px;
-	text-align:center;
-	margin-bottom:4px;
+	background:transparent;
+	padding:0px 0px 0px 0px;
+	height:140px;
+	width:70px;
+	color:#999;
+	position:absolute;
+	top:-30px;
+	right:0px;
+	border-top-left-radius:140px;
+	border-bottom-left-radius:140px;
+	-webkit-border-top-left-radius:140px;
+	-webkit-border-bottom-left-radius:140px;
+	-moz-border-radius-topleft:140px;
+	-moz-border-radius-bottomleft:140px;
+	z-index:11;
+	
+	border-top:40px solid #444;
+	border-left:40px solid #444;
+	border-bottom:40px solid #444;
 }
 
-#page .finalnumber
-{
-	background:#999;
-	color:#ddd;
-	padding:10px;	
-	font-size:25px;
-	font:Verdana;
-	text-align:center;
-	border-radius:1000px;
-	-moz-border-radius:1000px;
-	-webkit-border-radius:1000px;
-	min-width:30px;
-	box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
-	-moz-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;
-	-webkit-box-shadow: inset 1px 2px 2px #111,inset -2px -1px 2px #111,inset 1px -1px 2px #111;}
 
-#myFire
+
+.number #myFire
 {
 	position:absolute;
-	bottom:10px;
-	left:23px;
-	width:10px;
+	bottom:0px;
+	right:0px;
+	width:90%;
+	overflow:hidden;
+	border-top-left-radius:80px;
+	border-bottom-left-radius:80px;
+	-webkit-border-top-left-radius:80px;
+	-webkit-border-bottom-left-radius:80px;
+	-moz-border-radius-topleft:80px;
+	-moz-border-radius-bottomleft:80px;
 }
 
-#myFireHidden
+.number .light
 {
-	position:absolute;
-	bottom:8px;
-	left:20px;
-	width:10px;
-	height:85%;
-	padding:2px;
-	box-shadow: inset 0px 0px 3px #000;
-	-moz-box-shadow: inset 0px 0px 3px #000;
-	-webkit-box-shadow: inset 0px 0px 3px #000;
-}
-
-#myFire .light
-{
-	height:7px;
-	width:8px;
-	margin: 3px 0 0 0;
-	background: #2DC532;
-}
-
-#myLoading
-{
-	position:absolute;
-	bottom:10px;
-	left:7px;
-	width:10px;
-	height:85%;
-	background:red;
-	display:none;
-}
-
-
-#myLoadingHidden
-{
-	position:absolute;
-	bottom:8px;
-	left:5px;
-	width:10px;
-	height:85%;
-	padding:2px;
-	box-shadow: inset 0px 0px 3px #000;
-	-moz-box-shadow: inset 0px 0px 3px #000;
-	-webkit-box-shadow: inset 0px 0px 3px #000;
+	height:10px;
+	width:100%;
+	background:#68FFFF;
+	margin-top:2px;
+	  z-index:-1;
 }

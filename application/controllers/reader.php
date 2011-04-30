@@ -62,11 +62,11 @@ class Reader extends Public_Controller {
 				$current_page = 1;
 		}
 
-
 		$chaptere->get();
 		if ($chaptere->result_count() == 0) {
 			set_notice('warn', 'This chapter doesn\'t exist.');
 		}
+
 
 		$pages = $chaptere->get_pages();
 		$next_chapter = $chaptere->next();
@@ -142,7 +142,7 @@ class Reader extends Public_Controller {
 			$current_page = 1;
 
 		$team = new Team();
-		$teams = $team->get_teams_name($chaptere->team_id, $chaptere->joint_id);
+		$teams = $team->get_teams($chaptere->team_id, $chaptere->joint_id);
 
 		$teames = array();
 		foreach ($teams as $key => $tea) {
@@ -157,7 +157,6 @@ class Reader extends Public_Controller {
 
 		header('Content-type: application/json');
 		echo json_encode($result);
-
 	}
 
 	/*

@@ -145,7 +145,7 @@ class Team extends DataMapper {
 			$chapters = new Chapter();
 			$chapters->where("team_id", $this->id)->get();
 			foreach ($chapters->all as $chapter) {
-				if (!$chapter->remove_chapter()) {
+				if (!$chapter->remove()) {
 					set_notice('error', 'Failed removing the chapters while removing the team.');
 					log_message('error', 'remove_team: failed removing chapter');
 					return false;
@@ -217,7 +217,7 @@ class Team extends DataMapper {
 
 	//////// UNFINISHED!
 
-	public function get_teams_name($team_id, $joint_id = 0) {
+	public function get_teams($team_id, $joint_id = 0) {
 		if ($joint_id > 0) {
 			$joint = new Joint();
 			$joint->where("joint_id", $joint_id)->get();

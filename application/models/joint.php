@@ -76,6 +76,7 @@ class Joint extends DataMapper {
 			if ($tea->result_count() == 0) {
 				set_notice('error', 'One of the named teams does not exist.');
 				log_message('error', 'add_joint_via_name: team does not exist');
+				return false;
 			}
 			$result[] = $tea->id;
 		}

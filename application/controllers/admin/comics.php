@@ -184,7 +184,7 @@ class Comics extends Admin_Controller {
 		else {
 			$comic = new Comic();
 			if ($this->input->post()) {
-				if ($comic->add_comic($this->input->post())) {
+				if ($comic->add($this->input->post())) {
 					$config['upload_path'] = 'content/cache/';
 					$config['allowed_types'] = 'jpg|png|gif';
 					$this->load->library('upload', $config);
@@ -317,7 +317,7 @@ class Comics extends Admin_Controller {
 			case("comic"):
 				$comic = new Comic();
 				$comic->where('id', $id)->get();
-				if (!$comic->remove_comic()) {
+				if (!$comic->remove()) {
 					log_message("error", "Controller: comics.php/remove: failed comic removal");
 					return false;
 				}

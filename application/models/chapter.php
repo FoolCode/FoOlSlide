@@ -180,7 +180,7 @@ class Chapter extends DataMapper {
 	 * Sets the $this->comic variable if it hasn't been done before
 	 *
 	 * @author	Woxxy
-	 * @return	True on success, false on failure.
+	 * @return	boolean True on success, false on failure.
 	 */
 	public function get_comic() {
 		// Check if the variable is not yet set, in order to save a databse read.
@@ -209,7 +209,7 @@ class Chapter extends DataMapper {
 	 * @author	Woxxy
 	 * @param	array $data with the minimal values, or the function will return
 	 * 			false and do nothing.
-	 * @return	Returns true on success, false on failure.
+	 * @return	boolean true on success, false on failure.
 	 */
 	public function add($data) {
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
@@ -238,7 +238,7 @@ class Chapter extends DataMapper {
 		$this->comic_id = $data['comic_id'];
 
 		// Create the directory. The GUI error messages are inside the function.
-		if (!$this->add_chapter_dir($comic->stub, $comic->uniqid)) {
+		if (!$this->add_chapter_dir()) {
 			log_message('error', 'add: failed creating dir');
 			return false;
 		}
@@ -246,7 +246,7 @@ class Chapter extends DataMapper {
 		// Hoping we got enough $data, let's throw it to the database function.
 		// In case it fails, it will remove the directory.
 		if (!$this->update_chapter_db($data)) {
-			$this->remove_chapter_dir($comic->stub, $comic->uniqid);
+			$this->remove_chapter_dir();
 			log_message('error', 'add: failed adding to database');
 			return false;
 		}
@@ -264,7 +264,7 @@ class Chapter extends DataMapper {
 	 * There's no going back from this!
 	 *
 	 * @author	Woxxy
-	 * @return	Returns the comic the chapter derives from.
+	 * @return	object the comic the chapter derives from.
 	 */
 	public function remove() {
 		// Get comic and check if existant. We don't want to have empty stub on this!
@@ -302,7 +302,7 @@ class Chapter extends DataMapper {
 	 *
 	 * @author	Woxxy
 	 * @param	array $data contains the minimal data
-	 * @return	Returns the comic the chapter derives from.
+	 * @return	object the comic the chapter derives from.
 	 */
 	public function update_chapter_db($data = array()) {
 		// Check if we're updating or creating a new chapter by looking at $data["id"].
@@ -310,7 +310,7 @@ class Chapter extends DataMapper {
 		if (isset($data["id"]) && $data['id'] != "") {
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0) {
-				set_notice('error', 'The chapter you were referring to does not exist.');
+				set_notice('error', 'The chapter you wanted to edit doesn\'t exist.');
 				log_message('error', 'update_chapter_db: failed to find requested id');
 				return false;
 			}
@@ -362,7 +362,9 @@ class Chapter extends DataMapper {
 			$this->stub = $this->stub();
 
 		// This is necessary to make the checkbox work.
-		// @todo make the checkbox work consistently across the whole framework
+		/**
+		 *  @todo make the checkbox work consistently across the whole framework
+		 */
 		if (!isset($data['hidden']) || $data['hidden'] != 1)
 			$this->hidden = 0;
 
@@ -374,10 +376,9 @@ class Chapter extends DataMapper {
 		// If the new stub is different from the old one (if the chapter was 
 		// already existing), rename the folder.
 		if (isset($old_stub) && $old_stub != $this->stub) {
-			$comic = new Comic();
-			$comic->where('id', $this->comic_id)->get();
-			$dir_old = "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $old_stub . "_" . $this->uniqid;
-			$dir_new = "content/comics/" . $comic->stub . "_" . $comic->uniqid . "/" . $this->stub . "_" . $this->uniqid;
+			$this->get_comic();
+			$dir_old = "content/comics/" . $this->comic->directory() . "/" . $old_stub . "_" . $this->uniqid;
+			$dir_new = "content/comics/" . $this->comic->directory() . "/" . $this->stub . "_" . $this->uniqid;
 			rename($dir_old, $dir_new);
 		}
 
@@ -462,7 +463,7 @@ class Chapter extends DataMapper {
 	 * related pages from the database (not the files).
 	 *
 	 * @author	Woxxy
-	 * @return	Returns true if success, false if failure.
+	 * @return	boolean true if success, false if failure.
 	 */
 	public function remove_chapter_db() {
 		// get all the pages of this chapter. Use iterated because they could be many.
@@ -490,7 +491,7 @@ class Chapter extends DataMapper {
 	 * Creates the necessary empty folder for a chapter
 	 * 
 	 * @author	Woxxy
-	 * @return	Returns true if success, false if failure.
+	 * @return	boolean true if success, false if failure.
 	 */
 	public function add_chapter_dir() {
 		// Get the comic if we didn't yet.
@@ -501,7 +502,7 @@ class Chapter extends DataMapper {
 		}
 
 		// Create the directory and return false on failure. It's most likely file permissions anyway.
-		$dir = "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid;
+		$dir = "content/comics/" . $this->comic->directory() . "/" . $this->directory();
 		if (!mkdir($dir)) {
 			set_notice('error', 'Failed to create the chapter directory. Please, check file permissions.');
 			log_message('error', 'add_chapter_dir: folder could not be created');
@@ -516,7 +517,7 @@ class Chapter extends DataMapper {
 	 * This means pages and props too.
 	 *
 	 * @author	Woxxy
-	 * @return	Returns true if success, false if failure.
+	 * @return	boolean true if success, false if failure.
 	 */
 	public function remove_chapter_dir() {
 		// Get the comic if we didn't yet.
@@ -527,7 +528,7 @@ class Chapter extends DataMapper {
 		}
 
 		// Create the direcotry name
-		$dir = "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/";
+		$dir = "content/comics/" . $this->comic->directory() . "/" . $this->directory() . "/";
 
 		// Delete all files inside of it
 		if (!delete_files($dir, TRUE)) {
@@ -605,8 +606,8 @@ class Chapter extends DataMapper {
 			// Let's add to it the object itelf? Uncomment next line to do so.
 			// $return[$key]['object'] = $item;
 			// The URLs need to be completed. This function will also trigger the load balancing if enabled.
-			$return[$key]['url'] = balance_url() . "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->filename;
-			$return[$key]['thumb_url'] = balance_url() . "content/comics/" . $this->comic->stub . "_" . $this->comic->uniqid . "/" . $this->stub . "_" . $this->uniqid . "/" . $item->thumbnail . $item->filename;
+			$return[$key]['url'] = balance_url() . "content/comics/" . $this->comic->directory() . "/" . $this->directory() . "/" . $item->filename;
+			$return[$key]['thumb_url'] = balance_url() . "content/comics/" . $this->comic->directory() . "/" . $this->directory() . "/" . $item->thumbnail . $item->filename;
 		}
 
 		// Put the pages in a comfy variable.

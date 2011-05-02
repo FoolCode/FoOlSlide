@@ -4,6 +4,11 @@ class Migrate extends CI_Controller
 	function __construct()
 	{
 		parent::Controller();
+		
+		$this->iontank_auth_auth->logged_in() or redirect('/admin/auth/login');
+		$this->tank_auth->is_admin() or redirect('admin');
+		$this->tank_auth->is_admin() or die(1);
+		
 		$this->load->library('migrations');
 
 		$this->migrations->set_verbose(TRUE);

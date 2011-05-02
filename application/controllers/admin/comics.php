@@ -7,9 +7,9 @@ class Comics extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->ion_auth->logged_in() or redirect('auth/login');
-		$this->ion_auth->is_admin() or redirect('admin');
-		$this->ion_auth->is_admin() or die(1);
+		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
+		$this->tank_auth->is_admin() or redirect('admin');
+		$this->tank_auth->is_admin() or die(1);
 		$this->load->model('files_model');
 		$this->load->library('pagination');
 		$this->viewdata['controller_title'] = _("Comics");

@@ -7,15 +7,12 @@ class Index extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->ion_auth->logged_in() or redirect('auth/login');
-		$this->load->library('pagination');
+		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->viewdata['controller_title'] = 'Dashboard';
 	}
 
 	function index() {
 		redirect('/admin/dashboard/');
-		// $this->viewdata['main_content_view'] = $this->load->view('admin/body', NULL, TRUE);
-		$this->load->view("admin/default", $this->viewdata);
 	}
 
 }

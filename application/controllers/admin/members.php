@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Users extends Admin_Controller {
+class Members extends Admin_Controller {
 
 	function __construct()
 	{
@@ -13,19 +13,19 @@ class Users extends Admin_Controller {
         
         function index()
         {
-            redirect('/admin/users/users');
+            redirect('/admin/members/members');
         }
         
-        function usersa()
+        function member()
         {
             $this->viewdata["function_title"] = "User list";
             $data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $data['users'] = $this->ion_auth->get_users_array();
-            $this->viewdata["main_content_view"] = $this->load->view('auth/index', $data, TRUE);
+            //$this->viewdata["main_content_view"] = $this->load->view('auth/index', $data, TRUE);
             $this->load->view("admin/default", $this->viewdata);
         }
 		
-		function user($id)
+		function members($id)
 		{
 			if($post = $this->input->post())
 			{
@@ -36,7 +36,7 @@ class Users extends Admin_Controller {
 			
             $data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $user = $this->ion_auth->get_user_array($id);
-			$this->viewdata["function_title"] = "User: ".$user['username'];
+			$this->viewdata["function_title"] = _('Member').": ".$user['username'];
 			
 			$form = array();
 					
@@ -74,14 +74,14 @@ class Users extends Admin_Controller {
 			
 			$data['table'] = tabler($form, TRUE, TRUE);
 
-            $this->viewdata["main_content_view"] = $this->load->view('auth/edit_user', $data, TRUE);
+            //$this->viewdata["main_content_view"] = $this->load->view('auth/edit_user', $data, TRUE);
             $this->load->view("admin/default", $this->viewdata);
 		}
 		
 		function you()
 		{
 			$user = $this->ion_auth->get_user();
-			redirect('/admin/users/user/'.$user->id);
+			redirect('/admin/members/member/'.$user->id);
 		}
         
         function teams($stub = "")
@@ -102,10 +102,10 @@ class Users extends Admin_Controller {
 				$rows = array();
 				foreach($teams as $team)
 				{
-					$rows[] = array('title' => '<a href="'.site_url('admin/users/teams/'.$team->stub).'">'.$team->name.'</a>');
+					$rows[] = array('title' => '<a href="'.site_url('admin/members/teams/'.$team->stub).'">'.$team->name.'</a>');
 				}
 				$data['list'] = lister($rows);
-				$this->viewdata["main_content_view"] = $this->load->view('admin/users/users', $data, TRUE);
+				$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);
 				$this->load->view("admin/default", $this->viewdata);
 			}
 			else 
@@ -129,7 +129,7 @@ class Users extends Admin_Controller {
         {
 			$team = new Team();
 			$team->where('name', get_setting('fs_gen_default_team'))->get();
-			redirect('/admin/users/teams/'.$team->stub);
+			redirect('/admin/members/teams/'.$team->stub);
         }
 		
 		function add_team()
@@ -139,7 +139,7 @@ class Users extends Admin_Controller {
 			{
 				$team = new Team();
 				$team->update_team($this->input->post());
-				redirect('/admin/users/teams/'.$team->stub);
+				redirect('/admin/members/teams/'.$team->stub);
 			}
 			
 			$team = new Team();

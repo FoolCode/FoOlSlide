@@ -5,11 +5,10 @@ class Preferences extends Admin_Controller {
 	function __construct()
 	{
 		parent::__construct();
-                $this->ion_auth->logged_in() or redirect('auth/login');
-                $this->ion_auth->is_admin() or redirect('admin');
-                $this->ion_auth->is_admin() or die(1);
-                $this->load->library('form_validation');
-                $this->viewdata['controller_title'] = "Preferences";
+                $this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
+                $this->tank_auth->is_admin() or redirect('admin');
+                $this->tank_auth->is_admin() or die(1);
+                $this->viewdata['controller_title'] = "Load balancer";
         }
         
 		function authenticate()

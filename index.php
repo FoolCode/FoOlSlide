@@ -190,6 +190,12 @@ if (defined('ENVIRONMENT'))
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
 
+	$locale = "it_IT.utf8";
+	putenv("LANG=$locale");
+	setlocale(LC_ALL, $locale);
+	bindtextdomain("admin", FCPATH."assets/locale");
+    textdomain("admin");
+	
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

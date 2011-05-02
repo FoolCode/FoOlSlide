@@ -11,9 +11,8 @@ class Comics extends Admin_Controller {
 		$this->ion_auth->is_admin() or redirect('admin');
 		$this->ion_auth->is_admin() or die(1);
 		$this->load->model('files_model');
-		//$this->load->library('form_validation');
 		$this->load->library('pagination');
-		$this->viewdata['controller_title'] = "Comics";
+		$this->viewdata['controller_title'] = _("Comics");
 	}
 
 	function index() {
@@ -21,13 +20,13 @@ class Comics extends Admin_Controller {
 	}
 
 	function manage($page = 1) {
-		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/comics/manage/') . '">manage</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/comics/manage/') . '">'._('manage').'</a>';
 		$comics = new Comic();
 
 		if ($this->input->post('search')) {
 			$search = $this->input->post('search');
 			$comics->ilike('name', $search)->limit(20);
-			$this->viewdata["extra_title"][] = 'Searching: ' . htmlspecialchars(($search));
+			$this->viewdata["extra_title"][] = _('Searching').': ' . htmlspecialchars(($search));
 		}
 
 		$comics->order_by('name', 'ASC');
@@ -42,7 +41,7 @@ class Comics extends Admin_Controller {
 		$comic = new Comic();
 		$comic->where("stub", $stub)->get();
 		if ($comic->result_count() == 0) {
-			set_notice('warn', 'The comic you looked for does not exist.');
+			set_notice('warn', _('The comic you looked for doesn\'t exist.'));
 			$this->manage();
 			return false;
 		}
@@ -56,9 +55,8 @@ class Comics extends Admin_Controller {
 				$chapter->update_chapter_db($this->input->post());
 			}
 
-			$chapter = new Chapter();
-			$chapter->where('id', $chapter_id);
-			$data["chapter"] = $chapter->get();
+			$chapter = new Chapter($chapter_id);
+			$data["chapter"] = $chapter;
 
 			$team = new Team();
 			$teams = $team->get_teams($chapter->team_id, $chapter->joint_id);
@@ -66,11 +64,12 @@ class Comics extends Admin_Controller {
 			$table = ormer($chapter);
 
 			$table[] = array(
-				'Teams',
+				_('Teams'),
 				array(
 					'name' => 'team',
 					'type' => 'input',
-					'value' => $teams
+					'value' => $teams,
+					'help' => _('Insert the names of the teams who worked on this chapter.')
 				)
 			);
 
@@ -82,7 +81,7 @@ class Comics extends Admin_Controller {
 			$this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter . "." . $chapter->subchapter);
 
 
-			$data["pages"] = $chapter->get_pages();
+			 $data["pages"] = $chapter->get_pages();
 
 			$this->viewdata["main_content_view"] = $this->load->view("admin/comics/chapter.php", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
@@ -102,7 +101,7 @@ class Comics extends Admin_Controller {
 					log_message("error", "Controller: comics.php/comic: image failed being added to folder");
 				}
 				if (!unlink($up_data["full_path"])) {
-					set_notice('error', 'comics.php/comic: couldn\'t remove cache file ' . $data["full_path"]);
+					log_message('error', 'comics.php/comic: couldn\'t remove cache file ' . $data["full_path"]);
 					return false;
 				}
 			}
@@ -129,12 +128,12 @@ class Comics extends Admin_Controller {
 		$table = ormer($comic);
 
 		$table[] = array(
-			'Licensed nations',
+			_('Licensed in'),
 			array(
 				'name' => 'licensed',
 				'type' => 'input',
 				'value' => '',
-				'help' => 'Insert the nations where the comic is licensed to disable availability for the nation.'
+				'help' => _('Insert the nations where the comic is licensed in order to limit the availability.')
 			)
 		);
 
@@ -146,7 +145,7 @@ class Comics extends Admin_Controller {
 	}
 
 	function add_new($stub = "") {
-		$this->viewdata["function_title"] = "Add new";
+		$this->viewdata["function_title"] = _("Add new");
 
 		//$stub stands for $comic, but there's already a $comic here
 		if ($stub != "") {
@@ -158,18 +157,19 @@ class Comics extends Admin_Controller {
 			}
 			$comic = new Comic();
 			$comic->where('stub', $stub)->get();
-			$this->viewdata["extra_title"][] = "Chapter in " . $comic->name;
+			$this->viewdata["extra_title"][] = _("Chapter in"). ' ' . $comic->name;
 			$chapter = new Chapter();
 			$chapter->comic_id = $comic->id;
 
 			$table = ormer($chapter);
 
 			$table[] = array(
-				'Teams',
+				_('Teams'),
 				array(
 					'name' => 'team',
 					'type' => 'input',
-					'value' => array('value' => get_setting('fs_gen_default_team'))
+					'value' => array('value' => get_setting('fs_gen_default_team')),
+					'help' => _('Insert the names of the teams who worked on this chapter.')
 				)
 			);
 
@@ -195,7 +195,7 @@ class Comics extends Admin_Controller {
 							log_message("error", "Controller: comics.php/add_new: image failed being added to folder");
 						}
 						if (!unlink($up_data["full_path"])) {
-							set_notice('error', 'comics.php/add_new: couldn\'t remove cache file ' . $data["full_path"]);
+							log_message('error', 'comics.php/add_new: couldn\'t remove cache file ' . $data["full_path"]);
 							return false;
 						}
 					}
@@ -205,19 +205,19 @@ class Comics extends Admin_Controller {
 
 			$table = ormer($comic);
 			$table[] = array(
-				'Licensed nations',
+				_('Licensed in'),
 				array(
 					'name' => 'licensed',
 					'type' => 'nation',
 					'value' => array(),
-					'help' => 'Insert the nations where the comic is licensed to disable availability for the nation.'
+					'help' => _('Insert the nations where the comic is licensed in order to limit the availability.')
 				)
 			);
 
 			$table = tabler($table, FALSE, TRUE);
 			$data['table'] = $table;
 
-			$this->viewdata["extra_title"][] = "Comic";
+			$this->viewdata["extra_title"][] = _("Comic");
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
 		}
@@ -309,10 +309,12 @@ class Comics extends Admin_Controller {
 
 	function delete($type, $id = 0) {
 		if (!isAjax()) {
-			echo 'You can\'t delete chapters from outside the admin panel through this link.';
+			echo _('You can\'t delete chapters from outside the admin panel through this link.');
 			log_message("error", "Controller: comics.php/remove: failed comic removal");
 			return false;
 		}
+		$id = intval($id);
+		
 		switch ($type) {
 			case("comic"):
 				$comic = new Comic();
@@ -335,21 +337,22 @@ class Comics extends Admin_Controller {
 				break;
 			case("page"):
 				$page = new Page($this->input->post('id'));
-				$chapter = new Chapter($page->chapter_id);
+				$page->get_chapter();
 				$comic = new Chapter($chapter->comic_id);
 				if (!$data = $page->remove_page()) {
 					log_message("error", "Controller: comics.php/remove: failed page removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/comics/comic/" . $comic->stub . "/" . $chapter->id)));
+				echo json_encode(array('href' => site_url("admin/comics/comic/" . $page->chapter->comic->stub . "/" . $page->chapter->id)));
 				break;
 			case("allpages"):
-				$chapter = new Chapter($this->input->post('id'));
+				$chapter = new Chapter($id);
+				$chapter->get_comic();
 				if (!$chapter->remove_all_pages()) {
 					log_message("error", "Controller: comics.php/remove: failed all pages removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/comics/comic/" . $comic->stub . "/" . $chapter->id)));
+				echo json_encode(array('href' => site_url("admin/comics/comic/" . $chapter->comic->stub . "/" . $chapter->id)));
 				break;
 		}
 	}

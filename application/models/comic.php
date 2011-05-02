@@ -13,7 +13,6 @@ class Comic extends DataMapper {
 			'label' => 'Name',
 			'type' => 'input',
 			'placeholder' => 'required',
-			'help' => 'Insert the English version of the name. Try using the most popular one in order to lock it to the master FoOlSlide repository.'
 		),
 		'stub' => array(
 			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
@@ -27,20 +26,17 @@ class Comic extends DataMapper {
 			'rules' => array('is_int'),
 			'label' => 'Hidden',
 			'type' => 'checkbox',
-			'help' => 'Hide this entire comic from the public.'
 		),
 		'description' => array(
 			'rules' => array(),
 			'label' => 'Description',
 			'type' => 'textarea',
-			'help' => 'Write the basics of the plot of this comic.'
 		),
 		'thumbnail' => array(
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail',
 			'type' => 'upload',
 			'display' => 'image',
-			'help' => 'Upload an image, it will be stored in full quality and also resized for better public view.'
 		),
 		'lastseen' => array(
 			'rules' => array(),
@@ -57,11 +53,38 @@ class Comic extends DataMapper {
 	);
 
 	function __construct($id = NULL) {
-		parent::__construct($id);
+		// Set language
+		$this->help_lang();
+		
+		parent::__construct(NULL);
+		
+		// We've overwrote the get() function so we need to look for $id from here
+		if(!empty($id) && is_numeric($id)) 
+		{
+			$this->where('id', $id)->get();
+		}
 	}
 
 	function post_model_init($from_cache = FALSE) {
 		
+	}
+	
+	/**
+	 * This function sets the translations for the validation values.
+	 * 
+	 * @author Woxxy
+	 * @return void
+	 */
+	function help_lang()
+	{
+		$this->validation['name']['label'] = _('Name');
+		$this->validation['name']['help'] = _('Insert the title of the comic.');
+		$this->validation['description']['label'] = _('Description');
+		$this->validation['description']['help'] = _('Insert a description.');
+		$this->validation['hidden']['label'] = _('Hidden');
+		$this->validation['hidden']['help'] = _('Hide the comic from public view.');
+		$this->validation['thumbnail']['label'] = _('Thumbnail');
+		$this->validation['thumbnail']['help'] = _('Upload an image to use as thumbnail.');
 	}
 
 	/**
@@ -214,7 +237,7 @@ class Comic extends DataMapper {
 		if (isset($data["id"]) && $data['id'] != '') {
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0) {
-				set_notice('error', 'The comic you wanted to edit doesn\'t exist.');
+				set_notice('error', _('The comic you wanted to edit doesn\'t exist.'));
 				log_message('error', 'update_comic_db: failed to find requested id');
 				return false;
 			}
@@ -285,11 +308,11 @@ class Comic extends DataMapper {
 		$success = $this->save();
 		if (!$success) {
 			if (!$this->valid) {
-				set_notice('error', 'Check that you have inputted all the required fields.');
+				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'update_comic_db: failed validation');
 			}
 			else {
-				set_notice('error', 'Failed saving the Comic to database for unknown reasons.');
+				set_notice('error', _('Failed saving the Comic to database for unknown reasons.'));
 				log_message('error', 'update_comic_db: failed to save');
 			}
 			return false;
@@ -320,7 +343,7 @@ class Comic extends DataMapper {
 		$temp = $this->get_clone();
 		$success = $this->delete();
 		if (!$success) {
-			set_notice('error', 'The comic couldn\'t be removed from the database for unknown reasons.');
+			set_notice('error', _('The comic couldn\'t be removed from the database for unknown reasons.'));
 			log_message('error', 'remove_comic_db: id found but entry not removed');
 			return false;
 		}
@@ -338,7 +361,7 @@ class Comic extends DataMapper {
 	public function add_comic_dir() {
 		// Just create the folder
 		if (!mkdir("content/comics/" . $this->directory())) {
-			set_notice('error', 'The directory could not be created. Please, check file permissions.');
+			set_notice('error', _('The directory could not be created. Please, check file permissions.'));
 			log_message('error', 'add_comic_dir: folder could not be created');
 			return false;
 		}
@@ -357,14 +380,14 @@ class Comic extends DataMapper {
 		
 		// Delete all inner files
 		if (!delete_files($dir, TRUE)) {
-			set_notice('error', 'The files inside the comic directory could not be removed. Please, check the file permissions.');
+			set_notice('error', _('The files inside the comic directory could not be removed. Please, check the file permissions.'));
 			log_message('error', 'remove_comic_dir: files inside folder could not be removed');
 			return false;
 		}
 		else {
 			// On success delete the directory itself
 			if (!rmdir($dir)) {
-				set_notice('error', 'The directory could not be removed. Please, check file permissions.');
+				set_notice('error', _('The directory could not be removed. Please, check file permissions.'));
 				log_message('error', 'remove_comic_dir: folder could not be removed');
 				return false;
 			}
@@ -391,7 +414,7 @@ class Comic extends DataMapper {
 		
 		// Copy the full image over
 		if (!copy($filedata["server_path"], $dir . $filedata["name"])) {
-			set_notice('error', 'Failed to create the thumbnail image for the comic. Check file permissions.');
+			set_notice('error', _('Failed to create the thumbnail image for the comic. Check file permissions.'));
 			log_message('error', 'add_comic_thumb: failed to create/copy the image');
 			return false;
 		}
@@ -414,7 +437,7 @@ class Comic extends DataMapper {
 
 		// Resize! And return false of failure
 		if (!$CI->image_lib->resize()) {
-			set_notice('error', 'Failed to create the thumbnail image for the comic. Resize function didn\'t work');
+			set_notice('error', _('Failed to create the thumbnail image for the comic. Resize function didn\'t work'));
 			log_message('error', 'add_comic_thumb: failed to create thumbnail');
 			return false;
 		}
@@ -428,7 +451,7 @@ class Comic extends DataMapper {
 		
 		// Save hoping we're lucky
 		if (!$this->save()) {
-			set_notice('error', 'Failed to save the thumbnail image in the database.');
+			set_notice('error', _('Failed to save the thumbnail image in the database.'));
 			log_message('error', 'add_comic_thumb: failed to add to database');
 			return false;
 		}
@@ -450,14 +473,14 @@ class Comic extends DataMapper {
 
 		// Remove the full image
 		if (!unlink($dir . $this->thumbnail)) {
-			set_notice('error', 'Failed to remove the thumbnail\'s original image. Please, check file permissions.');
+			set_notice('error', _('Failed to remove the thumbnail\'s original image. Please, check file permissions.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete image');
 			return false;
 		}
 
 		// Remove the thumbnail
 		if (!unlink($dir . "thumb_" . $this->thumbnail)) {
-			set_notice('error', 'Failed to remove the thumbnail image. Please, check file permissions.');
+			set_notice('error', _('Failed to remove the thumbnail image. Please, check file permissions.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete thumbnail');
 			return false;
 		}
@@ -465,7 +488,7 @@ class Comic extends DataMapper {
 		// Set the thumbnail variable to empty and save to database
 		$this->thumbnail = "";
 		if (!$this->save()) {
-			set_notice('error', 'Failed to remove the thumbnail image from the database.');
+			set_notice('error', _('Failed to remove the thumbnail image from the database.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to remove from database');
 			return false;
 		}

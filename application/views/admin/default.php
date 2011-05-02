@@ -3,7 +3,7 @@
 
 
 	<head>
-		<title>FoOlSlide Administration</title>
+		<title><?php echo _('FoOlSlide Administration') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?= base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
@@ -17,6 +17,7 @@
                 if (plug)
                 {
                     jQuery.post(href, function(result){
+						if(location.href == result.href) window.location.reload();
 						location.href = result.href;
 					}, 'json');
                 }
@@ -55,7 +56,7 @@
 					}
 					?>
 				</div>
-				<div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide control panel</div>
+				<div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide - <?php echo _('control panel'); ?></div>
 
 			</div>
 

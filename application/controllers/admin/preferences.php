@@ -11,7 +11,7 @@ class Preferences extends Admin_Controller {
 		$this->ion_auth->is_admin() or redirect('admin');
 		$this->ion_auth->is_admin() or die(1);
 		$this->load->library('form_validation');
-		$this->viewdata['controller_title'] = "Preferences";
+		$this->viewdata['controller_title'] = _("Preferences");
 	}
 
 	function index() {
@@ -39,26 +39,26 @@ class Preferences extends Admin_Controller {
 	}
 
 	function general() {
-		$this->viewdata["function_title"] = "General";
+		$this->viewdata["function_title"] = _("General");
 
 
 		$form = array();
 
 
 		$form[] = array(
-			'Site title',
+			_('Site title'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_gen_site_title',
 				'id' => 'site_title',
 				'maxlength' => '200',
-				'placeholder' => 'manga reader',
+				'placeholder' => _('comic reader'),
 				'preferences' => 'fs_gen'
 			)
 		);
 
 		$form[] = array(
-			'Back URL',
+			_('Back URL'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_gen_back_url',
@@ -70,7 +70,7 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Footer text',
+			_('Footer text'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_gen_footer_text',
@@ -80,7 +80,7 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Default team',
+			_('Default team'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_gen_default_team',
@@ -93,7 +93,7 @@ class Preferences extends Admin_Controller {
 
 
 		$form[] = array(
-			'Default language',
+			_('Default language'),
 			array(
 				'type' => 'language',
 				'name' => 'fs_gen_default_lang',
@@ -102,7 +102,7 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Show Anonymous as team?',
+			_('Show Anonymous as team?'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_gen_anon_team_show',
@@ -126,35 +126,35 @@ class Preferences extends Admin_Controller {
 	}
 
 	function advertising() {
-		$this->viewdata["function_title"] = "Advertising";
+		$this->viewdata["function_title"] = _("Advertising");
 
 		$form = array();
 
 
 		$form[] = array(
-			'Top banner',
+			_('Top banner'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_top_banner',
-				'help' => 'Insert the HTML provided by your advertiser',
+				'help' => _('Insert the HTML provided by your advertiser'),
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview?',
+			_('Reload every pageview?'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_top_banner_reload',
 				'placeholder' => '',
 				'preferences' => 'fs_ads',
-				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
+				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
 			)
 		);
 
 
 		$form[] = array(
-			'Active',
+			_('Active'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_top_banner_active',
@@ -164,29 +164,29 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Right banner',
+			_('Right banner'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_right_banner',
-				'help' => 'Insert the HTML provided by your advertiser',
+				'help' => _('Insert the HTML provided by your advertiser'),
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview?',
+			_('Reload every pageview?'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_right_banner_reload',
 				'placeholder' => '',
 				'preferences' => 'fs_ads',
-				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
+				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
 			)
 		);
 
 
 		$form[] = array(
-			'Active',
+			_('Active'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_right_banner_active',
@@ -196,29 +196,29 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			'Bottom banner',
+			_('Bottom banner'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_bottom_banner',
-				'help' => 'Insert the HTML provided by your advertiser',
+				'help' => _('Insert the HTML provided by your advertiser'),
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			'Reload every pageview?',
+			_('Reload every pageview?'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_bottom_banner_reload',
 				'placeholder' => '',
 				'preferences' => 'fs_ads',
-				'help' => 'Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.'
+				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
 			)
 		);
 
 
 		$form[] = array(
-			'Active',
+			_('Active'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_ads_bottom_banner_active',
@@ -245,7 +245,7 @@ class Preferences extends Admin_Controller {
 			foreach ($ads as $ad => $adfile) {
 				if (!write_file('./content/ads/' . $adfile, $ad_before . $this->input->post($ad) . $ad_after)) {
 					log_message('error', 'preferences.php/advertising: couldn\'t update HTML files');
-					set_notice('error', 'Couldn\'t save the advertising code in the HTML');
+					set_notice('error', _('Couldn\'t save the advertising code in the HTML'));
 				}
 			}
 		}
@@ -260,7 +260,7 @@ class Preferences extends Admin_Controller {
 	}
 
 	function server() {
-		$this->viewdata["function_title"] = "General";
+		$this->viewdata["function_title"] = _("Server");
 
 		if ($post = $this->input->post()) {
 			$this->_submit($post);
@@ -270,11 +270,11 @@ class Preferences extends Admin_Controller {
 
 
 		$form[] = array(
-			'Input on each line the URL of FoOlSlide on the other server.',
+			_('Input on each line the URL of FoOlSlide on the other server.'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_srv_servers',
-				'placeholder' => 'List of servers',
+				'placeholder' => _('List of servers'),
 				'preferences' => 'fs_srv'
 			)
 		);

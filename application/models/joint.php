@@ -74,7 +74,7 @@ class Joint extends DataMapper {
 			$tea = new Team();
 			$tea->where('name', $team)->get();
 			if ($tea->result_count() == 0) {
-				set_notice('error', 'One of the named teams does not exist.');
+				set_notice('error', _('One of the named teams doesn\'t exist.'));
 				log_message('error', 'add_joint_via_name: team does not exist');
 				return false;
 			}
@@ -98,11 +98,11 @@ class Joint extends DataMapper {
 				$joint->editor = $this->logged_id();
 				if (!$joint->save()) {
 					if ($joint->valid) {
-						set_notice('error', 'One or more fields had wrong value types.');
+						set_notice('error', _('Check that you have inputted all the required fields.'));
 						log_message('error', 'add_joint: validation failed');
 					}
 					else {
-						set_notice('error', 'Couldn\'t save Joint to database due to an unknown error.');
+						set_notice('error', _('Couldn\'t save joint to database due to an unknown error.'));
 						log_message('error', 'add_joint: saving failed');
 					}
 					return false;
@@ -115,7 +115,7 @@ class Joint extends DataMapper {
 
 	public function remove_joint() {
 		if (!$this->delete_all()) {
-			set_notice('error', 'The joint couldn\'t be removed.');
+			set_notice('error', _('The joint couldn\'t be removed.'));
 			log_message('error', 'remove_joint: failed deleting');
 			return false;
 		}
@@ -130,11 +130,11 @@ class Joint extends DataMapper {
 		$joint->editor = $this->logged_id();
 		if (!$joint->save()) {
 			if ($joint->valid) {
-				set_notice('error', 'One or more fields had wrongly inpiutted data.');
+				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'add_team (joint.php): validation failed');
 			}
 			else {
-				set_notice('error', 'Couldn\'t add team to joint for unknown reasons.');
+				set_notice('error', _('Couldn\'t add team to joint for unknown reasons.'));
 				log_message('error', 'add_team (joint.php): saving failed');
 			}
 			return false;
@@ -144,7 +144,7 @@ class Joint extends DataMapper {
 	public function remove_team($team_id) {
 		$this->where('team_id', $team_id)->get();
 		if (!$this->delete()) {
-			set_notice('error', 'Couldn\'t remove the team from the joint.');
+			set_notice('error', _('Couldn\'t remove the team from the joint.'));
 			log_message('error', 'remove_team (joint.php): removing failed');
 			return false;
 		}
@@ -154,7 +154,7 @@ class Joint extends DataMapper {
 		$joints = new Joint();
 		$joints->where('team_id', $team_id)->get();
 		if (!$joints->delete_all()) {
-			set_notice('error', 'Couldn\'t remove the team from all the joints.');
+			set_notice('error', _('Couldn\'t remove the team from all the joints.'));
 			log_message('error', 'remove_team_from_all (joint.php): removing failed');
 			return false;
 		}

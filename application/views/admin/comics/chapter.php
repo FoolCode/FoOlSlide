@@ -1,8 +1,8 @@
 <?php
 $this->buttoner[] = array(
-	'text' => 'Delete chapter',
+	'text' => _('Delete chapter'),
 	'href' => site_url('/admin/comics/delete/chapter/' . $chapter->id),
-	'plug' => 'Do you really want to delete this chapter and its pages?'
+	'plug' => _('Do you really want to delete this chapter and its pages?')
 );
 
 echo buttoner();
@@ -63,7 +63,7 @@ $session_data = $this->session->get_js_session();
 				'checkExisting' : false,
 				'preventCaching' : false,
 				'multi' : true,
-				'buttonText' : 'Upload zip and images',
+				'buttonText' : '<?php echo _('Upload zip and images'); ?>',
 				'width': 200,
 				'auto'      : true,
 				'requeueErrors' : true,
@@ -78,7 +78,10 @@ $session_data = $this->session->get_js_session();
 </div>
 <?php
 $this->buttoner = array();
-$this->buttoner[] = array('href' => 'JavaScript:deleteAllPages()', 'text' => 'Delete all pages', 'plug' => 'Do you really want to delete all the images in this chapter?');
+$this->buttoner[] = array(
+	'text' => _('Delete all pages'),
+	'href' => site_url('/admin/comics/delete/allpages/' . $chapter->id),
+	'plug' => _('Do you really want to delete all the images in this chapter?'));
 echo buttoner();
 ?>
 
@@ -90,7 +93,7 @@ echo buttoner();
 			foreach ($pages as $item) {
 				$count++;
 				echo '<td>
-                <div class="controls gbutton" onclick="deleteImage(' . $item['id'] . ')">Delete</div>
+                <div class="controls gbutton" onclick="deleteImage(' . $item['id'] . ')">'._('Delete').'</div>
                 <img id="image_' . $item['id'] . '" src="' . $item["thumb_url"] . '" />
              </td>';
 				if ($count % 4 == 0)

@@ -1,0 +1,556 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FoOlSlide\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-01 23:46+0100\n"
+"PO-Revision-Date: 2011-05-01 23:56+0100\n"
+"Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
+"Language-Team: FoOlRulez <woxxy@foolrulez.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SearchPath-0: /Users/woxxy/NetBeansProjects/CI_FoOlSlide\n"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:17
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:19
+msgid "Comic"
+msgstr "Fumetto"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:18
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:20
+msgid "Comics"
+msgstr "Fumetti"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:24
+msgid "manage"
+msgstr "gestisci"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:30
+msgid "Searching"
+msgstr "Ricerca"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:45
+msgid "The comic you looked for doesn't exist."
+msgstr "Il fumetto che hai cercato non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:68
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:168
+msgid "Teams"
+msgstr "Gruppi"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:73
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:173
+msgid "Insert the names of the teams who worked on this chapter."
+msgstr "Inserisci i nomi dei gruppi che hanno lavorato su questo capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:132
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:209
+msgid "Licensed in"
+msgstr "Sotto licenza in"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:137
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:214
+msgid "Insert the nations where the comic is licensed in order to limit the availability."
+msgstr "Inserisci le nazioni in cui il fumetto è sotto licenza per limitarne la distribuzione."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:149
+msgid "Add new"
+msgstr "Aggiungi nuovo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:161
+msgid "Chapter in"
+msgstr "Capitolo in"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:313
+msgid "You can't delete chapters from outside the admin panel through this link."
+msgstr "Non puoi rimuovere i capitoli dall'esterno del pannello d'amministrazione con questo link."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:14
+msgid "Preferences"
+msgstr "Preferenze"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:42
+msgid "General"
+msgstr "Generale"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:49
+msgid "Site title"
+msgstr "Titolo del sito"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:55
+msgid "comic reader"
+msgstr "lettore di fumetti"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:61
+msgid "Back URL"
+msgstr "Link al sito"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:73
+msgid "Footer text"
+msgstr "Testo del footer"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:83
+msgid "Default team"
+msgstr "Gruppo di default"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:96
+msgid "Default language"
+msgstr "Lingua di default"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:105
+msgid "Show Anonymous as team?"
+msgstr "Mostra Anonymous come team?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:129
+msgid "Advertising"
+msgstr "Pubblicità"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:135
+msgid "Top banner"
+msgstr "Banner in alto"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:139
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:171
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:203
+msgid "Insert the HTML provided by your advertiser"
+msgstr "Inserisci l'HTML dal tuo pubblicitario"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:145
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:177
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:209
+msgid "Reload every pageview?"
+msgstr "Ricarica ogni visualizzazione di pagina?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:151
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:183
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:215
+msgid "Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser."
+msgstr "Ricarica la pubblicità. Utile con ProjectWonderful.com. Usalo senza violare i termini di servizio del tuo pubblicitario."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:157
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:189
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:221
+msgid "Active"
+msgstr "Attivo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:167
+msgid "Right banner"
+msgstr "Banner a destra"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:199
+msgid "Bottom banner"
+msgstr "Banner in basso"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:248
+msgid "Couldn't save the advertising code in the HTML"
+msgstr "Non ho potuto salvare il codice della pubblicità nell'HTML"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:263
+msgid "Server"
+msgstr "Server"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:273
+msgid "Input on each line the URL of FoOlSlide on the other server."
+msgstr "Ad ogni linea inserisci l'URL di FoOlSlide sull'altro server."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:277
+msgid "List of servers"
+msgstr "Lista dei server"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/helpers/tabler_helper.php:19
+msgid "Save"
+msgstr "Salva"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/helpers/tabler_helper.php:50
+msgid "Edit"
+msgstr "Modifica"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:16
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:26
+msgid "Manage"
+msgstr "Gestisci"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:31
+msgid "Users"
+msgstr "Utenti"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:34
+msgid "User list"
+msgstr "Lista utenti"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:35
+msgid "Your profile"
+msgstr "Il tuo profilo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:36
+msgid "Team list"
+msgstr "Lista gruppi"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:37
+msgid "Home team"
+msgstr "Gruppo locale"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:112
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:80
+msgid "Name"
+msgstr "Nome"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:113
+msgid "Insert the title of the chapter, if available."
+msgstr "Inserisci il titolo del capitolo, se disponibile."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:114
+msgid "Chapter number"
+msgstr "Numero del capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:115
+msgid "Insert the chapter number."
+msgstr "Inserire il numero del capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:116
+msgid "Subchapter number"
+msgstr "Numero del sottocapitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:117
+msgid "Insert a sub number to identify extra chapters. Zero for main chapter."
+msgstr "Inserisci una cifra per identificare i capitoli extra. Zero per il capitolo principale."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:118
+msgid "Volume"
+msgstr "Volume"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:119
+msgid "Insert the volume number."
+msgstr "Inserisci il numero del volume"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:120
+msgid "Language"
+msgstr "Lingua"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:121
+msgid "Insert the language of the chapter."
+msgstr "Inserisci la lingua del capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:122
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:82
+msgid "Description"
+msgstr "Descrizione"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:123
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:83
+msgid "Insert a description."
+msgstr "Inserisci una descrizione"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:124
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:84
+msgid "Hidden"
+msgstr "Nascosto"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:125
+msgid "Hide the chapter from public view."
+msgstr "Nascondi il capitolo al pubblico."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:257
+msgid "The comic you were adding the chapter to doesn't exist."
+msgstr "Il fumetto a cui stavi aggiungendo il capitolo non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:298
+msgid "You're trying to delete something that doesn't even have a related comic'?"
+msgstr "Stai provando a cancellare qualcosa che non è nemmeno collegato ad un fumetto?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:338
+msgid "The chapter you tried to edit doesn't exist."
+msgstr "Il capitolo che hai provato a modificare non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:357
+msgid "The comic you were referring to doesn't exist."
+msgstr "Il fumetto a cui ti riferivi non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:445
+msgid "The team you were referring this chapter to doesn't exist."
+msgstr "Il team a cui stavi riferendo questo capitolo non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:452
+msgid "You must select at least one team for this chapter"
+msgstr "Devi scegliere almeno un gruppo per questo capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:460
+msgid "You haven't selected any team in relation to this chapter."
+msgstr "Non hai scelto alcun gruppo da mettere in relazione con questo capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:471
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:311
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:101
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:133
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:378
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:123
+msgid "Check that you have inputted all the required fields."
+msgstr "Controlla di aver riempito tutti gli spazi richiesti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:475
+msgid "Failed to save to database for unknown reasons."
+msgstr "Non sono riuscito a salvare nel database per cause sconosciute."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:506
+msgid "Failed to remove the chapter from the database for unknown reasons."
+msgstr "Non sono riuscito a rimuovere il capitolo dal database per cause sconosciute."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:524
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:550
+msgid "No comic related to this chapter."
+msgstr "Nessun fumetto in relazione con questo capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:532
+msgid "Failed to create the chapter directory. Please, check file permissions."
+msgstr "Non sono riuscito a create la cartella del capitolo. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:560
+msgid "Failed to remove the files inside the chapter directory. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere i file all'interno della cartella del capitolo. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:567
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:139
+msgid "Failed to remove the chapter directory. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere la cartella del capitolo. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/chapter.php:662
+msgid "Chapter"
+msgstr "Capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:81
+msgid "Insert the title of the comic."
+msgstr "Inserisci il titolo del capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:85
+msgid "Hide the comic from public view."
+msgstr "Nascondi questo fumetto dal pubblico."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:86
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:87
+msgid "Upload an image to use as thumbnail."
+msgstr "Carica un'immagine da usare come thumbnail."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:240
+msgid "The comic you wanted to edit doesn't exist."
+msgstr "Il fumetto che volevi modificare non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:315
+msgid "Failed saving the Comic to database for unknown reasons."
+msgstr "Non sono riuscito a salvare il fumetto nel database a causa di motivi sconosciuti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:346
+msgid "The comic couldn't be removed from the database for unknown reasons."
+msgstr "Non sono riuscito a rimuovere il fumetto dal database per motivi sconosciuti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:364
+msgid "The directory could not be created. Please, check file permissions."
+msgstr "Non ho potuto creare la directory. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:383
+msgid "The files inside the comic directory could not be removed. Please, check the file permissions."
+msgstr "Non ho potuto rimuovere i file all'interno della cartella del fumetto. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:390
+msgid "The directory could not be removed. Please, check file permissions."
+msgstr "Non ho potuto rimuovere la cartella del fumetto. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:417
+msgid "Failed to create the thumbnail image for the comic. Check file permissions."
+msgstr "Non sono riuscito a create l'immagine thumbnail per il fumetto. Controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:440
+msgid "Failed to create the thumbnail image for the comic. Resize function didn't work"
+msgstr "Non sono riuscito a creare l'immagine thumbnail per il fumetto. La funzione di ridimensionamento non ha funzionato."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:454
+msgid "Failed to save the thumbnail image in the database."
+msgstr "Non sono riuscito a salvare l'immagine thumbnail nel database."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:476
+msgid "Failed to remove the thumbnail's original image. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere l'immagine originale del thumbnail. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:483
+msgid "Failed to remove the thumbnail image. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere l'immagine thumbnail. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/comic.php:491
+msgid "Failed to remove the thumbnail image from the database."
+msgstr "Non sono riuscito a rimuovere l'immagine thumbnail dal database."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:77
+msgid "One of the named teams doesn't exist."
+msgstr "Uno dei gruppi specificati non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:105
+msgid "Couldn't save joint to database due to an unknown error."
+msgstr "Non ho potuto salvare il joint nel database a causa di un errore sconosciuto."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:118
+msgid "The joint couldn't be removed."
+msgstr "Non ho potuto rimuovere la collaborazione."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:137
+msgid "Couldn't add team to joint for unknown reasons."
+msgstr "Non ho potuto aggiungere il gruppo alla collaborazione per motivi sconosciuti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:147
+msgid "Couldn't remove the team from the joint."
+msgstr "Non ho potuto rimuovere il gruppo dalla collaborazione."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/joint.php:157
+msgid "Couldn't remove the team from all the joints."
+msgstr "Non ho potuto rimuovere il team da tutte le collaborazioni."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:326
+msgid "There isn't a page in the database related to this ID."
+msgstr "Non c'è una pagina nel database in relazione a questo ID."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:334
+msgid "There was no selected chapter."
+msgstr "Non hai scelto alcun capitolo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:342
+msgid "The selected chapter doesn't exist."
+msgstr "Il capitolo scelto non esiste."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:382
+msgid "Failed to write to database for unknown reasons."
+msgstr "Non sono riuscito a salvare nel database per motivi sconosciuti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:402
+msgid "Failed to remove the page from the database."
+msgstr "Non sono riuscito a rimuovere la pagina dal database."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:426
+msgid "Failed to add the page's file. Please, check file permissions."
+msgstr "Non sono riuscito ad aggiungere il file della pagina. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:446
+msgid "Failed to create the thumbnail of the page."
+msgstr "Non sono riuscito a create il thumbnail della pagina."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:473
+msgid "Failed to remove the page's file. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere il file della pagina. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/page.php:480
+msgid "Failed to remove the page's thumbnail. Please, check file permissions."
+msgstr "Non sono riuscito a rimuovere il thumbnail della pagina. Per favore, controlla i permessi dei file."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:97
+msgid "Failed to find the selected team's ID."
+msgstr "Non sono riuscito a trovare l'ID del gruppo scelto."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:127
+msgid "Failed to update the team in the database for unknown reasons."
+msgstr "Non sono riuscito ad aggiornare il gruppo nel database per motivi sconosciuti."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:149
+msgid "Failed removing the chapters while removing the team."
+msgstr "Non sono riuscito a rimuovere i capitoli mentre rimuovevo il gruppo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:163
+msgid "Failed to delete the team for unknown reasons."
+msgstr "Non sono riuscito a rimuovere il team per cause sconosciute."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:174
+msgid "There were no groups selected."
+msgstr "Non hai scelto alcun gruppo."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:183
+msgid "There's no team under this ID."
+msgstr "Non c'è un gruppo sotto questo ID."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:197
+msgid "There's no teams under this ID."
+msgstr "Non ho trovato un gruppi sotto questo ID."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/models/team.php:213
+msgid "There's no group found with this ID."
+msgstr "Non ho trovato un gruppo con questo ID."
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/default.php:6
+msgid "FoOlSlide Administration"
+msgstr "Amministrazione FoOlSlide"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/default.php:59
+msgid "control panel"
+msgstr "pannello di controllo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:3
+msgid "Delete chapter"
+msgstr "Rimuovi capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:5
+msgid "Do you really want to delete this chapter and its pages?"
+msgstr "Vuoi davvero rimuovere questo capitolo e le relative pagine?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:66
+msgid "Upload zip and images"
+msgstr "Carica zip ed immagini"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:82
+msgid "Delete all pages"
+msgstr "Rimuovi tutte le pagine"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:84
+msgid "Do you really want to delete all the images in this chapter?"
+msgstr "Vuoi davvero rimuovere tutte le pagine in questo capitolo?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/chapter.php:96
+msgid "Delete"
+msgstr "Rimuovi"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/comic.php:3
+msgid "Delete comic"
+msgstr "Rimuovi capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/comic.php:5
+msgid "Do you really want to delete this comic and its chapters?"
+msgstr "Vuoi davvero rimuovere questo fumetto e i relativi capitoli?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/comic.php:22
+msgid "Add chapter"
+msgstr "Aggiungi capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/comic.php:54
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:29
+msgid "Quick tools"
+msgstr "Strumenti veloci"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:4
+msgid "To search, write and hit enter"
+msgstr "Per cercare, scrivi e premi invio"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:14
+msgid "Add comic"
+msgstr "Aggiungi fumetto"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:40
+msgid "First"
+msgstr "Primo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:41
+msgid "Prev"
+msgstr "Precedente"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:47
+msgid "Next"
+msgstr "Prossimo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:48
+msgid "Last"
+msgstr "Ultimo"
+

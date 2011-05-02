@@ -1,7 +1,7 @@
 <div class="smartsearch">
 <?php
 echo form_open(site_url('/admin/comics/manage/'));
-echo form_input(array('name'=>'search', 'placeholder' => 'To search, write and hit enter'));
+echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and hit enter')));
 echo form_close();
 ?>
 </div>
@@ -11,7 +11,7 @@ $CI =& get_instance();
 $CI->buttoner = array(
 	array(
 		'href' => site_url('/admin/comics/add_new/'),
-		'text' => 'Add comic'
+		'text' => _('Add comic')
 	)
 );
 			
@@ -26,7 +26,7 @@ echo buttoner();
     {
         echo '<div class="item">
                 <div class="title"><a href="'.site_url("admin/comics/comic/".$item->stub).'">'.$item->name.'</a></div>
-                <div class="smalltext">Quick tools</div>';
+                <div class="smalltext">'._('Quick tools').'</div>';
              echo '</div>';
     }
 
@@ -37,15 +37,15 @@ echo buttoner();
     if($comics->paged->has_previous)
     {
         ?>
-    <a href="<?= site_url('admin/comics/manage/') ?>">«« First</a>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->previous_page) ?>">« Prev</a>
+    <a href="<?= site_url('admin/comics/manage/') ?>">«« <?php echo _('First') ?></a>
+    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->previous_page) ?>">« <?php echo _('Prev') ?></a>
         <?php
     }
     if($comics->paged->has_next)
     {
         ?>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->next_page) ?>">Next »</a>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->total_pages) ?>">Last »»</a>
+    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->next_page) ?>"><?php echo _('Next') ?> »</a>
+    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->total_pages) ?>"><?php echo _('Last'); ?> »»</a>
         <?php
     }
 

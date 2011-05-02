@@ -9,7 +9,8 @@ function load_defaults()
 	{
 		$result[$item['name']] = $item['value'];
 	}
-	$CI->fs_options = $result;    
+	$CI->fs_options = $result;  
+	
 }
 
 

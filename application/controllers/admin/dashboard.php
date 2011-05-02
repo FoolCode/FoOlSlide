@@ -8,7 +8,7 @@ class Dashboard extends Admin_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->ion_auth->logged_in() or redirect('auth/login');
-		$this->viewdata["controller_title"] = 'Dashboard';
+		$this->viewdata["controller_title"] = _('Dashboard');
 	}
 
 	function index() {

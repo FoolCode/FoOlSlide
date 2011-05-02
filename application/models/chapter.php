@@ -3,6 +3,7 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
+
 class Chapter extends DataMapper {
 
 	var $has_one = array('comic', 'team', 'joint');
@@ -11,7 +12,7 @@ class Chapter extends DataMapper {
 		'name' => array(
 			'rules' => array('max_length' => 256),
 			'label' => 'Name',
-			'type' => 'input'
+			'type' => 'input',
 		),
 		'comic_id' => array(
 			'rules' => array('is_int', 'required', 'max_length' => 256),
@@ -84,13 +85,46 @@ class Chapter extends DataMapper {
 	);
 
 	function __construct($id = NULL) {
-		parent::__construct($id);
+		// Set the translations
+		$this->help_lang();
+		
+		parent::__construct(NULL);
+		
+		// We've overwrote some functions, and we need to use the get() from THIS model
+		if(!empty($id) && is_numeric($id)) 
+		{
+			$this->where('id', $id)->get();
+		}
 	}
 
 	function post_model_init($from_cache = FALSE) {
 		
 	}
 
+	/**
+	 * This function sets the translations for the validation values.
+	 * 
+	 * @author Woxxy
+	 * @return void
+	 */
+	function help_lang()
+	{
+		$this->validation['name']['label'] = _('Name');
+		$this->validation['name']['help'] = _('Insert the title of the chapter, if available.');
+		$this->validation['chapter']['label'] = _('Chapter number');
+		$this->validation['chapter']['help'] = _('Insert the chapter number.');
+		$this->validation['subchapter']['label'] = _('Subchapter number');
+		$this->validation['subchapter']['help'] = _('Insert a sub number to identify extra chapters. Zero for main chapter.');
+		$this->validation['volume']['label'] = _('Volume');
+		$this->validation['volume']['help'] = _('Insert the volume number.');
+		$this->validation['language']['label'] = _('Language');
+		$this->validation['language']['help'] = _('Insert the language of the chapter.');
+		$this->validation['description']['label'] = _('Description');
+		$this->validation['description']['help'] = _('Insert a description.');
+		$this->validation['hidden']['label'] = _('Hidden');
+		$this->validation['hidden']['help'] = _('Hide the chapter from public view.');
+	}
+	
 	/**
 	 * This function can determine if it's a team member accessing to protected
 	 * chapter functions.
@@ -185,16 +219,7 @@ class Chapter extends DataMapper {
 	public function get_comic() {
 		// Check if the variable is not yet set, in order to save a databse read.
 		if (!isset($this->comic)) {
-			$comic = new Comic($this->comic_id);
-			// For how difficult for this to happen, let's check if the search
-			// for the comic produced no results.
-			if ($comic->result_count() == 0) {
-				set_notice('error', 'There\'s no comic related to this chapter.');
-				log_message('error', 'get_comic: comic not found');
-				return false;
-			}
-			// Set the comic
-			$this->comic = $comic;
+			$this->comic = new Comic($this->comic_id);
 		}
 
 		// All good, return true.
@@ -229,7 +254,7 @@ class Chapter extends DataMapper {
 		// If not, make an error message and stop adding the chapter
 		$comic = new Comic($data['comic_id']);
 		if ($comic->result_count() == 0) {
-			set_notice('error', 'The comic you were adding the chapter to doesn\'t exist.');
+			set_notice('error', _('The comic you were adding the chapter to doesn\'t exist.'));
 			log_message('error', 'add: comic_id does not exist in comic database');
 			return false;
 		}
@@ -270,7 +295,7 @@ class Chapter extends DataMapper {
 		// Get comic and check if existant. We don't want to have empty stub on this!
 		$comic = new Comic($this->comic_id);
 		if ($this->result_count() == 0) {
-			set_notice('error', 'You\'re trying to delete something that doesn\'t even have a related comic\'?');
+			set_notice('error', _('You\'re trying to delete something that doesn\'t even have a related comic\'?'));
 			log_message('error', 'update_chapter_db: failed to find requested id');
 			return false;
 		}
@@ -310,7 +335,7 @@ class Chapter extends DataMapper {
 		if (isset($data["id"]) && $data['id'] != "") {
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0) {
-				set_notice('error', 'The chapter you wanted to edit doesn\'t exist.');
+				set_notice('error', _('The chapter you tried to edit doesn\'t exist.'));
 				log_message('error', 'update_chapter_db: failed to find requested id');
 				return false;
 			}
@@ -329,7 +354,7 @@ class Chapter extends DataMapper {
 			// Check that the related comic is defined, and exists.
 			$comic = new Comic($this->comic_id);
 			if ($comic->result_count() == 0) {
-				set_notice('error', 'The comic you were referring to does not exist.');
+				set_notice('error', _('The comic you were referring to doesn\'t exist.'));
 				log_message('error', 'update_chapter_db: comic_id does not exist in comic database');
 				return false;
 			}
@@ -417,14 +442,14 @@ class Chapter extends DataMapper {
 				$team = new Team();
 				$team->where("name", $data['team'][0])->get();
 				if ($team->result_count() == 0) {
-					set_notice('error', 'The team you were referring this chapter to doesn\'t exist.');
+					set_notice('error', _('The team you were referring this chapter to doesn\'t exist.'));
 					log_message('error', 'update_chapter_db: team_id does not exist in team database');
 					return false;
 				}
 				$this->team_id = $team->id;
 			}
 			else {
-				set_notice('error', 'You must select at least one team for this chapter');
+				set_notice('error', _('You must select at least one team for this chapter'));
 				log_message('error', 'update_chapter_db: team_id not defined');
 				return false;
 			}
@@ -432,7 +457,7 @@ class Chapter extends DataMapper {
 		else if (!isset($this->team)) { // If we're here it means that this is a new chapter with no teams assigned.
 			// The system doesn't allow chapters without related teams. It must be at
 			// least "anonymous" or a default anonymous team.
-			set_notice('error', 'You haven\'t selected any team related to this chapter.');
+			set_notice('error', _('You haven\'t selected any team in relation to this chapter.'));
 			log_message('error', 'update_chapter_db: team_id does not defined');
 			return false;
 		}
@@ -443,11 +468,11 @@ class Chapter extends DataMapper {
 		if (!$success) {
 			if (!$this->valid) {
 				log_message('error', $this->error->string);
-				set_notice('error', 'Check that you have inputted all the required fields.');
+				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'update_chapter_db: failed validation');
 			}
 			else {
-				set_notice('error', 'Failed to save to database for unknown reasons.');
+				set_notice('error', _('Failed to save to database for unknown reasons.'));
 				log_message('error', 'update_chapter_db: failed to save');
 			}
 			return false;
@@ -478,7 +503,7 @@ class Chapter extends DataMapper {
 		// And now, remove the chapter itself. There should be little chance for this to fail.
 		$success = $this->delete();
 		if (!$success) {
-			set_notice('error', 'Failed to remove the chapter from the database for unknown reasons.');
+			set_notice('error', _('Failed to remove the chapter from the database for unknown reasons.'));
 			log_message('error', 'remove_chapter_db: id found but entry not removed');
 			return false;
 		}
@@ -496,7 +521,7 @@ class Chapter extends DataMapper {
 	public function add_chapter_dir() {
 		// Get the comic if we didn't yet.
 		if (!$this->get_comic()) {
-			set_notice('error', 'No comic related to this chapter.');
+			set_notice('error', _('No comic related to this chapter.'));
 			log_message('error', 'add_chapter_dir: comic did not exist');
 			return false;
 		}
@@ -504,7 +529,7 @@ class Chapter extends DataMapper {
 		// Create the directory and return false on failure. It's most likely file permissions anyway.
 		$dir = "content/comics/" . $this->comic->directory() . "/" . $this->directory();
 		if (!mkdir($dir)) {
-			set_notice('error', 'Failed to create the chapter directory. Please, check file permissions.');
+			set_notice('error', _('Failed to create the chapter directory. Please, check file permissions.'));
 			log_message('error', 'add_chapter_dir: folder could not be created');
 			return false;
 		}
@@ -522,7 +547,7 @@ class Chapter extends DataMapper {
 	public function remove_chapter_dir() {
 		// Get the comic if we didn't yet.
 		if (!$this->get_comic()) {
-			set_notice('error', 'No comic related to this chapter.');
+			set_notice('error', _('No comic related to this chapter.'));
 			log_message('error', 'remove_chapter_dir: comic did not exist');
 			return false;
 		}
@@ -532,14 +557,14 @@ class Chapter extends DataMapper {
 
 		// Delete all files inside of it
 		if (!delete_files($dir, TRUE)) {
-			set_notice('error', 'Failed to remove the files inside the chapter directory. Please, check file permissions.');
+			set_notice('error', _('Failed to remove the files inside the chapter directory. Please, check file permissions.'));
 			log_message('error', 'remove_chapter_dir: files inside folder could not be removed');
 			return false;
 		}
 		else {
 			// On success of emptying, remove the chapter directory itself.
 			if (!rmdir($dir)) {
-				set_notice('error', 'Failed to remove the chapter directory. Please, check file permissions.');
+				set_notice('error', _('Failed to remove the chapter directory. Please, check file permissions.'));
 				log_message('error', 'remove_chapter_dir: folder could not be removed');
 				return false;
 			}
@@ -556,8 +581,10 @@ class Chapter extends DataMapper {
 	 */
 	public function remove_all_pages() {
 		$page = new Page();
+		
 		// Lets get the pages in iterated because there could be many
 		$page->where('chapter_id', $this->id)->get_iterated();
+		
 		// Loop and remove each. The page model will take care of database and directories.
 		$return = true;
 		foreach ($page as $key => $item) {

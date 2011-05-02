@@ -16,7 +16,7 @@ if (!function_exists('tabler')) {
 				'type' => 'submit',
 				'name' => 'submit',
 				'id' => 'submit',
-				'value' => 'Save'
+				'value' => _('Save')
 			)
 		);
 
@@ -47,7 +47,7 @@ if (!function_exists('tabler')) {
 		// echo '<pre>'; print_r($result); echo '</pre>';
 		if ($list && $edit) {
 			$CI->buttoner[] = array(
-				'text' => 'Edit',
+				'text' => _('Edit'),
 				'href' => '',
 				'onclick' => "slideToggle('.plain'); slideToggle('.edit'); return false;"
 			);
@@ -59,7 +59,7 @@ if (!function_exists('tabler')) {
 				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
 					//$echo .= $row[1]['form'];
 				} else {
-					if ($row[1]['table'] != 'Save' && $row[0]['table'] != 'id') {
+					if ($row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
 						$echo .= '<tr>';
 						foreach ($row as $column) {
 							$echo .= '<td>';

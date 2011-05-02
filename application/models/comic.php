@@ -101,7 +101,7 @@ class Comic extends DataMapper {
 		$CI = & get_instance();
 
 		// Check if the user is allowed to see protected chapters.
-		if (!$CI->ion_extra->is_allowed())
+		if (!$CI->tank_auth->is_allowed())
 			$this->where('hidden', 0);
 
 		return parent::get($limit, $offset);
@@ -121,7 +121,7 @@ class Comic extends DataMapper {
 		$CI = & get_instance();
 
 		// Check if the user is allowed to see protected chapters.
-		if (!$CI->ion_extra->is_allowed())
+		if (!$CI->tank_auth->is_allowed())
 			$this->where('hidden', 0);
 
 		/**

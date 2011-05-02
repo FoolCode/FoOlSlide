@@ -24,6 +24,6 @@
         function logged_in()
         {
             $CI =& get_instance();
-            return $CI->ion_auth->logged_in();
+            return $CI->tank_auth->is_logged_in();
         }
     }

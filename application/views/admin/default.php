@@ -51,7 +51,7 @@
 					<?php
 					if (logged_in()) {
 						?>
-						<a href="<?= site_url('auth/logout'); ?>">Logout <?php echo $this->ion_auth->get_user()->username; ?></a>
+						<a href="<?= site_url('/admin/auth/logout'); ?>">Logout <?php echo $this->tank_auth->get_username(); ?></a>
 						<?php
 					}
 					?>

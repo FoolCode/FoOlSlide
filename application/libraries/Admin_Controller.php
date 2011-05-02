@@ -27,11 +27,11 @@ class Admin_Controller extends MY_Controller {
 			"add_new" => array("level" => "mod", "name" => _("Add new"))
 		)
 	),
-	"users" => array(
-		"name" => _("Users"),
+	"members" => array(
+		"name" => _("Members"),
 		"level" => "mod",
 		"content" => array(
-			"users" => array("level" => "mod", "name" => _("User list")),
+			"member" => array("level" => "mod", "name" => _("Member list")),
 			"you" => array("level" => "member", "name" => _("Your profile")),
 			"teams" => array("level" => "mod", "name" => _("Team list")),
 			"home_team" => array("level" => "mod", "name" => _("Home team"))
@@ -50,13 +50,14 @@ class Admin_Controller extends MY_Controller {
 	}
 
 	public function sidebar() {
+		if(!$this->tank_auth->is_logged_in()) return false;
 		$result = "";
 		foreach ($this->sidebar_val() as $key => $item) {
-			if (($this->ion_auth->is_admin() || $this->ion_auth->is_group($item["level"])) && !empty($item)) {
+			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item)) {
 				$result .= '<div class="collection">';
 				$result .= '<div class="group">' . $item["name"] . '</div>';
 				foreach ($item["content"] as $subkey => $subitem) {
-					if (($this->ion_auth->is_admin() || $this->ion_auth->is_group($subitem["level"]))) {
+					if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($subitem["level"]))) {
 						//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
 						$is_active = "";
 						$result .= '<a href="' . site_url(array("admin", $key, $subkey)) . '"><div class="element' . $is_active . '">' . $subitem["name"] . '</div></a>';

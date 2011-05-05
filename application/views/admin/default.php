@@ -107,7 +107,7 @@
 							?>
 						</div>
 
-						<?= $main_content_view; ?>
+						<?php echo $main_content_view; ?>
 
 					</div></div></div>
             <div class="push"></div>

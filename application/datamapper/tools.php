@@ -25,7 +25,7 @@ class tools
         public function logged_id()
         {
             $CI =& get_instance();
-            return $CI->ion_auth->get_user()->id;
+            return $CI->tank_auth->get_user_id();
         }
         
         public function rule_is_int($object, $field, $param = '')

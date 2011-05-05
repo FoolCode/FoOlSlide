@@ -24,7 +24,7 @@ $db['default']['database'] = '';
 $db['default']['dbprefix'] = '';
 
 // The admin's email (will be overwritten by database)
-$config['admin_email'] = ".com";
+$config['admin_email'] = "";
 
 // Site title (will be overwritten via database)
 $config['website_name'] = "";

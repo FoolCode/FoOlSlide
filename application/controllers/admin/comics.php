@@ -8,8 +8,7 @@ class Comics extends Admin_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
-		$this->tank_auth->is_admin() or redirect('admin');
-		$this->tank_auth->is_admin() or die(1);
+		if(!($this->tank_auth->is_admin() || $this->tank_auth->is_group('mod'))) redirect('admin');
 		$this->load->model('files_model');
 		$this->load->library('pagination');
 		$this->viewdata['controller_title'] = _("Comics");
@@ -128,14 +127,14 @@ class Comics extends Admin_Controller {
 		$table = ormer($comic);
 
 		$table[] = array(
-			_('Licensed in'),
-			array(
-				'name' => 'licensed',
-				'type' => 'input',
-				'value' => '',
-				'help' => _('Insert the nations where the comic is licensed in order to limit the availability.')
-			)
-		);
+				_('Licensed in'),
+				array(
+					'name' => 'licensed',
+					'type' => 'nation',
+					'value' => array(),
+					'help' => _('Insert the nations where the comic is licensed in order to limit the availability.')
+				)
+			);
 
 		$table = tabler($table);
 		$data['table'] = $table;

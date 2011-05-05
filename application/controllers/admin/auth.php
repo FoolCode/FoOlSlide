@@ -17,7 +17,10 @@ class Auth extends Admin_Controller
 	function index()
 	{
 		if ($message = $this->session->flashdata('message')) {
-			$this->load->view('auth/general_message', array('message' => $message));
+			
+			$this->viewdata["function_title"] = _("Message");
+			$this->viewdata["main_content_view"] = $this->load->view('auth/general_message', array('message' => $message), TRUE);
+			$this->load->view("admin/default.php", $this->viewdata);
 		} else {
 			redirect('/admin/auth/login/');
 		}
@@ -31,7 +34,7 @@ class Auth extends Admin_Controller
 	function login()
 	{
 		if ($this->tank_auth->is_logged_in()) {									// logged in
-			redirect('');
+			redirect('/admin/');
 
 		} elseif ($this->tank_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/admin/auth/send_again/');
@@ -246,8 +249,8 @@ class Auth extends Admin_Controller
 	 */
 	function activate()
 	{
-		$user_id		= $this->uri->segment(3);
-		$new_email_key	= $this->uri->segment(4);
+		$user_id		= $this->uri->segment(4);
+		$new_email_key	= $this->uri->segment(5);
 
 		// Activate user
 		if ($this->tank_auth->activate_user($user_id, $new_email_key)) {		// success
@@ -293,7 +296,9 @@ class Auth extends Admin_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/forgot_password_form', $data);
+			$this->viewdata["function_title"] = _("Forgot password");
+			$this->viewdata["main_content_view"] = $this->load->view('auth/forgot_password_form', $data, TRUE);
+			$this->load->view("admin/default.php", $this->viewdata);	
 		}
 	}
 
@@ -306,8 +311,8 @@ class Auth extends Admin_Controller
 	 */
 	function reset_password()
 	{
-		$user_id		= $this->uri->segment(3);
-		$new_pass_key	= $this->uri->segment(4);
+		$user_id		= $this->uri->segment(4);
+		$new_pass_key	= $this->uri->segment(5);
 
 		$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 		$this->form_validation->set_rules('confirm_new_password', 'Confirm new Password', 'trim|required|xss_clean|matches[new_password]');
@@ -339,7 +344,9 @@ class Auth extends Admin_Controller
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
 			}
 		}
-		$this->load->view('auth/reset_password_form', $data);
+		$this->viewdata["function_title"] = _("Reset password");
+		$this->viewdata["main_content_view"] = $this->load->view('auth/reset_password_form', $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);	
 	}
 
 	/**
@@ -370,7 +377,9 @@ class Auth extends Admin_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_password_form', $data);
+			$this->viewdata["function_title"] = _("Change password");
+			$this->viewdata["main_content_view"] = $this->load->view('auth/change_password_form', $data, TRUE);
+			$this->load->view("admin/default.php", $this->viewdata);	
 		}
 	}
 
@@ -407,7 +416,9 @@ class Auth extends Admin_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_email_form', $data);
+			$this->viewdata["function_title"] = _("Change email");
+			$this->viewdata["main_content_view"] = $this->load->view('auth/change_email_form', $data, TRUE);
+			$this->load->view("admin/default.php", $this->viewdata);	
 		}
 	}
 
@@ -420,8 +431,8 @@ class Auth extends Admin_Controller
 	 */
 	function reset_email()
 	{
-		$user_id		= $this->uri->segment(3);
-		$new_email_key	= $this->uri->segment(4);
+		$user_id		= $this->uri->segment(4);
+		$new_email_key	= $this->uri->segment(5);
 
 		// Reset email
 		if ($this->tank_auth->activate_new_email($user_id, $new_email_key)) {	// success
@@ -458,7 +469,10 @@ class Auth extends Admin_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/unregister_form', $data);
+			$this->viewdata["function_title"] = _("Unregister");
+			$this->viewdata["main_content_view"] = $this->load->view('auth/unregister_form', $data, TRUE);
+			$this->load->view("admin/default.php", $this->viewdata);
+			
 		}
 	}
 

@@ -5,12 +5,13 @@ if (!defined('BASEPATH'))
 
 class User extends DataMapper {
 
-	var $has_one = array('user_profile');
+	var $has_one = array('profile');
 	var $has_many = array();
 	var $validation = array(
 		'username' => array(
 			'rules' => array(),
-			'label' => 'Username'
+			'label' => 'Username',
+			'type'	=> 'input'
 		),
 		'password' => array(
 			'rules' => array(),
@@ -18,7 +19,8 @@ class User extends DataMapper {
 		),
 		'email' => array(
 			'rules' => array(),
-			'label' => 'Email'
+			'label' => 'Email',
+			'type'	=> 'input'
 		),
 		'activated' => array(
 			'rules' => array(),

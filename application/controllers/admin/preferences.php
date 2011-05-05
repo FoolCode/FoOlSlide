@@ -7,7 +7,7 @@ class Preferences extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->tank_auth->logged_in() or redirect('auth/login');
+		$this->tank_auth->is_logged_in() or redirect('auth/login');
 		$this->tank_auth->is_admin() or redirect('admin');
 		$this->tank_auth->is_admin() or die(1);
 		$this->viewdata['controller_title'] = _("Preferences");

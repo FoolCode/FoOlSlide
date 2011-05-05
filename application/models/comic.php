@@ -55,12 +55,11 @@ class Comic extends DataMapper {
 	function __construct($id = NULL) {
 		// Set language
 		$this->help_lang();
-		
+
 		parent::__construct(NULL);
-		
+
 		// We've overwrote the get() function so we need to look for $id from here
-		if(!empty($id) && is_numeric($id)) 
-		{
+		if (!empty($id) && is_numeric($id)) {
 			$this->where('id', $id)->get();
 		}
 	}
@@ -68,15 +67,14 @@ class Comic extends DataMapper {
 	function post_model_init($from_cache = FALSE) {
 		
 	}
-	
+
 	/**
 	 * This function sets the translations for the validation values.
 	 * 
 	 * @author Woxxy
 	 * @return void
 	 */
-	function help_lang()
-	{
+	function help_lang() {
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the comic.');
 		$this->validation['description']['label'] = _('Description');
@@ -274,20 +272,19 @@ class Comic extends DataMapper {
 		$this->stub = $this->name;
 		// stub() is also able to restub the $this->stub. Already stubbed values won't change.
 		$this->stub = $this->stub();
-		
+
 		/**
 		 * @todo stubs with a number to safely allow multiple comics with same name
 		 */
-		
 		/*
-		$find_stub = false;
-		$i = 0;
-		while(!$find_stub)
-		{
-			$comic = new Comic();
-			$comic->where
-		}
-		*/
+		  $find_stub = false;
+		  $i = 0;
+		  while(!$find_stub)
+		  {
+		  $comic = new Comic();
+		  $comic->where
+		  }
+		 */
 
 
 		// This is necessary to make the checkbox work.
@@ -317,7 +314,9 @@ class Comic extends DataMapper {
 			}
 			return false;
 		}
-
+		if (isset($data['licensed'])) {
+			$this->update_license($data['licensed']);
+		}
 		// Good job!
 		return true;
 	}
@@ -377,7 +376,7 @@ class Comic extends DataMapper {
 	 */
 	public function remove_comic_dir() {
 		$dir = "content/comics/" . $this->directory() . "/";
-		
+
 		// Delete all inner files
 		if (!delete_files($dir, TRUE)) {
 			set_notice('error', _('The files inside the comic directory could not be removed. Please, check the file permissions.'));
@@ -396,7 +395,6 @@ class Comic extends DataMapper {
 		return true;
 	}
 
-	
 	/**
 	 * Creates the thumbnail and saves the original as well
 	 *
@@ -411,14 +409,14 @@ class Comic extends DataMapper {
 
 		// Get directory variable
 		$dir = "content/comics/" . $this->directory() . "/";
-		
+
 		// Copy the full image over
 		if (!copy($filedata["server_path"], $dir . $filedata["name"])) {
 			set_notice('error', _('Failed to create the thumbnail image for the comic. Check file permissions.'));
 			log_message('error', 'add_comic_thumb: failed to create/copy the image');
 			return false;
 		}
-		
+
 		// Load the image library
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
@@ -441,14 +439,14 @@ class Comic extends DataMapper {
 			log_message('error', 'add_comic_thumb: failed to create thumbnail');
 			return false;
 		}
-		
+
 		// Whatever we might want to do later, we better clear the library now!
 		$CI->image_lib->clear();
 
 		// The thumbnail is actually the filename of the original for comic thumbnails
 		// It's different from page thumbnails - those have "thumb_" in this variable!
 		$this->thumbnail = $filedata["name"];
-		
+
 		// Save hoping we're lucky
 		if (!$this->save()) {
 			set_notice('error', _('Failed to save the thumbnail image in the database.'));
@@ -508,6 +506,46 @@ class Comic extends DataMapper {
 		if ($this->thumbnail != "")
 			return balance_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
 		return false;
+	}
+	
+	function update_license($nations) {
+		$comic_id = $this->id;
+		log_message('error', 'updatecomic');
+		$licenses = new License();
+		$licenses->where('comic_id', $comic_id)->get();
+		
+		$removeme = array();
+		foreach($licenses->all as $key => $license)
+		{
+			$removeme[$key] = $license->nation;
+		}
+		
+		$temp_nations = $nations;
+		foreach($nations as $key => $nation)
+		{
+			$found = false;
+			foreach($licenses->all as $subkey => $license)
+			{
+				if($nation == $license->nation) 
+				{
+					unset($removeme[$subkey]);
+					$found = true;
+				}
+			}
+			if(!$found && $nation != "")
+			{
+				$new_license = new License();
+				$new_license->comic_id = $comic_id;
+				$new_license->nation = $nation;
+				$new_license->save();
+			}
+		}
+		
+		foreach($removeme as $key => $nation)
+		{
+			$remove = new License();
+			$remove->where('comic_id', $comic_id)->where('nation', $nation)->get()->remove();
+		}
 	}
 
 	/**

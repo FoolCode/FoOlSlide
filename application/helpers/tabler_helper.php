@@ -27,7 +27,8 @@ if (!function_exists('tabler')) {
 				if ($colk == 0) {
 					$result[$rowk][$colk]["table"] = $column;
 					$result[$rowk][$colk]["form"] = $column;
-				} else {
+				}
+				else {
 					if (!isset($column['value']))
 						$column['value'] = "";
 					if (is_array($column)) {
@@ -36,7 +37,8 @@ if (!function_exists('tabler')) {
 							$result[$rowk][$colk]["form"] = formize($column);
 							$result[$rowk][$colk]["type"] = $column['type'];
 						}
-					} else {
+					}
+					else {
 						$result[$rowk][$colk]["table"] = writize($column);
 						$result[$rowk][$colk]["form"] = $column;
 					}
@@ -58,7 +60,8 @@ if (!function_exists('tabler')) {
 			foreach ($result as $rowk => $row) {
 				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
 					//$echo .= $row[1]['form'];
-				} else {
+				}
+				else {
 					if ($row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
 						$echo .= '<tr>';
 						foreach ($row as $column) {
@@ -67,7 +70,8 @@ if (!function_exists('tabler')) {
 								foreach ($column['table'] as $mini) {
 									$echo .= '' . $mini->name . ' ';
 								}
-							} else if ($column['table'] == "")
+							}
+							else if ($column['table'] == "")
 								$echo .= 'N/A';
 							else
 								$echo .= $column['table'];
@@ -86,11 +90,17 @@ if (!function_exists('tabler')) {
 			foreach ($result as $rowk => $row) {
 				if ($row[1]['type'] == 'hidden') {
 					$echo .= $row[1]['form'];
-				} else {
+				}
+				else {
 					$echo .= '<tr>';
 					foreach ($row as $column) {
 						$echo .= '<td>';
+						if ((isset($row[1]['display'])) && $row[1]['display'] == 'hidden') {
+							$echo .= $column['table'];
+						}
+						else {
 							$echo .= $column['form'];
+						}
 						$echo .= '</td>';
 					}
 					$echo .= '</tr>';
@@ -112,16 +122,18 @@ if (!function_exists('formize')) {
 			$column['value'] = get_setting($column['name']);
 
 		//if($column['type'] == 'input' || $column['type'] == 'nation') $column['value'] = set_value($column['name']);
-		
+
 		if ($column['type'] == 'checkbox') {
-			if($column['value'] == 1) $column['checked'] = 'checked';
+			if ($column['value'] == 1)
+				$column['checked'] = 'checked';
 			$column['value'] = 1;
 		}
 
 
 		$formize = 'form_' . $column['type'];
 		$type = $column['type'];
-		if(isset($column['help'])) $help = $column['help'];
+		if (isset($column['help']))
+			$help = $column['help'];
 		unset($column['type']);
 		unset($column['preferences']);
 		unset($column['help']);
@@ -144,7 +156,8 @@ if (!function_exists('formize')) {
 			$column['value'] = "";
 			$column['onKeyUp'] = "addField(this);";
 			$result[] = $formize($column);
-		} else {
+		}
+		else {
 			// echo '<pre>'; print_r($column); echo '</pre>';
 			if ($type == 'hidden' && isset($column["value"])) {
 				$result = $formize($column['name'], $column['value']);
@@ -152,18 +165,17 @@ if (!function_exists('formize')) {
 			else
 				$result = $formize($column);
 		}
-		
-		if(is_array($result))
-		{
+
+		if (is_array($result)) {
 			$results = $result;
 			$result = "";
-			foreach($results as $resulting)
-			{
-				$result.= $resulting.'<br/>';
+			foreach ($results as $resulting) {
+				$result.= $resulting . '<br/>';
 			}
 		}
 
-		if (isset($help)) $result = $result.'<div class="help">'.$help.'</div>';
+		if (isset($help))
+			$result = $result . '<div class="help">' . $help . '</div>';
 		return $result;
 	}
 
@@ -180,9 +192,8 @@ function writize($column) {
 			$column['value'] = '<img src="' . $column['value'] . '" />';
 		//if($column['display'] == 'hidden') return '';
 	}
-	
-	if (isset($column['type']) && $column['type'] == 'language')
-	{
+
+	if (isset($column['type']) && $column['type'] == 'language') {
 		$lang = config_item('fs_languages');
 		if (!isset($column['value']) || $column['value'] == "")
 			$column['value'] = get_setting('fs_gen_default_lang');
@@ -237,7 +248,7 @@ if (!function_exists('ormer')) {
 				$row['placeholder'] = '';
 			if (!isset($row['help']))
 				$row['help'] = '';
-			
+
 			if (isset($row['type'])) {
 				if ($db->$key != "")
 					$row['value'] = $db->$key;
@@ -292,32 +303,49 @@ if (!function_exists('buttoner')) {
 }
 
 if (!function_exists('form_nation')) {
-	function form_nation($column)
-	{
+
+	function form_nation($column) {
 		$codes = config_item('fs_country_codes');
 		$nations = config_item('fs_country_names');
-		
+
 		$nationcodes = array();
-		foreach($codes as $key => $code)
-		{
-			$nationcodes[$code] = $nations[$key]; 
+		foreach ($codes as $key => $code) {
+			$nationcodes[$code] = $nations[$key];
 		}
-		if(isset($column['onKeyUp']))
-		{
-			$column['onChange'] = 'onChange="'.$column['onKeyUp'].'"';
+		if (isset($column['onKeyUp'])) {
+			$column['onChange'] = 'onChange="' . $column['onKeyUp'] . '"';
 			unset($column['onKeyUp']);
 		}
-		else $column['onChange'] = '';
+		else
+			$column['onChange'] = '';
 		return form_dropdown($column['name'], $nationcodes, $column['value'], $column['onChange']);
 	}
+
 }
 
 if (!function_exists('form_language')) {
-	function form_language($column)
-	{
+
+	function form_language($column) {
 		$lang = config_item('fs_languages');
 		if (!isset($column['value']) || $column['value'] == "")
 			$column['value'] = get_setting('fs_gen_default_lang');
 		return form_dropdown($column['name'], $lang, $column['value']);
 	}
+
+}
+
+if (!function_exists('form_group')) {
+
+	function form_group($column) {
+		$CI = & get_instance();
+		$groups = new Group();
+		$groups->get();
+		$set = array();
+		foreach ($groups->all as $group) {
+			$set[$group->id] = $group->name;
+		}
+
+		return form_dropdown($column['name'], $set, $column['value']);
+	}
+
 }

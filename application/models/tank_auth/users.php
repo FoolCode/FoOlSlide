@@ -13,7 +13,7 @@
 class Users extends CI_Model
 {
 	private $table_name			= 'users';			// user accounts
-	private $profile_table_name	= 'user_profiles';	// user profiles
+	private $profile_table_name	= 'profiles';	// user profiles
 
 	function __construct()
 	{

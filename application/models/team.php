@@ -91,7 +91,7 @@ class Team extends DataMapper {
 
 		// Check if we're updating or creating a new entry by looking at $data["id"].
 		// False is pushed if the ID was not found.
-		if (isset($data["id"])) {
+		if (isset($data["id"]) && $data['id'] != '') {
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0) {
 				set_notice('error', _('Failed to find the selected team\'s ID.'));

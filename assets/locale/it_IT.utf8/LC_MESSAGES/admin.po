@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 23:46+0100\n"
-"PO-Revision-Date: 2011-05-01 23:56+0100\n"
+"POT-Creation-Date: 2011-05-03 18:27+0100\n"
+"PO-Revision-Date: 2011-05-03 18:27+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <woxxy@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,153 +16,181 @@ msgstr ""
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-SearchPath-0: /Users/woxxy/NetBeansProjects/CI_FoOlSlide\n"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:17
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:19
-msgid "Comic"
-msgstr "Fumetto"
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/auth.php:14
+msgid "Authorization"
+msgstr ""
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:18
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/test.php:20
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/auth.php:97
+msgid "Login"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/auth.php:196
+msgid "Register"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/auth.php:234
+msgid "Resend activation email"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:15
 msgid "Comics"
 msgstr "Fumetti"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:24
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:23
 msgid "manage"
 msgstr "gestisci"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:30
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:29
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/members.php:48
 msgid "Searching"
 msgstr "Ricerca"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:45
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:44
 msgid "The comic you looked for doesn't exist."
 msgstr "Il fumetto che hai cercato non esiste."
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:68
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:168
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:67
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:167
 msgid "Teams"
 msgstr "Gruppi"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:73
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:173
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:72
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:172
 msgid "Insert the names of the teams who worked on this chapter."
 msgstr "Inserisci i nomi dei gruppi che hanno lavorato su questo capitolo"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:132
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:209
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:131
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:208
 msgid "Licensed in"
 msgstr "Sotto licenza in"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:137
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:214
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:136
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:213
 msgid "Insert the nations where the comic is licensed in order to limit the availability."
 msgstr "Inserisci le nazioni in cui il fumetto è sotto licenza per limitarne la distribuzione."
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:149
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:148
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:161
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:160
 msgid "Chapter in"
 msgstr "Capitolo in"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:313
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:220
+msgid "Comic"
+msgstr "Fumetto"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/comics.php:312
 msgid "You can't delete chapters from outside the admin panel through this link."
 msgstr "Non puoi rimuovere i capitoli dall'esterno del pannello d'amministrazione con questo link."
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:14
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/dashboard.php:11
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/members.php:21
+msgid "Member"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/members.php:30
+msgid "Select group"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:13
 msgid "Preferences"
 msgstr "Preferenze"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:42
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:41
 msgid "General"
 msgstr "Generale"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:49
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:48
 msgid "Site title"
 msgstr "Titolo del sito"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:55
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:54
 msgid "comic reader"
 msgstr "lettore di fumetti"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:61
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:60
 msgid "Back URL"
 msgstr "Link al sito"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:73
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:72
 msgid "Footer text"
 msgstr "Testo del footer"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:83
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:82
 msgid "Default team"
 msgstr "Gruppo di default"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:96
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:95
 msgid "Default language"
 msgstr "Lingua di default"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:105
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:104
 msgid "Show Anonymous as team?"
 msgstr "Mostra Anonymous come team?"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:129
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:128
 msgid "Advertising"
 msgstr "Pubblicità"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:135
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:134
 msgid "Top banner"
 msgstr "Banner in alto"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:139
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:171
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:203
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:138
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:170
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:202
 msgid "Insert the HTML provided by your advertiser"
 msgstr "Inserisci l'HTML dal tuo pubblicitario"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:145
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:177
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:209
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:144
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:176
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:208
 msgid "Reload every pageview?"
 msgstr "Ricarica ogni visualizzazione di pagina?"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:151
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:183
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:215
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:150
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:182
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:214
 msgid "Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser."
 msgstr "Ricarica la pubblicità. Utile con ProjectWonderful.com. Usalo senza violare i termini di servizio del tuo pubblicitario."
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:157
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:189
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:221
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:156
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:188
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:220
 msgid "Active"
 msgstr "Attivo"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:167
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:166
 msgid "Right banner"
 msgstr "Banner a destra"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:199
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:198
 msgid "Bottom banner"
 msgstr "Banner in basso"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:248
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:247
 msgid "Couldn't save the advertising code in the HTML"
 msgstr "Non ho potuto salvare il codice della pubblicità nell'HTML"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:263
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:262
 msgid "Server"
 msgstr "Server"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:273
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:272
 msgid "Input on each line the URL of FoOlSlide on the other server."
 msgstr "Ad ogni linea inserisci l'URL di FoOlSlide sull'altro server."
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:277
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/controllers/admin/preferences.php:276
 msgid "List of servers"
 msgstr "Lista dei server"
 
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/helpers/tabler_helper.php:19
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/helpers/tabler_helper.php:62
 msgid "Save"
 msgstr "Salva"
 
@@ -170,20 +198,17 @@ msgstr "Salva"
 msgid "Edit"
 msgstr "Modifica"
 
-#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:16
-msgid "Dashboard"
-msgstr "Dashboard"
-
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:26
 msgid "Manage"
 msgstr "Gestisci"
 
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:31
-msgid "Users"
-msgstr "Utenti"
+msgid "Members"
+msgstr ""
 
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:34
-msgid "User list"
+#, fuzzy
+msgid "Member list"
 msgstr "Lista utenti"
 
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/libraries/Admin_Controller.php:35
@@ -553,4 +578,98 @@ msgstr "Prossimo"
 #: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/admin/comics/manage.php:48
 msgid "Last"
 msgstr "Ultimo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/login_form.php:8
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/login_form.php:23
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:15
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:24
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:32
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:40
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:46
+msgid "required"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/login_form.php:81
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:105
+msgid "Confirmation Code"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/login_form.php:89
+msgid "Remember me"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/login_form.php:105
+msgid "Forgot password"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:1
+msgid "This registration is for future administrators, moderators and team members."
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:2
+msgid "An administrator or team leader will have to accept you in their group."
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:3
+msgid "No functions will be available upon simple registration."
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:53
+#, fuzzy
+msgid "Username"
+msgstr "Utenti"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:59
+msgid "Email Address"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:64
+msgid "Password"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:69
+msgid "Confirm Password"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:81
+msgid "Get another CAPTCHA"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:82
+msgid "Get an audio CAPTCHA"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:83
+msgid "Get an image CAPTCHA"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:88
+msgid "Enter the words above"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:89
+msgid "Enter the numbers you hear"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/register_form.php:98
+msgid "Enter the code exactly as it appears"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/user.php:8
+#, fuzzy
+msgid "Delete member"
+msgstr "Rimuovi capitolo"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/user.php:9
+#, fuzzy
+msgid "Do you really want to delete this user?"
+msgstr "Vuoi davvero rimuovere questo fumetto e i relativi capitoli?"
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/user.php:14
+msgid "Reset password"
+msgstr ""
+
+#: /Users/woxxy/NetBeansProjects/CI_FoOlSlide/application/views/auth/user.php:15
+msgid "Do you really want to reset this user's password? He will receive a mail with a link to insert a new one."
+msgstr ""
 

@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 class Membership extends DataMapper {
 
-	var $has_one = array('profile');
+	var $has_one = array();
 	var $has_many = array();
 	var $validation = array(
 		'team_id' => array(
@@ -74,44 +74,75 @@ class Membership extends DataMapper {
 		$this->accepted = 1;
 		$this->save();
 	}
-	
+
 	/**
-	 *	Returns User that is applying for the team
+	 * 	Returns User that is applying for the team
 	 * 
 	 *  @author Woxxy
 	 *  @param int $team_id 
-	 *	@return object User
+	 * 	@return object User
 	 */
-	function get_applications($team_id)
-	{
+	function get_applications($team_id) {
 		$this->where('team_id', $team_id)->where('accepted', 0)->where('applied', 1)->get();
 		$users = new User();
-		foreach($this->all as $applicant)
-		{
+		foreach ($this->all as $applicant) {
 			$users->or_where('id', $applicant->user_id);
 		}
 		$users->get();
 		return $users;
 	}
-	
+
 	/**
 	 * Accepts applications, can be triggered by team leader only.
 	 * 
 	 * @param int $team_id
 	 * @param int $user_id 
 	 */
-	function accept_application($team_id, $user_id)
-	{
+	function accept_application($team_id, $user_id) {
 		$CI = & get_instance();
-		if($CI->tank_auth->is_team_leader($team_id))
-		{
+		if ($CI->tank_auth->is_team_leader($team_id)) {
 			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 			$this->accepted = 1;
 			$this->save();
-			flash_notice('notice', _('The member was accepted into the group.'));
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Rejects applications, can be triggered by team leader only.
+	 * 
+	 * @param int $team_id
+	 * @param int $user_id 
+	 */
+	function reject_application($team_id, $user_id) {
+		$CI = & get_instance();
+		if ($CI->tank_auth->is_team_leader($team_id)) {
+			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
+			$this->delete();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns an array of Users. Bonus point: it also returns $user->is_admin
+	 * 
+	 * @param int $team_id 
+	 * @return object Users with ->is_admin
+	 */
+	function get_members($team_id) {
+		$this->where('team_id', $team_id)->where('accepted', 1)->get();
+		$members = new User();
+		foreach ($this->all as $member) {
+			$members->or_where('id', $member->user_id);
+		}
+		$members->get();
+
+		foreach ($members->all as $key => $member) {
+			$member->is_admin = $this->all[$key]->is_admin;
+		}
+		return $members;
 	}
 
 }

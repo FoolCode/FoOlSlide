@@ -14,9 +14,9 @@ class Admin_Controller extends MY_Controller {
 		return $sidebar = array(
 	"dashboard" => array(
 		"name" => _("Dashboard"),
-		"level" => "members",
+		"level" => "member",
 		"content" => array(
-			"index" => array("level" => "members", "name" => "Dashboard"),
+			"index" => array("level" => "member", "name" => "Dashboard"),
 		)
 	),
 	"comics" => array(

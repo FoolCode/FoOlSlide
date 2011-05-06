@@ -62,7 +62,7 @@ if (!function_exists('tabler')) {
 					//$echo .= $row[1]['form'];
 				}
 				else {
-					if ($row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
+					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
 						$echo .= '<tr>';
 						foreach ($row as $column) {
 							$echo .= '<td>';
@@ -95,12 +95,7 @@ if (!function_exists('tabler')) {
 					$echo .= '<tr>';
 					foreach ($row as $column) {
 						$echo .= '<td>';
-						if ((isset($row[1]['display'])) && $row[1]['display'] == 'hidden') {
-							$echo .= $column['table'];
-						}
-						else {
-							$echo .= $column['form'];
-						}
+						$echo .= $column['form'];
 						$echo .= '</td>';
 					}
 					$echo .= '</tr>';
@@ -186,8 +181,15 @@ function writize($column) {
 	if (!is_array($column)) {
 		return $column;
 	}
-
+	
 	if (isset($column['display'])) {
+		
+		if(function_exists('display_'.$column['display']))
+		{
+			$displayfn = 'display_'.$column['display'];
+			$column['value'] = $displayfn($column); 
+		}
+		
 		if ($column['display'] == 'image' && $column['value'])
 			$column['value'] = '<img src="' . $column['value'] . '" />';
 		//if($column['display'] == 'hidden') return '';
@@ -240,64 +242,26 @@ if (!function_exists('ormer')) {
 				$row['type'] = 'hidden';
 			}
 
-			if (!isset($row['value']))
-				$row['value'] = '';
-			if (!isset($row['display']))
-				$row['display'] = '';
-			if (!isset($row['placeholder']))
-				$row['placeholder'] = '';
-			if (!isset($row['help']))
-				$row['help'] = '';
-
 			if (isset($row['type'])) {
 				if ($db->$key != "")
 					$row['value'] = $db->$key;
+
+				$details = array();
+				$details = $row;
+				unset($details['label']);
+				$details['name'] = $key;
+
 				$result[] = array(
 					$row['label'],
-					array(
-						'name' => ($key),
-						'value' => ($row['value']),
-						'type' => ($row['type']),
-						'display' => ($row['display']),
-						'placeholder' => ($row['placeholder']),
-						'help' => ($row['help'])
-					)
+					$details
 				);
 			}
 		}
-		//		echo '<pre>'; print_r($result); echo '</pre>';
+		//echo '<pre>';
+		//print_r($result);
+		//echo '</pre>';
 
 		return $result;
-	}
-
-}
-
-if (!function_exists('buttoner')) {
-
-	function buttoner() {
-		$CI = & get_instance();
-		if (!isset($CI->buttoner))
-			return "";
-		$texturl = $CI->buttoner;
-
-		$echo = '<div class="gbuttons">';
-		foreach ($texturl as $key => $item) {
-			$echo .= '<a class="gbutton" ';
-			if (isset($item['onclick']))
-				$echo .= 'onclick="' . ($item['onclick']) . '" ';
-			if (isset($item['href']))
-				$echo .= 'href="' . ($item['href']) . '" ';
-			if (isset($item['plug']))
-				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\'); return false;"';
-			//	if (isset($item['slide']) && $item['slide']) $echo .= 'onclick="confirmSlide(); return false;"';
-			$echo .= '>' . $item['text'] . '</a>';
-			//	if (isset($item['slide']) && $item['slide'])
-			//	{
-			//		$echo .= '<a class="gbutton red" href="'.$item['href'].'">DO IT!</a>';
-			//	}
-		}
-		$echo .= '<div class="clearer_r"></div></div>';
-		return $echo;
 	}
 
 }
@@ -346,6 +310,50 @@ if (!function_exists('form_group')) {
 		}
 
 		return form_dropdown($column['name'], $set, $column['value']);
+	}
+
+}
+
+if (!function_exists('buttoner')) {
+
+	function buttoner($data = NULL) {
+		if (!is_array($data)) {
+			$CI = & get_instance();
+			if (!isset($CI->buttoner))
+				return "";
+			$texturl = $CI->buttoner;
+		}
+		else $texturl = array($data);
+
+		$echo = '<div class="gbuttons">';
+		foreach ($texturl as $key => $item) {
+			$echo .= '<a class="gbutton" ';
+			if (isset($item['onclick']))
+				$echo .= 'onclick="' . ($item['onclick']) . '" ';
+			if (isset($item['href']))
+				$echo .= 'href="' . ($item['href']) . '" ';
+			if (isset($item['plug']))
+				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\'); return false;"';
+			$echo .= '>' . $item['text'] . '</a>';
+		}
+		$echo .= '<div class="clearer_r"></div></div>';
+		return $echo;
+	}
+
+}
+
+if (!function_exists('display_buttoner')) {
+
+	function display_buttoner($column) {
+		return buttoner($column);
+	}
+
+}
+
+if (!function_exists('form_buttoner')) {
+
+	function form_buttoner($column) {
+		return buttoner($column);
 	}
 
 }

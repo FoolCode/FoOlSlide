@@ -8,48 +8,11 @@ class Members extends Admin_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->tank_auth->is_logged_in() or redirect('auth/login');
-		// 
 		$this->viewdata['controller_title'] = "Members";
 	}
 
 	function index() {
 		redirect('/admin/members/you');
-	}
-
-	function member($id) {
-		if (!is_numeric($id))
-			return false;
-
-		if ($this->tank_auth->is_admin() || $this->tank_auth->is_group('mod'))
-			$can_edit = true;
-		else
-			$can_edit = false;
-
-		if ($this->input->post() && $can_edit) {
-			$profile = new Profile($id);
-			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
-		}
-
-		$this->viewdata["function_title"] = _("Member");
-
-		$user = new User($id);
-		$table = ormer($user);
-		$table = tabler($table, TRUE, $can_edit);
-		$data['table'] = $table;
-
-		$group = array();
-		$group[] = array(
-			_('Group'),
-			array(
-				'type' => 'group',
-				'name' => 'group',
-			)
-		);
-
-		$data['group'] = tabler($group, TRUE, $can_edit);
-		$data['can_edit'] = $can_edit;
-		$this->viewdata["main_content_view"] = $this->load->view('auth/user', $data, TRUE);
-		$this->load->view("admin/default", $this->viewdata);
 	}
 
 	function membersa($page = 1) {
@@ -69,7 +32,7 @@ class Members extends Admin_Controller {
 		$users->get_paged($page, 20);
 
 		$users_arr = array();
-		foreach ($users->all as $item) {
+		foreach ($users->all as $key => $item) {
 			$form[$key][] = '<a href="' . site_url('/admin/members/member/' . $item->id) . '">' . $item->username . '</a>';
 			if ($can_edit)
 				$form[$key][] = $item->email;
@@ -107,6 +70,47 @@ class Members extends Admin_Controller {
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
+	function member($id) {
+		if (!is_numeric($id))
+			return false;
+
+		if ($this->tank_auth->get_user_id() == $id)
+			redirect('/admin/members/you/');
+
+		if ($this->tank_auth->is_admin() || $this->tank_auth->is_group('mod'))
+			$can_edit = true;
+		else
+			$can_edit = false;
+
+		if ($this->input->post() && $can_edit) {
+			$profile = new Profile($id);
+			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
+		}
+
+		$this->viewdata["function_title"] = _("Member");
+
+		$user = new User($id);
+		$table = ormer($user);
+		$table = tabler($table, TRUE, $can_edit);
+		$data['table'] = $table;
+
+		$group = array();
+		$group[] = array(
+			_('Group'),
+			array(
+				'type' => 'group',
+				'name' => 'group',
+			)
+		);
+
+		$data['user'] = $user;
+		
+		$data['group'] = tabler($group, TRUE, $can_edit);
+		$data['can_edit'] = $can_edit;
+		$this->viewdata["main_content_view"] = $this->load->view('auth/user', $data, TRUE);
+		$this->load->view("admin/default", $this->viewdata);
+	}
+
 	function teams($stub = "") {
 		if ($stub == "") {
 			$this->viewdata["function_title"] = "Team list";
@@ -132,7 +136,7 @@ class Members extends Admin_Controller {
 			if ($this->tank_auth->is_team_leader($team->id) && !$can_edit)
 				$can_edit_limited = true;
 			else
-				$can_edit_limited = true;
+				$can_edit_limited = false;
 
 			if (($post = $this->input->post()) && ($can_edit || $can_edit_limited)) {
 				$team = new Team();
@@ -149,8 +153,9 @@ class Members extends Admin_Controller {
 			$this->viewdata["function_title"] = "Team";
 			$this->viewdata["extra_title"][] = $team->name;
 
-			$team->validation['name']['display'] = 'hidden';
-			
+			if ($can_edit_limited)
+				$team->validation['name']['disabled'] = 'true';
+
 			$result = ormer($team);
 
 			$result = tabler($result, TRUE, ($can_edit || $can_edit_limited));
@@ -158,8 +163,18 @@ class Members extends Admin_Controller {
 			$data['team'] = $team;
 
 			$members = new Membership();
-			$members->where('team_id', $team->id)->get();
-			$data['members'] = $members;
+			$users = $members->get_members($team->id);
+
+			$users_arr = array();
+			foreach ($users->all as $key => $item) {
+				$users_arr[$key][] = '<a href="' . site_url('/admin/members/member/' . $item->id) . '">' . $item->username . '</a>';
+				if ($can_edit)
+					$users_arr[$key][] = $item->email;
+				$users_arr[$key][] = $item->last_login;
+				$users_arr[$key][] = $item->is_admin;
+			}
+			
+			$data['members'] = tabler($users_arr, TRUE, FALSE);
 
 			$this->viewdata["main_content_view"] = $this->load->view('admin/members/team', $data, TRUE);
 			$this->load->view("admin/default", $this->viewdata);
@@ -192,16 +207,35 @@ class Members extends Admin_Controller {
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
-	function apply_team($team_stub) {
+	function apply_team($team_id) {
 		$this->viewdata["function_title"] = "Applying to team...";
-		$team = new Team();
-		$team->where('stub', $team_stub)->limit(1)->get();
+		$team = new Team($team_id);
 		if ($team->result_count() != 1)
 			return false;
 
 		$member = new Membership();
 		$member->apply($team->id, $this->tank_auth->get_user_id());
-		flash_notice('notice', 'You have applied for membership in this team. Come later to check the status of your application.');
+		flash_notice('notice', _('You have applied for membership in this team. Come later to check the status of your application.'));
+		redirect('/admin/members/teams/' . $team->stub);
+	}
+	
+	function accept_application($team_id, $user_id)
+	{
+		if(!$this->tank_auth->is_team_leader($team_id)) return false;
+		$this->viewdata["function_title"] = "Accepting into team...";
+		$member = new Membership();
+		$member->accept_application($team_id, $user_id);
+		flash_notice('notice', _('You have accepted the user into the team.'));
+		redirect('/admin/members/teams/' . $team->stub);
+	}
+	
+	function reject_application($team_id, $user_id)
+	{
+		if(!$this->tank_auth->is_team_leader($team_id)) return false;
+		$this->viewdata["function_title"] = "Removing from team...";
+		$member = new Membership();
+		$member->reject_application($team_id, $user_id);
+		flash_notice('notice', _('You have removed the user from the team.'));
 		redirect('/admin/members/teams/' . $team->stub);
 	}
 

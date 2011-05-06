@@ -93,6 +93,11 @@ input[type="text"], input[type="password"], select
 	margin-top:2px;
 }
 
+[disabled="true"]
+{
+	background: #ececec;
+}
+
 input[type="text"]:focus, input[type="password"]:focus,
 input[type="text"]:hover, input[type="password"]:hover
 {
@@ -188,6 +193,7 @@ textarea:focus, textarea:hover
 }
 
 .gbutton {
+	font-size: 11px;
 	display:block;
 	float:left;
 	padding:3px;

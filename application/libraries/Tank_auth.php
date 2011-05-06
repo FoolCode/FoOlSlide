@@ -181,6 +181,7 @@ class Tank_auth {
 	{
 		if (!$this->is_logged_in())
 			return false;
+		if($group_name == 'member') return true;
 		if(!$group_id = $this->get_group_id()) return false;
 		$group = new Group();
 		$group->where('name', $group_name)->get();

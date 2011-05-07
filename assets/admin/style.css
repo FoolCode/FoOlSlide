@@ -483,8 +483,7 @@ textarea:focus, textarea:hover
 {
     border-bottom: 1px solid #ddd;
     border-color:rgba(20,20,20,0.1);
-    height:33px;
-    padding: 3px;
+    padding: 4px;
     padding-left:20px;
 }
 
@@ -499,7 +498,7 @@ textarea:focus, textarea:hover
 
 #center table.form .help
 {
-	margin:3px 0px;
+	margin:3px 0px 0px;
 	font-size:11px;
 }
 

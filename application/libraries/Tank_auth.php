@@ -75,7 +75,7 @@ class Tank_auth {
 							'status' => ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
 						));
 
-						if ($user->activated == 0) {	// fail - not activated
+						if ($user->activated == 0) { // fail - not activated
 							$this->error = array('not_activated' => '');
 						}
 						else {   // success
@@ -91,12 +91,12 @@ class Tank_auth {
 						}
 					}
 				}
-				else {	 // fail - wrong password
+				else {  // fail - wrong password
 					$this->increase_login_attempt($login);
 					$this->error = array('password' => 'auth_incorrect_password');
 				}
 			}
-			else {	  // fail - wrong login
+			else {   // fail - wrong login
 				$this->increase_login_attempt($login);
 				$this->error = array('login' => 'auth_incorrect_login');
 			}
@@ -132,14 +132,34 @@ class Tank_auth {
 	 * Check if user is administrator
 	 * 
 	 * @author Woxxy
+	 * @param int $user_id
 	 * @return bool
 	 */
-	function is_admin() {
-		if (!$this->is_logged_in())
+	function is_admin($user_id = NULL) {
+		if (!$this->is_logged_in() && is_null($user_id))
 			return false;
+		if(is_null($user_id)) $user_id = $this->get_user_id();
 		$user = new Profile();
-		$user->where('user_id', $this->get_user_id())->get();
+		$user->where('user_id', $user_id)->get();
 		if ($user->group_id == 1)
+			return true;
+		return false;
+	}
+	
+	/**
+	 * Check if user is a moderator
+	 * 
+	 * @author Woxxy
+	 * @param int $user_id
+	 * @return bool
+	 */
+	function is_mod($user_id = NULL) {
+		if (!$this->is_logged_in() && is_null($user_id))
+			return false;
+		if(is_null($user_id)) $user_id = $this->get_user_id();
+		$user = new Profile();
+		$user->where('user_id', $user_id)->get();
+		if ($user->group_id == 2)
 			return true;
 		return false;
 	}
@@ -176,16 +196,18 @@ class Tank_auth {
 		return $profile->group_id;
 		return false;
 	}
-	
-	function is_group($group_name)
-	{
+
+	function is_group($group_name) {
 		if (!$this->is_logged_in())
 			return false;
-		if($group_name == 'member') return true;
-		if(!$group_id = $this->get_group_id()) return false;
+		if ($group_name == 'member')
+			return true;
+		if (!$group_id = $this->get_group_id())
+			return false;
 		$group = new Group();
 		$group->where('name', $group_name)->get();
-		if($group->id == $group_id) return true;
+		if ($group->id == $group_id)
+			return true;
 	}
 
 	/**
@@ -198,17 +220,26 @@ class Tank_auth {
 	function is_team($team_id = NULL) {
 		if (!$this->is_logged_in())
 			return false;
+		if(!is_null($team_id) && !is_numeric($team_id)) return false;
+		
 		$memberships = new Membership();
-		$memberships->where('user_id', $this->get_user_id())->where('accepted', 1)->get();
+		$memberships->where('user_id', $this->get_user_id())->where('accepted', 1);
+		if(is_numeric($team_id)) $memberships->where('team_id', $team_id);
+		$memberships->get();
+		if ($memberships->result_count() < 1)
+			return false;
+
 		$teams = new Team();
 		if (is_numeric($team_id)) {
 			$teams->where('id', $team_id)->get();
 			if ($teams->result_count() == 0)
 				return false;
 		}
-		foreach ($memberships->all as $membership) {
-			$teams->or_where('id', $membership->team_id);
-		}
+		else
+		// Notice that if you remove the result count on $memberships, this will not run and the user will be leader of any group
+			foreach ($memberships->all as $membership) {
+				$teams->or_where('id', $membership->team_id);
+			}
 		$teams->get();
 		return $teams;
 	}
@@ -226,6 +257,9 @@ class Tank_auth {
 			return false;
 		$leaderships = new Membership();
 		$leaderships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1)->get();
+		if ($leaderships->result_count() < 1)
+			return false;
+
 		$teams = new Team();
 		if (is_numeric($team_id)) {
 			$teams->where('id', $team_id)->get();
@@ -233,6 +267,7 @@ class Tank_auth {
 				return false;
 		}
 		else
+		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any group
 			foreach ($leaderships->all as $key => $leadership) {
 				$teams->or_where('id', $leadership->team_id);
 			}
@@ -259,7 +294,7 @@ class Tank_auth {
 	}
 
 	/**
-	 * Create new user on the site and return some data about it:
+	 * Create new user on the site and return some data about it:	
 	 * user_id, username, password, email, new_email_key (if any).
 	 *
 	 * @param	string
@@ -480,7 +515,7 @@ class Tank_auth {
 				$this->ci->users->change_password($user_id, $hashed_password);
 				return TRUE;
 			}
-			else {	  // fail
+			else {   // fail
 				$this->error = array('old_password' => 'auth_incorrect_password');
 			}
 		}
@@ -528,7 +563,7 @@ class Tank_auth {
 					$this->error = array('email' => 'auth_email_in_use');
 				}
 			}
-			else {	  // fail
+			else {   // fail
 				$this->error = array('password' => 'auth_incorrect_password');
 			}
 		}
@@ -570,7 +605,7 @@ class Tank_auth {
 				$this->logout();
 				return TRUE;
 			}
-			else {	  // fail
+			else {   // fail
 				$this->error = array('password' => 'auth_incorrect_password');
 			}
 		}

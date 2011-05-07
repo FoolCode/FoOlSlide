@@ -7,7 +7,7 @@ class Members extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->tank_auth->is_logged_in() or redirect('auth/login');
+		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->viewdata['controller_title'] = "Members";
 	}
 
@@ -51,36 +51,27 @@ class Members extends Admin_Controller {
 			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
 		}
 
-		$this->viewdata["function_title"] = $this->tank_auth->get_username() . " (" . _("That's you!") . ")";
+		$this->viewdata["extra_title"][] = $this->tank_auth->get_username() . " (" . _("That's you!") . ")";
 
-		$user = new User($this->tank_auth->get_user_id());
-
-		$profile = new Profile($this->tank_auth->get_user_id());
-
-		$table = ormer($user);
-		$table = tabler($table, TRUE, FALSE);
-		$data['table'] = $table;
-
-
-		$group = ormer($profile);
-
-		$data['user'] = $user;
-
-		$this->viewdata["main_content_view"] = $this->load->view('auth/you', $data, TRUE);
-		$this->load->view("admin/default", $this->viewdata);
+		return $this->member($this->tank_auth->get_user_id());
 	}
 
 	function member($id) {
 		if (!is_numeric($id))
 			return false;
 
-		if ($this->tank_auth->get_user_id() == $id)
+		if ($this->tank_auth->get_user_id() == $id && $this->uri->segment(3) != 'you')
 			redirect('/admin/members/you/');
 
 		if ($this->tank_auth->is_admin() || $this->tank_auth->is_group('mod'))
 			$can_edit = true;
 		else
 			$can_edit = false;
+		
+		if ($this->tank_auth->get_user_id() == $id)
+			$can_edit_limited = true;
+		else
+			$can_edit_limited = false;
 
 		if ($this->input->post() && $can_edit) {
 			$profile = new Profile($id);
@@ -90,22 +81,18 @@ class Members extends Admin_Controller {
 		$this->viewdata["function_title"] = _("Member");
 
 		$user = new User($id);
+		if($user->result_count() == 0) return false;
 		$table = ormer($user);
 		$table = tabler($table, TRUE, $can_edit);
 		$data['table'] = $table;
 
-		$group = array();
-		$group[] = array(
-			_('Group'),
-			array(
-				'type' => 'group',
-				'name' => 'group',
-			)
-		);
 
 		$data['user'] = $user;
 		
-		$data['group'] = tabler($group, TRUE, $can_edit);
+		$profile = new Profile();
+		$profile->where('user_id', $id)->get();
+		$profile_table = ormer($profile);
+		$data['profile'] = tabler($profile_table, TRUE, $can_edit);
 		$data['can_edit'] = $can_edit;
 		$this->viewdata["main_content_view"] = $this->load->view('auth/user', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
@@ -171,7 +158,7 @@ class Members extends Admin_Controller {
 				if ($can_edit)
 					$users_arr[$key][] = $item->email;
 				$users_arr[$key][] = $item->last_login;
-				$users_arr[$key][] = $item->is_admin;
+				$users_arr[$key][] = $item->is_leader;
 			}
 			
 			$data['members'] = tabler($users_arr, TRUE, FALSE);
@@ -216,7 +203,7 @@ class Members extends Admin_Controller {
 		$member = new Membership();
 		$member->apply($team->id, $this->tank_auth->get_user_id());
 		flash_notice('notice', _('You have applied for membership in this team. Come later to check the status of your application.'));
-		redirect('/admin/members/teams/' . $team->stub);
+		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
 	}
 	
 	function accept_application($team_id, $user_id)
@@ -226,7 +213,7 @@ class Members extends Admin_Controller {
 		$member = new Membership();
 		$member->accept_application($team_id, $user_id);
 		flash_notice('notice', _('You have accepted the user into the team.'));
-		redirect('/admin/members/teams/' . $team->stub);
+		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
 	}
 	
 	function reject_application($team_id, $user_id)
@@ -236,7 +223,63 @@ class Members extends Admin_Controller {
 		$member = new Membership();
 		$member->reject_application($team_id, $user_id);
 		flash_notice('notice', _('You have removed the user from the team.'));
-		redirect('/admin/members/teams/' . $team->stub);
+		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
+	}
+	
+	function make_admin($user_id)
+	{
+		if (!isAjax()) { return false; }
+		if(!$this->tank_auth->is_admin()) return false;
+		$profile = new Profile();
+		if($profile->change_group($user_id, 1))
+		{
+			flash_notice('notice', _('You have added the user to the admin group.'));
+			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			return true;
+		}
+		return false;
+	}
+	
+	function remove_admin($user_id)
+	{
+		if (!isAjax()) { return false; }
+		if(!$this->tank_auth->is_admin()) return false;
+		$profile = new Profile();
+		if($profile->change_group($user_id, 0))
+		{
+			flash_notice('notice', _('You have removed the user from the administrators group.'));
+			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			return true;
+		}
+		return false;
+	}
+	
+	function make_mod($user_id)
+	{
+		if (!isAjax()) { return false; }
+		if(!$this->tank_auth->is_admin()) return false;
+		$profile = new Profile();
+		if($profile->change_group($user_id, 2))
+		{
+			flash_notice('notice', _('You have added the user to the moderators group.'));
+			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			return true;
+		}
+		return false;
+	}
+	
+	function remove_mod($user_id)
+	{
+		if (!isAjax()) { return false; }
+		if(!$this->tank_auth->is_admin()) return false;
+		$profile = new Profile();
+		if($profile->change_group($user_id, 0))
+		{
+			flash_notice('notice', _('You have removed the user from the moderators group.'));
+			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			return true;
+		}
+		return false;
 	}
 
 }

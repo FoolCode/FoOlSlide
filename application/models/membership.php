@@ -134,13 +134,14 @@ class Membership extends DataMapper {
 	function get_members($team_id) {
 		$this->where('team_id', $team_id)->where('accepted', 1)->get();
 		$members = new User();
+		if($this->result_count() == 0) return $members;
 		foreach ($this->all as $member) {
 			$members->or_where('id', $member->user_id);
 		}
 		$members->get();
 
 		foreach ($members->all as $key => $member) {
-			$member->is_admin = $this->all[$key]->is_admin;
+			$member->is_leader = ($this->all[$key]->is_leader == 1)?'1':'0';
 		}
 		return $members;
 	}

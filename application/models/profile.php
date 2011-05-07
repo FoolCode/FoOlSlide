@@ -40,4 +40,20 @@ class Profile extends DataMapper {
 	function post_model_init($from_cache = FALSE) {
 		
 	}
+	
+	function change_group($user_id, $group_id)
+	{
+		$CI = & get_instance();
+		if(!$CI->tank_auth->is_admin()) return false;
+		
+		$this->where('user_id', $user_id)->get();
+		$this->group_id = $group_id;
+		if(!$this->save())
+		{
+			log_message('error', 'change_group(): Could not change group.');
+			return false;
+		}
+		return true;
+	}
+
 }

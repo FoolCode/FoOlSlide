@@ -29,12 +29,12 @@ class Admin_Controller extends MY_Controller {
 	),
 	"members" => array(
 		"name" => _("Members"),
-		"level" => "mod",
+		"level" => "member",
 		"content" => array(
 			"members" => array("level" => "mod", "name" => _("Member list")),
 			"you" => array("level" => "member", "name" => _("Your profile")),
-			"teams" => array("level" => "mod", "name" => _("Team list")),
-			"home_team" => array("level" => "mod", "name" => _("Home team")),
+			"teams" => array("level" => "member", "name" => _("Team list")),
+			"home_team" => array("level" => "member", "name" => _("Home team")),
 			"add_team" => array("level" => "mod", "name" => _("Add team"))
 		)
 	),

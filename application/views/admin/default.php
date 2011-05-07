@@ -13,7 +13,9 @@
             function slideToggle(item) { jQuery(item).slideToggle(); }
             function confirmPlug(href, text)
             {
-                var plug = confirm(text);
+                if(text != "") var plug = confirm(text);
+				else plug = true;
+				
                 if (plug)
                 {
                     jQuery.post(href, function(result){

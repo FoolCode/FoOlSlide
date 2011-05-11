@@ -72,7 +72,7 @@ class Auth extends Admin_Controller
 						$this->form_validation->set_value('remember'),
 						$data['login_by_username'],
 						$data['login_by_email'])) {								// success
-					redirect('');
+					redirect('/admin/');
 
 				} else {
 					$errors = $this->tank_auth->get_error_message();

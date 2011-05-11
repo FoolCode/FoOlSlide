@@ -24,7 +24,8 @@ class Admin_Controller extends MY_Controller {
 		"level" => "mod",
 		"content" => array(
 			"manage" => array("level" => "mod", "name" => _("Manage")),
-			"add_new" => array("level" => "mod", "name" => _("Add new"))
+			"add_new" => array("level" => "mod", "name" => _("Add new")),
+			"import" => array("level" => "admin", "name" => _("Import"))
 		)
 	),
 	"members" => array(

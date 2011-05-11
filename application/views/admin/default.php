@@ -65,7 +65,7 @@
 			<div id="content_wrap">
 
 				<div id="sidebar">
-					<?= $sidebar ?>
+					<?php echo $sidebar ?>
 				</div>
 
 				<div class="spacer"></div>
@@ -111,7 +111,9 @@
 
 						<?php echo $main_content_view; ?>
 
-					</div></div></div>
+					</div></div>
+						<div class="clearer"></div>
+				</div>
             <div class="push"></div>
 
 		</div>

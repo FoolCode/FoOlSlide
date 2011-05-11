@@ -324,7 +324,7 @@ if (!function_exists('buttoner')) {
 			$texturl = $CI->buttoner;
 		}
 		else $texturl = array($data);
-
+		
 		$echo = '<div class="gbuttons">';
 		foreach ($texturl as $key => $item) {
 			$echo .= '<a class="gbutton" ';

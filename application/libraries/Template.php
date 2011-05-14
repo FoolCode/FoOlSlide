@@ -40,8 +40,8 @@ class Template
 
 	private $_is_mobile = FALSE;
 
-	// Seconds that cache will be alive for
-	private $cache_lifetime = 0;//7200;
+	// Minutes that cache will be alive for
+	private $cache_lifetime = 0;
 
 	private $_ci;
 
@@ -91,6 +91,12 @@ class Template
 		{
 			// Let's use this obvious default
 			$this->_theme_locations = array(APPPATH . 'themes/');
+		}
+		
+		// Theme was set
+		if ($this->_theme)
+		{
+			$this->set_theme($this->_theme);
 		}
 
 		// If the parse is going to be used, best make sure it's loaded
@@ -449,9 +455,9 @@ class Template
 	 * @param	boolean
 	 * @return	void
 	 */
-	public function set_cache($seconds = 0)
+	public function set_cache($minutes = 0)
 	{
-		$this->cache_lifetime = $seconds;
+		$this->cache_lifetime = $minutes;
 		return $this;
 	}
 
@@ -667,7 +673,7 @@ class Template
 					$this->_theme . '/views/' . $view
 				);
 
-                                foreach ($theme_views as $theme_view)
+				foreach ($theme_views as $theme_view)
 				{
 					if (file_exists($location . $theme_view . self::_ext($theme_view)))
 					{

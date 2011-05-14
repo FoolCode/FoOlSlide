@@ -9,7 +9,7 @@
 | and disable it back when you're done.
 |
 */
-$config['migrations_enabled'] = TRUE;
+$config['migration_enabled'] = TRUE;
 
 
 /*
@@ -22,7 +22,7 @@ $config['migrations_enabled'] = TRUE;
 | be upgraded / downgraded to.
 |
 */
-$config['migrations_version'] = 1;
+$config['migration_version'] = 0;
 
 
 /*
@@ -35,4 +35,8 @@ $config['migrations_version'] = 1;
 | Also, writing permission is required within the migrations path.
 |
 */
-$config['migrations_path'] = APPPATH . 'migrations/';
+$config['migration_path'] = APPPATH . 'migrations/';
+
+
+/* End of file migration.php */
+/* Location: ./application/config/migration.php */

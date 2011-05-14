@@ -8,7 +8,6 @@ class Files_model extends CI_Model {
 	function __construct() {
 		// Call the Model constructor
 		parent::__construct();
-		$this->load->library('unzip');
 	}
 
 	// This is just a plug to adapt the variable names for the comic_model
@@ -50,6 +49,7 @@ class Files_model extends CI_Model {
 			log_message('error', 'compressed_chapter: failed creating dir');
 			return false;
 		}
+		$this->load->library('unzip');
 		$this->unzip->allow(array('png', 'gif', 'jpeg', 'jpg'));
 		$this->unzip->extract($data["full_path"], $cachedir);
 

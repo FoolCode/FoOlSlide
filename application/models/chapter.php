@@ -3,7 +3,6 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-
 class Chapter extends DataMapper {
 
 	var $has_one = array('comic', 'team', 'joint');
@@ -48,7 +47,7 @@ class Chapter extends DataMapper {
 			'type' => 'input'
 		),
 		'language' => array(
-			'rules' => array(),
+			'rules' => array('required'),
 			'label' => 'Language',
 			'type' => 'language'
 		),
@@ -87,12 +86,11 @@ class Chapter extends DataMapper {
 	function __construct($id = NULL) {
 		// Set the translations
 		$this->help_lang();
-		
+
 		parent::__construct(NULL);
-		
+
 		// We've overwrote some functions, and we need to use the get() from THIS model
-		if(!empty($id) && is_numeric($id)) 
-		{
+		if (!empty($id) && is_numeric($id)) {
 			$this->where('id', $id)->get();
 		}
 	}
@@ -107,8 +105,7 @@ class Chapter extends DataMapper {
 	 * @author Woxxy
 	 * @return void
 	 */
-	function help_lang()
-	{
+	function help_lang() {
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the chapter, if available.');
 		$this->validation['chapter']['label'] = _('Chapter number');
@@ -124,7 +121,7 @@ class Chapter extends DataMapper {
 		$this->validation['hidden']['label'] = _('Hidden');
 		$this->validation['hidden']['help'] = _('Hide the chapter from public view.');
 	}
-	
+
 	/**
 	 * This function can determine if it's a team member accessing to protected
 	 * chapter functions.
@@ -175,12 +172,11 @@ class Chapter extends DataMapper {
 		// Check if the user is allowed to see protected chapters.
 		if (!$CI->tank_auth->is_allowed())
 			$this->where('hidden', 0);
-		
+
 		/**
 		 * @todo figure out why those variables don't get unset... it would be
 		 * way better to use the iterated in almost all cases in FoOlSlide
 		 */
-
 		return parent::get_iterated($limit, $offset);
 	}
 
@@ -204,7 +200,7 @@ class Chapter extends DataMapper {
 		foreach ($this->all as $item) {
 			$item->comic = new Comic($this->comic_id);
 			$teams = new Team();
-			$item->teams = $teams->get_teams($this->team_id, $this->joint_id);
+			$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
 		}
 
 		return $result;
@@ -581,10 +577,10 @@ class Chapter extends DataMapper {
 	 */
 	public function remove_all_pages() {
 		$page = new Page();
-		
+
 		// Lets get the pages in iterated because there could be many
 		$page->where('chapter_id', $this->id)->get_iterated();
-		
+
 		// Loop and remove each. The page model will take care of database and directories.
 		$return = true;
 		foreach ($page as $key => $item) {
@@ -617,7 +613,8 @@ class Chapter extends DataMapper {
 	 */
 	public function get_pages() {
 		// if we already used the function, no need to recalc it
-		if (isset($this->pages)) return $this->pages;
+		if (isset($this->pages))
+			return $this->pages;
 
 		// Check that the comic is loaded, else load it.
 		$this->get_comic();
@@ -659,13 +656,57 @@ class Chapter extends DataMapper {
 	 * @return	string the formatted title for the chapter, with chapter and subchapter
 	 */
 	public function title() {
-		$echo = _('Chapter') . ' ' . $this->chapter;
+		$echo = "";
+		if ($this->volume > 0)
+			$echo .= _('Vol.') . $this->volume . ' ';
+		$echo .= _('Chapter') . ' ' . $this->chapter;
 		if ($this->subchapter)
 			$echo .= '.' . $this->subchapter;
 		if ($this->name != "")
 			$echo .= ': ' . $this->name;
 
 		return $echo;
+	}
+
+	/**
+	 * Returns a string with the teams that worked on this chapter and the relative URLs
+	 *
+	 * @author	Woxxy
+	 * @return	string <a> to teams
+	 */
+	public function team_url() {
+		$echo = "";
+		foreach ($this->teams as $key => $team) {
+			if ($key > 0)
+				$echo .= " | ";
+			$echo .= '<a href="' . site_url('/reader/team/' . $team->stub) . '" title="' . $team->name . '" >' . $team->name . '</a>';
+		}
+		return $echo;
+	}
+	
+	/**
+	 * Returns the href to the chapter editing
+	 *
+	 * @author	Woxxy
+	 * @return	string href to chapter editing
+	 */
+	public function edit_href() {
+		$CI = & get_instance();
+		if(!$CI->tank_auth->is_team_leader_array($this->teams)) return "";
+		$this->get_comic();
+		return site_url('/admin/comics/comic/'.$this->comic->stub.'/'.$this->id);
+	}
+	
+	/**
+	 * Returns the url to the chapter editing
+	 *
+	 * @author	Woxxy
+	 * @return	string <a> to chapter editing
+	 */
+	public function edit_url() {
+		$CI = & get_instance();
+		if(!$CI->tank_auth->is_team_leader_array($this->teams)) return "";
+		return '<a href="' . $this->edit_href() . '" title="'._('Edit'). ' ' . $this->title() . '">' . _('Edit') . '</a>';
 	}
 
 	/**
@@ -684,10 +725,10 @@ class Chapter extends DataMapper {
 
 		// Identify the chapter through data, not ID. This allows us to find out if there are multiple similar chapters.
 		$chapter = new Chapter();
-		$chapter->where('comic_id', $this->comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
+		$chapter->where('comic_id', $this->comic->id)->where('volume', $this->volume)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
 
 		// This part of the URL won't change for sure.
-		$url = '/reader/read/' . $this->comic->stub . '/' . $this->language . '/' . $this->chapter . '/';
+		$url = '/reader/read/' . $this->comic->stub . '/' . $this->language . '/' . $this->volume . '/' . $this->chapter . '/';
 
 		// Find out if there are multiple versions of the chapter, it means there are multiple groups with the same chapter.
 		// Let's set the whole URL with subchapters, teams and maybe joint too in it.
@@ -734,14 +775,20 @@ class Chapter extends DataMapper {
 		$chapter = new Chapter();
 
 		// Check if there are subchapters for this chapter.
-		$chapter->where('comic_id', $this->comic->id)->where('chapter', $this->chapter)->where('language', $this->language)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
+		$chapter->where('comic_id', $this->comic->id)->where('volume', $this->volume)->where('chapter', $this->chapter)->where('language', $this->language)->having('subchapter >', $this->subchapter)->order_by('subchapter', 'asc')->limit(1)->get();
 		if ($chapter->result_count() == 0) {
 			// There aren't subchapters for this chapter. Then let's look for the next chapter
 			$chapter = new Chapter();
-			$chapter->where('comic_id', $this->comic->id)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
+			$chapter->where('comic_id', $this->comic->id)->where('volume', $this->volume)->having('chapter > ', $this->chapter)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
 			if ($chapter->result_count() == 0) {
-				// There's no next chapter. Redirect to the comic page.
-				return site_url('/reader/read/' . $this->comic->stub);
+				// Check if there's a chapter in the next volume.
+				// This works even if chapter goes vol2 33 -> vol3 34 or vol2 33 -> vol3 1
+				$chapter = new Chapter();
+				$chapter->where('comic_id', $this->comic->id)->having('volume > ', $this->volume)->where('language', $this->language)->order_by('chapter', 'asc')->limit(1)->get();
+				if ($chapter->result_count() == 0) {
+					// There's no next chapter. Redirect to the comic page.
+					return site_url('/reader/read/' . $this->comic->stub);
+				}
 			}
 		}
 

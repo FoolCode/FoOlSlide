@@ -20,7 +20,9 @@
 		result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='0' /></td></tr>";
 		
 		result += "<tr><td>Subchapter number:</td><td><input class='input_subchapter' type='text' value='0' /></td></tr>";
-		
+
+		result += '<tr><td>Chapter language:</td><td><?php echo str_replace("\n", "", form_language(array('name' => 'input_language', 'class' => 'input_language'))); ?></td></tr>';
+
 		result += "<tr><td>Teams:</td><td class='insert_teams'>";
 			
 		jQuery.each(chapter.teams, function(index, team){ result += "<input type='text' class='set_teams' value='" + team.substring(1, team.length-1) + "' />";});
@@ -126,7 +128,7 @@
 		})
 		
 		index = jQuery('.input_hidden', box).val();
-		
+
 		jQuery.post('<?php echo site_url('/admin/comics/import') ?>', {
 			action: 'execute',
 			type: 'single_compressed',
@@ -136,9 +138,11 @@
 			chapter: jQuery('.input_chapter', box).val(),
 			subchapter: jQuery('.input_subchapter', box).val(),
 			volume: jQuery('.input_volume', box).val(),
+			language: jQuery('[name="input_language"]', box).val(),
 			team: teams
 		}, function(result){
 			if(result.error == undefined) jQuery(box).css({'background': '#DDFCE7', 'opacity' : '0.3'});
+			else jQuery(box).css({'opacity' : '0.9'});
 		},'json');
 	}
 	

@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<?php echo $template['metadata']; ?>
 		<?php echo link_tag('content/themes/default/style.css') ?>
 
@@ -14,21 +15,21 @@
 				<div id="navig">
 					<ul>
 						<li>
-							<a href="<?php echo site_url('/reader/') ?>">Home</a>
+							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Home'); ?></a>
 						</li>
 						<li style="width:280px;">
 							<?php
 							echo form_open("/reader/search/");
-							echo form_input(array('name' => 'search', 'placeholder' => 'To search, type and hit enter', 'id' => 'searchbox'));
+							echo form_input(array('name' => 'search', 'placeholder' => _('To search, type and hit enter'), 'id' => 'searchbox'));
 							echo form_close();
 							?>
-							<a href="<?php echo site_url('/reader/search/') ?>">Search</a>
+							<a href="<?php echo site_url('/reader/search/') ?>"><?php echo _('Search'); ?></a>
 						</li>
 						<div class="clearer"></div>
 					</ul>
 				</div>
 
-				<a href="<?php echo ""; ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
+				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
 				<?php echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">Go back to site &crarr;</a></div>'; ?>
 				<div class="clearer"></div>	
 			</div>

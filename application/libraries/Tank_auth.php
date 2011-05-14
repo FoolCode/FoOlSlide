@@ -138,14 +138,15 @@ class Tank_auth {
 	function is_admin($user_id = NULL) {
 		if (!$this->is_logged_in() && is_null($user_id))
 			return false;
-		if(is_null($user_id)) $user_id = $this->get_user_id();
+		if (is_null($user_id))
+			$user_id = $this->get_user_id();
 		$user = new Profile();
 		$user->where('user_id', $user_id)->get();
 		if ($user->group_id == 1)
 			return true;
 		return false;
 	}
-	
+
 	/**
 	 * Check if user is a moderator
 	 * 
@@ -156,7 +157,8 @@ class Tank_auth {
 	function is_mod($user_id = NULL) {
 		if (!$this->is_logged_in() && is_null($user_id))
 			return false;
-		if(is_null($user_id)) $user_id = $this->get_user_id();
+		if (is_null($user_id))
+			$user_id = $this->get_user_id();
 		$user = new Profile();
 		$user->where('user_id', $user_id)->get();
 		if ($user->group_id == 2)
@@ -208,6 +210,7 @@ class Tank_auth {
 		$group->where('name', $group_name)->get();
 		if ($group->id == $group_id)
 			return true;
+		return false;
 	}
 
 	/**
@@ -220,28 +223,47 @@ class Tank_auth {
 	function is_team($team_id = NULL) {
 		if (!$this->is_logged_in())
 			return false;
-		if(!is_null($team_id) && !is_numeric($team_id)) return false;
-		
+
 		$memberships = new Membership();
 		$memberships->where('user_id', $this->get_user_id())->where('accepted', 1);
-		if(is_numeric($team_id)) $memberships->where('team_id', $team_id);
+
+		if (is_numeric($team_id)) {
+			$memberships->where('team_id', $team_id);
+			$memberships->get();
+			if ($memberships->result_count() != 1)
+				return false;
+			$team = new Team();
+			$team->where('id', $team_id)->get();
+			return $team;
+		}
+
 		$memberships->get();
 		if ($memberships->result_count() < 1)
 			return false;
-
 		$teams = new Team();
-		if (is_numeric($team_id)) {
-			$teams->where('id', $team_id)->get();
-			if ($teams->result_count() == 0)
-				return false;
+		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any team!
+		foreach ($memberships->all as $key => $membership) {
+			$teams->or_where('id', $membership->team_id);
 		}
-		else
-		// Notice that if you remove the result count on $memberships, this will not run and the user will be leader of any group
-			foreach ($memberships->all as $membership) {
-				$teams->or_where('id', $membership->team_id);
-			}
 		$teams->get();
 		return $teams;
+	}
+
+	/**
+	 * Returns member team objects, false in case user is not a team member
+	 * This allows sending the variable $chapter->teams, for easier check
+	 * 
+	 * @author Woxxy
+	 * @param object $team
+	 * @return object Teams
+	 * 
+	 */
+	function is_team_array($teams) {
+		foreach ($teams as $team) {
+			if ($return = $this->is_team($team->id))
+				return $return;
+		}
+		return false;
 	}
 
 	/**
@@ -255,24 +277,47 @@ class Tank_auth {
 	function is_team_leader($team_id = NULL) {
 		if (!$this->is_logged_in())
 			return false;
+
 		$leaderships = new Membership();
-		$leaderships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1)->get();
+		$leaderships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1);
+
+		if (is_numeric($team_id)) {
+			$leaderships->where('team_id', $team_id);
+			$leaderships->get();
+			if ($leaderships->result_count() != 1)
+				return false;
+			$team = new Team();
+			$team->where('id', $team_id)->get();
+			return $team;
+		}
+
+		$leaderships->get();
 		if ($leaderships->result_count() < 1)
 			return false;
-
 		$teams = new Team();
-		if (is_numeric($team_id)) {
-			$teams->where('id', $team_id)->get();
-			if ($teams->result_count() == 0)
-				return false;
+		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any team!
+		foreach ($leaderships->all as $key => $leadership) {
+			$teams->or_where('id', $leadership->team_id);
 		}
-		else
-		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any group
-			foreach ($leaderships->all as $key => $leadership) {
-				$teams->or_where('id', $leadership->team_id);
-			}
 		$teams->get();
 		return $teams;
+	}
+
+	/**
+	 * Returns leader team objects, false in case user is not a team leader
+	 * This allows sending the variable $chapter->teams, for easier check
+	 * 
+	 * @author Woxxy
+	 * @param object $team_id
+	 * @return object Teams
+	 * 
+	 */
+	function is_team_leader_array($teams) {
+		foreach ($teams as $team) {
+			if ($result = $this->is_team_leader($team->id))
+				return $result;
+		}
+		return false;
 	}
 
 	/**

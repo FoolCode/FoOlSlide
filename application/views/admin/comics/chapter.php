@@ -5,6 +5,11 @@ $this->buttoner[] = array(
 	'plug' => _('Do you really want to delete this chapter and its pages?')
 );
 
+$this->buttoner[] = array(
+	'text' => _('Read chapter'),
+	'href' => $chapter->href()
+);
+
 echo buttoner();
 
 echo form_open();
@@ -86,20 +91,15 @@ echo buttoner();
 ?>
 
 <div class="list pages">
-    <table>
-        <tr>
-			<?php
-			$count = 0;
-			foreach ($pages as $item) {
-				$count++;
-				echo '<td>
-                <div class="controls gbutton" onclick="deleteImage(' . $item['id'] . ')">'._('Delete').'</div>
+	<?php
+	$count = 0;
+	foreach ($pages as $item) {
+		$count++;
+		echo '<div class="element">
+                <div class="controls gbutton" onclick="deleteImage(' . $item['id'] . ')">' . _('Delete') . '</div>
                 <img id="image_' . $item['id'] . '" src="' . $item["thumb_url"] . '" />
-             </td>';
-				if ($count % 4 == 0)
-					echo '</tr><tr>';
-			}
-			?>     </tr>
-    </table>
+             </div>';
+	}
+	?> 
 
 </div>

@@ -406,7 +406,7 @@ class Comics extends Admin_Controller {
 			);
 			
 			$archive[] = array(
-				_("Absolute directory path to archives"),
+				_("Absolute directory path to ZIP archives"),
 				array(
 					'type' => 'input',
 					'name' => 'archive_directory',
@@ -415,7 +415,7 @@ class Comics extends Admin_Controller {
 			);
 			
 			$archive[] = array(
-				_("Absolute directory path to archives"),
+				_("Absolute directory path to ZIP archives"),
 				array(
 					'type' => 'hidden',
 					'name' => 'action',

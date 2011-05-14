@@ -181,15 +181,14 @@ function writize($column) {
 	if (!is_array($column)) {
 		return $column;
 	}
-	
+
 	if (isset($column['display'])) {
-		
-		if(function_exists('display_'.$column['display']))
-		{
-			$displayfn = 'display_'.$column['display'];
-			$column['value'] = $displayfn($column); 
+
+		if (function_exists('display_' . $column['display'])) {
+			$displayfn = 'display_' . $column['display'];
+			$column['value'] = $displayfn($column);
 		}
-		
+
 		if ($column['display'] == 'image' && $column['value'])
 			$column['value'] = '<img src="' . $column['value'] . '" />';
 		//if($column['display'] == 'hidden') return '';
@@ -323,8 +322,9 @@ if (!function_exists('buttoner')) {
 				return "";
 			$texturl = $CI->buttoner;
 		}
-		else $texturl = array($data);
-		
+		else
+			$texturl = array($data);
+
 		$echo = '<div class="gbuttons">';
 		foreach ($texturl as $key => $item) {
 			$echo .= '<a class="gbutton" ';
@@ -354,6 +354,30 @@ if (!function_exists('form_buttoner')) {
 
 	function form_buttoner($column) {
 		return buttoner($column);
+	}
+
+}
+
+if (!function_exists('prevnext')) {
+
+	function prevnext($base_url, $item) {
+		$echo = '<div class="prevnext">';
+
+		if ($item->paged->has_previous) {
+			$echo .= '<div class="prev">
+					<a class="gbutton fleft" href="' . site_url($base_url.'1') . '">«« First</a>
+					<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a>
+				</div>';
+		}
+		if ($item->paged->has_next) {
+			$echo .= '<div class="next">
+					<a class="gbutton fright" href="'.site_url($base_url.$item->paged->total_pages).'">Last »»</a>
+					<a class="gbutton fright" href="'.site_url($base_url.$item->paged->next_page).'">Next »</a>
+				</div>';
+		}
+		$echo .= '<div class="clearer"></div></div>';
+		
+		return $echo;
 	}
 
 }

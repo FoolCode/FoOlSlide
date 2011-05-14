@@ -557,6 +557,66 @@ class Comic extends DataMapper {
 	public function directory() {
 		return $this->stub . '_' . $this->uniqid;
 	}
+	
+	
+	/**
+	 * Returns a ready to use html <a> link that points to the reader
+	 *
+	 * @author	Woxxy
+	 * @return	string <a> to reader
+	 */
+	public function url() {
+		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . $this->title() . '</a>';
+	}
+
+	/**
+	 * Returns a nicely built title for a chapter
+	 *
+	 * @author	Woxxy
+	 * @return	string the formatted title for the chapter, with chapter and subchapter
+	 */
+	public function title() {
+		return $this->name;
+	}
+
+	/**
+	 * Returns the href to the chapter editing
+	 *
+	 * @author	Woxxy
+	 * @return	string href to chapter editing
+	 */
+	public function edit_href() {
+		$CI = & get_instance();
+		if(!$CI->tank_auth->is_allowed()) return "";
+		return site_url('/admin/comics/comic/'.$this->stub);
+	}
+	
+	/**
+	 * Returns the url to the chapter editing
+	 *
+	 * @author	Woxxy
+	 * @return	string <a> to chapter editing
+	 */
+	public function edit_url() {
+		$CI = & get_instance();
+		if(!$CI->tank_auth->is_allowed()) return "";
+		return '<a href="' . $this->edit_href() . '" title="'._('Edit'). ' ' . $this->title() . '">' . _('Edit') . '</a>';
+	}
+
+	/**
+	 * Returns the href to the reader. This will create the shortest possible URL.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
+	public function href() {
+		// If we already used this function, no need to recalc it.
+		if (isset($this->href))
+			return $this->href;
+
+		return site_url('/reader/comic/'.$this->stub);
+	}
+
 
 }
 

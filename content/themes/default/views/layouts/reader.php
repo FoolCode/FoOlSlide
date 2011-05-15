@@ -17,6 +17,9 @@
 						<li>
 							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Home'); ?></a>
 						</li>
+						<li>
+							<a href="<?php echo site_url('/reader/list') ?>"><?php echo _('Series list'); ?></a>
+						</li>
 						<li style="width:280px;">
 							<?php
 							echo form_open("/reader/search/");
@@ -38,14 +41,16 @@
 
 
 			<div id="content">
+				<?php 
+					if(!isset($is_reader) || !$is_reader) echo '<div class="panel">'.get_sidebar();
 
-				<?php
-				echo $template['body'];
+					echo $template['body'];
+				
+					if(!isset($is_reader) || !$is_reader) echo '</div>';
 				?>
 
 			</div>
 
-			<div class="clearfooter"></div>
 			</div>
 			<div id="footer">
 				<div class="text">

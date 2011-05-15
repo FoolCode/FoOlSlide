@@ -9,6 +9,7 @@ class Reader extends Public_Controller {
 		parent::__construct();
 		$this->load->library('pagination');
 		$this->load->library('template');
+		$this->load->helper('reader');
 		$this->template->set_layout('reader');
 	}
 
@@ -40,8 +41,10 @@ class Reader extends Public_Controller {
 		// Select the latest 25 released chapters
 		$chapters->order_by('created', 'DESC')->limit(25);
 		
-		// Get the chapters! Let's use get_iterated() instead of get() to save some RAM
+		// Get the chapters!
 		$chapters->get();
+		$chapters->get_teams();
+		$chapters->get_comic();
 		
 		$this->template->set('chapters', $chapters);
 		$this->template->build('latest');
@@ -109,6 +112,7 @@ class Reader extends Public_Controller {
 
 
 
+		$this->template->set('is_reader', TRUE);
 		$this->template->set('chapter', $chaptere);
 		$this->template->set('current_page', $current_page);
 		$this->template->set('pages', $pages);
@@ -118,11 +122,13 @@ class Reader extends Public_Controller {
 	}
 	
 	
-	public function comic($stub)
+	public function comic($stub = NULL)
 	{
+		if(is_null($stub)) show_404();
 		$comic = new Comic();
 		$comic->where('stub', $stub)->get();
-		
+		if($comic->result_count() < 1) show_404();
+			
 		$chapters = new Chapter();
 		$chapters->where('comic_id', $comic->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();
 		

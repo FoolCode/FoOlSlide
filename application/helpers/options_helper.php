@@ -3,6 +3,13 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
+/**
+ * Function to get single options from the preferences database
+ * 
+ * @param string $option the code of the option
+ * @author Woxxy
+ * @return string the option
+ */
 if (!function_exists('get_setting')) {
 
 	function get_setting($option) {
@@ -13,6 +20,48 @@ if (!function_exists('get_setting')) {
 
 }
 
+/**
+ * Caches in a variable and returns the home team's object
+ * 
+ * @author Woxxy
+ * @return object home team
+ */
+if (!function_exists('get_home_team')) {
+
+	function get_home_team() {
+		$CI = & get_instance();
+		if(isset($CI->fs_loaded->home_team)) return $CI->fs_loaded->home_team;
+		$hometeam = get_setting('fs_gen_default_team');
+		$team = new Team();
+		$team->where('name', $hometeam)->limit(1)->get();
+		if($team->result_count() < 1) return false;
+		
+		return $team;
+	}
+
+}
+
+if (!function_exists('parse_irc'))
+{
+	function parse_irc($string){
+		if(substr($string, 0, 1) == '#')
+		{
+			$echo = 'irc://';
+			$at = strpos($string, '@');
+			$echo .= substr($string, $at + 1);
+			$echo .= '/'.substr($string, 1, $at-1);
+			return $echo;
+		}
+		return $string;
+	}
+}
+
+/**
+ * Checks that the call is made from Ajax
+ * 
+ * @author Woxxy
+ * @return bool true if ajax request
+ */
 function isAjax() {
 	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
 	($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
@@ -43,6 +92,12 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 	return $url;
 }
 
+/**
+ * Future function for load balancing the source of the images
+ * 
+ * @param string $string the url of the image
+ * @return string the base url for the image server
+ */
 function balance_url($string = '')
 {
 	return site_url($string);

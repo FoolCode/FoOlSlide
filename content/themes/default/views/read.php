@@ -3,25 +3,43 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 ?>
 
-
-
-<div id="page">
-	<div class="inner">
-		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return changePage('<?php echo $current_page; ?>');" >
-			<img src="<?php echo $pages[$current_page - 1]['url'] ?>"  />
-		</a>
-		<div class="number">
-			
-			
-			<div id="myFire"></div>
-			<div class="number2"></div>
-			<div class="number3"></div>
-
-		</div>
-	</div>
+<div id="pagelist" style="display:none; display:block;">
+		<div class="title"><?php echo _('List of this chapter\'s pages') ?></div>
+		<div class="images"><table><tr>
+				<?php
+					foreach($pages as $key => $page)
+					{
+						echo '<td><img src="'.$page['thumb_url'].'" /></td>';
+						//if(($key+1)%5==0 && $key!=0) echo '</tr><tr>';
+					}
+				?>
+				</tr></table></div>
 </div>
 
 
+<div id="page">
+
+	<div class="inner">
+		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return changePage('<?php echo $current_page; ?>');" >
+			<img src="<?php echo $pages[$current_page - 1]['url'] ?>"  />
+		</a>			
+
+
+
+	</div>
+</div>
+</div>
+
+<div id="widget">
+	<div class="initnumber"><?php echo $current_page ?></div>
+	<div class="on">on</div>
+	<div class="finalnumber"><?php echo count($pages); ?></div>
+	<div id="myFire"></div>
+	<div id="myFireHidden"></div>
+	<div id="myLoading"></div>
+	<div id="myLoadingHidden"></div>
+	<div id="myPagelist"><a href="#" onClick="togglePagelist(); return false;" class="gbutton"><?php echo _('Pagelist') ?></a></div>
+</div>
 
 <div class="clearer"></div>
 <script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
@@ -53,7 +71,7 @@ if (!defined('BASEPATH'))
 		jQuery('#page .inner a').attr('onClick', 'return changePage(\'' + next + '\')');
 		jQuery('.initnumber').text(next);
 		jQuery("html, body").stop(true,true);
-		jQuery.scrollTo('#page', 500, { easing:'elasout' });
+		jQuery.scrollTo('#page', 300);
 		current_page = id;
 		blinker();
 		lightMyFire();
@@ -97,16 +115,6 @@ if (!defined('BASEPATH'))
 		});
 	}
 	
-	//borrowed from jQuery easing plugin
-	//http://gsgd.co.uk/sandbox/jquery.easing.php
-	$.easing.elasout = function(x, t, b, c, d) {
-		var s=1.70158;var p=0;var a=c;
-		if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
-		if (a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
-	};
-	
 	function blinker()
 	{
 		if(pages[current_page].loaded == undefined)
@@ -141,6 +149,11 @@ if (!defined('BASEPATH'))
 		jQuery('#myFire').html(light);
 	}
 	
+	function togglePagelist()
+	{
+		jQuery('#pagelist').slideToggle();
+		//jQuery.scrollTo('#pagelist', 300);
+	}
 
 	isSpread = false;
 

@@ -53,21 +53,7 @@ class Files_model extends CI_Model {
 		$this->unzip->allow(array('png', 'gif', 'jpeg', 'jpg'));
 		$this->unzip->extract($data["full_path"], $cachedir);
 
-		// Get the filename
-		$dirarray = get_dir_file_info($cachedir, FALSE);
-		//echo '<pre>'; print_r($dirarray); echo '</pre>';
-
-		foreach ($dirarray as $key => $value) {
-			$value['overwrite'] = $overwrite;
-			$page = new Page();
-			$error = false;
-			if (!$page->add_page($value, $chapter->id, 0, "")) {
-				log_message('error', 'compressed_chapter: one page in the loop failed being added');
-				$error = true;
-			}
-			if ($error)
-				set_notice('error', 'Some pages weren\'t uploaded');
-		}
+		$this->folder_chapter($dir);
 
 		// Let's delete all the cache
 		if (!delete_files($cachedir, TRUE)) {
@@ -83,7 +69,28 @@ class Files_model extends CI_Model {
 		return true;
 	}
 
-	function import_list($data) {
+	public function folder_chapter($dir) {
+		// Get the filename
+		$dirarray = get_dir_file_info($cachedir, FALSE);
+
+		$extension = pathinfo($dir, PATHINFO_EXTENSION);
+
+		foreach ($dirarray as $key => $value) {
+			if ($extension && !in_array(strtolower($extension), array('jpeg', 'jpg', 'png', 'gif')))
+				continue;
+			$value['overwrite'] = $overwrite;
+			$page = new Page();
+			$error = false;
+			if (!$page->add_page($value, $chapter->id, 0, "")) {
+				log_message('error', 'compressed_chapter: one page in the loop failed being added');
+				$error = true;
+			}
+			if ($error)
+				set_notice('error', 'Some pages weren\'t uploaded');
+		}
+	}
+
+	public function import_list($data) {
 
 		function array_minus_array($a, $b) {
 			$c = Array();
@@ -101,7 +108,7 @@ class Files_model extends CI_Model {
 
 		$dirinfo = get_dir_file_info($data['directory'], FALSE);
 		ksort($dirinfo);
-		
+
 		$archives = array();
 
 		$matches = array();
@@ -114,7 +121,7 @@ class Files_model extends CI_Model {
 			$archives[$count]['server_path'] = $file['server_path'];
 			$archives[$count]['relative_path'] = $file['relative_path'];
 			$archives[$count]['comic_id'] = $data['comic']->id;
-			
+
 			$matches = array();
 			preg_match_all("/\[([\w! ]+)\]/", $file['name'], $matches, PREG_PATTERN_ORDER);
 			$archives[$count]['teams'] = $matches[0];
@@ -130,25 +137,23 @@ class Files_model extends CI_Model {
 		return $archives;
 	}
 
-	function import_compressed() {
-		
+	public function import_compressed() {
+
 		$chapter = new Chapter();
-		if(!$chapter->add($this->input->post()))
-		{
+		if (!$chapter->add($this->input->post())) {
 			log_message('error', 'import_compressed(): Couldn\'t create chapter');
 			return array('error' => "Couldn't create the chapter.");
 		}
 		$data['chapter_id'] = $chapter->id;
 		$data['overwrite'] = 1;
 		$data['full_path'] = $this->input->post('server_path');
-		$data['raw_name'] = 'import_'.$chapter->id;
-		if(!$this->compressed_chapter($data))
-		{
+		$data['raw_name'] = 'import_' . $chapter->id;
+		if (!$this->compressed_chapter($data)) {
 			$chapter->remove();
 			log_message('error', 'import_compressed(): Couldn\'t add the pages to the chapter');
 			return array('error' => "Couldn't add the pages to the chapter.");
 		}
-		return array ('success' => TRUE);
+		return array('success' => TRUE);
 	}
 
 }

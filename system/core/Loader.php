@@ -40,7 +40,7 @@ class CI_Loader {
 	 * @author Woxxy
 	 */
 	public $_ci_cached_vars		= array();
-	protected $_ci_classes			= array();
+	public $_ci_classes			= array();
 	protected $_ci_loaded_files		= array();
 	protected $_ci_models			= array();
 	protected $_ci_helpers			= array();

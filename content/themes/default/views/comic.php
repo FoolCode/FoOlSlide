@@ -15,7 +15,6 @@
 				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
 			</ul>
 		</div>
-		<div class="clearer"></div>
 	</div>
 
 
@@ -27,7 +26,7 @@
 		foreach ($chapters as $key => $chapter) {
 			echo '<div class="element">
 					<div class="title">' . $chapter->url() . '</div>
-					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ' ' . _('on') . ' ' . $chapter->created . ' ' . $chapter->edit_url() . '</div>
+					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ' ' . _('on') . ' ' . $chapter->date() . ' ' . $chapter->edit_url() . '</div>
 				</div>';
 		}
 		?>

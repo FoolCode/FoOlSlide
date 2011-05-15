@@ -213,10 +213,44 @@ class Chapter extends DataMapper {
 	 * @return	boolean True on success, false on failure.
 	 */
 	public function get_comic() {
-		// Check if the variable is not yet set, in order to save a databse read.
-		if (!isset($this->comic)) {
-			$this->comic = new Comic($this->comic_id);
+		if (count($this->all) == 1) {
+			if (!isset($this->comic))
+				$this->comic = new Comic($this->comic_id);
+			return true;
 		}
+		else
+		// Check if the variable is not yet set, in order to save a databse read.
+			foreach ($this->all as $item) {
+				if (!isset($item->comic))
+					$item->comic = new Comic($item->comic_id);
+			}
+
+		// All good, return true.
+		return true;
+	}
+
+	/**
+	 * Sets the $this->teams variable if it hasn't been done before
+	 *
+	 * @author	Woxxy
+	 * @return	boolean True on success, false on failure.
+	 */
+	public function get_teams() {
+		if (count($this->all) == 1) {
+			if (isset($this->teams))
+				return true;
+			$teams = new Team();
+			$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
+			return true;
+		}
+		else
+		// Check if the variable is not yet set, in order to save a databse read.
+			foreach ($this->all as $item) {
+				if (isset($item->teams))
+					continue;
+				$teams = new Team();
+				$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
+			}
 
 		// All good, return true.
 		return true;
@@ -640,6 +674,16 @@ class Chapter extends DataMapper {
 	}
 
 	/**
+	 * Returns the date of release of the chapter WITHOUT hours, minutes and seconds
+	 * 
+	 * @author Woxxy
+	 * @return string date d/m/y
+	 */
+	public function date() {
+		return date('d/m/y', strtotime($this->created));
+	}
+
+	/**
 	 * Returns a ready to use html <a> link that points to the reader
 	 *
 	 * @author	Woxxy
@@ -683,7 +727,7 @@ class Chapter extends DataMapper {
 		}
 		return $echo;
 	}
-	
+
 	/**
 	 * Returns the href to the chapter editing
 	 *
@@ -692,11 +736,12 @@ class Chapter extends DataMapper {
 	 */
 	public function edit_href() {
 		$CI = & get_instance();
-		if(!$CI->tank_auth->is_team_leader_array($this->teams)) return "";
+		if (!$CI->tank_auth->is_team_leader_array($this->teams))
+			return "";
 		$this->get_comic();
-		return site_url('/admin/comics/comic/'.$this->comic->stub.'/'.$this->id);
+		return site_url('/admin/comics/comic/' . $this->comic->stub . '/' . $this->id);
 	}
-	
+
 	/**
 	 * Returns the url to the chapter editing
 	 *
@@ -705,8 +750,9 @@ class Chapter extends DataMapper {
 	 */
 	public function edit_url() {
 		$CI = & get_instance();
-		if(!$CI->tank_auth->is_team_leader_array($this->teams)) return "";
-		return '<a href="' . $this->edit_href() . '" title="'._('Edit'). ' ' . $this->title() . '">' . _('Edit') . '</a>';
+		if (!$CI->tank_auth->is_team_leader_array($this->teams))
+			return "";
+		return '<a href="' . $this->edit_href() . '" title="' . _('Edit') . ' ' . $this->title() . '">' . _('Edit') . '</a>';
 	}
 
 	/**

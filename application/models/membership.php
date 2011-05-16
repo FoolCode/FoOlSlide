@@ -129,7 +129,7 @@ class Membership extends DataMapper {
 	 * Returns an array of Users. Bonus point: it also returns $user->is_admin
 	 * 
 	 * @param int $team_id 
-	 * @return object Users with ->is_admin
+	 * @return object Users with ->is_leader
 	 */
 	function get_members($team_id) {
 		$this->where('team_id', $team_id)->where('accepted', 1)->get();

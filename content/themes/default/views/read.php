@@ -3,14 +3,13 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 ?>
 
-<div id="pagelist" style="display:none; display:block;">
+<div id="pagelist" style="display:none;">
 		<div class="title"><?php echo _('List of this chapter\'s pages') ?></div>
 		<div class="images"><table><tr>
 				<?php
 					foreach($pages as $key => $page)
 					{
-						echo '<td><img src="'.$page['thumb_url'].'" /></td>';
-						//if(($key+1)%5==0 && $key!=0) echo '</tr><tr>';
+						echo '<td><a href="#" onClick="changePage('.$key.', \'TRUE\');"><img id="thumb_'.$key.'" src="'.$page['thumb_url'].'" /></a></td>';
 					}
 				?>
 				</tr></table></div>
@@ -56,7 +55,7 @@ if (!defined('BASEPATH'))
 
 	var current_page = <?php echo $current_page - 1; ?>;
 	
-	function changePage(id)
+	function changePage(id, noscroll)
 	{
 		id = parseInt(id);
 		if(id > pages.length-1) 
@@ -71,10 +70,14 @@ if (!defined('BASEPATH'))
 		jQuery('#page .inner a').attr('onClick', 'return changePage(\'' + next + '\')');
 		jQuery('.initnumber').text(next);
 		jQuery("html, body").stop(true,true);
-		jQuery.scrollTo('#page', 300);
+		if(!noscroll) jQuery.scrollTo('#page', 300);
+		jQuery('#pagelist .images').scrollTo(jQuery('#thumb_' + id).parent(), 400);
+		jQuery('.current').removeClass('current');
+		jQuery('#thumb_' + id).addClass('current');
 		current_page = id;
 		blinker();
 		lightMyFire();
+		
 		
 		return false;
 	}
@@ -109,6 +112,7 @@ if (!defined('BASEPATH'))
 			onComplete:function(data)
 			{
 				pages[arraydata[data.index]].loaded = true;
+				jQuery('#thumb_'+ arraydata[data.index]).addClass('loaded');
 				lightMyFire();
 			}
 	
@@ -152,7 +156,8 @@ if (!defined('BASEPATH'))
 	function togglePagelist()
 	{
 		jQuery('#pagelist').slideToggle();
-		//jQuery.scrollTo('#pagelist', 300);
+		jQuery.scrollTo('#pagelist', 300);
+		jQuery('#pagelist .images').scrollTo('#thumb_' + current_page, 400);
 	}
 
 	isSpread = false;

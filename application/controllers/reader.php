@@ -17,11 +17,30 @@ class Reader extends Public_Controller {
 		redirect('/reader/latest/');
 	}
 
+	public function team($stub = NULL) {
+		if(is_null($stub)) show_404();
+		$team = new Team();
+		$team->where('stub', $stub)->get();
+		if($team->result_count() < 1) show_404();
+		
+		$memberships = new Membership();
+		$members = $memberships->get_members($team->id);
+		
+		$this->template->set('team', $team);
+		$this->template->set('members', $members);
+		$this->template->build('team');
+	} 
+	
 	public function lista($page = 1) {
 		$this->template->title('Comic list');
 		
 		$comics = new Comic();
 		$comics->get_paged($page, 15);
+		foreach($comics->all as $comic)
+		{
+			$comic->latest_chapter = new Chapter();
+			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
+		}
 		
 		$this->template->set('comics', $comics);
 		$this->template->build('list');

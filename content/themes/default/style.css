@@ -98,7 +98,7 @@ input[type="text"]
 #content
 {
 	padding: 0 0px 10px;
-	margin:25px auto;
+	margin:25px auto 0px;
 	color:#555;
 }
 
@@ -274,19 +274,11 @@ input[type="text"]
 .panel a
 {
 	color:#333;
-	border-bottom:1px solid #fff;
-	border-bottom:1px solid rgba(255,255,255,0.7);
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
 }
 
 .panel a:hover
 {
 	color:#000;
-	border-bottom:1px solid #000;
-	border-bottom:1px solid rgba(0,0,0,0.7);
-	text-decoration:none;
 }
 
 
@@ -338,6 +330,7 @@ input[type="text"]
 	border-bottom:1px solid #888;
 	margin-top:8px;
 	padding-bottom:8px;
+	position:relative;
 }
 
 .list .group > .title
@@ -345,9 +338,14 @@ input[type="text"]
 	font-weight:bold;
 }
 
+.list .group > .title > .meta
+{
+	font-weight:normal;
+	font-size:11px;
+}
+
 .list .element
 {
-	border-bottom:1px dotted #bbb;
 	text-indent:12px;
 	position:relative;
 	padding: 3px 0;
@@ -445,10 +443,10 @@ input[type="text"]
 	float:right;
 	overflow:hidden;
 
-	margin:0 0 0 15px;
+	margin:0 0 0 10px;
 	padding:0;
 
-	width:260px;
+	width:240px;
 
 
 	z-index:-1;
@@ -460,8 +458,8 @@ input[type="text"]
 
 .sidebar li
 {
-	margin: 0 0 8px;
-	padding:15px 10px 15px 10px;
+	margin: 0 0 10px;
+	padding:10px 8px 10px 8px;
     color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
@@ -509,18 +507,20 @@ input[type="text"]
 	padding:2px;
 	z-index:1000;
 	box-shadow:0px 0px 4px #000;
+	-moz-box-shadow:0px 0px 4px #000;
+	-webkit-box-shadow:0px 0px 4px #000;
 }
 
 #widget
 {
 	background:#eeedeb;
-	padding:10px 6px 10px 43px;
+	padding:10px 6px 10px 6px;
 	color:#999;
 	position:fixed;
 	top:170px;
 	right:10px;
 	z-index:100;
-
+	height:330px;
 
 	margin: 0 0 8px;
 
@@ -582,7 +582,7 @@ input[type="text"]
 {
 	position:absolute;
 	bottom:10px;
-	left:23px;
+	left:43px;
 	width:10px;
 }
 
@@ -590,9 +590,9 @@ input[type="text"]
 {
 	position:absolute;
 	bottom:8px;
-	left:20px;
+	left:40px;
 	width:10px;
-	height:85%;
+	height:150px;
 	padding:2px;
 	box-shadow: inset 0px 0px 3px #000;
 	-moz-box-shadow: inset 0px 0px 3px #000;
@@ -611,9 +611,9 @@ input[type="text"]
 {
 	position:absolute;
 	bottom:10px;
-	left:7px;
+	left:14px;
 	width:10px;
-	height:85%;
+	height:150px;
 	background:red;
 	display:none;
 }
@@ -623,9 +623,9 @@ input[type="text"]
 {
 	position:absolute;
 	bottom:8px;
-	left:5px;
+	left:12px;
 	width:10px;
-	height:85%;
+	height:150px;
 	padding:2px;
 	box-shadow: inset 0px 0px 3px #000;
 	-moz-box-shadow: inset 0px 0px 3px #000;
@@ -701,8 +701,67 @@ input[type="text"]
 	vertical-align:middle;
 }
 
-#pagelist img
+#pagelist a
 {
-	max-height:100%;
+	width:160px;
+	display:block;
+	text-decoration:none;
+}
+
+#pagelist a img
+{
+	max-height:160px;
 	max-width:160px;
+}
+
+#pagelist a img.loaded
+{
+	border: 2px solid #70D441;
+}
+
+#pagelist a img.current
+{
+	border: 2px solid #000;
+}
+
+
+
+
+.ads{
+}
+
+.ads a{
+}
+
+.ads a:hover{
+}
+
+.ads.banner 
+{
+	width:728px;
+	margin: 10px 0px;
+	padding:7px 10px;
+	text-decoration:none !important;
+	
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+
+    border:1px solid rgba(56,56,56,0.4);
+    background: -webkit-gradient(
+        linear, left top, left bottom,
+        color-stop(0, rgba(234, 231, 229,.8)),
+        color-stop(1, rgba(234, 231, 229,.5))
+		);
+	background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+	background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+
+
+    box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
+    -moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
+    -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
+}
+
+.ads.banner a
+{
 }

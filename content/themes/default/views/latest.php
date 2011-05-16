@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
 <div class="list">
-	<div class="title"><a href="<?php echo site_url('/reader/latest/') ?>"><?php echo _('Latest released chapters')?>:</div>
+	<div class="title"><a href="<?php echo site_url('/reader/latest/') ?>"><?php echo _('Latest released chapters')?>:</a></div>
      <?php
 		$current_comic = "";
 		$current_comic_closer = "";
@@ -27,8 +27,4 @@
 		// Closing the last comic group
 		echo '</div>';
 	?>
-</div>
-
-	
-	
 </div>

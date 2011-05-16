@@ -240,7 +240,7 @@ class Chapter extends DataMapper {
 			if (isset($this->teams))
 				return true;
 			$teams = new Team();
-			$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
+			$this->teams = $teams->get_teams($this->team_id, $this->joint_id);
 			return true;
 		}
 		else
@@ -719,6 +719,7 @@ class Chapter extends DataMapper {
 	 * @return	string <a> to teams
 	 */
 	public function team_url() {
+		$this->get_teams();
 		$echo = "";
 		foreach ($this->teams as $key => $team) {
 			if ($key > 0)

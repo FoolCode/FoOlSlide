@@ -4,39 +4,68 @@ if (!defined('BASEPATH'))
 ?>
 
 <div id="pagelist" style="display:none;">
-		<div class="title"><?php echo _('List of this chapter\'s pages') ?></div>
-		<div class="images"><table><tr>
+	<div class="title"><?php echo _('List of this chapter\'s pages') ?></div>
+	<div class="images"><table><tr>
 				<?php
-					foreach($pages as $key => $page)
-					{
-						echo '<td><a href="#" onClick="changePage('.$key.', \'TRUE\');"><img id="thumb_'.$key.'" src="'.$page['thumb_url'].'" /></a></td>';
-					}
+				foreach ($pages as $key => $page) {
+					echo '<td><a href="#" onClick="changePage(' . $key . ', \'TRUE\');"><img id="thumb_' . $key . '" src="' . $page['thumb_url'] . '" /></a></td>';
+				}
 				?>
-				</tr></table></div>
+			</tr></table></div>
 </div>
 
+<?php
+if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
+	echo '<div class="ads iframe banner" id="ads_iframe_top_banner"><iframe src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
+?>
+
+<?php
+if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && !get_setting('fs_ads_top_banner_reload'))
+	echo '<div class="ads static banner ftop" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
+?>
+
+<?php
+if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && !get_setting('fs_ads_left_banner_reload'))
+	echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
+?>
+
+<?php
+if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && get_setting('fs_ads_left_banner_reload'))
+	echo '<div class="ads iframe vertical fleft" id="ads_iframe_left_banner"><iframe src="' . site_url() . 'content/ads/ads_left.html' . '"></iframe></div>';
+?>
 
 <div id="page">
 
 	<div class="inner">
 		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return changePage('<?php echo $current_page; ?>');" >
 			<img src="<?php echo $pages[$current_page - 1]['url'] ?>"  />
-		</a>			
-
-
-
+		</a>
 	</div>
 </div>
-</div>
+
+<?php
+if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
+	echo '<div class="ads iframe banner" id="ads_iframe_bottom_banner"><iframe src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
+?>
+
+<?php
+if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && !get_setting('fs_ads_bottom_banner_reload'))
+	echo '<div class="ads static banner fbottom" id="ads_static_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
+?>
+
+<?php
+if (!(get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'))) {
+	echo '<style type="text/css">
+				#page{margin: 10px auto 0px;}
+				#ads_iframe_top_banner, #ads_static_top_banner {margin:10px auto;}
+			</style>';
+}
+?>
 
 <div id="widget">
 	<div class="initnumber"><?php echo $current_page ?></div>
 	<div class="on">on</div>
 	<div class="finalnumber"><?php echo count($pages); ?></div>
-	<div id="myFire"></div>
-	<div id="myFireHidden"></div>
-	<div id="myLoading"></div>
-	<div id="myLoadingHidden"></div>
 	<div id="myPagelist"><a href="#" onClick="togglePagelist(); return false;" class="gbutton"><?php echo _('Pagelist') ?></a></div>
 </div>
 
@@ -66,14 +95,39 @@ if (!defined('BASEPATH'))
 		
 		preload(id);
 		next = parseInt(id+1);
-		jQuery('#page img').attr('src', pages[id].url);
-		jQuery('#page .inner a').attr('onClick', 'return changePage(\'' + next + '\')');
-		jQuery('.initnumber').text(next);
+		
+		if (pages[id].width > 1000 && ((pages[id].width)/(pages[id].height)) > 1.2) {
+			jQuery("#page").css("max-height", '1200px');
+			jQuery("#page .inner img").css({"max-height": '1200px', 'width':'auto'});
+			isSpread = true;
+		}
+		else{
+			jQuery("#page").attr('style', '');
+			jQuery("#page .inner img").attr('style','');
+			isSpread = false;
+		}
+		
 		jQuery("html, body").stop(true,true);
 		if(!noscroll) jQuery.scrollTo('#page', 300);
+		jQuery('#page .inner img').attr('src', pages[id].url);
+		jQuery('#page .large img').attr('src', pages[id].url);
+		jQuery('#page .inner a').attr('onClick', 'return changePage(\'' + next + '\')');
+		jQuery('.initnumber').text(next);
 		jQuery('#pagelist .images').scrollTo(jQuery('#thumb_' + id).parent(), 400);
 		jQuery('.current').removeClass('current');
 		jQuery('#thumb_' + id).addClass('current');
+		<?php
+		if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
+			echo 'jQuery("#ads_iframe_top_banner iframe").attr("src","'.site_url().'content/ads/ads_top.html");';
+		?>
+		<?php
+		if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && get_setting('fs_ads_left_banner_reload'))
+			echo 'jQuery("#ads_iframe_left_banner iframe").attr("src","'.site_url().'content/ads/ads_left.html");';
+		?>
+		<?php
+		if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
+			echo 'jQuery("#ads_iframe_bottom_banner iframe").attr("src","'.site_url().'content/ads/ads_bottom.html");';
+		?>
 		current_page = id;
 		blinker();
 		lightMyFire();

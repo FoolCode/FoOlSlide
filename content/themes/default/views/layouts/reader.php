@@ -88,13 +88,15 @@
 
 			<div id="content">
 				<?php
-				if (!isset($is_reader) || !$is_reader)
+				if (!isset($is_reader) || !$is_reader) {
 					echo '<div class="panel">' . get_sidebar();
-				
+				if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active')) echo '<div class="ads static vertical fleft" id="ads_static_left_banner">'.get_setting('fs_ads_left_banner').'</div>';
+				else echo '<style type="text/css">.panel {width:1000px; margin: 0 auto;}</style>';
 				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active')) echo '<div class="ads static banner" id="ads_static_top_banner">'.get_setting('fs_ads_top_banner').'</div>';
+				}
 				echo $template['body'];
 				
-				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active')) echo '<div class="ads static banner" id="ads_static_top_banner">'.get_setting('fs_ads_top_banner').'</div>';
+				if ((!isset($is_reader) || !$is_reader) && get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active')) echo '<div class="ads static banner" id="ads_static_top_banner">'.get_setting('fs_ads_top_banner').'</div>';
 
 				if (!isset($is_reader) || !$is_reader)
 					echo '</div>';
@@ -108,7 +110,5 @@
 <?php echo get_setting('fs_gen_footer_text'); ?>
 			</div>
 		</div>
-
-		<a href="http://twitter.com/intent/user?screen_name=woxxy">test </a>
 	</body>
 </html>

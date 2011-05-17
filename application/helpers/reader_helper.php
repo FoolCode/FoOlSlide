@@ -17,6 +17,7 @@ if(!function_exists('get_sidebar'))
 		if(get_setting_twitter())$echo .= '<li>'. get_twitter_widget() .'</li>';
 		if(get_setting_facebook())$echo .= '<li>'. get_facebook_widget() .'</li>';
 		$echo .= '</ul>';
+		$echo .= '<div class="clearer_l"></div>';
 		return $echo;
 	}
 }

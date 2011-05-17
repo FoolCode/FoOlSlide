@@ -166,7 +166,7 @@ class Preferences extends Admin_Controller {
 			_('Right banner'),
 			array(
 				'type' => 'textarea',
-				'name' => 'fs_ads_right_banner',
+				'name' => 'fs_ads_left_banner',
 				'help' => _('Insert the HTML provided by your advertiser'),
 				'preferences' => 'fs_ads'
 			)
@@ -176,7 +176,7 @@ class Preferences extends Admin_Controller {
 			_('Reload every pageview?'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_right_banner_reload',
+				'name' => 'fs_ads_left_banner_reload',
 				'placeholder' => '',
 				'preferences' => 'fs_ads',
 				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
@@ -188,7 +188,7 @@ class Preferences extends Admin_Controller {
 			_('Active'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_right_banner_active',
+				'name' => 'fs_ads_left_banner_active',
 				'placeholder' => '',
 				'preferences' => 'fs_ads'
 			)
@@ -240,7 +240,7 @@ class Preferences extends Admin_Controller {
 			$ad_after = '</body>
 						</html>';
 
-			$ads = array('fs_ads_top_banner' => 'ads_top.html', 'fs_ads_bottom_banner' => 'ads_bottom.html', 'fs_ads_right_banner' => 'ads_right.html');
+			$ads = array('fs_ads_top_banner' => 'ads_top.html', 'fs_ads_bottom_banner' => 'ads_bottom.html', 'fs_ads_left_banner' => 'ads_left.html');
 			foreach ($ads as $ad => $adfile) {
 				if (!write_file('./content/ads/' . $adfile, $ad_before . $this->input->post($ad) . $ad_after)) {
 					log_message('error', 'preferences.php/advertising: couldn\'t update HTML files');

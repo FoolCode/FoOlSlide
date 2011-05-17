@@ -30,30 +30,32 @@ if (!function_exists('get_home_team')) {
 
 	function get_home_team() {
 		$CI = & get_instance();
-		if(isset($CI->fs_loaded->home_team)) return $CI->fs_loaded->home_team;
+		if (isset($CI->fs_loaded->home_team))
+			return $CI->fs_loaded->home_team;
 		$hometeam = get_setting('fs_gen_default_team');
 		$team = new Team();
 		$team->where('name', $hometeam)->limit(1)->get();
-		if($team->result_count() < 1) return false;
-		
+		if ($team->result_count() < 1)
+			return false;
+
 		return $team;
 	}
 
 }
 
-if (!function_exists('parse_irc'))
-{
-	function parse_irc($string){
-		if(substr($string, 0, 1) == '#')
-		{
+if (!function_exists('parse_irc')) {
+
+	function parse_irc($string) {
+		if (substr($string, 0, 1) == '#') {
 			$echo = 'irc://';
 			$at = strpos($string, '@');
 			$echo .= substr($string, $at + 1);
-			$echo .= '/'.substr($string, 1, $at-1);
+			$echo .= '/' . substr($string, 1, $at - 1);
 			return $echo;
 		}
 		return $string;
 	}
+
 }
 
 /**
@@ -65,6 +67,17 @@ if (!function_exists('parse_irc'))
 function isAjax() {
 	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
 	($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+}
+
+function current_url_real() {
+	$pageURL = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+	}
+	else {
+		$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+	}
+	return $pageURL;
 }
 
 /**
@@ -98,7 +111,6 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
  * @param string $string the url of the image
  * @return string the base url for the image server
  */
-function balance_url($string = '')
-{
+function balance_url($string = '') {
 	return site_url($string);
 }

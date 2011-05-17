@@ -1,7 +1,6 @@
 <?php if (!defined('BASEPATH'))
 	exit('No direct script access allowed'); ?>
 
-<div class="panel">
 	<div class="large comic">
 		<div class="title">
 			<?php echo $comic->name; ?>
@@ -31,4 +30,3 @@
 		}
 		?>
 	</div>
-</div>

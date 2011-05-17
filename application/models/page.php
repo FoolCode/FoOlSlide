@@ -245,12 +245,12 @@ class Page extends DataMapper {
 		// Prepare the variables
 		$this->filename = $filedata["name"];
 		$this->thumbnail = "thumb_";
-		$this->height = $imagedata["0"];
-		$this->width = $imagedata["1"];
+		$this->width = $imagedata["0"];
+		$this->height = $imagedata["1"];
 		$this->size = $filedata["size"];
 		$this->mime = image_type_to_mime_type($imagedata["2"]);
-		$this->thumbheight = $thumbdata["0"];
-		$this->thumbwidth = $thumbdata["1"];
+		$this->thumbwidth = $thumbdata["0"];
+		$this->thumbheight = $thumbdata["1"];
 		$this->thumbsize = filesize($dir . "thumb_" . $filedata["name"]);
 
 		// Check from the thumbnail if the image is in colors or not

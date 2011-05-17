@@ -9,12 +9,7 @@ body
 	color:#f6f6f6;
 	margin:0 auto;
 	padding:0;
-	background:#f0f0f0;
-	background:#444;
-	//background-image: url('http://dl.dropbox.com/u/279080/bg_slide.png');
     overflow-y:scroll;
-	//background:url('http://i.imgur.com/goqEm.png') fixed;
-	//background:url(http://dl.dropbox.com/u/279080/forum/bg_rust.png);
 	background:#fafafa;
 
 }
@@ -82,6 +77,16 @@ input[type="text"]
 .clearer
 {
 	clear:both;
+}
+
+.clearer_r
+{
+	clear:right;
+}
+
+.clearer_l
+{
+	clear:left;
 }
 
 .fright
@@ -266,8 +271,8 @@ input[type="text"]
 
 .panel
 {
-	width:1000px;
-	margin:20px auto;
+	//width:1000px;
+	margin:10px 10px 5px 10px;
 	color:#555;
 }
 
@@ -489,19 +494,22 @@ input[type="text"]
 
 #page
 {
-	margin:10px;
+	margin:10px 90px 10px 10px;
+	overflow:hidden;
+	max-width:1000px;
+	padding: 5px 0;
+	position:relative;
 }
 
 #page .inner
 {
 	margin: 0 auto;
-	min-height:1000px;
 	position:relative;
 }
 
-#page img
+#page .inner img
 {
-	max-width:1000px;
+	max-width:99%;
 	margin:0 auto;
 	display:block;
 	padding:2px;
@@ -516,11 +524,10 @@ input[type="text"]
 	background:#eeedeb;
 	padding:10px 6px 10px 6px;
 	color:#999;
-	position:fixed;
+	position:absolute;
 	top:170px;
 	right:10px;
 	z-index:100;
-	height:330px;
 
 	margin: 0 0 8px;
 
@@ -644,7 +651,7 @@ input[type="text"]
 {
 	width:1000px;
 	margin: 0 auto 15px;
-	
+
     border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -736,13 +743,14 @@ input[type="text"]
 .ads a:hover{
 }
 
-.ads.banner 
+.ads.banner, .ads.vertical 
 {
-	width:728px;
 	margin: 10px 0px;
 	padding:7px 10px;
 	text-decoration:none !important;
-	
+
+	overflow:hidden;
+
 	border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -762,6 +770,40 @@ input[type="text"]
     -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
 }
 
-.ads.banner a
+.ads.banner *
 {
+	margin: 0 auto;
+}
+
+.ads.vertical
+{
+	margin:0 10px;
+	padding: 7px 7px;
+}
+
+.ads.iframe iframe
+{
+	border:none;
+}
+
+.ads.vertical.iframe iframe{
+	height:600px;
+	width:160px;
+	background:transparent;
+}
+
+.ads.banner.iframe iframe{
+	height:90px;
+	width:728px;
+	background:transparent;
+}
+
+.ads.banner.iframe {
+	width:728px;
+	margin:0 0 10px 10px;
+}
+
+#ads_iframe_bottom_banner
+{
+	margin:10px auto;
 }

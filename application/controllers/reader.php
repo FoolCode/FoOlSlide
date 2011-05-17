@@ -14,7 +14,10 @@ class Reader extends Public_Controller {
 	}
 
 	public function index() {
-		redirect('/reader/latest/');
+	//	if (!$this->agent->is_mobile() && false)
+	//		redirect('/reader/latest/');
+	//	else 
+	$this->latest();
 	}
 
 	public function team($stub = NULL) {

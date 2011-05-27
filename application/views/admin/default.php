@@ -1,9 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-
+<!DOCTYPE html>
+<html>
 	<head>
-		<title><?php echo _('FoOlSlide Administration') ?></title>
+		<title><?php echo _('Control panel') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?= base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
@@ -49,16 +47,17 @@
 			</div>
 
 			<div id="header">
-				<div class="logout">
-					<?php
-					if (logged_in()) {
-						?>
+				<?php
+					if (isset($this->tank_auth) && logged_in()) {
+						?><div class="logout">
+					
 						<a href="<?= site_url('/admin/auth/logout'); ?>">Logout <?php echo $this->tank_auth->get_username(); ?></a>
-						<?php
+						
+				</div><?php
 					}
 					?>
-				</div>
-				<div class="title"><?php echo get_setting('fs_gen_site_title'); ?> Slide - <?php echo _('control panel'); ?></div>
+				<div class="title"><?php if (isset($this->tank_auth))
+						echo get_setting('fs_gen_site_title'); ?> Slide - <?php echo _('control panel'); ?></div>
 
 			</div>
 
@@ -93,32 +92,38 @@
 										$color = 'yellow';
 									if ($value["type"] == 'notice')
 										$color = 'green';
+									if($value["message"])
 									echo '<div class="alert ' . $color . '">' . $value["message"] . '</div>';
 								}
-							$flashdata = $this->session->flashdata('notices');
-							if (!empty($flashdata))
-								foreach ($flashdata as $key => $value) {
-									if ($value["type"] == 'error')
-										$color = 'red';
-									if ($value["type"] == 'warn')
-										$color = 'yellow';
-									if ($value["type"] == 'notice')
-										$color = 'green';
-									echo '<div class="alert ' . $color . '">' . $value["message"] . '</div>';
-								}
+							if (isset($this->tank_auth)) {
+
+								$flashdata = $this->session->flashdata('notices');
+								if (!empty($flashdata))
+									foreach ($flashdata as $key => $value) {
+										if ($value["type"] == 'error')
+											$color = 'red';
+										if ($value["type"] == 'warn')
+											$color = 'yellow';
+										if ($value["type"] == 'notice')
+											$color = 'green';
+										if($value["message"])
+										echo '<div class="alert ' . $color . '">' . $value["message"] . '</div>';
+									}
+							}
 							?>
 						</div>
 
 						<?php echo $main_content_view; ?>
 
 					</div></div>
-						<div class="clearer"></div>
-				</div>
+				<div class="clearer"></div>
+			</div>
             <div class="push"></div>
 
 		</div>
 
-		<div id="footer"><div class="text">FoOlSlide Version <?php echo get_setting('fs_priv_version') ?></div></div>
+		<div id="footer"><div class="text">FoOlSlide Version <?php if (isset($this->tank_auth))
+							echo get_setting('fs_priv_version') ?></div></div>
 	</body>
 
 </html>

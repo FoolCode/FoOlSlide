@@ -175,11 +175,7 @@ class Tank_auth {
 	function is_allowed() {
 		if (!$this->is_logged_in())
 			return false;
-		$user = new Profile();
-		$user->where('user_id', $this->get_user_id())->get();
-		if ($user->group_id == 1)
-			return true;
-		if ($user->group_id == 2)
+		if($this->is_mod() || $this->is_admin())
 			return true;
 		return false;
 	}
@@ -220,9 +216,15 @@ class Tank_auth {
 	 * @returns object Teams
 	 * 
 	 */
-	function is_team($team_id = NULL) {
+	function is_team($team_id = NULL, $joint_id = NULL) {
 		if (!$this->is_logged_in())
 			return false;
+		
+		if(!is_null($joint_id) && $joint_id != 0)
+		{
+			$teams = new Team();
+			return($this->is_team_array($teams->get_teams(0, $joint_id)));
+		}
 
 		$memberships = new Membership();
 		$memberships->where('user_id', $this->get_user_id())->where('accepted', 1);

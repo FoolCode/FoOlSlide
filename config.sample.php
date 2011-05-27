@@ -21,13 +21,7 @@ $db['default']['password'] = '';
 $db['default']['database'] = '';
 
 // The prefix for the tables in the database
-$db['default']['dbprefix'] = '';
-
-// The admin's email (will be overwritten by database)
-$config['admin_email'] = "";
-
-// Site title (will be overwritten via database)
-$config['website_name'] = "";
+$db['default']['dbprefix'] = 'fs_';
 
 // Session encryption: just tap randomly on your keyboard to make a random key
 $config['encryption_key'] = '';

@@ -21,6 +21,24 @@ if (!function_exists('get_setting')) {
 }
 
 /**
+ * Loads variables from database for get_setting()
+ * 
+ * @author Woxxy
+ */
+if (!function_exists('load_settings')) {
+	function load_settings() {
+		$CI = & get_instance();
+		$array = $CI->db->get('preferences')->result_array();
+		$result = array();
+		foreach($array as $item)
+		{
+			$result[$item['name']] = $item['value'];
+		}
+		$CI->fs_options = $result;  
+	}
+}
+
+/**
  * Caches in a variable and returns the home team's object
  * 
  * @author Woxxy
@@ -106,8 +124,24 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 }
 
 /**
+ * Returns a random string
+ * 
+ * @param int length of string to generate
+ * @return string random string
+ */
+function random_string($length = 20) {
+     $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+     $string = '';    
+    for ($p = 0; $p < $length; $p++) {
+         $string .= $characters[mt_rand(0, strlen($characters-1))];
+     }
+    return $string;
+}
+
+/**
  * Future function for load balancing the source of the images
  * 
+ * @author Woxxy
  * @param string $string the url of the image
  * @return string the base url for the image server
  */

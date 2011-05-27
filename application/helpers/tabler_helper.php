@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 if (!function_exists('tabler')) {
 
-	function tabler($rows, $list = TRUE, $edit = TRUE) {
+	function tabler($rows, $list = TRUE, $edit = TRUE, $repopulate = FALSE) {
 		$result = array();
 		$CI = & get_instance();
 
@@ -34,7 +34,7 @@ if (!function_exists('tabler')) {
 					if (is_array($column)) {
 						$result[$rowk][$colk]["table"] = writize($column);
 						if (isset($column['type'])) {
-							$result[$rowk][$colk]["form"] = formize($column);
+							$result[$rowk][$colk]["form"] = formize($column, $repopulate);
 							$result[$rowk][$colk]["type"] = $column['type'];
 						}
 					}
@@ -111,8 +111,9 @@ if (!function_exists('tabler')) {
 
 if (!function_exists('formize')) {
 
-	function formize($column) {
+	function formize($column, $repopulate) {
 		$CI = & get_instance();
+		if($repopulate && $CI->input->post()) $column['value'] = (set_value($column['name'])=="")?$column["value"]:set_value($column['name']);
 		if (isset($column['preferences']))
 			$column['value'] = get_setting($column['name']);
 
@@ -200,6 +201,19 @@ function writize($column) {
 			$column['value'] = get_setting('fs_gen_default_lang');
 		$column['value'] = $lang[$column['value']];
 	}
+	
+	if (isset($column['type']) && $column['type'] == 'nation') {
+		$value = $column['value'];
+		$column['value'] = "";
+		$nations = config_item('fs_country_names');
+		foreach($value as $key => $item)
+		{
+			$num = array_search($item, config_item('fs_country_codes'));
+			if($key>0) $column['value'] .= ", ";
+			$column['value'] .= $nations[$num];
+		}
+	}
+
 	return $column['value'];
 }
 

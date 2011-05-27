@@ -7,6 +7,7 @@ class Admin_Controller extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
+		
 		$this->viewdata["sidebar"] = $this->sidebar();
 	}
 
@@ -45,7 +46,7 @@ class Admin_Controller extends MY_Controller {
 		"content" => array(
 			"general" => array("level" => "admin", "name" => _("General")),
 			"advertising" => array("level" => "admin", "name" => _("Advertising")),
-			"server" => array("level" => "admin", "name" => _("Server"))
+		//	"server" => array("level" => "admin", "name" => _("Server"))
 		)
 	)
 		);

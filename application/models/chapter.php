@@ -153,7 +153,17 @@ class Chapter extends DataMapper {
 		if (!$CI->tank_auth->is_allowed())
 			$this->where('hidden', 0);
 
-		return parent::get($limit, $offset);
+		$result = parent::get($limit, $offset);
+		
+		foreach($this->all as $key => $item)
+		{
+			if(!$this->get_comic())
+			{
+				unset($this->all[$key]);
+			}
+		}
+		
+		return $result;
 	}
 
 	/**
@@ -216,6 +226,10 @@ class Chapter extends DataMapper {
 		if (count($this->all) == 1) {
 			if (!isset($this->comic))
 				$this->comic = new Comic($this->comic_id);
+				if($this->comic->result_count() != 1)
+				{
+					return false;
+				}
 			return true;
 		}
 		else

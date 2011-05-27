@@ -46,7 +46,7 @@ $config['email_activation_expire'] = 60*60*24*2;
 $config['email_account_details'] = TRUE;
 $config['use_username'] = TRUE;
 
-$config['username_min_length'] = 5;
+$config['username_min_length'] = 4;
 $config['username_max_length'] = 20;
 $config['password_min_length'] = 5;
 $config['password_max_length'] = 20;
@@ -140,7 +140,8 @@ $config['recaptcha_private_key'] = '';
 */
 $config['db_table_prefix'] = '';
 
-require(FCPATH."config.php");
+if (file_exists(FCPATH . "config.php"))
+	require(FCPATH . "config.php");
 
 /* End of file tank_auth.php */
 /* Location: ./application/config/tank_auth.php */

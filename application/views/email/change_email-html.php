@@ -11,7 +11,7 @@
 You have changed your email address for <?php echo $site_name; ?>.<br />
 Follow this link to confirm your new email address:<br />
 <br />
-<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/auth/reset_email/'.$user_id.'/'.$new_email_key); ?>" style="color: #3366cc;">Confirm your new email</a></b></big><br />
+<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/admin/auth/reset_email/'.$user_id.'/'.$new_email_key); ?>" style="color: #3366cc;">Confirm your new email</a></b></big><br />
 <br />
 Link doesn't work? Copy the following link to your browser address bar:<br />
 <nobr><a href="<?php echo site_url('/admin/auth/reset_email/'.$user_id.'/'.$new_email_key); ?>" style="color: #3366cc;"><?php echo site_url('/admin/auth/reset_email/'.$user_id.'/'.$new_email_key); ?></a></nobr><br />

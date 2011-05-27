@@ -127,12 +127,14 @@ class Comics extends Admin_Controller {
 
 		$table = ormer($comic);
 
+		$licenses = new License();
+		
 		$table[] = array(
 			_('Licensed in'),
 			array(
 				'name' => 'licensed',
 				'type' => 'nation',
-				'value' => array(),
+				'value' => $licenses->get_by_comic($comic->id),
 				'help' => _('Insert the nations where the comic is licensed in order to limit the availability.')
 			)
 		);

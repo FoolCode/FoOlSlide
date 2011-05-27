@@ -9,6 +9,7 @@ html
 {
     height: 100%;
     background: #fff url(images/background.png);
+	background:#f6f6f6;
 }
 
 body
@@ -554,6 +555,7 @@ textarea:focus, textarea:hover
 {
     margin: 0 5px 5px;
     padding:8px;
+	line-height:125%;
 }
 
 .alert.red

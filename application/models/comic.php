@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class Comic extends DataMapper {
 
 	var $has_one = array();
-	var $has_many = array('chapter');
+	var $has_many = array('chapter', 'license');
 	var $validation = array(
 		'name' => array(
 			'rules' => array('required', 'unique', 'max_length' => 256),
@@ -99,10 +99,26 @@ class Comic extends DataMapper {
 		$CI = & get_instance();
 
 		// Check if the user is allowed to see protected chapters.
-		if (!$CI->tank_auth->is_allowed())
+		if (!$CI->tank_auth->is_allowed()) {
 			$this->where('hidden', 0);
+		}
 
-		return parent::get($limit, $offset);
+		$result = parent::get($limit, $offset);
+		
+		$this->get_licenses();
+		
+		$CI = & get_instance();
+		
+		if(!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team())
+		// Remove from the array the comics licensed in the user's nation
+		foreach($this->all as $key => $item)
+		{
+			if(in_array($CI->session->userdata('nation'), $this->licenses)) {
+					unset($this->all[$key]);
+			}
+		}
+		
+		return $result;
 	}
 
 	/**
@@ -153,6 +169,33 @@ class Comic extends DataMapper {
 		}
 
 		return $result;
+	}
+	
+	/**
+	 * Gets the nations where the comic is licensed
+	 * 
+	 * @author	Woxxy
+	 * @return	bool true on success
+	 */
+	public function get_licenses() {
+		if (count($this->all) == 1) {
+			if (isset($this->licenses))
+				return true;
+			$license = new License();
+			$this->licenses = $license->get_by_comic($this->id);
+			return true;
+		}
+		else
+		// Check if the variable is not yet set, in order to save a databse read.
+			foreach ($this->all as $item) {
+				if (isset($item->licenses))
+					continue;
+				$license = new License();
+				$item->licenses = $license->get_by_comic($item->id);
+			}
+
+		// All good, return true.
+		return true;
 	}
 
 	/**
@@ -314,9 +357,13 @@ class Comic extends DataMapper {
 			}
 			return false;
 		}
-		if (isset($data['licensed'])) {
-			$this->update_license($data['licensed']);
+		
+		if (!isset($data['licensed'])) {
+			$data['licensed'] = array();
 		}
+
+		$license = new License();
+		$license->update($this->id, $data['licensed']);
 		// Good job!
 		return true;
 	}

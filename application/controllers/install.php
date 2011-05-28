@@ -128,7 +128,7 @@ class Install extends Install_Controller {
 		);
 
 		if ($post = $this->input->post()) {
-			if($this->_submit($post) == 'stop') {
+			if ($this->_submit($post) == 'stop') {
 				return FALSE;
 			}
 			set_notice('error', validation_errors());
@@ -181,33 +181,36 @@ class Install extends Install_Controller {
 		}
 
 		$config = read_file('config.sample.php');
-		$config = str_replace("\$db['default']['hostname'] = 'localhost'", "\$db['default']['hostname'] = '".addslashes($post["db_hostname"])."'", $config);
-		$config = str_replace("\$db['default']['username'] = ''", "\$db['default']['username'] = '".addslashes($post["db_username"])."'", $config);
-		$config = str_replace("\$db['default']['password'] = ''", "\$db['default']['password'] = '".addslashes($post["db_password"])."'", $config);
-		$config = str_replace("\$db['default']['database'] = ''", "\$db['default']['database'] = '".addslashes($post["db_name"])."'", $config);
-		$config = str_replace("\$db['default']['dbprefix'] = 'fs_'", "\$db['default']['dbprefix'] = '".addslashes($post["db_prefix"])."'", $config);
-		
+		$config = str_replace("\$db['default']['hostname'] = 'localhost'", "\$db['default']['hostname'] = '" . addslashes($post["db_hostname"]) . "'", $config);
+		$config = str_replace("\$db['default']['username'] = ''", "\$db['default']['username'] = '" . addslashes($post["db_username"]) . "'", $config);
+		$config = str_replace("\$db['default']['password'] = ''", "\$db['default']['password'] = '" . addslashes($post["db_password"]) . "'", $config);
+		$config = str_replace("\$db['default']['database'] = ''", "\$db['default']['database'] = '" . addslashes($post["db_name"]) . "'", $config);
+		$config = str_replace("\$db['default']['dbprefix'] = 'fs_'", "\$db['default']['dbprefix'] = '" . addslashes($post["db_prefix"]) . "'", $config);
+
 		$random_string = random_string(20);
 		$this->config->set_item('encryption_key', $random_string);
-		$config = str_replace("\$config['encryption_key'] = ''", "\$config['encryption_key'] = '".addslashes($random_string)."'", $config);
+		$config = str_replace("\$config['encryption_key'] = ''", "\$config['encryption_key'] = '" . addslashes($random_string) . "'", $config);
 
 		$manual_config = FALSE;
-		if(!write_file('config.php', $config))
-		{
+		if (!write_file('config.php', $config)) {
 			$manual_config = TRUE;
 		}
-		
+
 		$this->load->library('migration');
 		$this->migration->version(1);
 		$this->load->library('session');
 		$this->load->library('tank_auth');
 		$this->load->library('datamapper');
 		load_settings();
-		
+
 		$user = $this->tank_auth->create_user($post["username"], $post["email"], $post["password"], FALSE);
-		$profile = new Profile();
-		$profile->change_group($user['user_id'], 1);
-		
+		if ($user !== FALSE) {
+			$profile = new Profile();
+			$profile->where('user_id', $user['user_id'])->get();
+			$profile->group_id = 1;
+			$profile->save();
+		}
+
 		if (!is_dir('content/ads'))
 			mkdir('content/ads');
 		if (!is_dir('content/cache'))
@@ -217,7 +220,7 @@ class Install extends Install_Controller {
 		if (!is_dir('content/comics'))
 			mkdir('content/comics');
 
-		if($manual_config) {
+		if ($manual_config) {
 			$this->notices = array();
 			$data["config"] = $config;
 			$this->viewdata['main_content_view'] = $this->load->view("install/manual_config", $data, TRUE);

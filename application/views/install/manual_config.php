@@ -17,7 +17,7 @@ $textarea = array(
 );
 echo form_textarea($textarea); 
 ?>
-<br/>
+<br/><br/>
 <script type="text/javascript">
 function SelectAll(id)
 {

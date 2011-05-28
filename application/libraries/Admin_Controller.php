@@ -46,6 +46,7 @@ class Admin_Controller extends MY_Controller {
 		"content" => array(
 			"general" => array("level" => "admin", "name" => _("General")),
 			"advertising" => array("level" => "admin", "name" => _("Advertising")),
+			"upgrade" => array("level" => "admin", "name" => _("Upgrade")),
 		//	"server" => array("level" => "admin", "name" => _("Server"))
 		)
 	)

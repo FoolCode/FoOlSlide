@@ -166,7 +166,6 @@ class Page extends DataMapper {
 		// Check if the variable is not yet set, in order to save a databse read.
 		if (!isset($this->chapter)) {
 			$this->chapter = new Chapter($this->chapter_id);
-			log_message('error', 'chapter id ' . $this->chapter->id);
 
 			if (!$this->chapter->get_comic()) {
 				log_message('error', 'get_chapter: comic not found');

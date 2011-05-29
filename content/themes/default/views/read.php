@@ -16,7 +16,7 @@ if (!defined('BASEPATH'))
 
 <?php
 if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
-	echo '<div class="ads iframe banner" id="ads_iframe_top_banner"><iframe src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
+	echo '<div class="ads iframe banner" id="ads_iframe_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
 ?>
 
 <?php
@@ -31,7 +31,7 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 
 <?php
 if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && get_setting('fs_ads_left_banner_reload'))
-	echo '<div class="ads iframe vertical fleft" id="ads_iframe_left_banner"><iframe src="' . site_url() . 'content/ads/ads_left.html' . '"></iframe></div>';
+	echo '<div class="ads iframe vertical fleft" id="ads_iframe_left_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_left.html' . '"></iframe></div>';
 ?>
 
 <div id="page">
@@ -45,7 +45,7 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 
 <?php
 if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
-	echo '<div class="ads iframe banner" id="ads_iframe_bottom_banner"><iframe src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
+	echo '<div class="ads iframe banner" id="ads_iframe_bottom_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
 ?>
 
 <?php

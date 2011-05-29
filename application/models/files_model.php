@@ -49,11 +49,14 @@ class Files_model extends CI_Model {
 			log_message('error', 'compressed_chapter: failed creating dir');
 			return false;
 		}
-		$this->load->library('unzip');
-		$this->unzip->allow(array('png', 'gif', 'jpeg', 'jpg'));
-		$this->unzip->extract($data["full_path"], $cachedir);
+		
+		if(function_exists('rar_open') && strtolower($data["file_ext"]) == '.rar')
+			$this->uncompress_rar($data["full_path"], $cachedir);
+		
+		if (strtolower($data["file_ext"]) == '.zip')
+			$this->uncompress_zip($data["full_path"], $cachedir);
 
-		$this->folder_chapter($dir);
+		$this->folder_chapter($cachedir, $chapter, $overwrite);
 
 		// Let's delete all the cache
 		if (!delete_files($cachedir, TRUE)) {
@@ -69,11 +72,30 @@ class Files_model extends CI_Model {
 		return true;
 	}
 
-	public function folder_chapter($dir) {
+	public function uncompress_rar($path, $cachedir) {
+		log_message('error', 'rar');
+		$rar_file = rar_open($path);
+		$entries = rar_list($rar_file);
+		$allowed = array('.jpg', '.gif', '.png', 'jpeg');
+		foreach ($entries as $entry) {
+			if (in_array(substr($entry->getName(), -4), $allowed))
+				$entry->extract($cachedir);
+		}
+		rar_close($rar_file);
+			log_message('error', 'rar done');
+	}
+	
+	public function uncompress_zip($path, $cachedir) {
+		$this->load->library('unzip');
+		$this->unzip->allow(array('png', 'gif', 'jpeg', 'jpg'));
+		$this->unzip->extract($data["full_path"], $cachedir);
+	}
+
+	public function folder_chapter($cachedir, $chapter, $overwrite) {
 		// Get the filename
 		$dirarray = get_dir_file_info($cachedir, FALSE);
 
-		$extension = pathinfo($dir, PATHINFO_EXTENSION);
+	//	$extension = pathinfo($cachedir, PATHINFO_EXTENSION);
 
 		foreach ($dirarray as $key => $value) {
 			if ($extension && !in_array(strtolower($extension), array('jpeg', 'jpg', 'png', 'gif')))
@@ -148,6 +170,7 @@ class Files_model extends CI_Model {
 		$data['overwrite'] = 1;
 		$data['full_path'] = $this->input->post('server_path');
 		$data['raw_name'] = 'import_' . $chapter->id;
+		$data['file_ext'] = '.'.end(explode('.', $this->input->post('server_path')));
 		if (!$this->compressed_chapter($data)) {
 			$chapter->remove();
 			log_message('error', 'import_compressed(): Couldn\'t add the pages to the chapter');

@@ -26,16 +26,17 @@ if (!function_exists('get_setting')) {
  * @author Woxxy
  */
 if (!function_exists('load_settings')) {
+
 	function load_settings() {
 		$CI = & get_instance();
 		$array = $CI->db->get('preferences')->result_array();
 		$result = array();
-		foreach($array as $item)
-		{
+		foreach ($array as $item) {
 			$result[$item['name']] = $item['value'];
 		}
-		$CI->fs_options = $result;  
+		$CI->fs_options = $result;
 	}
+
 }
 
 /**
@@ -130,12 +131,12 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
  * @return string random string
  */
 function random_string($length = 20) {
-     $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-     $string = '';    
-    for ($p = 0; $p < $length; $p++) {
-         $string .= $characters[mt_rand(0, strlen($characters-1))];
-     }
-    return $string;
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+	$string = '';
+	for ($p = 0; $p < $length; $p++) {
+		$string .= $characters[mt_rand(0, strlen($characters - 1))];
+	}
+	return $string;
 }
 
 /**
@@ -147,4 +148,40 @@ function random_string($length = 20) {
  */
 function balance_url($string = '') {
 	return site_url($string);
+}
+
+/**
+ * 
+ */
+function HTMLpurify($dirty_html, $set = 'default') {
+	if (is_array($dirty_html)) {
+		foreach ($dirty_html as $key => $val) {
+			$dirty_html[$key] = purify($val);
+		}
+
+		return $dirty_html;
+	}
+
+	if (trim($dirty_html) === '') {
+		return $dirty_html;
+	}
+
+	require_once(FCPATH . "assets/htmlpurifier/library/HTMLPurifier.auto.php");
+	require_once(FCPATH . "assets/htmlpurifier/library/HTMLPurifier.func.php");
+
+	$config = HTMLPurifier_Config::createDefault();
+	if(!file_exists('content/cache/HTMLPurifier')) mkdir('content/cache/HTMLPurifier');
+	$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
+	$config->set('Cache.SerializerPath', FCPATH.'content/cache/HTMLPurifier' );
+
+	
+	
+	switch($set) {
+		case 'default':
+			break;
+		case 'unallowed':
+			$config->set('HTML.AllowedElements', '');
+			break;
+	}
+	return HTMLPurifier($dirty_html, $config);
 }

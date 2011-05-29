@@ -37,7 +37,7 @@ class Upgrade_model extends CI_Model {
 	function get_file($url) {
 		$this->clean();
 		$zip = $this->curl->simple_get($url);
-		if (!$zip){
+		if (!$zip) {
 			log_message('error', 'upgrade_model get_file(): impossible to get the update from FoOlPod');
 			set_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem. Browse <a href="http://foolrulez.com/pod">http://foolrulez.com/pod</a> to check if it\'s a known issue.'));
 			return FALSE;
@@ -120,7 +120,7 @@ class Upgrade_model extends CI_Model {
 		}
 
 		unlink('index.php');
-		rename('content/cache/upgrade/index.php', 'index.php');		
+		rename('content/cache/upgrade/index.php', 'index.php');
 		delete_files('application/', TRUE);
 		rename('content/cache/upgrade/application', 'application');
 		delete_files('system/', TRUE);
@@ -132,7 +132,11 @@ class Upgrade_model extends CI_Model {
 		delete_files('content/themes/mobile/', TRUE);
 		rename('content/cache/upgrade/content/themes/mobile', 'content/themes/mobile');
 
-		$this->db->update('preferences', array('value' => $latest->version.'.'.$latest->subversion.'.'.$latest->subsubversion), array('name' => 'fs_priv_version'));
+		if (!$this->migration->latest()) {
+			show_error($this->migration->error);
+		}
+
+		$this->db->update('preferences', array('value' => $latest->version . '.' . $latest->subversion . '.' . $latest->subsubversion), array('name' => 'fs_priv_version'));
 		$this->upgrade_model->clean();
 	}
 

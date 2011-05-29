@@ -101,5 +101,4 @@ echo buttoner();
              </div>';
 	}
 	?> 
-
 </div>

@@ -154,15 +154,13 @@ class Chapter extends DataMapper {
 			$this->where('hidden', 0);
 
 		$result = parent::get($limit, $offset);
-		
-		foreach($this->all as $key => $item)
-		{
-			if(!$this->get_comic())
-			{
+
+		foreach ($this->all as $key => $item) {
+			if (!$this->get_comic()) {
 				unset($this->all[$key]);
 			}
 		}
-		
+
 		return $result;
 	}
 
@@ -223,21 +221,13 @@ class Chapter extends DataMapper {
 	 * @return	boolean True on success, false on failure.
 	 */
 	public function get_comic() {
-		if (count($this->all) == 1) {
-			if (!isset($this->comic))
-				$this->comic = new Comic($this->comic_id);
-				if($this->comic->result_count() != 1)
-				{
-					return false;
-				}
+		if (isset($this->comic))
 			return true;
+		$this->comic = new Comic($this->comic_id);
+		foreach ($this->all as $key => $item) {
+			if (!isset($item->comic))
+				$item->comic = new Comic($item->comic_id);
 		}
-		else
-		// Check if the variable is not yet set, in order to save a databse read.
-			foreach ($this->all as $item) {
-				if (!isset($item->comic))
-					$item->comic = new Comic($item->comic_id);
-			}
 
 		// All good, return true.
 		return true;
@@ -250,21 +240,16 @@ class Chapter extends DataMapper {
 	 * @return	boolean True on success, false on failure.
 	 */
 	public function get_teams() {
-		if (count($this->all) == 1) {
-			if (isset($this->teams))
-				return true;
-			$teams = new Team();
-			$this->teams = $teams->get_teams($this->team_id, $this->joint_id);
+		if (isset($this->teams))
 			return true;
+		$teams = new Team();
+		$this->teams = $teams->get_teams($this->team_id, $this->joint_id);
+		foreach ($this->all as $item) {
+			if (isset($item->teams))
+				continue;
+			$teams = new Team();
+			$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
 		}
-		else
-		// Check if the variable is not yet set, in order to save a databse read.
-			foreach ($this->all as $item) {
-				if (isset($item->teams))
-					continue;
-				$teams = new Team();
-				$item->teams = $teams->get_teams($item->team_id, $item->joint_id);
-			}
 
 		// All good, return true.
 		return true;

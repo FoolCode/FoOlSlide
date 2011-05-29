@@ -52,6 +52,33 @@
 				}
 				window.__twitterIntentHandler = true;
 			}());
+			
+			jQuery(document).ready(function(){
+				<?php if ($this->agent->is_browser('MSIE')) { ?>
+
+				// Let's make placeholders work on IE and old browsers too
+				jQuery('[placeholder]').focus(function() {
+					var input = jQuery(this);
+					if (input.val() == input.attr('placeholder')) {
+						input.val('');
+						input.removeClass('placeholder');
+					}
+				}).blur(function() {
+					var input = jQuery(this);
+					if (input.val() == '' || input.val() == input.attr('placeholder')) {
+						input.addClass('placeholder');
+						input.val(input.attr('placeholder'));
+					}
+				}).blur().parents('form').submit(function() {
+					jQuery(this).find('[placeholder]').each(function() {
+						var input =jQuery(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					})
+				}); <?php } ?>
+			});
+			
 		</script>
 	</head>
 	<body>
@@ -66,20 +93,20 @@
 						<li>
 							<a href="<?php echo site_url('/reader/list') ?>"><?php echo _('Series list'); ?></a>
 						</li>
-						<li style="width:280px;">
+						<li style="">
 							<?php
 							echo form_open("/reader/search/");
-							echo form_input(array('name' => 'search', 'placeholder' => _('To search, type and hit enter'), 'id' => 'searchbox'));
+							echo form_input(array('name' => 'search', 'placeholder' => _('To search series, type and hit enter'), 'id' => 'searchbox', 'class' => 'fright'));
 							echo form_close();
 							?>
-							<a href="<?php echo site_url('/reader/search/') ?>"><?php echo _('Search'); ?></a>
 						</li>
 						<div class="clearer"></div>
 					</ul>
 				</div>
 
 				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
-				<?php echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">Go back to site &crarr;</a></div>'; ?>
+				<?php if (get_setting('fs_gen_back_url'))
+					echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">Go back to site &crarr;</a></div>'; ?>
 				<div class="clearer"></div>	
 			</div>
 
@@ -90,13 +117,17 @@
 				<?php
 				if (!isset($is_reader) || !$is_reader) {
 					echo '<div class="panel">' . get_sidebar();
-				if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active')) echo '<div class="ads static vertical fleft" id="ads_static_left_banner">'.get_setting('fs_ads_left_banner').'</div>';
-				else echo '<style type="text/css">.panel {width:1000px; margin: 0 auto;}</style>';
-				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active')) echo '<div class="ads static banner" id="ads_static_top_banner">'.get_setting('fs_ads_top_banner').'</div>';
+					if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'))
+						echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
+					else
+						echo '<style type="text/css">.panel {width:1000px; margin: 0 auto;}</style>';
+					if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active'))
+						echo '<div class="ads static banner" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
 				}
 				echo $template['body'];
-				
-				if ((!isset($is_reader) || !$is_reader) && get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active')) echo '<div class="ads static banner" id="ads_static_top_banner">'.get_setting('fs_ads_top_banner').'</div>';
+
+				if ((!isset($is_reader) || !$is_reader) && get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active'))
+					echo '<div class="ads static banner" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
 
 				if (!isset($is_reader) || !$is_reader)
 					echo '</div>';
@@ -107,7 +138,7 @@
 		</div>
 		<div id="footer">
 			<div class="text">
-<?php echo get_setting('fs_gen_footer_text'); ?>
+				<?php echo get_setting('fs_gen_footer_text'); ?>
 			</div>
 		</div>
 	</body>

@@ -17,7 +17,7 @@
                 if (plug)
                 {
                     jQuery.post(href, function(result){
-						if(location.href == result.href) window.location.reload();
+						if(location.href == result.href) window.location.reload(true);
 						location.href = result.href;
 					}, 'json');
                 }
@@ -32,6 +32,34 @@
 					jQuery(e).attr('onChange', '');
 				}
             }
+			
+			jQuery(document).ready(function(){
+					<?php 
+					$CI = & get_instance();
+					if ($CI->agent->is_browser('MSIE')) { ?>
+
+				// Let's make placeholders work on IE and old browsers too
+				jQuery('[placeholder]').focus(function() {
+					var input = jQuery(this);
+					if (input.val() == input.attr('placeholder')) {
+						input.val('');
+						input.removeClass('placeholder');
+					}
+				}).blur(function() {
+					var input = jQuery(this);
+					if (input.val() == '' || input.val() == input.attr('placeholder')) {
+						input.addClass('placeholder');
+						input.val(input.attr('placeholder'));
+					}
+				}).blur().parents('form').submit(function() {
+					jQuery(this).find('[placeholder]').each(function() {
+						var input =jQuery(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					})
+				}); <?php } ?>
+			});
         </script>
 
 	</head>

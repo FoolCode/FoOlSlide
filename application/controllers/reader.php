@@ -35,7 +35,7 @@ class Reader extends Public_Controller {
 	} 
 	
 	public function lista($page = 1) {
-		$this->template->title('Comic list');
+		$this->template->title(_('Series list'));
 		
 		$comics = new Comic();
 		$comics->get_paged($page, 15);
@@ -50,12 +50,12 @@ class Reader extends Public_Controller {
 	}
 	
 	public function latest($page = 1) {
-		$this->template->title('Comic list');
+		$this->template->title(_('Series list'));
 		// Create a "Chapter" object. It can contain more than one chapter!
 		$chapters = new Chapter();
 		
 		// With each, get the comic they depends from
-		$chapters->include_related('comic');
+		//$chapters->include_related('comic');
 		
 		// Lets group these 25 releases by comic, so it looks like less of a mess.
 		$chapters->order_by_related('comic', 'name');
@@ -139,7 +139,7 @@ class Reader extends Public_Controller {
 		$this->template->set('current_page', $current_page);
 		$this->template->set('pages', $pages);
 		$this->template->set('next_chapter', $next_chapter);
-		$this->template->title($comice->name . ' :: Chapter ' . $chaptere->chapter);
+		$this->template->title($comice->name . ' :: '._('Chapter').' ' . $chaptere->chapter);
 		$this->template->build('read');
 	}
 	
@@ -160,4 +160,29 @@ class Reader extends Public_Controller {
 		$this->template->build('comic');
 	}
 	
+	public function search()
+	{
+		if(!$this->input->post('search'))
+		{
+			$this->template->title(_('Search'));
+			$this->template->build('search_pre');
+			return TRUE;
+		}
+		
+		$search = HTMLpurify($this->input->post('search'), 'unallowed');
+		$this->template->title(_('Search'));
+		
+		$comics = new Comic();
+		$comics->ilike('name', $search)->limit(20)->get();
+		foreach($comics->all as $comic)
+		{
+			$comic->latest_chapter = new Chapter();
+			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();
+		}
+		
+		
+		$this->template->set('search', $search);
+		$this->template->set('comics', $comics);
+		$this->template->build('search');
+	}
 }

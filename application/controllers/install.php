@@ -197,7 +197,7 @@ class Install extends Install_Controller {
 		}
 
 		$this->load->library('migration');
-		$this->migration->version(1);
+		$this->migration->install();
 		$this->load->library('session');
 		$this->load->library('tank_auth');
 		$this->load->library('datamapper');

@@ -71,7 +71,11 @@ input[type="text"]
 
 #searchbox
 {
-	float:right;
+	width:250px;
+}
+
+.center {
+	text-align:center;
 }
 
 .clearer
@@ -99,6 +103,10 @@ input[type="text"]
 	float:left !important;
 }
 
+.placeholder {
+	color:#999;
+}
+
 
 #content
 {
@@ -113,6 +121,8 @@ input[type="text"]
 	color:#E26A51;
 	border-top:none;
 	border-bottom:6px solid #52A9E3;
+	border-left:1px solid #52A9E3;
+	border-right:1px solid #52A9E3;
 	margin:0 8px;
 
 	border-bottom-right-radius:9px;
@@ -183,6 +193,7 @@ input[type="text"]
 	color:#fff !important;
 	text-shadow:0px 0px 1px #333;
 	color:rgba(255,255,255,1) !important;
+	border:1px solid #ddd;
 	border:1px solid rgba(56,56,56,0.4) !important;
 	margin: 0 4px 0 0;
 	min-width:50px;
@@ -191,6 +202,7 @@ input[type="text"]
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 
+	background:#999;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(201,191,171,.30)),
@@ -271,7 +283,6 @@ input[type="text"]
 
 .panel
 {
-	//width:1000px;
 	margin:10px 10px 5px 10px;
 	color:#555;
 }
@@ -294,8 +305,9 @@ input[type="text"]
 
 	overflow:hidden;
 
-	background:#333;
+	background:#eeecea;
 	color:#aaa;
+	border:1px solid #999;
 	border-radius:5px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -377,7 +389,8 @@ input[type="text"]
 
 	overflow:hidden;
 
-	background:#333;
+	background:#eeecea;
+	border:1px solid #999;
 	color:#aaa;
 	border-radius:5px;
 	-moz-border-radius:5px;
@@ -465,7 +478,9 @@ input[type="text"]
 {
 	margin: 0 0 10px;
 	padding:10px 8px 10px 8px;
-    color:#666;
+ 	background:#eeecea;
+	border: 1px solid #999;
+	color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
@@ -651,7 +666,8 @@ input[type="text"]
 {
 	width:1000px;
 	margin: 0 auto 15px;
-
+	background:#eeecea;
+	border: 1px solid #999;	
     border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -748,7 +764,8 @@ input[type="text"]
 	margin: 10px 0px;
 	padding:7px 10px;
 	text-decoration:none !important;
-
+	background:#eeecea;
+	border: 1px solid #999;
 	overflow:hidden;
 
 	border-radius:4px;

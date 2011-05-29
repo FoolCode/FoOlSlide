@@ -104,20 +104,19 @@ class Comic extends DataMapper {
 		}
 
 		$result = parent::get($limit, $offset);
-		
+
 		$this->get_licenses();
-		
+
 		$CI = & get_instance();
-		
-		if(!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team())
+
+		if (!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team())
 		// Remove from the array the comics licensed in the user's nation
-		foreach($this->all as $key => $item)
-		{
-			if(in_array($CI->session->userdata('nation'), $this->licenses)) {
+			foreach ($this->all as $key => $item) {
+				if (in_array($CI->session->userdata('nation'), $this->licenses)) {
 					unset($this->all[$key]);
+				}
 			}
-		}
-		
+
 		return $result;
 	}
 
@@ -170,7 +169,7 @@ class Comic extends DataMapper {
 
 		return $result;
 	}
-	
+
 	/**
 	 * Gets the nations where the comic is licensed
 	 * 
@@ -178,21 +177,17 @@ class Comic extends DataMapper {
 	 * @return	bool true on success
 	 */
 	public function get_licenses() {
-		if (count($this->all) == 1) {
-			if (isset($this->licenses))
-				return true;
-			$license = new License();
-			$this->licenses = $license->get_by_comic($this->id);
+		if (isset($this->licenses))
 			return true;
-		}
-		else
+		$license = new License();
+		$this->licenses = $license->get_by_comic($this->id);
 		// Check if the variable is not yet set, in order to save a databse read.
-			foreach ($this->all as $item) {
-				if (isset($item->licenses))
-					continue;
-				$license = new License();
-				$item->licenses = $license->get_by_comic($item->id);
-			}
+		foreach ($this->all as $item) {
+			if (isset($item->licenses))
+				continue;
+			$license = new License();
+			$item->licenses = $license->get_by_comic($item->id);
+		}
 
 		// All good, return true.
 		return true;
@@ -357,7 +352,7 @@ class Comic extends DataMapper {
 			}
 			return false;
 		}
-		
+
 		if (!isset($data['licensed'])) {
 			$data['licensed'] = array();
 		}
@@ -554,42 +549,36 @@ class Comic extends DataMapper {
 			return balance_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
 		return false;
 	}
-	
+
 	function update_license($nations) {
 		$comic_id = $this->id;
 		log_message('error', 'updatecomic');
 		$licenses = new License();
 		$licenses->where('comic_id', $comic_id)->get();
-		
+
 		$removeme = array();
-		foreach($licenses->all as $key => $license)
-		{
+		foreach ($licenses->all as $key => $license) {
 			$removeme[$key] = $license->nation;
 		}
-		
+
 		$temp_nations = $nations;
-		foreach($nations as $key => $nation)
-		{
+		foreach ($nations as $key => $nation) {
 			$found = false;
-			foreach($licenses->all as $subkey => $license)
-			{
-				if($nation == $license->nation) 
-				{
+			foreach ($licenses->all as $subkey => $license) {
+				if ($nation == $license->nation) {
 					unset($removeme[$subkey]);
 					$found = true;
 				}
 			}
-			if(!$found && $nation != "")
-			{
+			if (!$found && $nation != "") {
 				$new_license = new License();
 				$new_license->comic_id = $comic_id;
 				$new_license->nation = $nation;
 				$new_license->save();
 			}
 		}
-		
-		foreach($removeme as $key => $nation)
-		{
+
+		foreach ($removeme as $key => $nation) {
 			$remove = new License();
 			$remove->where('comic_id', $comic_id)->where('nation', $nation)->get()->remove();
 		}
@@ -604,8 +593,7 @@ class Comic extends DataMapper {
 	public function directory() {
 		return $this->stub . '_' . $this->uniqid;
 	}
-	
-	
+
 	/**
 	 * Returns a ready to use html <a> link that points to the reader
 	 *
@@ -634,10 +622,11 @@ class Comic extends DataMapper {
 	 */
 	public function edit_href() {
 		$CI = & get_instance();
-		if(!$CI->tank_auth->is_allowed()) return "";
-		return site_url('/admin/comics/comic/'.$this->stub);
+		if (!$CI->tank_auth->is_allowed())
+			return "";
+		return site_url('/admin/comics/comic/' . $this->stub);
 	}
-	
+
 	/**
 	 * Returns the url to the chapter editing
 	 *
@@ -646,8 +635,9 @@ class Comic extends DataMapper {
 	 */
 	public function edit_url() {
 		$CI = & get_instance();
-		if(!$CI->tank_auth->is_allowed()) return "";
-		return '<a href="' . $this->edit_href() . '" title="'._('Edit'). ' ' . $this->title() . '">' . _('Edit') . '</a>';
+		if (!$CI->tank_auth->is_allowed())
+			return "";
+		return '<a href="' . $this->edit_href() . '" title="' . _('Edit') . ' ' . $this->title() . '">' . _('Edit') . '</a>';
 	}
 
 	/**
@@ -661,9 +651,8 @@ class Comic extends DataMapper {
 		if (isset($this->href))
 			return $this->href;
 
-		return site_url('/reader/comic/'.$this->stub);
+		return site_url('/reader/comic/' . $this->stub);
 	}
-
 
 }
 

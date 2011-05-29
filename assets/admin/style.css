@@ -119,6 +119,7 @@ input[type="button"], input[type="submit"], input[type="reset"]
 	color:#f6f6f6 !important;
 	text-shadow:0px 0px 1px #333;
 	color:rgba(255,255,255,0.9) !important;
+	border:1px solid #ddd;
 	border:1px solid rgba(56,56,56,0.4);
 	margin: 0 4px 0 0;
 	min-width:50px;
@@ -127,6 +128,7 @@ input[type="button"], input[type="submit"], input[type="reset"]
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 
+	background: #b7b7b7;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.20)),
@@ -195,6 +197,9 @@ textarea:focus, textarea:hover
 }
 
 
+.placeholder {
+	color:#999;
+}
 
 .spacer{height:0px; }
 
@@ -222,6 +227,7 @@ textarea:focus, textarea:hover
 	color:#f6f6f6 !important;
 	text-shadow:0px 0px 1px #333;
 	color:rgba(255,255,255,0.9) !important;
+	border:1px solid #ddd;
 	border:1px solid rgba(56,56,56,0.4);
 	margin: 0 4px 0 0;
 	min-width:50px;
@@ -230,6 +236,7 @@ textarea:focus, textarea:hover
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 
+	background: #b7b7b7;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.20)),
@@ -307,14 +314,16 @@ textarea:focus, textarea:hover
 	color:#f6f6f6 !important;
 	text-shadow:0px 0px 1px #333;
 	color:rgba(255,255,255,0.9) !important;
+	border:1px solid #ddd;
 	border:1px solid rgba(56,56,56,0.4);
-	margin: 6px 4px 0 0;
+	margin: 8px 4px 0 0;
 	min-width:50px;
 	text-align:center;
 	border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 
+	background: #b7b7b7;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.20)),
@@ -396,7 +405,7 @@ textarea:focus, textarea:hover
 
 #sidebar .collection
 {
-	background: #F5F5F5;
+	background: #d7d7d7;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.1)),
@@ -409,6 +418,7 @@ textarea:focus, textarea:hover
 	border-radius:4px;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
+	border:1px solid #999;
 	border:1px solid rgba(56,56,56,0.9);
 	box-shadow: 1px 1px 2px rgba(81,81,92,0.7), 1px 1px 1px rgba(255,255,255,0.7) inset;
 	-moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7), 1px 1px 1px rgba(255,255,255,0.7) inset;
@@ -434,6 +444,7 @@ textarea:focus, textarea:hover
 	-moz-border-radius-topright:4px;
 	-webkit-border-top-right-radius:4px;
 
+	background:#a3a3a3;
 	background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.3)),
@@ -498,6 +509,7 @@ textarea:focus, textarea:hover
 
 #center
 {
+	overflow:hidden;
     margin-left:203px;
     padding-left:20px;
 	margin: 0px 20px 20px 223px;
@@ -507,7 +519,9 @@ textarea:focus, textarea:hover
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
+	border: 1px solid #999;
     border:1px solid rgba(56,56,56,0.4);
+	background: #e3e3e3;
     background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(56,56,56,.15)),
@@ -610,7 +624,8 @@ textarea:focus, textarea:hover
 
 
 .list
-{}
+{
+}
 
 .list.comics .item, .list.chapters .item, .list .item
 {
@@ -650,13 +665,17 @@ textarea:focus, textarea:hover
 {
     width:100%;
     height:200px;
+	text-align:center;
 }
 
 .list.pages > div
 {
     float:left;
     width:250px;
+	height:250px;
+	margin:5px;
 	border:1px solid #999;
+	position:relative;
 }
 
 .list.pages img

@@ -272,13 +272,13 @@ class Tank_auth {
 	 * Returns leader team objects, false in case user is not a team leader
 	 * 
 	 * @author Woxxy
-	 * @param int $team_id
+	 * @param int $team_id if NULL returns each team in which this user is leader
 	 * @return object Teams
 	 * 
 	 */
 	function is_team_leader($team_id = NULL) {
 		if (!$this->is_logged_in())
-			return false;
+			return FALSE;
 
 		$leaderships = new Membership();
 		$leaderships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1);
@@ -287,7 +287,7 @@ class Tank_auth {
 			$leaderships->where('team_id', $team_id);
 			$leaderships->get();
 			if ($leaderships->result_count() != 1)
-				return false;
+				return FALSE;
 			$team = new Team();
 			$team->where('id', $team_id)->get();
 			return $team;
@@ -295,7 +295,7 @@ class Tank_auth {
 
 		$leaderships->get();
 		if ($leaderships->result_count() < 1)
-			return false;
+			return FALSE;
 		$teams = new Team();
 		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any team!
 		foreach ($leaderships->all as $key => $leadership) {

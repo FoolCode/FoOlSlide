@@ -268,7 +268,7 @@ class Chapter extends DataMapper {
 	public function add($data) {
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
 		// the addition of the chapter.
-		$data['subchapter'] = (is_int($data['subchapter'])) ? $data['subchapter'] : 0;
+		//if(!is_int($data["subchapter"])) $data["subchapter"] = 0;
 
 		// Create a stub that is humanly readable, for the worst cases.
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];

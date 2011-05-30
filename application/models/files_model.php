@@ -73,7 +73,6 @@ class Files_model extends CI_Model {
 	}
 
 	public function uncompress_rar($path, $cachedir) {
-		log_message('error', 'rar');
 		$rar_file = rar_open($path);
 		$entries = rar_list($rar_file);
 		$allowed = array('.jpg', '.gif', '.png', 'jpeg');
@@ -82,22 +81,22 @@ class Files_model extends CI_Model {
 				$entry->extract($cachedir);
 		}
 		rar_close($rar_file);
-			log_message('error', 'rar done');
 	}
 	
 	public function uncompress_zip($path, $cachedir) {
 		$this->load->library('unzip');
 		$this->unzip->allow(array('png', 'gif', 'jpeg', 'jpg'));
-		$this->unzip->extract($data["full_path"], $cachedir);
+		$this->unzip->extract($path, $cachedir);
 	}
 
 	public function folder_chapter($cachedir, $chapter, $overwrite) {
 		// Get the filename
 		$dirarray = get_dir_file_info($cachedir, FALSE);
 
-	//	$extension = pathinfo($cachedir, PATHINFO_EXTENSION);
 
 		foreach ($dirarray as $key => $value) {
+			$extentsion = "";
+			$extension = pathinfo($value["server_path"], PATHINFO_EXTENSION);
 			if ($extension && !in_array(strtolower($extension), array('jpeg', 'jpg', 'png', 'gif')))
 				continue;
 			$value['overwrite'] = $overwrite;
@@ -128,7 +127,7 @@ class Files_model extends CI_Model {
 			return $c;
 		}
 
-		$dirinfo = get_dir_file_info($data['directory'], FALSE);
+		$dirinfo = get_dir_file_info($data['directory']);
 		ksort($dirinfo);
 
 		$archives = array();
@@ -139,6 +138,18 @@ class Files_model extends CI_Model {
 
 		$count = 0;
 		foreach ($dirinfo as $key => $file) {
+			if(!is_dir($file['server_path']))
+			{
+				$extension = strtolower(pathinfo($file["server_path"], PATHINFO_EXTENSION));
+				if($extension != 'rar' && $extension != 'zip')
+					continue;
+			}
+			
+			if(!is_dir($file['server_path']))
+			{
+				$not_dir = TRUE;
+			}
+			
 			$archives[$count]['filename'] = $file['name'];
 			$archives[$count]['server_path'] = $file['server_path'];
 			$archives[$count]['relative_path'] = $file['relative_path'];

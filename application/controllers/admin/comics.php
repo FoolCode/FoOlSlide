@@ -89,6 +89,8 @@ class Comics extends Admin_Controller {
 		}
 
 		if ($this->input->post()) {
+			// Prepare for stub change in case we have to redirect instead of just printing the view
+			$old_comic_stub = $comic->stub;
 			$comic->update_comic_db($this->input->post());
 
 			$config['upload_path'] = 'content/cache/';
@@ -104,6 +106,11 @@ class Comics extends Admin_Controller {
 					log_message('error', 'comics.php/comic: couldn\'t remove cache file ' . $data["full_path"]);
 					return false;
 				}
+			}
+			
+			// Did we change the stub of the comic? We need to redirect to the new page then.
+			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub) {
+				redirect('/admin/comics/comic/' . $comic->stub);
 			}
 		}
 
@@ -128,7 +135,7 @@ class Comics extends Admin_Controller {
 		$table = ormer($comic);
 
 		$licenses = new License();
-		
+
 		$table[] = array(
 			_('Licensed in'),
 			array(
@@ -358,97 +365,56 @@ class Comics extends Admin_Controller {
 				break;
 		}
 	}
-	
-	function import()
-		{
-			$this->viewdata["function_title"] = _("Import");
-			if($this->input->post())
-			{
-				if($this->input->post('action') == 'list')
-				{
-					$comic_stub = $this->input->post('archive_comic');
-					$comic = new Comic();
-					$comic->where('stub', $comic_stub)->get();
-					if($comic->result_count() != 1)
-					{
-						flash_notice('error', _('The comic\'s stub you have inserted doesn\'t exist'));
-						redirect('/admin/comics/import/');
-					}
-					$data['comic'] = $comic;
-					$data['directory'] = $this->input->post('archive_directory');
-					$data['archives'] = $this->files_model->import_list($data);
-					$this->viewdata["main_content_view"] = $this->load->view("admin/comics/import_compressed_list", $data, TRUE);
-					$this->load->view("admin/default.php", $this->viewdata);
-					return true;
-				}
-				
-				if($this->input->post('action') == 'execute')
-				{
-					$result = $this->files_model->import_compressed();
-					if(isset($result['error']) && !$result['error'])
-					{
-						echo json_encode($result);
-						return false;
-					}
-					else
-					{
-						echo json_encode($result);
-						return true;
-					}
-				}
+
+	function import($stub) {
+		if (!$stub)
+			show_404();
+
+		$comic = new Comic();
+		$comic->where('stub', $stub)->get();
+		$data['comic'] = $comic;
+		$this->viewdata["extra_title"][] = $comic->name;
+
+		$archive[] = array(
+			_("Absolute directory path to ZIP archive for the series") . ' ' . $comic->name,
+			array(
+				'type' => 'input',
+				'name' => 'directory',
+				'help' => sprintf(_('Insert the absolute directory path. This means from the lowest accessible directory. Example: %s'), '/var/www/backup/' . $comic->stub)
+			)
+		);
+
+		$data['archive'] = tabler($archive, FALSE, TRUE, TRUE);
+
+		$this->viewdata["function_title"] = _("Import");
+		if ($this->input->post('directory')) {
+			$data['directory'] = $this->input->post('directory');
+			if (!is_dir($data['directory'])) {
+				set_notice('error', _('The directory you set does not exist.'));
+				$this->viewdata["main_content_view"] = $this->load->view("admin/comics/import", $data, TRUE);
+				$this->load->view("admin/default.php", $this->viewdata);
+				return FALSE;
 			}
-			
-			$archive[] = array(
-				_("Title of the comic"),
-				array(
-					'type' => 'input',
-					'name' => 'archive_comic',
-					'help' => 'Insert the "stub" of the comic. It\'s what appears in the URL when you are in the comic\'s page. Remember the comic <i>must</i> already exist in your database.'
-				)
-			);
-			
-			$archive[] = array(
-				_("Absolute directory path to ZIP archives"),
-				array(
-					'type' => 'input',
-					'name' => 'archive_directory',
-					'help' => 'Insert the absolute directory path. This means from the lowest accessible directory. Example: /var/www/path/to/zips/comic_name'
-				)
-			);
-			
-			$archive[] = array(
-				_("Absolute directory path to ZIP archives"),
-				array(
-					'type' => 'hidden',
-					'name' => 'action',
-					'value' => 'list'
-				)
-			);
-			
-			$foolreader[] = array(
-				_("Absolute directory path to FoOlReader"),
-				array(
-					'type' => 'input',
-					'name' => 'foolreader_directory',
-					'help' => 'Insert the absolute directory path to your FoOlReader\'s index page. This means from the lowest accessible directory. Example: /var/www/path/to/foolreader/'
-				)
-			);
-			
-			$foolreader[] = array(
-				_("Absolute directory path to archives"),
-				array(
-					'type' => 'hidden',
-					'name' => 'action',
-					'value' => 'list'
-				)
-			);
-			
-			$data['archive'] = tabler($archive, FALSE, TRUE);
-			$data['foolreader'] = tabler($foolreader, FALSE, TRUE);
-			
-			$this->viewdata["main_content_view"] = $this->load->view("admin/comics/import", $data, TRUE);
+			$data['archives'] = $this->files_model->import_list($data);
+			$this->viewdata["main_content_view"] = $this->load->view("admin/comics/import_compressed_list", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
-			
+			return TRUE;
 		}
+
+		if ($this->input->post('action') == 'execute') {
+			$result = $this->files_model->import_compressed();
+			if (isset($result['error']) && !$result['error']) {
+				echo json_encode($result);
+				return FALSE;
+			}
+			else {
+				echo json_encode($result);
+				return true;
+			}
+		}
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/comics/import", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
 
 }

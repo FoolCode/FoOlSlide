@@ -19,6 +19,19 @@ echo $table;
 echo form_close();
 ?>
 <br/><br/>
+<?php
+// Check for admin has already been done in controller
+if ($no_leader) {
+	echo _("There's no team leader set! Send an user the request to be leader by submitting his username:");
+	echo form_open("/admin/members/make_team_leader_username/".$team->id);
+	echo '<table class="form"><tr><td>';
+	echo form_input(array('name' => 'username', 'placeholder' => 'Username'));
+	echo '</td><td>';
+	echo form_submit('save', 'Save');
+	echo form_close();
+	echo '</td></tr></table>';
+}
+?>
 <div class="section">Members:</div><br/>
 <?php
 echo $members;

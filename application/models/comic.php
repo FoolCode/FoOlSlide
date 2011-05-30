@@ -9,7 +9,7 @@ class Comic extends DataMapper {
 	var $has_many = array('chapter', 'license');
 	var $validation = array(
 		'name' => array(
-			'rules' => array('required', 'unique', 'max_length' => 256),
+			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Name',
 			'type' => 'input',
 			'placeholder' => 'required',
@@ -279,6 +279,7 @@ class Comic extends DataMapper {
 			}
 			// Save the stub in a variable in case it gets changed, so we can change folder name
 			$old_stub = $this->stub;
+			$old_name = $this->name;
 		}
 		else {
 			// let's set the creator name if it's a new entry
@@ -289,11 +290,17 @@ class Comic extends DataMapper {
 		$this->editor = $this->logged_id();
 
 		// Unset sensible variables
-		// Not even admins should touch these, for database stability.
 		unset($data["creator"]);
 		unset($data["editor"]);
 		unset($data["uniqid"]);
 		unset($data["stub"]);
+
+		// Allow only admins and mods to arbitrarily change the release date
+		$CI = & get_instance();
+		if (!$CI->tank_auth->is_allowed())
+			unset($data["created"]);
+		if (!$CI->tank_auth->is_allowed())
+			unset($data["edited"]);
 
 		// Loop over the array and assign values to the variables.
 		foreach ($data as $key => $value) {
@@ -306,23 +313,39 @@ class Comic extends DataMapper {
 		if (!isset($this->stub))
 			$this->stub = $this->stub();
 
-		// Prepare a new stub.
-		$this->stub = $this->name;
-		// stub() is also able to restub the $this->stub. Already stubbed values won't change.
-		$this->stub = $this->stub();
+		// Create a new stub if the name has changed
+		if(isset($old_name) && isset($old_stub) && ($old_name != $this->name))
+		{
+			// Prepare a new stub.
+			$this->stub = $this->name;
+			// stub() is also able to restub the $this->stub. Already stubbed values won't change.
+			$this->stub = $this->stub();
+		}
 
-		/**
-		 * @todo stubs with a number to safely allow multiple comics with same name
-		 */
-		/*
-		  $find_stub = false;
-		  $i = 0;
-		  while(!$find_stub)
-		  {
-		  $comic = new Comic();
-		  $comic->where
-		  }
-		 */
+
+		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
+		// In case this chapter already has a stub and it wasn't changed, don't change it!
+		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub)) {
+			$i = 1;
+			$found = FALSE;
+
+			$comic = new Comic();
+			$comic->where('stub', $this->stub)->get();
+			if ($comic->result_count() == 0) {
+				$found = TRUE;
+			}
+
+			while (!$found) {
+				$i++;
+				$pre_stub = $this->stub . '_' . $i;
+				$comic = new Comic();
+				$comic->where('stub', $pre_stub)->get();
+				if ($comic->result_count() == 0) {
+					$this->stub = $pre_stub;
+					$found = TRUE;
+				}
+			}
+		}
 
 
 		// This is necessary to make the checkbox work.
@@ -333,7 +356,7 @@ class Comic extends DataMapper {
 			$this->hidden = 0;
 
 		// rename the folder if the stub changed
-		if (isset($old_stub) && $old_stub != $this->stub) {
+		if (isset($old_stub) && $old_stub != $this->stub && is_dir("content/comics/" . $old_stub . "_" . $this->uniqid)) {
 			$dir_old = "content/comics/" . $old_stub . "_" . $this->uniqid;
 			$dir_new = "content/comics/" . $this->stub . "_" . $this->uniqid;
 			rename($dir_old, $dir_new);

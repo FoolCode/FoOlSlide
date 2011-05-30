@@ -25,8 +25,7 @@ class Admin_Controller extends MY_Controller {
 		"level" => "mod",
 		"content" => array(
 			"manage" => array("level" => "mod", "name" => _("Manage")),
-			"add_new" => array("level" => "mod", "name" => _("Add new")),
-			"import" => array("level" => "admin", "name" => _("Import"))
+			"add_new" => array("level" => "mod", "name" => _("Add new"))
 		)
 	),
 	"members" => array(
@@ -46,7 +45,6 @@ class Admin_Controller extends MY_Controller {
 		"content" => array(
 			"general" => array("level" => "admin", "name" => _("General")),
 			"advertising" => array("level" => "admin", "name" => _("Advertising")),
-		//	"server" => array("level" => "admin", "name" => _("Server"))
 		)
 	),
 	"upgrade" => array(

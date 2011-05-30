@@ -1,3 +1,3 @@
-<div class="section">Pending applicants</div>
+<div class="section"><?php echo $section ?></div>
 <?php
 echo $application;

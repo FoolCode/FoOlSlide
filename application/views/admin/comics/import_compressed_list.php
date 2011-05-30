@@ -1,23 +1,23 @@
 <script type="text/javascript">
 
-	archives = <?php echo json_encode($archives); ?>
+	archives = <?php echo json_encode($archives); ?>;
 
 	function chapter_options(index, chapter) {
 		result = "<div class='chapter chapter_" + index + "'><table class='form'>";
 		
-		result += "<?php echo _('Chapter filename')?> : <b>" + chapter.filename + "</b>";
+		result += "<?php echo _('Chapter filename') ?> : <b>" + chapter.filename + "</b>";
 
 		result += "<input class='input_hidden' type='hidden' value='" + index + "' /></td></tr>";
 
 		if(chapter.numbers.length > 0)
-		result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='" + chapter.numbers[chapter.numbers.length-1] + "' /></td></tr>";
+			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='" + chapter.numbers[chapter.numbers.length-1] + "' /></td></tr>";
 		else
-		result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='0' /></td></tr>";
+			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='0' /></td></tr>";
 		
 		if(chapter.numbers.length > 1)
-		result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='" + chapter.numbers[chapter.numbers.length-2] + "' /></td></tr>";
+			result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='" + chapter.numbers[chapter.numbers.length-2] + "' /></td></tr>";
 		else
-		result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='0' /></td></tr>";
+			result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='0' /></td></tr>";
 		
 		result += "<tr><td>Subchapter number:</td><td><input class='input_subchapter' type='text' value='0' /></td></tr>";
 
@@ -63,12 +63,11 @@
 		result = "";
 		jQuery('.set_teams', '.teams_setter').each(function(index){
 			if (jQuery(this).val() != "")
-			result += "<input type='text' class='set_teams' value='" + jQuery(this).val() + "' />";
+				result += "<input type='text' class='set_teams' value='" + jQuery(this).val() + "' />";
 		});
 		
 		result += "<input type='text' class='set_teams' value='' onKeyUp='addField(this);' />";
 		jQuery(".insert_teams").each(function(index){
-			alert(result);
 			jQuery(this).html(result);
 		});
 	}
@@ -129,7 +128,7 @@
 		
 		index = jQuery('.input_hidden', box).val();
 
-		jQuery.post('<?php echo site_url('/admin/comics/import') ?>', {
+		jQuery.post('<?php echo site_url('/admin/comics/import/' . $comic->stub) ?>', {
 			action: 'execute',
 			type: 'single_compressed',
 			name: '',
@@ -183,9 +182,9 @@
 		<input type="text" class="set_teams" value="" /> <a href="#" class="" onClick="set_teams(); return false;">Set</a>
 		<br/><input type="text" class="set_teams" value="" onKeyUp="addField(this);" />
 	</div>
-	
+
 </div>
-	
+
 <br/>
 </div>
 <br/>Currently adding chapters to: <b><?php echo $comic->name ?></b><br/><br/>

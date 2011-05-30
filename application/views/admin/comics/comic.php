@@ -22,6 +22,14 @@ echo form_close();
 			'text' => _('Add chapter')
 		)
 	);
+	
+	if($this->tank_auth->is_admin())
+	{
+		$this->buttoner[] = array(
+			'href' => site_url('/admin/comics/import/'.$comic->stub),
+			'text' => _('Import from folder')
+		);
+	}
 			
 	echo buttoner();
 ?>

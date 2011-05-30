@@ -14,7 +14,7 @@ html
 
 body
 {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     text-align:center;
     color:#fafafa;
     /* background: url(images/bg2.png) fixed repeat-x top; */
@@ -432,8 +432,8 @@ textarea:focus, textarea:hover
     font-style:italic;
     color:#1a2225;
 	color:#E2E2E2;
-	color:rgba(255,255,255,0.6);
-	text-shadow: none;
+	color:rgba(255,255,255,0.8);
+	text-shadow: 0px 0px 1px #444;
     font-size: 17px;
 	border-bottom:1px solid rgba(71,82,87,1);
 
@@ -510,9 +510,8 @@ textarea:focus, textarea:hover
 #center
 {
 	overflow:hidden;
-    margin-left:203px;
     padding-left:20px;
-	margin: 0px 20px 20px 223px;
+	margin: 0px 0px 20px 20px;
     padding:15px 10px 25px 10px;
     color:#666;
     color:rgba(0,0,0,0.7);
@@ -569,7 +568,7 @@ textarea:focus, textarea:hover
 {
     margin: 0 5px 5px;
     padding:8px;
-	line-height:125%;
+	margin-bottom:12px;
 }
 
 .alert.red

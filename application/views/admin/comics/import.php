@@ -1,17 +1,9 @@
-<?php echo _('Here you can select a directory and import chapters from it. Make sure you already created a comic for the chapters you\'re going to add. After you press on save, you will get a list of chapters you can add, so you can refine the importing.'); 
+<?php echo _('Here you can select a directory and import chapters from it. This directory must contain ZIP, RAR or directories with each representing one single chapter. After you select a valid directory, the interface will give you the ability to fine-tune the import of each chapter. Notice that every directory, ZIP or RAR will be scanned for images and these will all be put in the same folder. If there are two files with the same name in the same ZIP, RAR or directory, the second found will overwrite the first.'); 
 ?>
 <br/><br/>
+
 <?php 
 echo form_open();
 echo $archive; 
 echo form_close();
 ?>
-<br/><br/>
-<?php echo _('When importing from FoOlReader, the system will try guessing the name of the comics you\'re importing.'); ?>
-<br/><br/>
-<?php
-echo form_open();
-echo $foolreader;
-echo form_close();
-?>
-

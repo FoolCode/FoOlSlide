@@ -9,7 +9,7 @@ class Team extends DataMapper {
 	var $has_many = array('chapter');
 	var $validation = array(
 		'name' => array(
-			'rules' => array('required', 'unique', 'max_length' => 256),
+			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Name',
 			'type' => 'input'
 		),
@@ -69,9 +69,13 @@ class Team extends DataMapper {
 		
 	}
 
+	/**
+	 * Leaving this here to make sure I can restore it later in case somewhere it was used
+	 *
+	 * @deprecated
+	 */
 	public function add_team($name, $url = "", $forum = "", $irc = "", $twitter = "", $facebook = "", $facebookid = "") {
 		$this->name = $name;
-		$this->stub = $name;
 		$this->url = $url;
 		$this->forum = $forum;
 		$this->irc = $irc;
@@ -98,6 +102,9 @@ class Team extends DataMapper {
 				log_message('error', 'update_team_db: failed to find requested id');
 				return false;
 			}
+			// Save the stub in a variable in case it gets changed, so we can change folder name
+			$old_stub = $this->stub;
+			$old_name = $this->name;
 		}
 		else { // let's set the creator name if it's a new entry
 			$this->creator = $this->logged_id();
@@ -106,17 +113,64 @@ class Team extends DataMapper {
 		// always set the editor name
 		$this->editor = $this->logged_id();
 
-
-
-		//
+		
+		// Loop over the array and assign values to the variables.
 		foreach ($data as $key => $value) {
 			$this->$key = $value;
 		}
+		
+		// Unset sensible variables
+		unset($data["creator"]);
+		unset($data["editor"]);
+		unset($data["stub"]);
 
-
+		// Allow only admins and mods to arbitrarily change the release date
+		$CI = & get_instance();
+		if (!$CI->tank_auth->is_allowed())
+			unset($data["created"]);
+		if (!$CI->tank_auth->is_allowed())
+			unset($data["edited"]);
+		
+		// Double check that we have all the necessary automated variables
+		if (!isset($this->uniqid))
+			$this->uniqid = uniqid();
 		if (!isset($this->stub))
 			$this->stub = $this->stub();
 
+		// Create a new stub if the name has changed
+		if(isset($old_name) && isset($old_stub) && ($old_name != $this->name))
+		{
+			// Prepare a new stub.
+			$this->stub = $this->name;
+			// stub() is also able to restub the $this->stub. Already stubbed values won't change.
+			$this->stub = $this->stub();
+		}
+
+
+		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
+		// In case this chapter already has a stub and it wasn't changed, don't change it!
+		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub)) {
+			$i = 1;
+			$found = FALSE;
+
+			$team = new Team();
+			$team->where('stub', $this->stub)->get();
+			if ($team->result_count() == 0) {
+				$found = TRUE;
+			}
+
+			while (!$found) {
+				$i++;
+				$pre_stub = $this->stub . '_' . $i;
+				$team = new Team();
+				$team->where('stub', $pre_stub)->get();
+				if ($team->result_count() == 0) {
+					$this->stub = $pre_stub;
+					$found = TRUE;
+				}
+			}
+		}
+		
 		// let's save and give some error check. Push false if fail, true if good.
 		if (!$this->save()) {
 			if (!$this->valid) {
@@ -215,7 +269,7 @@ class Team extends DataMapper {
 		return false;
 	}
 
-	//////// UNFINISHED!
+	//////// UNFINISHED! // Or is it finished...? @_@
 
 	public function get_teams($team_id, $joint_id = 0) {
 		if ($joint_id > 0) {

@@ -47,7 +47,7 @@ $config['index_page'] = '';
   | 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
   |
  */
-$config['uri_protocol'] = 'QUERY_STRING';
+$config['uri_protocol'] = 'AUTO';
 
 /*
   |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ $config['charset'] = 'UTF-8';
   | setting this variable to TRUE (boolean).  See the user guide for details.
   |
  */
-$config['enable_hooks'] = TRUE;
+$config['enable_hooks'] = FALSE;
 
 
 /*
@@ -195,7 +195,7 @@ $config['log_threshold'] = 1;
   | application/logs/ folder. Use a full server path with trailing slash.
   |
  */
-$config['log_path'] = '';
+$config['log_path'] = FCPATH.'content/logs/';
 
 /*
   |--------------------------------------------------------------------------
@@ -343,7 +343,7 @@ $config['time_reference'] = 'local';
   | in your view files.  Options are TRUE or FALSE (boolean)
   |
  */
-$config['rewrite_short_tags'] = FALSE;
+$config['rewrite_short_tags'] = TRUE;
 
 
 /*

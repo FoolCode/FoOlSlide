@@ -52,8 +52,6 @@ class Joint extends DataMapper {
 				foreach ($join as $joi) {
 					$key = array_search($joi->team_id, $teams);
 					if ($key === FALSE) {
-						echo $joi->team_id;
-						print_r($teams);
 						break;
 					}
 					unset($test[$key]);
@@ -87,7 +85,12 @@ class Joint extends DataMapper {
 	public function add_joint($teams) {
 		if (!$result = $this->check_joint($teams)) {
 			$maxjoint = new Joint();
-			$maxjoint->select_max('joint_id')->get();
+			/**
+			 * @todo select_max returns an error:
+			 * ERROR - 2011-05-31 19:58:16 --> Severity: Notice --> Undefined offset: 0 /var/www/manga/beta3/system/database/DB_active_rec.php 1719
+			 */
+			//$maxjoint->select_max('joint_id')->get();
+			$maxjoint->order_by('joint_id', 'DESC')->limit(1)->get();
 			$max = $maxjoint->joint_id + 1;
 
 			foreach ($teams as $key => $team) {

@@ -18,7 +18,8 @@ class MY_Controller extends CI_Controller {
 				//
 				require_once("assets/geolite/GeoIP.php");
 				$gi = geoip_open("assets/geolite/GeoIP.dat", GEOIP_STANDARD);
-				$nation = geoip_country_code_by_addr($gi, $_SERVER['REMOTE_ADDR']);
+				$remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR']: '127.0.0.1';
+				$nation = geoip_country_code_by_addr($gi, $remote_addr);
 				geoip_close($gi);
 				$this->session->set_userdata('nation', $nation);
 			}

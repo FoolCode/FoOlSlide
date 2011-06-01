@@ -447,6 +447,7 @@ class Chapter extends DataMapper {
 						unset($data['team'][$key]);
 					}
 				}
+				sort($data["team"]);
 			}
 
 			// In case there's more than a team name in array, get the joint_id.

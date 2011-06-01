@@ -180,7 +180,7 @@ class Install extends Install_Controller {
 			return false;
 		}
 
-		$config = read_file('config.sample.php');
+		$config = read_file('assets/config.sample.php');
 		$config = str_replace("\$db['default']['hostname'] = 'localhost'", "\$db['default']['hostname'] = '" . addslashes($post["db_hostname"]) . "'", $config);
 		$config = str_replace("\$db['default']['username'] = ''", "\$db['default']['username'] = '" . addslashes($post["db_username"]) . "'", $config);
 		$config = str_replace("\$db['default']['password'] = ''", "\$db['default']['password'] = '" . addslashes($post["db_password"]) . "'", $config);
@@ -197,7 +197,7 @@ class Install extends Install_Controller {
 		}
 
 		$this->load->library('migration');
-		$this->migration->install();
+		$this->migration->version(1);
 		$this->load->library('session');
 		$this->load->library('tank_auth');
 		$this->load->library('datamapper');

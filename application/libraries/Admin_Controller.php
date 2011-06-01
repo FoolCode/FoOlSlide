@@ -7,8 +7,18 @@ class Admin_Controller extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		
+
 		$this->viewdata["sidebar"] = $this->sidebar();
+
+		// Check if the database is upgraded to the the latest available
+		if ($this->tank_auth->is_admin() && $this->uri->uri_string() != '/admin/database/upgrade' && $this->uri->uri_string() != '/admin/database/do_upgrade') {			
+			$this->config->load('migration');
+			$config_version = $this->config->item('migration_version');
+			$db_version = $this->db->get('migrations')->row()->version;
+			if ($db_version != $config_version) {
+				redirect('/admin/database/upgrade/');
+			}
+		}
 	}
 
 	function sidebar_val() {
@@ -58,7 +68,8 @@ class Admin_Controller extends MY_Controller {
 	}
 
 	public function sidebar() {
-		if(!$this->tank_auth->is_logged_in()) return false;
+		if (!$this->tank_auth->is_logged_in())
+			return false;
 		$result = "";
 		foreach ($this->sidebar_val() as $key => $item) {
 			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item)) {

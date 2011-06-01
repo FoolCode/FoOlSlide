@@ -44,10 +44,14 @@ class Files_model extends CI_Model {
 		$chapter->where("id", $data["chapter_id"])->get();
 		$uniqid = uniqid();
 		$overwrite = ($data["overwrite"] == 1);
+		if(is_dir($data["full_path"])) {
+			$this->folder_chapter($data["full_path"], $chapter, $overwrite);
+			return TRUE;
+		}
 		$cachedir = 'content/cache/' . $data["raw_name"] . "_" . $uniqid;
 		if (!mkdir($cachedir)) {
 			log_message('error', 'compressed_chapter: failed creating dir');
-			return false;
+			return FALSE;
 		}
 		
 		if(function_exists('rar_open') && strtolower($data["file_ext"]) == '.rar')
@@ -61,15 +65,15 @@ class Files_model extends CI_Model {
 		// Let's delete all the cache
 		if (!delete_files($cachedir, TRUE)) {
 			log_message('error', 'compressed_chapter: files inside cache dir could not be removed');
-			return false;
+			return FALSE;
 		}
 		else {
 			if (!rmdir($cachedir)) {
 				log_message('error', 'compressed_chapter: cache dir could not be removed');
-				return false;
+				return FALSE;
 			}
 		}
-		return true;
+		return TRUE;
 	}
 
 	public function uncompress_rar($path, $cachedir) {
@@ -181,6 +185,7 @@ class Files_model extends CI_Model {
 		$data['overwrite'] = 1;
 		$data['full_path'] = $this->input->post('server_path');
 		$data['raw_name'] = 'import_' . $chapter->id;
+		if(!is_dir($data["full_path"]))
 		$data['file_ext'] = '.'.end(explode('.', $this->input->post('server_path')));
 		if (!$this->compressed_chapter($data)) {
 			$chapter->remove();

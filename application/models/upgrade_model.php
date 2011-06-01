@@ -11,6 +11,12 @@ class Upgrade_model extends CI_Model {
 		$this->pod = 'http://foolrulez.com/pod';
 	}
 
+	/**
+	 * Connects to FoOlPod to retrieve which is the latest version from the API
+	 * 
+	 * @param type $force forces returning the download even if FoOlSlide is up to date
+	 * @return type FALSE or the download URL
+	 */
 	function check_latest($force = FALSE) {
 		$result = $this->curl->simple_get($this->pod . '/api/software/foolslide');
 		if (!$result) {
@@ -34,6 +40,12 @@ class Upgrade_model extends CI_Model {
 		return FALSE;
 	}
 
+	/**
+	 *
+	 * @author Woxxy
+	 * @param string $url
+	 * @return bool 
+	 */
 	function get_file($url) {
 		$this->clean();
 		$zip = $this->curl->simple_get($url);
@@ -42,11 +54,19 @@ class Upgrade_model extends CI_Model {
 			set_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem. Browse <a href="http://foolrulez.com/pod">http://foolrulez.com/pod</a> to check if it\'s a known issue.'));
 			return FALSE;
 		}
-		@mkdir('content/cache/upgrade');
+		if (!is_dir('content/cache/upgrade'))
+			mkdir('content/cache/upgrade');
 		write_file('content/cache/upgrade/upgrade.zip', $zip);
 		$this->unzip->extract('content/cache/upgrade/upgrade.zip');
+		return TRUE;
 	}
 
+	/**
+	 * Checks files permissions before upgrading
+	 * 
+	 * @author Woxxy
+	 * @return bool 
+	 */
 	function check_files() {
 		if (!is_writable('.')) {
 			return FALSE;
@@ -81,9 +101,38 @@ class Upgrade_model extends CI_Model {
 			return FALSE;
 		}
 
+		if (!is_writable('application/models/upgrade2_model.php')) {
+			return FALSE;
+		}
+
 		return TRUE;
 	}
 
+	/**
+	 * Hi, I herd you liek upgrading, so I put an update for your upgrade, so you
+	 * can update the upgrade before upgrading.
+	 * 
+	 * @author Woxxy
+	 * @return bool 
+	 */
+	function update_upgrade() {
+		if (!file_exists('content/cache/update/application/models/upgrade2_model.php')) {
+			return FALSE;
+		}
+		unlink('application/models/upgrade2_model.php');
+		rename('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
+
+		return TRUE;
+	}
+
+	/**
+	 * Does further checking, updates the upgrade2 "stage 2" file to accomodate
+	 * changes to the upgrade script, updates the version number with the one
+	 * from FoOlPod, and cleans up.
+	 *
+	 * @author Woxxy
+	 * @return bool 
+	 */
 	function do_upgrade() {
 		if (!$this->check_files()) {
 			log_message('error', 'upgrade.php:_do_upgrade() check_files() failed');
@@ -95,51 +144,25 @@ class Upgrade_model extends CI_Model {
 			return FALSE;
 
 		$this->upgrade_model->get_file($latest->download);
+		$this->upgrade_model->update_upgrade();
 
 
-		if (!file_exists('content/cache/upgrade')) {
+		$this->load->model('upgrade2_model');
+		if (!$this->upgrade2_model->do_upgrade()) {
 			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/index.php')) {
-			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/application')) {
-			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/system')) {
-			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/assets')) {
-			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/content/themes/default')) {
-			return FALSE;
-		}
-		if (!file_exists('content/cache/upgrade/content/themes/mobile')) {
-			return FALSE;
-		}
-
-		unlink('index.php');
-		rename('content/cache/upgrade/index.php', 'index.php');
-		delete_files('application/', TRUE);
-		rename('content/cache/upgrade/application', 'application');
-		delete_files('system/', TRUE);
-		rename('content/cache/upgrade/system', 'system');
-		delete_files('assets/', TRUE);
-		rename('content/cache/upgrade/assets', 'assets');
-		delete_files('content/themes/default/', TRUE);
-		rename('content/cache/upgrade/content/themes/default', 'content/themes/default');
-		delete_files('content/themes/mobile/', TRUE);
-		rename('content/cache/upgrade/content/themes/mobile', 'content/themes/mobile');
-
-		if (!$this->migration->latest()) {
-			show_error($this->migration->error);
 		}
 
 		$this->db->update('preferences', array('value' => $latest->version . '.' . $latest->subversion . '.' . $latest->subsubversion), array('name' => 'fs_priv_version'));
 		$this->upgrade_model->clean();
+		
+		return TRUE;
 	}
 
+	/**
+	 * Cleans up the upgrade folder
+	 * 
+	 * @author Woxxy
+	 */
 	function clean() {
 		delete_files('content/cache/upgrade/', TRUE);
 	}

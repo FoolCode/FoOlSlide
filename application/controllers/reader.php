@@ -135,6 +135,7 @@ class Reader extends Public_Controller {
 
 
 		$this->template->set('is_reader', TRUE);
+		$this->template->set('comic', $comice);
 		$this->template->set('chapter', $chaptere);
 		$this->template->set('current_page', $current_page);
 		$this->template->set('pages', $pages);

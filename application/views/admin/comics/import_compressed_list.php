@@ -1,6 +1,7 @@
 <script type="text/javascript">
 
 	archives = <?php echo json_encode($archives); ?>;
+	default_team = '<?php echo addslashes(get_setting('fs_gen_default_team')) ?>';
 
 	function chapter_options(index, chapter) {
 		result = "<div class='chapter chapter_" + index + "'><table class='form'>";
@@ -9,23 +10,33 @@
 
 		result += "<input class='input_hidden' type='hidden' value='" + index + "' /></td></tr>";
 
-		if(chapter.numbers.length > 0)
-			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='" + chapter.numbers[chapter.numbers.length-1] + "' /></td></tr>";
-		else
-			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='0' /></td></tr>";
-		
+		result += "<tr><td>Title:</td><td><input class='input_name' type='text' value='' /></td></tr>";
+
 		if(chapter.numbers.length > 1)
 			result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='" + chapter.numbers[chapter.numbers.length-2] + "' /></td></tr>";
 		else
 			result += "<tr><td>Volume number:</td><td><input class='input_volume' type='text' value='0' /></td></tr>";
 		
-		result += "<tr><td>Subchapter number:</td><td><input class='input_subchapter' type='text' value='0' /></td></tr>";
 
+		if(chapter.numbers.length > 0)
+			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='" + chapter.numbers[chapter.numbers.length-1] + "' /></td></tr>";
+		else
+			result += "<tr><td>Chapter number:</td><td><input class='input_chapter' type='text' value='0' /></td></tr>";
+		
+		result += "<tr><td>Subchapter number:</td><td><input class='input_subchapter' type='text' value='0' /></td></tr>";		
+		
 		result += '<tr><td>Chapter language:</td><td><?php echo str_replace("\n", "", form_language(array('name' => 'input_language', 'class' => 'input_language'))); ?></td></tr>';
 
 		result += "<tr><td>Teams:</td><td class='insert_teams'>";
 			
-		jQuery.each(chapter.teams, function(index, team){ result += "<input type='text' class='set_teams' value='" + team.substring(1, team.length-1) + "' />";});
+		team_found = false;
+		jQuery.each(chapter.teams, function(index, team){
+			team_found = true;
+			result += "<input type='text' class='set_teams' value='" + team.substring(1, team.length-1) + "' />";
+		});
+		if(!team_found) {
+			result += "<input type='text' class='set_teams' value='" + default_team + "' />";
+		}
 		
 		result += "<input type='text' class='set_teams' value='' onKeyUp='addField(this);' /></td></tr>";
 		
@@ -117,7 +128,7 @@
 		});
 	}
 	
-	function submit_chapter(obj)
+	function submit_chapter(obj, all)
 	{
 		box = jQuery(obj).parent().parent();
 		jQuery(box).css({'background': '#FCDEDE', 'opacity' : '0.6'});
@@ -134,15 +145,23 @@
 			name: '',
 			server_path: archives[index].server_path,
 			comic_id: archives[0].comic_id,
+			name: jQuery('.input_name', box).val(),
 			chapter: jQuery('.input_chapter', box).val(),
 			subchapter: jQuery('.input_subchapter', box).val(),
 			volume: jQuery('.input_volume', box).val(),
 			language: jQuery('[name="input_language"]', box).val(),
 			team: teams
 		}, function(result){
-			if(result.error == undefined) jQuery(box).css({'background': '#DDFCE7', 'opacity' : '0.3'});
+			if(result.error === undefined) jQuery(box).css({'background': '#DDFCE7', 'opacity' : '0.4'});
 			else jQuery(box).css({'opacity' : '0.9'});
-		},'json');
+		},'json').complete(function(){
+			if(all !== undefined) {
+				submit_all(all+1);
+			}});
+	}
+	
+	function submit_all(index){
+		submit_chapter(jQuery('.chapter:eq('+index+') .gbutton'), index);
 	}
 	
 	jQuery(document).ready(function(){
@@ -182,7 +201,9 @@
 		<input type="text" class="set_teams" value="" /> <a href="#" class="" onClick="set_teams(); return false;">Set</a>
 		<br/><input type="text" class="set_teams" value="" onKeyUp="addField(this);" />
 	</div>
-
+	<br/><br/>
+	If you checked all chapter numbers:
+	<a href="#" onClick="submit_all(0)" class="">Submit all</a>
 </div>
 
 <br/>

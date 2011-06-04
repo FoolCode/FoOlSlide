@@ -1,6 +1,6 @@
 <div data-role="content">
 	<ul data-role="listview" data-theme="c" data-dividertheme="b">
-		<div class="images_loader"><img style="width:100%;" src="" /></div>
+		<div class="images_loader" onClick="nextPage()"><img style="width:100%;" src="" /></div>
 	</ul>
 </div>
 
@@ -20,6 +20,12 @@
 	function changePage(id, noscroll)
 	{
 		id = parseInt(id);
+		if(id > pages.length-1) 
+		{
+			location.href = next_chapter;
+			return false;
+		}
+		
 		preload(id);
 		next = parseInt(id+1);
 		jQuery('.images_loader img').remove();
@@ -75,7 +81,7 @@
 			},
 			//wipeUp: function() { alert("up"); },
 			//wipeDown: function() { alert("down"); },
-			min_move_x: 20,
+			min_move_x: 40,
 			preventDefaultEvents: false
 		});
 		

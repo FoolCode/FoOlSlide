@@ -24,12 +24,12 @@ if (!defined('BASEPATH'))
 
 
 	echo '<div class="group">
-					<div class="title">' . _('Team leaders') . '</span></div>
+					<div class="title">' . _('Team leaders') . '</div>
 				';
 	if (count($members) == 0) {
 		echo '<div class="element">
 					<div class="title">' . _("No leaders in this team") . '.</div>
-				</div></div>';
+				</div>';
 	}
 	else
 		foreach ($members->all as $key => $member) {
@@ -37,16 +37,16 @@ if (!defined('BASEPATH'))
 				continue;
 			echo '<div class="element">
 					<div class="title">' . get_gravatar($member->email, 50, NULL, NULL, TRUE) . ' ' . $member->username . '</div>
-				</div></div>';
+				</div>';
 		}
 
-	echo '<div class="group">
-					<div class="title">' . _('Members') . '</span></div>
+	echo '</div><div class="group">
+					<div class="title">' . _('Members') . '</div>
 				';
 	if (count($members) == 0) {
 		echo '<div class="element">
 					<div class="title">' . _("No members in this team") . '.</div>
-				</div></div>';
+				</div>';
 	}
 	else
 		foreach ($members->all as $key => $member) {
@@ -54,7 +54,8 @@ if (!defined('BASEPATH'))
 				continue;
 			echo '<div class="element">
 					<div class="title">' . get_gravatar($member->email, 50, NULL, NULL, TRUE) . ' ' . $member->username . '</div>
-				</div></div>';
+				</div>';
 		}
+	echo '</div>'
 	?>
 </div>

@@ -14,14 +14,20 @@
 
 
 			<div data-role="header">
-				<h1><?php echo _('Reading') ?></h1>
+				<h1><?php echo $template['title'] ?></h1>
 				<a href="<?php echo site_url('reader') ?>" data-icon="home" class="ui-btn-right"><?php echo _('Home') ?></a>
+				<?php
+				echo form_open("/reader/search/");
+				echo form_input(array('name' => 'search', 'placeholder' => _('To search series, type and hit enter'), 'id' => 'searchbox'));
+				echo form_close();
+				?>
 			</div>
+
 
 			<?php echo $template['body']; ?>
 
 			<div data-role="footer">
-				<h4>FoOlSlide</h4>
+				<h4><?php echo get_setting('fs_gen_site_title') ?></h4>
 			</div><!-- /footer -->
 
 

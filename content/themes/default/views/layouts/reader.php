@@ -54,30 +54,30 @@
 			}());
 			
 			jQuery(document).ready(function(){
-				<?php if ($this->agent->is_browser('MSIE')) { ?>
+<?php if ($this->agent->is_browser('MSIE')) { ?>
 
-				// Let's make placeholders work on IE and old browsers too
-				jQuery('[placeholder]').focus(function() {
-					var input = jQuery(this);
-					if (input.val() == input.attr('placeholder')) {
-						input.val('');
-						input.removeClass('placeholder');
-					}
-				}).blur(function() {
-					var input = jQuery(this);
-					if (input.val() == '' || input.val() == input.attr('placeholder')) {
-						input.addClass('placeholder');
-						input.val(input.attr('placeholder'));
-					}
-				}).blur().parents('form').submit(function() {
-					jQuery(this).find('[placeholder]').each(function() {
-						var input =jQuery(this);
-						if (input.val() == input.attr('placeholder')) {
-							input.val('');
-						}
-					})
-				}); <?php } ?>
-			});
+							// Let's make placeholders work on IE and old browsers too
+							jQuery('[placeholder]').focus(function() {
+								var input = jQuery(this);
+								if (input.val() == input.attr('placeholder')) {
+									input.val('');
+									input.removeClass('placeholder');
+								}
+							}).blur(function() {
+								var input = jQuery(this);
+								if (input.val() == '' || input.val() == input.attr('placeholder')) {
+									input.addClass('placeholder');
+									input.val(input.attr('placeholder'));
+								}
+							}).blur().parents('form').submit(function() {
+								jQuery(this).find('[placeholder]').each(function() {
+									var input =jQuery(this);
+									if (input.val() == input.attr('placeholder')) {
+										input.val('');
+									}
+								})
+							}); <?php } ?>
+					});
 			
 		</script>
 	</head>
@@ -120,7 +120,9 @@
 					if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'))
 						echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
 					else
-						echo '<style type="text/css">.panel {width:1000px; margin: 0 auto;}</style>';
+						echo '<style type="text/css">
+								.panel {width:1000px; margin: 0 auto;}
+							</style>';
 					if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active'))
 						echo '<div class="ads static banner" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
 				}

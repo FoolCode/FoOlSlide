@@ -150,6 +150,41 @@ function balance_url($string = '') {
 	return site_url($string);
 }
 
+function relative_date($time) {
+
+	$today = strtotime(date('M j, Y'));
+
+	$reldays = ($time - $today) / 86400;
+
+	if ($reldays >= 0 && $reldays < 1) {
+		return 'Today';
+	}
+	else if ($reldays >= 1 && $reldays < 2) {
+		return 'Tomorrow';
+	}
+	else if ($reldays >= -1 && $reldays < 0) {
+		return 'Yesterday';
+	}
+
+	if (abs($reldays) < 7) {
+		if ($reldays > 0) {
+			$reldays = floor($reldays);
+			return 'In ' . $reldays . ' day' . ($reldays != 1 ? 's' : '');
+		}
+		else {
+			$reldays = abs(floor($reldays));
+			return $reldays . ' day' . ($reldays != 1 ? 's' : '') . ' ago';
+		}
+	}
+
+	if (abs($reldays) < 182) {
+		return date('jS F', $time ? $time : time());
+	}
+	else {
+		return date('jS F, Y', $time ? $time : time());
+	}
+}
+
 /**
  * 
  */
@@ -170,13 +205,14 @@ function HTMLpurify($dirty_html, $set = 'default') {
 	require_once(FCPATH . "assets/htmlpurifier/library/HTMLPurifier.func.php");
 
 	$config = HTMLPurifier_Config::createDefault();
-	if(!file_exists('content/cache/HTMLPurifier')) mkdir('content/cache/HTMLPurifier');
+	if (!file_exists('content/cache/HTMLPurifier'))
+		mkdir('content/cache/HTMLPurifier');
 	$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
-	$config->set('Cache.SerializerPath', FCPATH.'content/cache/HTMLPurifier' );
+	$config->set('Cache.SerializerPath', FCPATH . 'content/cache/HTMLPurifier');
 
-	
-	
-	switch($set) {
+
+
+	switch ($set) {
 		case 'default':
 			break;
 		case 'unallowed':

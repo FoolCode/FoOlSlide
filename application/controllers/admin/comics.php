@@ -236,7 +236,7 @@ class Comics extends Admin_Controller {
 		$config['upload_path'] = 'content/cache/';
 
 		if ($this->input->post('uploader') == 'uploadify') {
-			$config['allowed_types'] = 'png|zip|gif|jpg|jpeg';
+			$config['allowed_types'] = 'png|zip|rar|gif|jpg|jpeg';
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('Filedata')) {
 				log_message('error', 'durr' . print_r($_FILES, true));
@@ -249,7 +249,7 @@ class Comics extends Admin_Controller {
 				$data["chapter_id"] = $this->input->post('chapter_id');
 				$data["overwrite"] = $this->input->post('overwrite');
 
-				if ($data['file_ext'] != ".zip")
+				if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
 					$this->files_model->page($data);
 				else
 					$this->files_model->compressed_chapter($data);

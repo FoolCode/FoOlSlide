@@ -14,61 +14,56 @@ class Reader extends Public_Controller {
 	}
 
 	public function index() {
-	//	if (!$this->agent->is_mobile() && false)
-	//		redirect('/reader/latest/');
-	//	else 
-	$this->latest();
+		$this->latest();
 	}
 
 	public function team($stub = NULL) {
-		if(is_null($stub)) show_404();
+		if (is_null($stub))
+			show_404();
 		$team = new Team();
 		$team->where('stub', $stub)->get();
-		if($team->result_count() < 1) show_404();
-		
+		if ($team->result_count() < 1)
+			show_404();
+
 		$memberships = new Membership();
 		$members = $memberships->get_members($team->id);
-		
+
+		$this->template->title(_('Team'));
 		$this->template->set('team', $team);
 		$this->template->set('members', $members);
 		$this->template->build('team');
-	} 
-	
+	}
+
 	public function lista($page = 1) {
 		$this->template->title(_('Series list'));
-		
+
 		$comics = new Comic();
 		$comics->get_paged($page, 15);
-		foreach($comics->all as $comic)
-		{
+		foreach ($comics->all as $comic) {
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
 		}
-		
+
+		$this->template->title(_('Series'));
 		$this->template->set('comics', $comics);
 		$this->template->build('list');
 	}
-	
+
 	public function latest($page = 1) {
 		$this->template->title(_('Series list'));
 		// Create a "Chapter" object. It can contain more than one chapter!
 		$chapters = new Chapter();
-		
-		// With each, get the comic they depends from
-		//$chapters->include_related('comic');
-		
-		// Lets group these 25 releases by comic, so it looks like less of a mess.
-		$chapters->order_by_related('comic', 'name');
-		
+
 		// Select the latest 25 released chapters
-		$chapters->order_by('created', 'DESC')->limit(25);
-		
+		$chapters->order_by('created', 'DESC')->limit(15);
+
 		// Get the chapters!
 		$chapters->get();
 		$chapters->get_teams();
 		$chapters->get_comic();
-		
+
 		$this->template->set('chapters', $chapters);
+		$this->template->title(_('Latest'));
 		$this->template->build('latest');
 	}
 
@@ -78,10 +73,9 @@ class Reader extends Public_Controller {
 		if ($comice->result_count() == 0) {
 			set_notice('warn', 'This comic doesn\'t exist.');
 		}
-		
-		if ($chapter == "")
-		{
-			redirect('/reader/comic/'. $comic);
+
+		if ($chapter == "") {
+			redirect('/reader/comic/' . $comic);
 		}
 
 		$chaptere = new Chapter();
@@ -131,59 +125,62 @@ class Reader extends Public_Controller {
 		if ($current_page < 1)
 			$current_page = 1;
 
-
-
-
+		$chapters = new Chapter();
+		$chapters->where('comic_id', $comice->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();
+		
+		$comics = new Comic();
+		$comics->order_by('name', 'DESC')->limit(100)->get();
+		
 		$this->template->set('is_reader', TRUE);
 		$this->template->set('comic', $comice);
 		$this->template->set('chapter', $chaptere);
+		$this->template->set('chapters', $chapters);
+		$this->template->set('comics', $comics);
 		$this->template->set('current_page', $current_page);
 		$this->template->set('pages', $pages);
 		$this->template->set('next_chapter', $next_chapter);
-		$this->template->title($comice->name . ' :: '._('Chapter').' ' . $chaptere->chapter);
+		$this->template->title($comice->name . ' :: ' . _('Chapter') . ' ' . $chaptere->chapter);
 		$this->template->build('read');
 	}
-	
-	
-	public function comic($stub = NULL)
-	{
-		if(is_null($stub)) show_404();
+
+	public function comic($stub = NULL) {
+		if (is_null($stub))
+			show_404();
 		$comic = new Comic();
 		$comic->where('stub', $stub)->get();
-		if($comic->result_count() < 1) show_404();
-			
+		if ($comic->result_count() < 1)
+			show_404();
+
 		$chapters = new Chapter();
 		$chapters->where('comic_id', $comic->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();
-		
+
 		$this->template->set('comic', $comic);
 		$this->template->set('chapters', $chapters);
 		$this->template->title($comic->name);
 		$this->template->build('comic');
 	}
-	
-	public function search()
-	{
-		if(!$this->input->post('search'))
-		{
+
+	public function search() {
+		if (!$this->input->post('search')) {
 			$this->template->title(_('Search'));
 			$this->template->build('search_pre');
 			return TRUE;
 		}
-		
+
 		$search = HTMLpurify($this->input->post('search'), 'unallowed');
 		$this->template->title(_('Search'));
-		
+
 		$comics = new Comic();
 		$comics->ilike('name', $search)->limit(20)->get();
-		foreach($comics->all as $comic)
-		{
+		foreach ($comics->all as $comic) {
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();
 		}
-		
-		
+
+
 		$this->template->set('search', $search);
 		$this->template->set('comics', $comics);
 		$this->template->build('search');
 	}
+
 }

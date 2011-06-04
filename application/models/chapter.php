@@ -680,7 +680,7 @@ class Chapter extends DataMapper {
 	 * @return string date d/m/y
 	 */
 	public function date() {
-		return date('d/m/y', strtotime($this->created));
+		return relative_date(strtotime($this->created));
 	}
 
 	/**

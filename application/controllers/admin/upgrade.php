@@ -31,7 +31,7 @@ class Upgrade extends Admin_Controller {
 			log_message('error', 'upgrade.php do_upgrade(): failed upgrade');
 			flash_message('error', _('Upgrade failed: check file permissions.'));
 		}
-		redirect('admin/upgrade');
+		echo json_encode(array('href' => site_url('admin/upgrade')));
 	}
 
 

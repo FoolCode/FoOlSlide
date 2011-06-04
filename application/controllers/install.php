@@ -235,7 +235,7 @@ class Install extends Install_Controller {
 	function _check() {
 		$prob = FALSE;
 
-		if (!file_exists('config.sample.php')) {
+		if (!file_exists('assets/config.sample.php')) {
 			set_notice('error', sprintf(_('The file %s was removed. The installation can\'t continue without that file. You can find it in the FoOlSlide download.'), FCPATH . 'config.sample.php'));
 			$prob = TRUE;
 			return FALSE;

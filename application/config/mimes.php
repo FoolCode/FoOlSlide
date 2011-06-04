@@ -105,7 +105,9 @@ $mimes = array(	'hqx'	=>	'application/mac-binhex40',
 'jpe'    =>    array('image/jpeg', 'image/pjpeg','application/octet-stream'),
 'png'    =>    array('image/png',  'image/x-png','application/octet-stream'), 
 'zip'	=>  array('application/x-zip', 'application/zip', 'application/x-zip-compressed','application/octet-stream'),
-			);
+'zip'	=>  array('application/x-zip', 'application/zip', 'application/x-zip-compressed','application/octet-stream'),
+'rar'	=> array('application/x-rar', 'application/x-rar-compressed', 'application/rar', 'application/octet-stream')
+	);
 
 
 /* End of file mimes.php */

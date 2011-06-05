@@ -26,6 +26,18 @@ class MY_Controller extends CI_Controller {
 			
 			// loads variables from database for get_setting()
 			load_settings();
+			
+			$this->config->config['tank_auth']['allow_registration'] = !get_setting('fs_reg_disabled');
+
+			$captcha_public = get_setting('fs_reg_recaptcha_public');
+			if ($captcha_public != "") {
+				$captcha_secret = get_setting('fs_reg_recaptcha_secret');
+				if ($captcha_secret != "") {
+					$this->config->config['tank_auth']['use_recaptcha'] = TRUE;
+					$this->config->config['tank_auth']['recaptcha_public_key'] = $captcha_public;
+					$this->config->config['tank_auth']['recaptcha_secret_key'] = $captcha_secret;
+				}
+			}
 		}
 	}
 

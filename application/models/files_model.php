@@ -97,7 +97,7 @@ class Files_model extends CI_Model {
 		// Get the filename
 		$dirarray = get_dir_file_info($cachedir, FALSE);
 
-
+		$this->db->reconnect();
 		foreach ($dirarray as $key => $value) {
 			$extentsion = "";
 			$extension = pathinfo($value["server_path"], PATHINFO_EXTENSION);

@@ -41,13 +41,19 @@ class Database extends Admin_Controller {
 	}
 
 	function do_upgrade() {
-		if (!isAjax())
+		if (!isAjax() && !$this->input->is_cli_request())
 			return FALSE;
-		if (!$this->migration->current()) {
-			log_message('error', 'database.php do_upgrade() failed');
-			return FALSE;
+
+		$row = $this->db->get('migrations')->row();
+		$current = $row->version + 1;
+		if ($current <= $this->config->item('migration_version')) {
+			$this->migration->version($current);
 		}
-		echo json_encode(array('href' => site_url('admin/')));
+
+		if ($this->input->is_cli_request())
+			echo 'Success.' . PHP_EOL;
+		else
+			echo json_encode(array('href' => site_url('admin/')));
 		return TRUE;
 	}
 

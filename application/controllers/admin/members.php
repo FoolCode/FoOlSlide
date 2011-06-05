@@ -83,9 +83,17 @@ class Members extends Admin_Controller {
 		$user = new User($id);
 		if ($user->result_count() == 0)
 			return false;
-		$table = ormer($user);
-		$table = tabler($table, TRUE, $can_edit);
-		$data['table'] = $table;
+		
+		if($this->tank_auth->is_allowed())
+		{
+			$table = ormer($user);
+			//$table = tabler($table, TRUE, $can_edit); not even admins should edit
+			$table = tabler($table, TRUE, FALSE);
+			$data['table'] = $table;
+		}
+		else {
+			$data["table"] = "";
+		}
 
 
 		$data['user'] = $user;

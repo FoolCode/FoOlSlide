@@ -20,7 +20,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 </style>
 
 <div class="panel">
-	<div class="large">
+	<div class="large nooverflow">
 		<h1 class="title dnone"><?php echo $comic->url() ?> :: <?php echo $chapter->url() ?></h1>
 		<div class="title fleft dropdown_parent"><div class="text"><?php echo $comic->url() ?> ⤵</div>
 			<?php
@@ -162,7 +162,10 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			isSpread = true;
 		}
 		else{
-			jQuery("#page").animate({maxWidth:(parseInt(pages[id].width) + 10) + 'px'},400);
+			if(parseInt(pages[id].width) < 1000)
+				width = parseInt(pages[id].width);
+			else width = 1000;
+			jQuery("#page").animate({maxWidth:(width + 10) + 'px'},400);
 			jQuery("#page .inner img").attr('style','');
 			isSpread = false;
 		}
@@ -218,8 +221,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			{
 				pages[arraydata[data.index]].loaded = true;
 				jQuery('#thumb_'+ arraydata[data.index]).addClass('loaded');
-				jQuery('.numbers .number_'+ arraydata[data.index]).addClass('loaded');
-				lightMyFire();
+				jQuery('.numbers .number_'+ (arraydata[data.index]+1)).addClass('loaded');
 			}
 	
 		});
@@ -265,14 +267,35 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			if(e.keyCode==37 || e.keyCode==97)
 			{
 				if (!isSpread && e.timeStamp - timeStamp37 > 100) prevPage();
-				else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 100) prevPage();
+				else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
 				else jQuery('#page').scrollTo("-=80",100,{axis:"x"});
 				timeStamp37 = e.timeStamp;
 			}
 			if(e.keyCode==39 || e.keyCode==100) 
 			{
 				if (!isSpread && e.timeStamp - timeStamp39 > 100) nextPage();
-				else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 100) nextPage();
+				else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
+				else jQuery('#page').scrollTo("+=80",100,{axis:"x"});
+				timeStamp39 = e.timeStamp;
+			}
+
+			jQuery("html, body").stop(true,true);			
+			if(e.which==115) jQuery.scrollTo("+=80",200,{axis:"y"});
+			if(e.which==119) jQuery.scrollTo("-=80",100,{axis:"y"});
+		});
+		
+		jQuery(document).keydown(function(e){
+			if(e.keyCode==37 || e.keyCode==97)
+			{
+				if (!isSpread && e.timeStamp - timeStamp37 > 100) prevPage();
+				else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
+				else jQuery('#page').scrollTo("-=80",100,{axis:"x"});
+				timeStamp37 = e.timeStamp;
+			}
+			if(e.keyCode==39 || e.keyCode==100) 
+			{
+				if (!isSpread && e.timeStamp - timeStamp39 > 100) nextPage();
+				else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
 				else jQuery('#page').scrollTo("+=80",100,{axis:"x"});
 				timeStamp39 = e.timeStamp;
 			}

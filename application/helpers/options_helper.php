@@ -15,7 +15,8 @@ if (!function_exists('get_setting')) {
 	function get_setting($option) {
 		$CI = & get_instance();
 		$array = $CI->fs_options;
-		return $array[$option];
+		if (isset($array[$option])) return $array[$option];
+		return FALSE;
 	}
 
 }

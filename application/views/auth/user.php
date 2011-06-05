@@ -48,10 +48,9 @@ if ($CI->tank_auth->is_admin() && $CI->tank_auth->is_mod($user->id))
 
 
 echo buttoner();
-
 echo $table;
 ?>
-<div class="section">Profile</div>
+<div class="section"><?php _("Profile") ?></div>
 
 <?php
 $CI->buttoner = array();
@@ -64,8 +63,9 @@ if ($CI->tank_auth->get_user_id() == $user->id)
 	);
 
 echo buttoner();
-
-echo $profile
+echo form_open();
+echo $profile;
+echo form_close();
 ?>
 
 <br/>

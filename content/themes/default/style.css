@@ -109,6 +109,10 @@ input[type="text"]
 	display:none !important;
 }
 
+.nooverflow {
+	overflow:visible !important;
+}
+
 .placeholder {
 	color:#999;
 }
@@ -484,7 +488,7 @@ ul.dropdown li a
 	padding:10px;
 	margin:0 0 10px;
 
-	/*overflow:hidden;*/
+	overflow:hidden;
 
 	background:#eeecea;
 	border:1px solid #999;

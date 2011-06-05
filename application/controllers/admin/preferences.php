@@ -7,7 +7,7 @@ class Preferences extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->tank_auth->is_logged_in() or redirect('auth/login');
+		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->tank_auth->is_admin() or redirect('admin');
 		$this->tank_auth->is_admin() or die(1);
 		$this->viewdata['controller_title'] = _("Preferences");
@@ -247,6 +247,59 @@ class Preferences extends Admin_Controller {
 					set_notice('error', _('Couldn\'t save the advertising code in the HTML'));
 				}
 			}
+		}
+
+		$table = tabler($form, FALSE);
+
+		$data['table'] = $table;
+
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
+	
+	function registration() {
+		$this->viewdata["function_title"] = _("Registration");
+
+
+		$form = array();
+
+
+		$form[] = array(
+			_('Disable registration'),
+			array(
+				'type' => 'checkbox',
+				'name' => 'fs_reg_disabled',
+				'id' => 'disable_reg',
+				'preferences' => 'fs_reg',
+				'help' => _('Disable registration in case you\'re not expecting any')
+			)
+		);
+
+		$form[] = array(
+			_('reCaptcha public key'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_reg_recaptcha_public',
+				'id' => 'captcha_public',
+				'maxlength' => '200',
+				'preferences' => 'fs_reg',
+				'help' => _('Use <a href="http://www.google.com/recaptcha">reCaptcha</a> service, avoid hellish captchas!')
+			)
+		);
+
+		$form[] = array(
+			_('reCaptcha secret key'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_reg_recaptcha_secret',
+				'preferences' => 'fs_reg',
+				'help' => _('You must insert both public and secret key if you want to use reCaptcha')
+			)
+		);
+
+		if ($post = $this->input->post()) {
+			$this->_submit($post, $form);
 		}
 
 		$table = tabler($form, FALSE);

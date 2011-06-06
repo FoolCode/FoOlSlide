@@ -18,7 +18,8 @@ class Upgrade_model extends CI_Model {
 	 * @return type FALSE or the download URL
 	 */
 	function check_latest($force = FALSE) {
-		$result = $this->curl->simple_get($this->pod . '/api/software/foolslide');
+		$this->load->library('curl');
+		$result = $this->curl->simple_post($this->pod . '/api/software/foolslide', array('url' => site_url()));
 		if (!$result) {
 			set_notice('error', _('FoOlPod server could not be contacted: impossible to check for new versions.'));
 			return FALSE;
@@ -46,13 +47,15 @@ class Upgrade_model extends CI_Model {
 	 * @param string $url
 	 * @return bool 
 	 */
-	function get_file($url) {
+	function get_file($url, $direct_url) {
 		$this->clean();
-		$zip = $this->curl->simple_get($url);
+		$zip = $this->curl->simple_post($url, array('url' => site_url()));
 		if (!$zip) {
-			log_message('error', 'upgrade_model get_file(): impossible to get the update from FoOlPod');
-			set_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem. Browse <a href="http://foolrulez.com/pod">http://foolrulez.com/pod</a> to check if it\'s a known issue.'));
-			return FALSE;
+			if (!$zip = $this->curl->simple_get($direct_url)) {
+				log_message('error', 'upgrade_model get_file(): impossible to get the update from FoOlPod');
+				set_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem. Browse <a href="http://foolrulez.com/pod/human">http://foolrulez.com/pod/human</a> to check if it\'s a known issue.'));
+				return FALSE;
+			}
 		}
 		if (!is_dir('content/cache/upgrade'))
 			mkdir('content/cache/upgrade');
@@ -143,7 +146,7 @@ class Upgrade_model extends CI_Model {
 		if ($latest === FALSE)
 			return FALSE;
 
-		$this->upgrade_model->get_file($latest->download);
+		$this->upgrade_model->get_file($latest->download, $latest->direct_download);
 		$this->upgrade_model->update_upgrade();
 
 
@@ -154,7 +157,7 @@ class Upgrade_model extends CI_Model {
 
 		$this->db->update('preferences', array('value' => $latest->version . '.' . $latest->subversion . '.' . $latest->subsubversion), array('name' => 'fs_priv_version'));
 		$this->upgrade_model->clean();
-		
+
 		return TRUE;
 	}
 

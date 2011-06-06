@@ -151,7 +151,7 @@
 		</div>
 
 		<div id="footer"><div class="text">FoOlSlide Version <?php if (isset($this->tank_auth))
-							echo get_setting('fs_priv_version') ?></div></div>
+							echo get_setting('fs_priv_version') ?><?php if($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version'))) echo ' – <a href="'.site_url('/admin/upgrade/upgrade/').'">'._('New upgrade available:'). ' ' . get_setting('fs_cron_autoupgrade_version').'</a>'; ?></div></div>
 	</body>
 
 </html>

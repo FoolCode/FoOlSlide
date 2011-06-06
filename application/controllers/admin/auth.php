@@ -591,7 +591,11 @@ class Auth extends Admin_Controller
 	{
 		$this->load->helper('recaptcha');
 
-		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'tank_auth'),
+		/**
+		 * Fixed for compatibility with FoOlSlide registration
+		 * @author Woxxy
+		 */
+		$resp = recaptcha_check_answer(get_setting('fs_reg_recaptcha_secret'),
 				$_SERVER['REMOTE_ADDR'],
 				$_POST['recaptcha_challenge_field'],
 				$_POST['recaptcha_response_field']);

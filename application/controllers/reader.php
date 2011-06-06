@@ -38,7 +38,7 @@ class Reader extends Public_Controller {
 		$this->template->title(_('Series list'));
 
 		$comics = new Comic();
-		$comics->get_paged($page, 15);
+		$comics->get_paged($page, 25);
 		foreach ($comics->all as $comic) {
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
@@ -79,10 +79,11 @@ class Reader extends Public_Controller {
 		}
 
 		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter);
+		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
 
-		if ($subchapter == 'page')
+		if (!is_int($subchapter) && $subchapter == 'page') {
 			$current_page = $team;
+		}
 		else {
 			$chaptere->where('subchapter', $subchapter);
 
@@ -118,6 +119,7 @@ class Reader extends Public_Controller {
 
 
 		$pages = $chaptere->get_pages();
+		foreach($pages as $page) unset($page["object"]);
 		$next_chapter = $chaptere->next();
 
 		if ($current_page > count($pages))
@@ -141,6 +143,61 @@ class Reader extends Public_Controller {
 		$this->template->set('next_chapter', $next_chapter);
 		$this->template->title($comice->name . ' :: ' . _('Chapter') . ' ' . $chaptere->chapter);
 		$this->template->build('read');
+	}
+	
+	public function download($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
+		$comice = new Comic();
+		$comice->where('stub', $comic)->get();
+		if ($comice->result_count() == 0) {
+			set_notice('warn', 'This comic doesn\'t exist.');
+		}
+
+		if ($chapter == "") {
+			redirect('/reader/comic/' . $comic);
+		}
+
+		$chaptere = new Chapter();
+		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
+
+		if (!is_int($subchapter) && $subchapter == 'page') {
+			$current_page = $team;
+		}
+		else {
+			$chaptere->where('subchapter', $subchapter);
+
+			if ($team == 'page')
+				$current_page = $joint;
+			else {
+				if ($team != 0) {
+					$teame = new Team();
+					$teame->where('stub', $team)->get();
+					$chaptere->where('team_id', $teame->id);
+				}
+
+				if ($joint == 'page')
+					$current_page = $pagetext;
+
+				if ($joint != 0) {
+					$chaptere->where('joint_id', $joint);
+				}
+			}
+		}
+
+		if (!isset($current_page)) {
+			if ($page != 1)
+				$current_page = $page;
+			else
+				$current_page = 1;
+		}
+
+		$chaptere->get();
+		if ($chaptere->result_count() == 0) {
+			show_404();
+		}
+		
+		$archive = new Archive();
+		$url = $archive->compress($chaptere);
+		redirect($url);
 	}
 
 	public function comic($stub = NULL) {

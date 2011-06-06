@@ -395,3 +395,34 @@ if (!function_exists('prevnext')) {
 	}
 
 }
+
+if (!function_exists('mobile_prevnext')) {
+
+	function mobile_prevnext($base_url, $item) {
+		
+		/*
+
+		
+			<a href="<?php echo site_url('/reader/list/') ?>"><?php echo _("Go to series list") ?></a>
+		<!-- /navbar -->
+*/
+		$echo = '<div data-role="navbar" data-theme="a"><ul>';
+
+		if ($item->paged->has_previous) {
+			$echo .= '
+					<li><a class="gbutton fleft" href="' . site_url($base_url.'1') . '">«« First</a></li>
+					<li><a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a></li>
+				';
+		}
+		if ($item->paged->has_next) {
+			$echo .= '
+					<li><a class="gbutton fright" href="'.site_url($base_url.$item->paged->total_pages).'">Last »»</a></li>
+					<li><a class="gbutton fright" href="'.site_url($base_url.$item->paged->next_page).'">Next »</a></li>
+				';
+		}
+		$echo .= '</ul></div>';
+		
+		return $echo;
+	}
+
+}

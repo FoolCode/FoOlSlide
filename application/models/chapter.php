@@ -69,6 +69,19 @@ class Chapter extends DataMapper {
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail'
 		),
+		'pagesnum' => array(
+			'rules' => array(),
+			'label' => 'Description',
+			'type' => 'Number of pages'
+		),
+		'size' => array(
+			'rules' => array(),
+			'label' => 'Total size of pages',
+		),
+		'dirsize' => array(
+			'rules' => array(),
+			'label' => 'Directory size'
+		),
 		'lastseen' => array(
 			'rules' => array(),
 			'label' => 'Lastseen'
@@ -269,7 +282,6 @@ class Chapter extends DataMapper {
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
 		// the addition of the chapter.
 		//if(!is_int($data["subchapter"])) $data["subchapter"] = 0;
-
 		// Create a stub that is humanly readable, for the worst cases.
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
 
@@ -626,6 +638,16 @@ class Chapter extends DataMapper {
 		}
 		// Even if false is returned all removable pages will be removed.
 		return $return;
+	}
+
+	function get_dirsize() {
+		$this->get_comic();
+		$filearray = get_dir_file_info("content/comics/" . $this->comic->directory() . "/" . $this->directory() . "/", FALSE);
+		$size = 0;
+		foreach ($filearray as $file) {
+			$size += $file["size"];
+		}
+		return $size;
 	}
 
 	/**

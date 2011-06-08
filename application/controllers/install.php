@@ -253,15 +253,16 @@ class Install extends Install_Controller {
 			return FALSE;
 		}
 
-		$whoami = exec('whoami');
-		if (!$whoami && is_writable('content')) {
-			write_file('content/testing_123.txt', 'testing_123');
-			$whoami = posix_getpwuid(fileowner('content/testing_123.txt'));
-			$whoami = $whoami['name'];
-			unlink('content/testing_123.txt');
-		}
-
 		if (!is_writable('.')) {
+			$whoami = FALSE;
+			if ($this->_exec_enabled())
+				$whoami = exec('whoami');
+			if (!$whoami && is_writable('content') && function_exists('posix_getpwid')) {
+				write_file('content/testing_123.txt', 'testing_123');
+				$whoami = posix_getpwuid(fileowner('content/testing_123.txt'));
+				$whoami = $whoami['name'];
+				unlink('content/testing_123.txt');
+			}
 			if ($whoami != "")
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
 			else
@@ -275,6 +276,11 @@ class Install extends Install_Controller {
 		}
 
 		return TRUE;
+	}
+
+	function _exec_enabled() {
+		$disabled = explode(', ', ini_get('disable_functions'));
+		return!in_array('exec', $disabled);
 	}
 
 }

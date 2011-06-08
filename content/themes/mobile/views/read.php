@@ -22,7 +22,7 @@
 		id = parseInt(id);
 		if(id > pages.length-1) 
 		{
-			location.href = next_chapter;
+			jQuery.mobile.changePage(next_chapter, "slidedown");	
 			return false;
 		}
 		

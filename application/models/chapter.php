@@ -71,8 +71,7 @@ class Chapter extends DataMapper {
 		),
 		'pagesnum' => array(
 			'rules' => array(),
-			'label' => 'Description',
-			'type' => 'Number of pages'
+			'label' => 'Number of pages'
 		),
 		'size' => array(
 			'rules' => array(),

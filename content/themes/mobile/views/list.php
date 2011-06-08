@@ -13,3 +13,5 @@
 		?>
 	</ul>
 </div><!-- /content -->
+
+<?php echo mobile_prevnext('/reader/list/', $comics); ?>

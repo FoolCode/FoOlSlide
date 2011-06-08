@@ -38,7 +38,7 @@ class Reader extends Public_Controller {
 		$this->template->title(_('Series list'));
 
 		$comics = new Comic();
-		$comics->get_paged($page, 25);
+		$comics->order_by('name', 'ASC')->get_paged($page, 25);
 		foreach ($comics->all as $comic) {
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();

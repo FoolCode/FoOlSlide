@@ -116,6 +116,7 @@ class Archive extends DataMapper {
 		$bad = array_merge(
 				array_map('chr', range(0, 31)), array("<", ">", ":", '"', "/", "\\", "|", "?", "*"));
 		$filename = str_replace($bad, "", $filename);
+		$filename = str_replace(" ", "_", $filename);
 
 		return $filename;
 	}

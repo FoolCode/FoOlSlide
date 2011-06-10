@@ -35,6 +35,7 @@ class Preferences extends Admin_Controller {
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
+		set_notice('notice', _('Settings changed.'));
 	}
 
 	function general() {
@@ -275,6 +276,17 @@ class Preferences extends Admin_Controller {
 				'help' => _('Disable registration in case you\'re not expecting any')
 			)
 		);
+		
+		$form[] = array(
+			_('Disable activation email'),
+			array(
+				'type' => 'checkbox',
+				'name' => 'fs_reg_email_disabled',
+				'id' => 'disable_reg',
+				'preferences' => 'fs_reg',
+				'help' => _('Disable the necessity to proceed with an activation after registering')
+			)
+		);
 
 		$form[] = array(
 			_('reCaptcha public key'),
@@ -310,8 +322,51 @@ class Preferences extends Admin_Controller {
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
+	
+	function reader() {
+		$this->viewdata["function_title"] = _("Reading");
+
+
+		$form = array();
+
+
+		$form[] = array(
+			_('Enable direct downloads'),
+			array(
+				'type' => 'checkbox',
+				'name' => 'fs_dl_enabled',
+				'id' => 'enable_dl',
+				'preferences' => 'fs_dl',
+				'help' => _('Direct downloads usually increase the bandwidth usage by one-third. The issue is wheter you have enough space to keep both images and ZIPs. FoOlSlide tries to avoid dealing with the problem by using on-the-fly ZIP compression and caching.')
+			)
+		);
+
+		$form[] = array(
+			_('Maximum direct download cache in Megabyte'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_dl_archive_max',
+				'id' => 'max_dl',
+				'preferences' => 'fs_dl',
+				'help' => _('Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely.')
+			)
+		);
+
+		if ($post = $this->input->post()) {
+			$this->_submit($post, $form);
+		}
+
+		$table = tabler($form, FALSE);
+
+		$data['table'] = $table;
+
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
 
 	function server() {
+		show_404();
 		$this->viewdata["function_title"] = _("Server");
 
 		if ($post = $this->input->post()) {

@@ -218,7 +218,7 @@ textarea:focus, textarea:hover
 {
 	width:100%;
 	font-size:11px;
-	height:28px;
+	height:23px;
 }
 
 .gbutton {
@@ -284,8 +284,8 @@ textarea:focus, textarea:hover
 #header
 {
 	font-family: Cambria, Georgia, Times, Times New Roman, serif;
-	padding:10px 15px 10px 15px;
-	margin: 0 15px 0 223px;
+	padding:0px 15px 8px 15px;
+	margin: 0 15px 0 187px;
 }
 
 #header a
@@ -305,55 +305,99 @@ textarea:focus, textarea:hover
     font-size:25px;
 	color:#1a2225;
 	text-shadow: 1px 1px 0px rgba(255,255,255,.6);
-	margin-top:3px;
+	padding-top:3px;
 }
 
-#header .logout
-{
-    float:right;
-	font-size:13px;
-	padding:4px 6px;
-	color:#f6f6f6 !important;
-	text-shadow:0px 0px 1px #333;
-	color:rgba(255,255,255,0.9) !important;
-	border:1px solid #ddd;
-	border:1px solid rgba(56,56,56,0.4);
-	margin: 8px 4px 0 0;
-	min-width:50px;
-	text-align:center;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
 
-	background: #b7b7b7;
+#nav {
+    font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
+	position:absolute;
+	top:0;
+	right:20px;
+	font-size:14px;
+	text-shadow:0px 0px 1px #333;
+	margin:0px 0px 3px;
+    font-style:italic;
+    color:#1a2225;
+	color:#E2E2E2;
+	color:rgba(255,255,255,0.8);
+	text-shadow: 0px 0px 1px #444;
+	border-bottom:1px solid rgba(71,82,87,1);
+	overflow:hidden;
+
+	background:#535353;
 	background: -webkit-gradient(
         linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.20)),
-        color-stop(1, rgba(56,56,56,.30))
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
     	);
-  	background: -o-linear-gradient(rgba(56,56,56,.20),rgba(56,56,56,.30));
-  	background: -moz-linear-gradient(rgba(56,56,56,.20),rgba(56,56,56,.30));
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 
-	box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
-	moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
-	-webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
+	box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 0px -1px 1px rgba(255,255,255,0.5) inset;
+	moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 0px -1px 1px rgba(255,255,255,0.5) inset;
+	-webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 0px -1px 1px rgba(255,255,255,0.5) inset;
+	
+	border-bottom-left-radius:4px;
+    -webkit-border-bottom-left-radius-:4px;
+    -moz-border-radius-bottomleft:4px;
+	border-bottom-right-radius:4px;
+    -webkit-border-bottom-right-radius-:4px;
+    -moz-border-radius-bottomright:4px;
 }
 
-#header .logout a
-{
-	color:rgba(255,255,255,0.9) !important;
+#nav .element {
+	float:left;
+	position:relative;
 }
 
-#header .logout a:hover
-{
-	color:#1a2225;
-	text-shadow:0px 0px 5px rgba(255,255,255,.9);
+
+#nav .element {
+	border-left:1px solid #666;
+	border-left:1px solid rgba(0,0,0,0.2);
+}
+
+#nav .element:first-child {
+	border:none;
+}
+
+#nav .element a {
+	color:inherit;
+	display:block;
+	padding:8px 10px 8px 38px;
+	height:100%;
+	width:100%;
+}
+
+#nav .element:hover {
+	text-decoration:underline;
+}
+
+#nav .element .icon {
+	position:absolute;
+	top:-9px;
+	left:-5px;
+}
+
+#nav .element .icon.off {
+	
+}
+
+#nav .element .icon.on {
+	display:none;
+}
+
+#nav .element:hover .icon.off {
+	display:none;
+}
+
+#nav .element:hover .icon.on {
+	display:block;
 }
 
 #footer
 {
     font-family: Cambria, Georgia, Times, Times New Roman, serif;
-    background:#e0e0e0;
 	color:#888;
 }
 
@@ -398,30 +442,33 @@ textarea:focus, textarea:hover
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     float:left;
     min-width:190px;
-    min-height:500px;
     color:#333;
-    margin:5px 10px 10px 7px;
+    margin:0px 10px 10px 0px;
 	text-shadow: 1px 1px 0px rgba(255,255,255,.3);
 	position:relative;
+	
+	border-top-right-radius:4px;
+    -webkit-border-top-right-radius-:4px;
+    -moz-border-radius-topright:4px;
+	border-bottom-right-radius:4px;
+    -webkit-border-bottom-right-radius-:4px;
+    -moz-border-radius-bottomright:4px;
+	border:1px solid #999;
+	border:1px solid rgba(56,56,56,0.9);
+	border-left:none;
 }
 
 #sidebar .collection
 {
-	background: #d7d7d7;
+	background: #ebebeb;
 	background: -webkit-gradient(
         linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.1)),
-        color-stop(1, rgba(56,56,56,.2))
+        color-stop(0, rgba(180,180,180,.1)),
+        color-stop(1, rgba(180,180,180,.2))
     	);
-	background: -o-linear-gradient(rgba(56,56,56,.1),rgba(56,56,56,.2));
-	background: -moz-linear-gradient(rgba(56,56,56,.1),rgba(56,56,56,.2));
+	background: -o-linear-gradient(rgba(180,180,180,.1),rgba(180,180,180,.2));
+	background: -moz-linear-gradient(rgba(180,180,180,.1),rgba(180,180,180,.2));
 	padding: 0 0 3px 0;
-	margin-top:5px;
-	border-radius:4px;
-    -webkit-border-radius:4px;
-    -moz-border-radius:4px;
-	border:1px solid #999;
-	border:1px solid rgba(56,56,56,0.9);
 	box-shadow: 1px 1px 2px rgba(81,81,92,0.7), 1px 1px 1px rgba(255,255,255,0.7) inset;
 	-moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7), 1px 1px 1px rgba(255,255,255,0.7) inset;
 	-webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7), 1px 1px 1px rgba(255,255,255,0.7) inset;
@@ -429,8 +476,7 @@ textarea:focus, textarea:hover
 
 #sidebar .group
 {
-    padding:3px 3px 3px 10px;
-    margin:0px 0px 5px;
+    margin:0px 0px 3px;
     font-style:italic;
     color:#1a2225;
 	color:#E2E2E2;
@@ -438,61 +484,66 @@ textarea:focus, textarea:hover
 	text-shadow: 0px 0px 1px #444;
     font-size: 17px;
 	border-bottom:1px solid rgba(71,82,87,1);
+	position:relative;
+	text-indent:30px;
 
-	border-top-left-radius:4px;
-	-moz-border-radius-topleft:4px;
-	-webkit-border-top-left-radius:4px;
-	border-top-right-radius:4px;
-	-moz-border-radius-topright:4px;
-	-webkit-border-top-right-radius:4px;
-
-	background:#a3a3a3;
+	background:#535353;
 	background: -webkit-gradient(
         linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.3)),
-        color-stop(1, rgba(56,56,56,.4))
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
     	);
-	background: -o-linear-gradient(rgba(56,56,56,.3),rgba(56,56,56,.4));
-	background: -moz-linear-gradient(rgba(56,56,56,.3),rgba(56,56,56,.4));
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 
 
 }
 
+#sidebar .group .icon {
+	position:absolute;
+	top:-8px;
+	left:-5px;
+}
+
+#sidebar .group .icon.on {
+	display:none;
+}
+
+#sidebar .group:hover .icon.off {
+	display:none;
+}
+
+#sidebar .group:hover .icon.on {
+	display:block;
+}
+
+#sidebar .group a {
+    padding:6px 3px 6px 10px;
+	display:block;
+	height:100%;
+	width:100%;
+	color:inherit;
+}
+
+#sidebar .group a:hover {
+	text-decoration:underline;
+}
+
 #sidebar .element
 {
-    padding:5px 3px 5px 15px;
-    margin:0px 0px 0px 0px;
+    padding:4px 3px 4px 15px;
     border-bottom:1px solid transparent;
     border-top:1px solid transparent;
 	border-radius:0px;
     -webkit-border-radius:0px;
     -moz-border-radius:0px;
+	font-size:13px;
 
 }
 
-#sidebar .element:hover
+#sidebar .element:hover, #sidebar .element.active
 {
-	margin:0px 1px 0px 0px;
-    border-top-color:rgba(81,81,92,.9);
-    border-bottom-color:rgba(255,255,255,.7);
-    border-right-color:rgba(56,56,56,0.9);
-    box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
-    -moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
-    -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
-    background: -webkit-gradient(
-        linear, left top, left bottom,
-        color-stop(0, rgba(127,159,202,.4)),
-        color-stop(1, rgba(190,218,255,.4))
-        );
-	background: -moz-linear-gradient(rgba(127,159,202,.4),rgba(190,218,255,.4));
-	background: -o-linear-gradient(rgba(127,159,202,.4),rgba(190,218,255,.4));
-}
-
-#sidebar .active
-{
-    background:#FCF5EF;
-    border:1px solid #eee;
-    border-left:5px solid #666;
+	background: #f9f9f9;
 }
 
 
@@ -503,49 +554,73 @@ textarea:focus, textarea:hover
 
 #content_wrap
 {
-	width:98%;
 	margin: 0 auto;
-    
 }
 
 #center
 {
 	overflow:hidden;
-    padding-left:20px;
-	margin: 0px 0px 40px 20px;
-    padding:15px 10px 25px 10px;
+	margin: 0px 10px 40px 20px;
     color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
-	border: 1px solid #999;
-    border:1px solid rgba(56,56,56,0.4);
-	background: #e3e3e3;
-    background: -webkit-gradient(
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+  	border:1px solid #777;  
+	background: #ebebeb;
+	background: -webkit-gradient(
         linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.15)),
-        color-stop(1, rgba(56,56,56,.05))
+        color-stop(0, rgba(200,200,200,.1)),
+        color-stop(1, rgba(180,180,180,.2))
     	);
-	background: -o-linear-gradient(rgba(56,56,56,.15),rgba(56,56,56,.05));
-	background: -moz-linear-gradient(rgba(56,56,56,.15),rgba(56,56,56,.05));
-
-
-    box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
-    -moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
-    -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
+	background: -o-linear-gradient(rgba(200,200,200,.1),rgba(180,180,180,.2));
+	background: -moz-linear-gradient(rgba(200,200,200,.1),rgba(180,180,180,.2));
+	
+	box-shadow: 0px 0px 2px rgba(41,41,52,0.9), 1px 1px 1px rgba(255,255,255,0.7) inset;
+	-moz-box-shadow: 0px 0px 2px rgba(41,41,52,0.9), 1px 1px 1px rgba(255,255,255,0.7) inset;
+	-webkit-box-shadow: 0px 0px 2px rgba(41,41,52,0.9), 1px 1px 1px rgba(255,255,255,0.7) inset;
 }
 
 #center > .title
 {
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
-    font-size:23px;
+    font-size:20px;
     font-style:italic;
-    margin-bottom:12px;
+    margin-bottom:16px;
 	text-indent:10px;
-	border-bottom:1px solid #bbb;
-	padding-bottom:5px;
+	padding:7px 0;
 	display:block;
+	color:#E2E2E2;
+	color:rgba(255,255,255,0.8);
+	text-shadow: 0px 0px 1px #444;
+	background:#535353;
+	background: -webkit-gradient(
+        linear, left top, left bottom,
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
+    	);
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	
+	border-top-right-radius:4px;
+    -webkit-border-top-right-radius-:4px;
+    -moz-border-radius-topright:4px;
+	border-top-left-radius:4px;
+    -webkit-border-top-left-radius-:4px;
+    -moz-border-radius-topleft:4px;
+
+}
+
+#center > .title a
+{
+	color:inherit;
+}
+
+#center > .title a:hover
+{
+	text-decoration:underline;
 }
 
 #center .section
@@ -553,16 +628,20 @@ textarea:focus, textarea:hover
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
     font-size:23px;
     font-style:italic;
-    margin:10px 0 16px;
-    padding:10px 0;
 	text-indent:10px;
-	padding-bottom:5px;
-	border-bottom:1px solid #bbb;
+	margin-top:15px;
+	display:block;
 }
 
 #center > .smalltext
 {
     font-size:11px;
+}
+
+#center .content 
+{
+	padding:0px 10px 25px 10px;
+	font-size:14px;
 }
 
 .alert
@@ -594,11 +673,29 @@ textarea:focus, textarea:hover
 #center table.form
 {
     width:100%;
+	border-collapse:collapse;
+	margin: 10px 0;
+}
+
+#center table.form tr:first-child
+{
+    border-top: 1px solid #bbb;
+}
+
+#center table.form tr:nth-child(odd)
+{
+	background:#e0e0e0;
+    border-bottom: 1px solid #bbb;
+}
+
+#center table.form tr:nth-child(even)
+{
+	background:#f7f7f7;
+    border-bottom: 1px solid #bbb;
 }
 
 #center table.form tr td
 {
-    border-bottom: 1px solid #ddd;
     border-color:rgba(20,20,20,0.1);
     padding: 4px;
     padding-left:20px;
@@ -610,7 +707,7 @@ textarea:focus, textarea:hover
     border-right:1px solid #aaa;
     border-right:1px solid rgba(20,20,20,0.2);
     padding:5px;
-	vertical-align:top;
+	vertical-align:middle;
 }
 
 #center table.form .help

@@ -8,25 +8,25 @@ class Migration_Update extends CI_Migration {
 
 		$this->db->query(
 				"INSERT INTO `" . $this->db->dbprefix('preferences') . "` (`name`, `value`, `group`) VALUES
-						('fs_dl_archive_max', 0, 0),
+						('fs_reg_email_disabled', 0, 0),
+						('fs_dl_archive_max', 750, 0),
+						('fs_dl_enabled', 0, 0),
 						('fs_cron_autoupgrade_version', 0, 0);"
 		);
 
-		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD `pagesnum` INT NOT NULL AFTER `thumbnail` ,
-						ADD `size` INT NOT NULL AFTER `pages` ,
-						ADD `compressed` VARCHAR( 140 ) NOT NULL AFTER `size` ,
-						ADD `compressedsize` INT NOT NULL AFTER `compressed` ,
-						ADD `compressedtime` DATETIME NOT NULL AFTER `compressed` ,
-						ADD `dirsize` INT NOT NULL AFTER `compressedsize`"
-		);
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . $this->db->dbprefix('archives') . "` (
+						  `id` int(11) NOT NULL AUTO_INCREMENT,
+						  `chapter_id` int(11) NOT NULL,
+						  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+						  `size` int(11) NOT NULL,
+						  `created` datetime NOT NULL,
+						  `edited` datetime NOT NULL,
+						  `lastdownload` datetime NOT NULL,
+						  PRIMARY KEY (`id`)
+						) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+						");
 
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD INDEX ( `created` )");
-
-		$chapters = new Chapters();
-		$chapters->get_iterated();
-		foreach ($chapters as $chapter) {
-			
-		}
 	}
 
 }

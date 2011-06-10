@@ -33,7 +33,6 @@ class Archive extends DataMapper {
 	function post_model_init($from_cache = FALSE) {
 		
 	}
-	
 
 	/**
 	 * Creates a compressed cache file for the chapter
@@ -45,23 +44,23 @@ class Archive extends DataMapper {
 		$chapter->get_comic();
 		$chapter->get_pages();
 		$files = array();
-		
+
 		$this->where('chapter_id', $chapter->id)->get();
-		if($this->result_count() == 0) {
+		if ($this->result_count() == 0) {
 			$this->remove_old();
 			$CI = & get_instance();
+			
 			$CI->load->library('zip');
-			foreach ($chapter->pages as $page) {
-				$CI->zip->read_file("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"]);
-			}
-
 			$filename = $this->filename_compressed($chapter);
-			$CI->zip->add_data($files);
-			$CI->zip->archive("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename);
+			foreach ($chapter->pages as $page) {
+				$data = file_get_contents("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"]);
+				$CI->zip->add_data($filename.'/'.$page["filename"], $data);
+			}
+			$CI->zip->archive("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename.'.zip');
 
 			$this->chapter_id = $chapter->id;
-			$this->filename = $filename;
-			$this->size = filesize("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename);
+			$this->filename = $filename.'.zip';
+			$this->size = filesize("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename.'.zip');
 			$this->lastdownload = date('Y-m-d H:i:s', time());
 			$this->save();
 		}
@@ -70,9 +69,9 @@ class Archive extends DataMapper {
 			$this->save();
 		}
 
-		return site_url()."content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename;
+		return site_url() . "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename;
 	}
-	
+
 	/**
 	 * Removes the compressed file from the disk and database
 	 * 
@@ -86,21 +85,20 @@ class Archive extends DataMapper {
 		unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename);
 		$this->delete();
 	}
-	
+
 	function calculate_size() {
 		$this->select_sum('size')->get();
 		return $this->size;
 	}
-	
+
 	function remove_old() {
-		while($this->calculate_size() > (get_setting('fs_dl_archive_max')*1024*1024)) {
+		while ($this->calculate_size() > (get_setting('fs_dl_archive_max') * 1024 * 1024)) {
 			$archive = new Archive();
 			$archive->order_by('lastdownload', 'ASC')->limit(1)->get();
 			$archive->remove();
 		}
 	}
-	
-	
+
 	function filename_compressed($chapter) {
 		$chapter->get_teams();
 		$chapter->get_comic();
@@ -119,11 +117,9 @@ class Archive extends DataMapper {
 				array_map('chr', range(0, 31)), array("<", ">", ":", '"', "/", "\\", "|", "?", "*"));
 		$filename = str_replace($bad, "", $filename);
 
-		return $filename . '.zip';
+		return $filename;
 	}
-	
 
-	
 }
 
 /* End of file team.php */

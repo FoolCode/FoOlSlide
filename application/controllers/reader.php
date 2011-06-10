@@ -146,6 +146,8 @@ class Reader extends Public_Controller {
 	}
 	
 	public function download($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
+		if(!get_setting('fs_dl_enabled'))
+			show_404();
 		$comice = new Comic();
 		$comice->where('stub', $comic)->get();
 		if ($comice->result_count() == 0) {

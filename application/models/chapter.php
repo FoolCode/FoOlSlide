@@ -706,12 +706,26 @@ class Chapter extends DataMapper {
 
 	/**
 	 * Returns a ready to use html <a> link that points to the reader
-	 *
+	 * 
+	 * @param $text string
 	 * @author	Woxxy
 	 * @return	string <a> to reader
 	 */
-	public function url() {
-		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . $this->title() . '</a>';
+	public function url($text = NULL) {
+		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . ((is_null($text))?$this->title():$text) . '</a>';
+	}
+	
+	
+	/**
+	 * Returns a ready to use html <a> link that points to the download
+	 *
+	 * @param $text string
+	 * @author	Woxxy
+	 * @return	string <a> to reader
+	 */
+	public function download_url($text = NULL, $class = "") {
+		if(get_setting('fs_dl_enabled'))
+			return '<div class="icon_wrapper '.$class.'"><a href="'.$this->download_href().'"><img class="icon off" src="'.glyphish(67).'" /><img class="icon on" src="'.glyphish(67, TRUE).'" /></a></div>';
 	}
 
 	/**
@@ -784,9 +798,17 @@ class Chapter extends DataMapper {
 	 * @returns string href to reader.
 	 */
 	public function href() {
+		return site_url('/reader/read/'.$this->unique_href());
+	}
+	
+	public function download_href() {
+		return site_url('/reader/download/'.$this->unique_href());
+	}
+	
+	public function unique_href() {
 		// If we already used this function, no need to recalc it.
-		if (isset($this->href))
-			return $this->href;
+		if (isset($this->unique_href))
+			return $this->unique_href;
 
 		// We need the comic
 		$this->get_comic();
@@ -796,7 +818,7 @@ class Chapter extends DataMapper {
 		$chapter->where('comic_id', $this->comic->id)->where('volume', $this->volume)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
 
 		// This part of the URL won't change for sure.
-		$url = '/reader/read/' . $this->comic->stub . '/' . $this->language . '/' . $this->volume . '/' . $this->chapter . '/';
+		$url = $this->comic->stub . '/' . $this->language . '/' . $this->volume . '/' . $this->chapter . '/';
 
 		// Find out if there are multiple versions of the chapter, it means there are multiple groups with the same chapter.
 		// Let's set the whole URL with subchapters, teams and maybe joint too in it.
@@ -812,7 +834,7 @@ class Chapter extends DataMapper {
 				$url .= '0/' . $this->joint_id . '/';
 
 			// save the value in a variable for reuse.
-			$this->href = site_url($url);
+			$this->unique_href = $url;
 		}
 		else { // There's only one chapter like this.
 			// If possiblee can make it even shorter without subchapter!
@@ -820,11 +842,10 @@ class Chapter extends DataMapper {
 				$url .= $this->subchapter . '/';
 			}
 			// Save the value in a variable for reuse.
-			$this->href = site_url($url);
+			$this->unique_href = $url;
 		}
 
-
-		return $this->href;
+		return $this->unique_href;
 	}
 
 	/**

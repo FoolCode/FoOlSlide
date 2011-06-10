@@ -29,6 +29,8 @@ class MY_Controller extends CI_Controller {
 			
 			$this->config->config['tank_auth']['allow_registration'] = !get_setting('fs_reg_disabled');
 
+			$this->config->config['tank_auth']['email_activation'] = ((get_setting('fs_reg_email_disabled'))?FALSE:TRUE);
+			
 			$captcha_public = get_setting('fs_reg_recaptcha_public');
 			if ($captcha_public != "") {
 				$captcha_secret = get_setting('fs_reg_recaptcha_secret');

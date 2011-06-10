@@ -151,6 +151,10 @@ function balance_url($string = '') {
 	return site_url($string);
 }
 
+function glyphish($num, $on = FALSE) {
+	return site_url().'/assets/glyphish/'.($on?'on':'off').'/'.$num.'.png';
+}
+
 function relative_date($time) {
 
 	$today = strtotime(date('M j, Y'));

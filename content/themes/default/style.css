@@ -339,6 +339,7 @@ ul.dropdown
 	line-height:120%;
 	width:260px;
 	max-height:400px;
+	overflow:auto;
 	overflow-x:hidden;
 	z-index:1200;
 	padding:6px 5px;
@@ -373,6 +374,7 @@ ul.dropdown li a
 	width:100%;
 	height:100%;
 }
+
 
 .panel
 {
@@ -433,6 +435,7 @@ ul.dropdown li a
 	border-bottom: 1px solid #999;
 	padding-bottom:8px;
 	margin-bottom:8px;
+	position:relative;
 }
 
 .list > .title.fleft, .large > .title.fleft, .large >.title.fright
@@ -442,6 +445,52 @@ ul.dropdown li a
 	padding:0px;
 	margin-bottom:0;
 }
+
+.icon_wrapper {
+	position:relative;
+	height:32px;
+	width:32px;
+	padding:0px;
+	text-align:center;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	overflow:hidden;
+}
+
+.icon_wrapper .icon {
+	position:absolute;
+	top:0px;
+	text-align:center;
+	top:-7px;
+	left:-7px;
+}
+
+.icon_wrapper .icon.on {
+	display:none;
+}
+
+.icon_wrapper:hover .icon.off {
+	display:none;
+}
+
+.icon_wrapper:hover .icon.on {
+	display:block;
+}
+
+.icon_wrapper.small {
+	width:16px;
+	height:16px;
+	margin-right:-10px;
+}
+
+.icon_wrapper.small .icon {
+	top:-4px;
+	right:4px;
+	width:26px;
+	height:26px;
+}
+
 
 .list .group
 {

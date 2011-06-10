@@ -226,10 +226,8 @@ class Membership extends DataMapper {
 			if (!$CI->tank_auth->is_allowed() || $this->has_leader($team_id))
 				return FALSE;
 
-			// If we're here it means the user is not in the team, that the team has no leader, and that it's an admin/mod using the function
-			// I've added this security measure to avoid bitching between admins and leaders seeing new leaders popping out of nowhere
-			// Also, less buttons displayed for admins, which is real nice
 			$this->request($team_id, $user_id);
+			$this->accept($team_id, $user_id);
 			$this->clear();
 			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 			if ($this->result_count() != 1)

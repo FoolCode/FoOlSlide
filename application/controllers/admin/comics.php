@@ -8,7 +8,7 @@ class Comics extends Admin_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
-		if (!($this->tank_auth->is_admin() || $this->tank_auth->is_group('mod')))
+		if (!($this->tank_auth->is_allowed()))
 			redirect('admin');
 		$this->load->model('files_model');
 		$this->load->library('pagination');
@@ -367,6 +367,9 @@ class Comics extends Admin_Controller {
 	}
 
 	function import($stub) {
+		if(!$this->tank_auth->is_admin())
+			show_404();
+		
 		if (!$stub)
 			show_404();
 

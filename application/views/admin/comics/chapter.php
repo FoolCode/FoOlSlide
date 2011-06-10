@@ -37,13 +37,6 @@ $session_data = $this->session->get_js_session();
 			});
 		}
 	
-		function deleteAllPages()
-		{
-			jQuery.post('<?php echo site_url('/admin/comics/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
-				location.reload();
-			});
-		}
-	
 		function updateSession()
 		{
 			jQuery.post('<?php echo site_url('/admin/comics/get_sess_id'); ?>', 
@@ -61,6 +54,8 @@ $session_data = $this->session->get_js_session();
 		}
 			
 		jQuery(document).ready(function() {
+			updateSession();
+		
 			jQuery('#file_upload').uploadify({
 				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
 				'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
@@ -75,9 +70,7 @@ $session_data = $this->session->get_js_session();
 				'postData' : {}
 			});
 		});
-	
-		updateSession();
-	
+
 	</script>
 	<div id="file_upload">Upload</div>
 </div>

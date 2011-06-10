@@ -164,6 +164,7 @@ input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:ac
 input::-webkit-input-placeholder {
     color:    #999;
 }
+
 input:-moz-placeholder {
     color:    #999;
 }
@@ -225,10 +226,11 @@ textarea:focus, textarea:hover
 	font-size: 12px;
 	display:block;
 	float:left;
+	position:relative;
 	padding:5px 6px 4px;
 	color:#f6f6f6 !important;
 	text-shadow:0px 0px 1px #333;
-	color:rgba(255,255,255,0.9) !important;
+	color:rgba(255,255,255,0.85) !important;
 	border:1px solid #ddd;
 	border:1px solid rgba(56,56,56,0.4);
 	margin: 0 4px 0 0;
@@ -238,14 +240,14 @@ textarea:focus, textarea:hover
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 
-	background: #b7b7b7;
+	background:#535353;
 	background: -webkit-gradient(
         linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.20)),
-        color-stop(1, rgba(56,56,56,.30))
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
     	);
-  	background: -o-linear-gradient(rgba(56,56,56,.20),rgba(56,56,56,.30));
-  	background: -moz-linear-gradient(rgba(56,56,56,.20),rgba(56,56,56,.30));
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 
 	box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
 	moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
@@ -267,6 +269,23 @@ textarea:focus, textarea:hover
 	box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
 	-moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
 	-webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+.gbutton .loader {
+	display:none;
+}
+
+.gbutton.loading {
+	color:#666 !important;
+	color:rgba(200,200,200,0.4) !important;
+}
+
+.gbutton.loading .loader {
+	display:block;
+	position:absolute;
+	text-align:center;
+	top:2px;
+	left:38%;
 }
 
 #background
@@ -495,7 +514,9 @@ textarea:focus, textarea:hover
     	);
 	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-
+	box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
+	moz-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
+	-webkit-box-shadow:	0px -1px 1px rgba(255,255,255,0.4) inset;
 
 }
 
@@ -604,12 +625,16 @@ textarea:focus, textarea:hover
 	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 	
-	border-top-right-radius:4px;
-    -webkit-border-top-right-radius-:4px;
-    -moz-border-radius-topright:4px;
-	border-top-left-radius:4px;
-    -webkit-border-top-left-radius-:4px;
-    -moz-border-radius-topleft:4px;
+	box-shadow: 0px -2px 1px rgba(255,255,255,0.4) inset;
+	moz-box-shadow: 0px -2px 1px rgba(255,255,255,0.4) inset;
+	-webkit-box-shadow:	0px -2px 1px rgba(255,255,255,0.4) inset;
+	
+	border-top-right-radius:3px;
+    -webkit-border-top-right-radius-:3px;
+    -moz-border-radius-topright:3px;
+	border-top-left-radius:3px;
+    -webkit-border-top-left-radius-:3px;
+    -moz-border-radius-topleft:3px;
 
 }
 
@@ -626,11 +651,28 @@ textarea:focus, textarea:hover
 #center .section
 {
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
-    font-size:23px;
+    font-size:18px;
     font-style:italic;
+    margin:20px 0 14px;
 	text-indent:10px;
-	margin-top:15px;
+
 	display:block;
+	color:#E2E2E2;
+	color:rgba(255,255,255,0.8);
+	text-shadow: 0px 0px 1px #444;
+
+	padding:6px 15px;
+	width:100%;
+	position:relative;
+	right:20px;
+	background:#535353;
+	background: -webkit-gradient(
+        linear, left top, left bottom,
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
+    	);
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 }
 
 #center > .smalltext

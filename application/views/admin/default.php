@@ -9,14 +9,16 @@
             function slideDown(item) { jQuery(item).slideDown(); }
             function slideUp(item) { jQuery(item).slideUp(); }
             function slideToggle(item) { jQuery(item).slideToggle(); }
-            function confirmPlug(href, text)
+            function confirmPlug(href, text, item)
             {
                 if(text != "") var plug = confirm(text);
 				else plug = true;
 				
                 if (plug)
                 {
+					jQuery(item).addClass('loading');
                     jQuery.post(href, function(result){
+						jQuery(item).removeClass('loading');
 						if(location.href == result.href) window.location.reload(true);
 						location.href = result.href;
 					}, 'json');
@@ -160,7 +162,7 @@ if (isset($extra_title) && !empty($extra_title)) {
 	</div>
 
 	<div id="footer"><div class="text">FoOlSlide Version <?php if (isset($this->tank_auth))
-	echo get_setting('fs_priv_version') ?><?php if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && get_setting('fs_priv_version')))
+	echo get_setting('fs_priv_version') ?><?php if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
 	echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>'; ?></div></div>
 </body>
 

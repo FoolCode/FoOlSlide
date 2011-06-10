@@ -161,7 +161,7 @@ class Tank_auth {
 			$user_id = $this->get_user_id();
 		$user = new Profile();
 		$user->where('user_id', $user_id)->get();
-		if ($user->group_id == 2)
+		if ($user->group_id == 3)
 			return true;
 		return false;
 	}

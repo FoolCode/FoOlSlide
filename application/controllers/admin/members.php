@@ -352,7 +352,7 @@ class Members extends Admin_Controller {
 		if (!$this->tank_auth->is_admin())
 			return false;
 		$profile = new Profile();
-		if ($profile->change_group($user_id, 2)) {
+		if ($profile->change_group($user_id, 3)) {
 			flash_notice('notice', _('You have added the user to the moderators group.'));
 			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
 			return true;

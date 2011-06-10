@@ -347,8 +347,11 @@ if (!function_exists('buttoner')) {
 			if (isset($item['href']))
 				$echo .= 'href="' . ($item['href']) . '" ';
 			if (isset($item['plug']))
-				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\'); return false;"';
-			$echo .= '>' . $item['text'] . '</a>';
+				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
+			$echo .= '>';
+			if (isset($item['plug']))
+				$echo .= '<img class="loader" src="'.site_url().'/assets/js/images/ajax-loader.gif'.'" />';
+			$echo .= $item['text'] . '</a>';
 		}
 		$echo .= '<div class="clearer_r"></div></div>';
 		return $echo;

@@ -152,7 +152,7 @@ function balance_url($string = '') {
 }
 
 function glyphish($num, $on = FALSE) {
-	return site_url().'/assets/glyphish/'.($on?'on':'off').'/'.$num.'.png';
+	return site_url().'assets/glyphish/'.($on?'on':'off').'/'.$num.'.png';
 }
 
 function relative_date($time) {

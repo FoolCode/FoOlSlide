@@ -42,7 +42,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 		</div>
 		<div class="title fleft icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
 		<?php echo $chapter->download_url(NULL, "fleft"); ?>
-		
+
 		<div class="title fright dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
 			<?php
 			$url = $chapter->href();
@@ -52,7 +52,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 			}
 			echo '</ul>'
 			?></div>		
-		
+
 		<div class="numbers fright">
 
 			<div class="divider fright"></div>
@@ -64,8 +64,8 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 			}
 			?></div>
 		</div>
-		
-		
+
+
 		<div class="clearer"></div>
 
 	</div>
@@ -119,7 +119,8 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 <script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
 <script type="text/javascript">
 
-
+	var title = document.title;
+	
 	var pages = <?php echo json_encode($pages); ?>;
 
 	var next_chapter = "<?php echo $next_chapter; ?>";
@@ -130,7 +131,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 	var current_page = <?php echo $current_page - 1; ?>;
 	
-	function changePage(id, noscroll)
+	function changePage(id, noscroll, nohash)
 	{
 		id = parseInt(id);
 		if(id > pages.length-1) 
@@ -164,7 +165,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			}
 			jQuery("#page").css({'max-width': 'none', 'overflow':'auto'});
 			jQuery("#page").animate({scrollLeft:9000},400);
-			jQuery("#page .inner img.open").css({'max-width':'none', 'height':height});
+			jQuery("#page .inner img.open").css({'max-width':'99999px', 'height':height, 'width':width});
 			jQuery('#page .inner .preview img').attr({width:width, height:height});
 			jQuery('#page .inner img.open').attr({width:width, height:height});
 			if(jQuery("#page").width() < jQuery("#page .inner img.open").width()) {
@@ -203,11 +204,13 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('#page .inner img.open').css({'opacity':'1'});
 		}
 		
-		
+		if(!nohash) History.pushState(null, null, '<?php echo $chapter->href() ?>page/' + (current_page + 1));
 		update_numberPanel();
 		jQuery('#pagelist .images').scrollTo(jQuery('#thumb_' + id).parent(), 400);
 		jQuery('#pagelist .current').removeClass('current');
 		jQuery('#thumb_' + id).addClass('current');
+		document.title = '<?php echo addslashes(_("page")) ?> ' + (id+1) + ' :: ' + title;
+		
 <?php
 if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
 	echo 'jQuery("#ads_iframe_top_banner iframe").attr("src","' . site_url() . 'content/ads/ads_top.html");';
@@ -412,6 +415,15 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		timeStamp37 = 0;
 		timeStamp39 = 0;
 		
+		jQuery(window).bind('statechange',function(){
+			var State = History.getState();
+			url = State.url.substr(State.url.lastIndexOf('/')+1);
+			changePage(url-1, false, true);
+		});
+		State = History.getState();
+		url = State.url.substr(State.url.lastIndexOf('/')+1);
+		current_page = url-1;
+		History.pushState(null, null, '<?php echo $chapter->href() ?>page/' + (current_page+1));
 		create_numberPanel();
 		changePage(current_page);
 		

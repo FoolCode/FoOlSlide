@@ -50,13 +50,16 @@ class Archive extends DataMapper {
 			$this->remove_old();
 			$CI = & get_instance();
 			
-			$CI->load->library('zip');
+			require_once(FCPATH.'assets/pclzip/pclzip.lib.php');
 			$filename = $this->filename_compressed($chapter);
+			$archive = new PclZip("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename.'.zip');
+			
+			$filearray = array();
 			foreach ($chapter->pages as $page) {
-				$data = file_get_contents("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"]);
-				$CI->zip->add_data($filename.'/'.$page["filename"], $data);
+				$filearray[] = "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"];
 			}
-			$CI->zip->archive("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename.'.zip');
+			
+			$v_list = $archive->create(implode(',', $filearray), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, $filename, PCLZIP_OPT_NO_COMPRESSION);
 
 			$this->chapter_id = $chapter->id;
 			$this->filename = $filename.'.zip';

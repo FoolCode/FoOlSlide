@@ -131,9 +131,18 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 	var current_page = <?php echo $current_page - 1; ?>;
 	
+	var initialized = false;
+	
+	var baseurl = '<?php echo $chapter->href() ?>';
+	
+	var gt_page = '<?php echo addslashes(_("page")) ?>';
+	
 	function changePage(id, noscroll, nohash)
 	{
 		id = parseInt(id);
+		if (initialized && id == current_page)
+			return false;
+		initialized = true;
 		if(id > pages.length-1) 
 		{
 			location.href = next_chapter;
@@ -204,12 +213,12 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('#page .inner img.open').css({'opacity':'1'});
 		}
 		
-		if(!nohash) History.pushState(null, null, '<?php echo $chapter->href() ?>page/' + (current_page + 1));
+		if(!nohash) History.pushState(null, null, baseurl+'page/' + (current_page + 1));
+		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
 		update_numberPanel();
 		jQuery('#pagelist .images').scrollTo(jQuery('#thumb_' + id).parent(), 400);
 		jQuery('#pagelist .current').removeClass('current');
 		jQuery('#thumb_' + id).addClass('current');
-		document.title = '<?php echo addslashes(_("page")) ?> ' + (id+1) + ' :: ' + title;
 		
 <?php
 if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
@@ -228,15 +237,13 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 	function nextPage()
 	{
-		current_page++;
-		changePage(current_page);
+		changePage(current_page+1);
 		return false;
 	}
 	
 	function prevPage()
 	{
-		current_page--;
-		changePage(current_page);
+		changePage(current_page-1);
 		return false;
 	}
 	
@@ -288,7 +295,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		result = "";
 		for (j = pages.length+1; j > 0; j--) {
 			nextnumber = ((j/1000 < 1 && pages.length >= 1000)?'0':'') + ((j/100 < 1 && pages.length >= 100)?'0':'') + ((j/10 < 1 && pages.length >= 10)?'0':'') + j;
-			result += "<div class='number number_"+ j +" dnone'><a href='<?php echo ($chapter->href . 'page/'); ?>" + j + "' onClick='changePage("+(j-1)+"); return false;'>"+nextnumber+"</a></div>"; 
+			result += "<div class='number number_"+ j +" dnone'><a href='" + baseurl + "page/" + j + "' onClick='changePage("+(j-1)+"); return false;'>"+nextnumber+"</a></div>"; 
 		}
 		jQuery(".numbers .current").html(result);
 	}
@@ -419,13 +426,16 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			var State = History.getState();
 			url = State.url.substr(State.url.lastIndexOf('/')+1);
 			changePage(url-1, false, true);
+			document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
 		});
 		State = History.getState();
 		url = State.url.substr(State.url.lastIndexOf('/')+1);
+		if(url < 1)
+			url = 1;
 		current_page = url-1;
-		History.pushState(null, null, '<?php echo $chapter->href() ?>page/' + (current_page+1));
+		History.pushState(null, null, baseurl+'page/' + (current_page+1));
 		create_numberPanel();
-		changePage(current_page);
-		
+		changePage(current_page, false, true);
+		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;		
 	});
 </script>

@@ -106,7 +106,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 <style type="text/css">
 	#page{margin: 10px auto 0px;}
-	#ads_iframe_top_banner, #ads_static_top_banner {margin:10px auto;}
+	#ads_iframe_top_banner, #ads_static_top_banner, #ads_iframe_bottom_banner, #ads_static_bottom_banner {margin:10px auto;}
 	<?php
 	if (get_setting('fs_ads_left_banner_active')) {
 		echo '.panel,#ads_iframe_top_banner, #ads_static_bottom_banner,#ads_iframe_bottom_banner, #ads_static_top_banner  {position:relative; left:95px;}';

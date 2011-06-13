@@ -16,9 +16,13 @@ class Upgrade extends Admin_Controller {
 	}
 
 	function index() {
-		$data["version"] = get_setting('fs_priv_version');
+		$data["current_version"] = get_setting('fs_priv_version');
 		$data["can_upgrade"] = $this->upgrade_model->check_files();
-		$data["latest"] = $this->upgrade_model->check_latest();
+		if(!$data["can_upgrade"])
+		{
+			$this->upgrade_model->permissions_suggest();
+		}
+		$data["new_versions"] = $this->upgrade_model->check_latest();
 		
 		$this->viewdata["main_content_view"] = $this->load->view("admin/upgrade/index", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
@@ -33,6 +37,5 @@ class Upgrade extends Admin_Controller {
 		}
 		echo json_encode(array('href' => site_url('admin/upgrade')));
 	}
-
 
 }

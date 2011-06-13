@@ -264,7 +264,7 @@ class Install extends Install_Controller {
 				unlink('content/testing_123.txt');
 			}
 			if ($whoami != "")
-				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
+				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<br/><b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
 			else
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it\'s www-data or Apache)'), FCPATH, '<br/><b><code>chown -R www-data ' . FCPATH . '</code></b><br/>'));
 			set_notice('warn', sprintf(_('If you can\'t do the above, after the installation you will be given a textfile to paste in config.php. More info after submitting.')));
@@ -272,7 +272,7 @@ class Install extends Install_Controller {
 		}
 
 		if ($prob) {
-			set_notice('notice', 'If you made any changes, just refresh this page to recheck the directory permissions');
+			set_notice('notice', 'If you made any changes, just refresh this page to recheck the directory permissions.');
 		}
 
 		return TRUE;

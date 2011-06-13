@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 $CI = & get_instance();
 
-if ($latest) {
+if ($new_versions) {
 	if ($can_upgrade) {
 		$CI->buttoner[] = array(
 			'text' => _('Upgrade FoOlSlide automatically'),
@@ -16,13 +16,22 @@ if ($latest) {
 	
 	$CI->buttoner[] = array(
 			'text' => _('Download latest version'),
-			'href' => $latest->download
+			'href' => $new_versions[0]->download
 		);
 }
 
 echo buttoner();
 echo '<br/><br/>
-	Current version: '.$version.'<br/>
-	Latest version available: '.($latest?($latest->version.'.'.$latest->subversion.'.'.$latest->subsubversion):_('Your FoOlSlide is up to date.')).'<br/><br/>';
-if($latest)
-echo 'Changelog: '.$latest->changelog;
+	Current version: '.$current_version.'<br/>
+	Latest version available: '.($new_versions?($new_versions[0]->version.'.'.$new_versions[0]->subversion.'.'.$new_versions[0]->subsubversion):_('Your FoOlSlide is up to date.')).'<br/><br/>';
+if($new_versions){
+	echo '<div class="list">';
+	foreach($new_versions as $version){
+		echo '<div class="item">
+                <div class="title">Changelog for version '.implode('.',array($version->version, $version->subversion, $version->subsubversion)).'</div><br/>'
+					.nl2br($version->changelog).'<br/><br/>
+				</div>';
+	}
+	echo '</div>';
+}
+

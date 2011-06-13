@@ -166,15 +166,18 @@ class Page extends DataMapper {
 		// Check if the variable is not yet set, in order to save a databse read.
 		if (!isset($this->chapter)) {
 			$this->chapter = new Chapter($this->chapter_id);
-
+			if($this->chapter->result_count() < 1) {
+				log_message('error', 'get_chapter: chapter not found');
+				return FALSE;
+			}
 			if (!$this->chapter->get_comic()) {
 				log_message('error', 'get_chapter: comic not found');
-				return false;
+				return FALSE;
 			}
 		}
 
 		// All good, return true.
-		return true;
+		return TRUE;
 	}
 
 	/**
@@ -290,7 +293,7 @@ class Page extends DataMapper {
 			log_message('error', 'remove_page: failed to delete dir');
 			return false;
 		}
-		
+
 		// Remove from database
 		if (!$this->remove_page_db()) {
 			log_message('error', 'remove_page: failed to delete database entry');

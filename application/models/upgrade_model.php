@@ -18,8 +18,12 @@ class Upgrade_model extends CI_Model {
 	 * @return type FALSE or the download URL
 	 */
 	function check_latest($force = FALSE) {
-		$this->load->library('curl');
-		$result = $this->curl->simple_post($this->pod . '/api/software/foolslide', array('url' => site_url()));
+		if (function_exists('curl_open')) {
+			$this->load->library('curl');
+			$result = $this->curl->simple_post($this->pod . '/api/software/foolslide', array('url' => site_url()));
+		}
+		else
+			$result = file_get_contents($this->pod . '/api/software/foolslide');
 		if (!$result) {
 			set_notice('error', _('FoOlPod server could not be contacted: impossible to check for new versions.'));
 			return FALSE;
@@ -27,18 +31,52 @@ class Upgrade_model extends CI_Model {
 		$data = json_decode($result);
 		$latest = $data->versions[0];
 
-		$version = explode('.', get_setting('fs_priv_version'));
+		$new_versions = array();
+		foreach ($data->versions as $new) {
+			if (!$this->is_bigger_version(get_setting('fs_priv_version'), $new))
+				break;
+			$new_versions[] = $new;
+		}
+		if (!empty($new_versions))
+			return $new_versions;
+
+		return FALSE;
+	}
+
+	/**
+	 * Compares two versions and returns TRUE if second parameter is bigger than first, else FALSE
+	 * 
+	 * @param type $maybemin
+	 * @param type $maybemax
+	 * @return bool 
+	 */
+	function is_bigger_version($maybemin, $maybemax) {
+		if (is_string($maybemin))
+			$maybemin = $this->version_to_object($maybemin);
+		if (is_string($maybemax))
+			$maybemax = $this->version_to_object($maybemax);
+
+		if ($maybemax->version > $maybemin->version ||
+				($maybemax->version == $maybemin->version && $maybemax->subversion > $maybemin->subversion) ||
+				($maybemax->version == $maybemin->version && $maybemax->subversion == $maybemin->subversion && $maybemax->subsubversion > $maybemin->subsubversion)) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Converts the version from string separated by dots to object
+	 * 
+	 * @author Woxxy
+	 * @param type $string
+	 * @return object 
+	 */
+	function version_to_object($string) {
+		$version = explode('.', $string);
 		$current->version = $version[0];
 		$current->subversion = $version[1];
 		$current->subsubversion = $version[2];
-
-		if ($force || $latest->version > $current->version ||
-				($latest->version == $current->version && $latest->subversion > $current->subversion) ||
-				($latest->version == $current->version && $latest->subversion == $current->subversion && $latest->subsubversion > $current->subsubversion)) {
-			return $latest;
-		}
-
-		return FALSE;
+		return $current;
 	}
 
 	/**
@@ -49,14 +87,21 @@ class Upgrade_model extends CI_Model {
 	 */
 	function get_file($url, $direct_url) {
 		$this->clean();
-		$zip = $this->curl->simple_post($url, array('url' => site_url()));
-		if (!$zip) {
-			if (!$zip = $this->curl->simple_get($direct_url)) {
-				log_message('error', 'upgrade_model get_file(): impossible to get the update from FoOlPod');
-				set_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem. Browse <a href="http://foolrulez.com/pod/human">http://foolrulez.com/pod/human</a> to check if it\'s a known issue.'));
-				return FALSE;
+		if (function_exists('curl_open')) {
+			$zip = $this->curl->simple_post($url, array('url' => site_url()));
+			if (!$zip) {
+				$zip = $this->curl->simple_get($direct_url);
 			}
 		}
+		else {
+			$zip = file_get_contents($direct_url);
+		}
+		if (!$zip) {
+			log_message('error', 'upgrade_model get_file(): impossible to get the update from FoOlPod');
+			flash_notice('error', _('Can\'t get the update file from FoOlPod. It might be a momentary problem, or a problem with your server security configuration. Browse <a href="http://foolrulez.com/pod/human">http://foolrulez.com/pod/human</a> to check if it\'s a known issue.'));
+			return FALSE;
+		}
+
 		if (!is_dir('content/cache/upgrade'))
 			mkdir('content/cache/upgrade');
 		write_file('content/cache/upgrade/upgrade.zip', $zip);
@@ -111,6 +156,35 @@ class Upgrade_model extends CI_Model {
 		return TRUE;
 	}
 
+	function permissions_suggest() {
+		if (!is_writable('.')) {
+			$whoami = FALSE;
+			if ($this->_exec_enabled())
+				$whoami = exec('whoami');
+			if (!$whoami && is_writable('content') && function_exists('posix_getpwid')) {
+				write_file('content/testing_123.txt', 'testing_123');
+				$whoami = posix_getpwuid(fileowner('content/testing_123.txt'));
+				$whoami = $whoami['name'];
+				unlink('content/testing_123.txt');
+			}
+			if ($whoami != "")
+				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<br/><b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
+			else
+				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it\'s www-data or Apache)'), FCPATH, '<br/><b><code>chown -R www-data ' . FCPATH . '</code></b><br/>'));
+			set_notice('warn', sprintf(_('If you can\'t do the above, you can follow the manual upgrade instructons at %sthis link%s.'), '<a href="http://trac.foolrulez.com/foolslide/wiki/installation_guide#Manualupgradeorifautomaticupgradebrokeeverything">', '</a>'));
+			$prob = TRUE;
+		}
+
+		if ($prob) {
+			set_notice('notice', 'If you made any changes, just refresh this page to recheck the directory permissions.');
+		}
+	}
+
+	function _exec_enabled() {
+		$disabled = explode(', ', ini_get('disable_functions'));
+		return!in_array('exec', $disabled);
+	}
+
 	/**
 	 * Hi, I herd you liek upgrading, so I put an update for your upgrade, so you
 	 * can update the upgrade before upgrading.
@@ -142,9 +216,12 @@ class Upgrade_model extends CI_Model {
 			return false;
 		}
 
-		$latest = $this->upgrade_model->check_latest(TRUE);
-		if ($latest === FALSE)
+		$new_versions = $this->upgrade_model->check_latest(TRUE);
+		if ($new_versions === FALSE)
 			return FALSE;
+
+		// Pick the newest version
+		$latest = $new_versions[0];
 
 		$this->upgrade_model->get_file($latest->download, $latest->direct_download);
 		$this->upgrade_model->update_upgrade();

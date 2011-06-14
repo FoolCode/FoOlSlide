@@ -10,7 +10,7 @@ class Public_Controller extends MY_Controller {
 		
 		$this->load->library('template');
 		$this->template->append_metadata('<script src="' . site_url() . 'assets/js/jquery.js"></script>');
-		$this->template->set_theme('default');
+		$this->template->set_theme((get_setting('fs_theme_dir')?get_setting('fs_theme_dir'):'default'));
 		if ($this->agent->is_mobile()) {
 			$this->reurl_mobile();
 			$this->template->append_metadata('<script src="' . site_url() . 'assets/js/jquery.mobile.js"></script>');

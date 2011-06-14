@@ -670,7 +670,12 @@ class Template
 			{
 				$theme_views = array(
 					$this->_theme . '/views/modules/' . $this->_module . '/' . $view,
-					$this->_theme . '/views/' . $view
+					$this->_theme . '/views/' . $view,
+					/**
+					 * Added default
+					 * @author Woxxy
+					 */
+					'default/views/' . $view
 				);
 
 				foreach ($theme_views as $theme_view)
@@ -704,6 +709,13 @@ class Template
 
 			else
 			{
+				/**
+				 * Switch to default if not found
+				 * @author Woxxy
+				 */
+				if(!file_exists($override_view_path.$view.self::_ext($view))) {
+					$override_view_path = FCPATH.'content/themes/default/views/';
+				}
 				// Load it directly, bypassing $this->load->view() as ME resets _ci_view
 				$content = $this->_ci->load->_ci_load(array(
 					'_ci_path' => $override_view_path.$view.self::_ext($view),

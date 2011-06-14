@@ -25,7 +25,14 @@ class Preferences extends Admin_Controller {
 			else
 				$value = NULL;
 
-			$this->db->update('preferences', array('value' => $value), array('name' => $item[1]['name']));
+			$this->db->from('preferences');
+			$this->db->where(array('name' => $item[1]['name']));
+			if($this->db->count_all_results() == 1) {
+				$this->db->update('preferences', array('value' => $value), array('name' => $item[1]['name']));
+			}
+			else {
+				$this->db->insert('preferences', array('name' => $item[1]['name'], 'value' => $value));
+			}
 		}
 
 		$CI = & get_instance();
@@ -70,16 +77,6 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			_('Footer text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_gen_footer_text',
-				'placeholder' => '',
-				'preferences' => 'fs_gen'
-			)
-		);
-
-		$form[] = array(
 			_('Default team'),
 			array(
 				'type' => 'input',
@@ -112,6 +109,65 @@ class Preferences extends Admin_Controller {
 			)
 		);
 
+		if ($post = $this->input->post()) {
+			$this->_submit($post, $form);
+		}
+
+		$table = tabler($form, FALSE);
+
+		$data['table'] = $table;
+
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
+	
+	function theme() {
+		$this->viewdata["function_title"] = _("Theme");
+
+
+		$form = array();
+
+		$form[] = array(
+			_('Select theme'),
+			array(
+				'type' => 'themes',
+				'name' => 'fs_theme_dir',
+				'placeholder' => '',
+				'preferences' => 'fs_gen'
+			)
+		);
+
+		$form[] = array(
+			_('Footer text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_gen_footer_text',
+				'placeholder' => '',
+				'preferences' => 'fs_gen'
+			)
+		);
+		
+		$form[] = array(
+			_('Header code'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_theme_header_code',
+				'placeholder' => '',
+				'preferences' => 'fs_gen'
+			)
+		);
+		
+		$form[] = array(
+			_('Footer code'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_theme_footer_code',
+				'placeholder' => '',
+				'preferences' => 'fs_gen'
+			)
+		);
+		
 		if ($post = $this->input->post()) {
 			$this->_submit($post, $form);
 		}

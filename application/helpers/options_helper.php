@@ -55,8 +55,10 @@ if (!function_exists('get_home_team')) {
 		$hometeam = get_setting('fs_gen_default_team');
 		$team = new Team();
 		$team->where('name', $hometeam)->limit(1)->get();
-		if ($team->result_count() < 1)
-			return false;
+		if ($team->result_count() < 1) {
+			$team = new Team();
+			$team->limit(1)->get();
+		}
 
 		return $team;
 	}

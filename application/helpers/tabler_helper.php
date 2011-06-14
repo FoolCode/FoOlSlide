@@ -113,7 +113,8 @@ if (!function_exists('formize')) {
 
 	function formize($column, $repopulate) {
 		$CI = & get_instance();
-		if($repopulate && $CI->input->post()) $column['value'] = (set_value($column['name'])=="")?$column["value"]:set_value($column['name']);
+		if ($repopulate && $CI->input->post())
+			$column['value'] = (set_value($column['name']) == "") ? $column["value"] : set_value($column['name']);
 		if (isset($column['preferences']))
 			$column['value'] = get_setting($column['name']);
 
@@ -201,15 +202,15 @@ function writize($column) {
 			$column['value'] = get_setting('fs_gen_default_lang');
 		$column['value'] = $lang[$column['value']];
 	}
-	
+
 	if (isset($column['type']) && $column['type'] == 'nation') {
 		$value = $column['value'];
 		$column['value'] = "";
 		$nations = config_item('fs_country_names');
-		foreach($value as $key => $item)
-		{
+		foreach ($value as $key => $item) {
 			$num = array_search($item, config_item('fs_country_codes'));
-			if($key>0) $column['value'] .= ", ";
+			if ($key > 0)
+				$column['value'] .= ", ";
 			$column['value'] .= $nations[$num];
 		}
 	}
@@ -327,6 +328,22 @@ if (!function_exists('form_group')) {
 
 }
 
+if (!function_exists('form_themes')) {
+
+	function form_themes($column) {
+		$column["value"] = get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default';
+		$dirs = scandir('content/themes', 1);
+		$set = array();
+		foreach ($dirs as $key => $item) {
+			if (is_dir('content/themes/' . $item) && $item != '.' && $item != '..' && $item != 'mobile') {
+				$set[$item] = $item;
+			}
+		}
+		return form_dropdown($column['name'], $set, $column['value']);
+	}
+
+}
+
 if (!function_exists('buttoner')) {
 
 	function buttoner($data = NULL) {
@@ -350,7 +367,7 @@ if (!function_exists('buttoner')) {
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
 			$echo .= '>';
 			if (isset($item['plug']))
-				$echo .= '<img class="loader" src="'.site_url().'/assets/js/images/ajax-loader.gif'.'" />';
+				$echo .= '<img class="loader" src="' . site_url() . '/assets/js/images/ajax-loader.gif' . '" />';
 			$echo .= $item['text'] . '</a>';
 		}
 		$echo .= '<div class="clearer_r"></div></div>';
@@ -382,18 +399,18 @@ if (!function_exists('prevnext')) {
 
 		if ($item->paged->has_previous) {
 			$echo .= '<div class="prev">
-					<a class="gbutton fleft" href="' . site_url($base_url.'1') . '">«« First</a>
+					<a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« First</a>
 					<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a>
 				</div>';
 		}
 		if ($item->paged->has_next) {
 			$echo .= '<div class="next">
-					<a class="gbutton fright" href="'.site_url($base_url.$item->paged->total_pages).'">Last »»</a>
-					<a class="gbutton fright" href="'.site_url($base_url.$item->paged->next_page).'">Next »</a>
+					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">Last »»</a>
+					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">Next »</a>
 				</div>';
 		}
 		$echo .= '<div class="clearer"></div></div>';
-		
+
 		return $echo;
 	}
 
@@ -402,29 +419,29 @@ if (!function_exists('prevnext')) {
 if (!function_exists('mobile_prevnext')) {
 
 	function mobile_prevnext($base_url, $item) {
-		
+
 		/*
 
-		
-			<a href="<?php echo site_url('/reader/list/') ?>"><?php echo _("Go to series list") ?></a>
-		<!-- /navbar -->
-*/
+
+		  <a href="<?php echo site_url('/reader/list/') ?>"><?php echo _("Go to series list") ?></a>
+		  <!-- /navbar -->
+		 */
 		$echo = '<div data-role="navbar" data-theme="a"><ul>';
 
 		if ($item->paged->has_previous) {
 			$echo .= '
-					<li><a class="gbutton fleft" href="' . site_url($base_url.'1') . '">«« First</a></li>
+					<li><a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« First</a></li>
 					<li><a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a></li>
 				';
 		}
 		if ($item->paged->has_next) {
 			$echo .= '
-					<li><a class="gbutton fright" href="'.site_url($base_url.$item->paged->total_pages).'">Last »»</a></li>
-					<li><a class="gbutton fright" href="'.site_url($base_url.$item->paged->next_page).'">Next »</a></li>
+					<li><a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">Last »»</a></li>
+					<li><a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">Next »</a></li>
 				';
 		}
 		$echo .= '</ul></div>';
-		
+
 		return $echo;
 	}
 

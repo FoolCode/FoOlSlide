@@ -13,5 +13,4 @@ class Migration_Update extends CI_Migration {
 						('fs_priv_maintenance', '', 0);"
 		);
 	}
-
 }

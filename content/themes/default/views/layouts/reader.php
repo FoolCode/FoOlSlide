@@ -5,7 +5,7 @@
 		<title><?php echo $template['title']; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<?php echo $template['metadata']; ?>
-		<?php echo link_tag('content/themes/default/style.css') ?>
+		<?php echo link_tag('content/themes/'.(get_setting('fs_theme_dir')?get_setting('fs_theme_dir'):'default').'/style.css') ?>
 
 
 		<script type="text/javascript">
@@ -80,7 +80,7 @@
 					});
 			
 		</script>
-	<?php echo get_setting('fs_gen_header_code'); ?>
+	<?php echo get_setting('fs_theme_header_code'); ?>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -145,5 +145,5 @@
 			</div>
 		</div>
 	</body>
-	<?php echo get_setting('fs_gen_footer_code'); ?>
+	<?php echo get_setting('fs_theme_footer_code'); ?>
 </html>

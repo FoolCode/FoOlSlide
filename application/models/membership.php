@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 class Membership extends DataMapper {
 
-	var $has_one = array();
+	var $has_one = array('user');
 	var $has_many = array();
 	var $validation = array(
 		'team_id' => array(
@@ -275,7 +275,7 @@ class Membership extends DataMapper {
 		foreach ($this->all as $member) {
 			$members->or_where('id', $member->user_id);
 		}
-		$members->get();
+		$members->include_related('profile')->get();
 
 		foreach ($members->all as $key => $member) {
 			$member->is_leader = ($this->all[$key]->is_leader == 1) ? '1' : '0';

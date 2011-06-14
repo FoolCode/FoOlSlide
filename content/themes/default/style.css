@@ -306,7 +306,9 @@ input[type="text"]
 	border-radius:4px;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
-
+	max-width:500px;
+	height:22px;
+	overflow:hidden;
 }
 
 .dropdown_parent:hover, .dropdown_parent:hover .text {

@@ -31,7 +31,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 			echo '</ul>'
 			?>
 		</div>	
-		<div class="title fleft dropdown_parent"><div class="text"><?php echo $chapter->url() ?> ⤵</div>
+		<div class="title fleft dropdown_parent"><div class="text"><?php echo '<a href="'.$chapter->href().'">'. ((strlen($chapter->title()) > 58)?(substr($chapter->title(), 0, 50).'...'):$chapter->title()) . '</a>' ?> ⤵</div>
 			<?php
 			echo '<ul class="dropdown">';
 			foreach ($chapters->all as $ch) {

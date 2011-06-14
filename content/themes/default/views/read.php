@@ -48,7 +48,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 			$url = $chapter->href();
 			echo '<ul class="dropdown" style="width:90px;">';
 			for ($i = 1; $i <= count($pages); $i++) {
-				echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . $i . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
+				echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . ($i - 1) . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
 			}
 			echo '</ul>'
 			?></div>		

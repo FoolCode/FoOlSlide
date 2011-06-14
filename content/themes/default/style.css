@@ -481,7 +481,7 @@ ul.dropdown li a
 .icon_wrapper.small {
 	width:16px;
 	height:16px;
-	margin-right:-10px;
+	margin-right:0px;
 }
 
 .icon_wrapper.small .icon {
@@ -498,6 +498,7 @@ ul.dropdown li a
 	margin-top:8px;
 	padding-bottom:8px;
 	position:relative;
+	overflow:hidden;
 }
 
 .list .group > .title
@@ -513,15 +514,18 @@ ul.dropdown li a
 
 .list .element
 {
-	text-indent:12px;
 	position:relative;
-	padding: 3px 0;
+	padding: 3px 0 3px 10px;
+	overflow:hidden;
+}
+
+.list .element .title {
+	float:left;
 }
 
 .list .element .meta_r
 {
-	position:absolute;
-	bottom:4px; right:2px;	
+	float:right;
 	font-size: 11px;
 	margin-top:2px;
 }
@@ -530,6 +534,33 @@ ul.dropdown li a
 {
 	font-size:120%;
 }
+
+.list .group .preview {
+	float:left;
+	max-height:125px;
+	margin-right:5px;
+	position:relative;
+	z-index:100;
+}
+
+.list.series .group {
+	min-height:70px;
+}
+
+.list.series .meta_r {
+	position:static;
+	float:none;
+	clear:both;
+}
+
+.list .element .image {
+	float:left;
+	max-height:125px;
+	margin-right:5px;
+	position:relative;
+	z-index:100;
+}
+
 
 
 .large

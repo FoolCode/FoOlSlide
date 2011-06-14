@@ -80,6 +80,7 @@
 					});
 			
 		</script>
+	<?php echo get_setting('fs_gen_header_code'); ?>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -88,7 +89,7 @@
 				<div id="navig">
 					<ul>
 						<li>
-							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Home'); ?></a>
+							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Latest releases'); ?></a>
 						</li>
 						<li>
 							<a href="<?php echo site_url('/reader/list') ?>"><?php echo _('Series list'); ?></a>
@@ -129,7 +130,7 @@
 				echo $template['body'];
 
 				if ((!isset($is_reader) || !$is_reader) && get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active'))
-					echo '<div class="ads static banner" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
+					echo '<div class="ads static banner" id="ads_static_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
 
 				if (!isset($is_reader) || !$is_reader)
 					echo '</div>';
@@ -144,4 +145,5 @@
 			</div>
 		</div>
 	</body>
+	<?php echo get_setting('fs_gen_footer_code'); ?>
 </html>

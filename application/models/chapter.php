@@ -168,7 +168,7 @@ class Chapter extends DataMapper {
 		$result = parent::get($limit, $offset);
 
 		foreach ($this->all as $key => $item) {
-			if (!$this->get_comic()) {
+			if (!$item->get_comic()) {
 				unset($this->all[$key]);
 			}
 		}
@@ -236,9 +236,15 @@ class Chapter extends DataMapper {
 		if (isset($this->comic))
 			return true;
 		$this->comic = new Comic($this->comic_id);
+		if($this->comic->result_count() < 1)
+				return FALSE;
+		if(isset($this->all))
 		foreach ($this->all as $key => $item) {
-			if (!isset($item->comic))
+			if (!isset($item->comic)) {
 				$item->comic = new Comic($item->comic_id);
+				if ($item->comic->result_count() != 1)
+					return FALSE;
+			}
 		}
 
 		// All good, return true.
@@ -712,10 +718,9 @@ class Chapter extends DataMapper {
 	 * @return	string <a> to reader
 	 */
 	public function url($text = NULL) {
-		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . ((is_null($text))?$this->title():$text) . '</a>';
+		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . ((is_null($text)) ? $this->title() : $text) . '</a>';
 	}
-	
-	
+
 	/**
 	 * Returns a ready to use html <a> link that points to the download
 	 *
@@ -724,8 +729,8 @@ class Chapter extends DataMapper {
 	 * @return	string <a> to reader
 	 */
 	public function download_url($text = NULL, $class = "") {
-		if(get_setting('fs_dl_enabled'))
-			return '<div class="icon_wrapper '.$class.'"><a href="'.$this->download_href().'"><img class="icon off" src="'.glyphish(67).'" /><img class="icon on" src="'.glyphish(67, TRUE).'" /></a></div>';
+		if (get_setting('fs_dl_enabled'))
+			return '<div class="icon_wrapper ' . $class . '"><a href="' . $this->download_href() . '"><img class="icon off" src="' . glyphish(67) . '" /><img class="icon on" src="' . glyphish(67, TRUE) . '" /></a></div>';
 	}
 
 	/**
@@ -798,13 +803,13 @@ class Chapter extends DataMapper {
 	 * @returns string href to reader.
 	 */
 	public function href() {
-		return site_url('/reader/read/'.$this->unique_href());
+		return site_url('/reader/read/' . $this->unique_href());
 	}
-	
+
 	public function download_href() {
-		return site_url('/reader/download/'.$this->unique_href());
+		return site_url('/reader/download/' . $this->unique_href());
 	}
-	
+
 	public function unique_href() {
 		// If we already used this function, no need to recalc it.
 		if (isset($this->unique_href))

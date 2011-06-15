@@ -60,7 +60,7 @@ class Reader extends Public_Controller {
 		// Get the chapters!
 		$chapters->get();
 		$chapters->get_teams();
-		$chapters->get_comic();
+		//$chapters->get_comic();
 
 		$this->template->set('chapters', $chapters);
 		$this->template->title(_('Latest'));

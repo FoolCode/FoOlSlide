@@ -6,13 +6,15 @@
 		$current_comic = "";
 		$current_comic_closer = "";
 		
-		
+		$opendiv = FALSE;
 		// Let's loop over every chapter. The array is just $chapters because we used get_iterated(), else it would be $chapters->all
 		foreach($chapters as $key => $chapter)
 		{
 			if ($current_comic != $chapter->comic_id)
 			{
-				if ($key > 0) echo '</div>';
+				if ($opendiv) {
+					echo '</div>';
+				}
 				echo '<div class="group"><div class="title">'.$chapter->comic->url().'</div>';
 				$current_comic = $chapter->comic_id;
 			}
@@ -21,6 +23,7 @@
 					<div class="title">'.$chapter->url().'</div>
 					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ' ' . _('on') . ' ' . $chapter->date() . ' ' . $chapter->edit_url() . '</div>
 				</div>';
+			$opendiv = TRUE;
 			
 		}
 		

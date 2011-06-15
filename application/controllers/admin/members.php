@@ -189,7 +189,7 @@ class Members extends Admin_Controller {
 
 			// Spawn the form for adding a team leader
 			$data["no_leader"] = FALSE;
-			if ($this->tank_auth->is_allowed() && !$members->has_leader($team->id))
+			if ($this->tank_auth->is_allowed())
 				$data["no_leader"] = TRUE;
 
 			$data['members'] = tabler($users_arr, TRUE, FALSE);

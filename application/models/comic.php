@@ -109,13 +109,18 @@ class Comic extends DataMapper {
 
 		$CI = & get_instance();
 
-		if (!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team())
+		if (!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team()) {
 		// Remove from the array the comics licensed in the user's nation
 			foreach ($this->all as $key => $item) {
 				if (in_array($CI->session->userdata('nation'), $this->licenses)) {
 					unset($this->all[$key]);
 				}
 			}
+			if (in_array($CI->session->userdata('nation'), $this->licenses)) {
+				$this->clear();
+			}
+		}
+			
 
 		return $result;
 	}

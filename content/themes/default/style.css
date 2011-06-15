@@ -709,6 +709,7 @@ ul.dropdown li a
 	display:block;
 	padding:2px;
 	z-index:1000;
+	image-rendering: optimizeSpeed;
 }
 
 #page .inner .preview

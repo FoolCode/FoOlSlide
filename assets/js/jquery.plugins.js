@@ -690,11 +690,17 @@ if ( typeof window.JSON === 'undefined' ) {
 				}
 				else {
 					// Generate a new ID
-					while ( true ) {
+					/**
+					 *	Added a counter not to create infinite loops...
+					 *	@author Woxxy
+					 */
+					counter = 0;
+					while ( true  && counter < 20) {
 						id = String(Math.floor(Math.random()*1000));
 						if ( typeof History.idToState[id] === 'undefined' && typeof History.store.idToState[id] === 'undefined' ) {
 							break;
 						}
+						counter++;
 					}
 
 					// Apply the new State to the ID

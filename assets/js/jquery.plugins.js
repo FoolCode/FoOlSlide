@@ -694,7 +694,7 @@ if ( typeof window.JSON === 'undefined' ) {
 					 *	Added a counter not to create infinite loops...
 					 *	@author Woxxy
 					 */
-					counter = 0;
+					var counter = 0;
 					while ( true  && counter < 20) {
 						id = String(Math.floor(Math.random()*1000));
 						if ( typeof History.idToState[id] === 'undefined' && typeof History.store.idToState[id] === 'undefined' ) {

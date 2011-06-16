@@ -167,8 +167,17 @@ class Members extends Admin_Controller {
 				if ($can_edit)
 					$users_arr[$key][] = $item->email;
 				$users_arr[$key][] = $item->last_login;
-				$users_arr[$key][] = ($item->is_leader) ? _('Leader') : '';
-				if (!$item->is_leader && $this->tank_auth->is_team_leader($team->id)) {
+				$users_arr[$key][] = ($item->is_leader) ? _('Leader') : _('Member');
+				if ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed()) {
+					$buttoner = array();
+					$buttoner = array(
+						'text' => _("Remove member"),
+						'href' => site_url('/admin/members/reject_application/' . $team->id . '/' . $item->id),
+						'plug' => _('Do you want to remove this team member?')
+					);
+				}
+				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
+				if (!$item->is_leader && ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed())) {
 					$buttoner = array();
 					$buttoner = array(
 						'text' => _("Make leader"),
@@ -176,7 +185,7 @@ class Members extends Admin_Controller {
 						'plug' => _('Do you want to make this user a team leader?')
 					);
 				}
-				if ($item->is_leader && $this->tank_auth->is_team_leader($team->id)) {
+				if ($item->is_leader && ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed())) {
 					$buttoner = array();
 					$buttoner = array(
 						'text' => _("Remove leader"),

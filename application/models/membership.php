@@ -149,7 +149,7 @@ class Membership extends DataMapper {
 	 */
 	function accept_application($team_id, $user_id = NULL) {
 		$CI = & get_instance();
-	if (is_null($user_id)) {
+		if (is_null($user_id)) {
 			$user_id = $CI->tank_auth->get_user_id();
 			$this->where('team_id', $team_id)->where('user_id', $user_id)->where('requested', 1)->get();
 			if ($this->result_count() != 1) {
@@ -160,8 +160,11 @@ class Membership extends DataMapper {
 			return TRUE;
 		}
 		else if (is_numeric($user_id)) {
-			if ($CI->tank_auth->is_team_leader($team_id)) {
-				$this->where('team_id', $team_id)->where('user_id', $user_id)->where('applied', 1)->get();
+			if ($CI->tank_auth->is_team_leader($team_id) || $CI->tank_auth->is_allowed()) {
+				$this->where('team_id', $team_id)->where('user_id', $user_id);
+				if (!$CI->tank_auth->is_allowed())
+					$this->where('applied', 1);
+				$this->get();
 				if ($this->result_count() != 1) {
 					return FALSE;
 				}
@@ -175,7 +178,7 @@ class Membership extends DataMapper {
 
 	/**
 	 * Rejects applications, can be triggered by team leader only if the user applied.
-	 * By the user only if the team leader requested.
+	 * By the user only if the team leader requested or if it's a team member.
 	 * 
 	 * @param int $team_id
 	 * @param int $user_id 
@@ -193,8 +196,8 @@ class Membership extends DataMapper {
 			return TRUE;
 		}
 		else if (is_numeric($user_id)) {
-			if ($CI->tank_auth->is_team_leader($team_id)) {
-				$this->where('team_id', $team_id)->where('user_id', $user_id)->where('applied', 1)->get();
+			if ($CI->tank_auth->is_team_leader($team_id) || $CI->tank_auth->is_allowed()) {
+				$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 				if ($this->result_count() != 1) {
 					return FALSE;
 				}
@@ -219,20 +222,16 @@ class Membership extends DataMapper {
 		if (!$CI->tank_auth->is_team_leader($team_id) && !$CI->tank_auth->is_allowed()) {
 			return FALSE;
 		}
-		$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
-		if ($this->result_count() > 1)
-			return FALSE;
-		if ($this->result_count() == 0) {
-			if (!$CI->tank_auth->is_allowed() || $this->has_leader($team_id))
-				return FALSE;
 
+		if ($CI->tank_auth->is_allowed()) {
 			$this->request($team_id, $user_id);
 			$this->accept($team_id, $user_id);
 			$this->clear();
-			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
-			if ($this->result_count() != 1)
-				return FALSE;
 		}
+
+		$this->where('team_id', $team_id)->where('user_id', $user_id)->where('accepted', 1)->get();
+		if ($this->result_count() != 1)
+			return FALSE;
 
 		$this->is_leader = 1;
 		$this->save();

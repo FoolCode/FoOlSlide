@@ -38,6 +38,9 @@ class Reader extends Public_Controller {
 		$this->template->title(_('Series list'));
 
 		$comics = new Comic();
+		/**
+		 * @todo this needs filtering, though it looks good enough in browser
+		 */
 		$comics->order_by('name', 'ASC')->get_paged($page, 25);
 		foreach ($comics->all as $comic) {
 			$comic->latest_chapter = new Chapter();

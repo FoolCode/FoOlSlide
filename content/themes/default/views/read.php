@@ -249,9 +249,9 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 	
 	function preload(id)
 	{
-		array = [];
-		arraythumb = [];
-		arraydata = [];
+		var array = [];
+		var arraythumb = [];
+		var arraydata = [];
 		for(i = -preload_back; i < preload_next; i++)
 		{
 			if(id+i >= 0 && id+i < pages.length)
@@ -261,16 +261,6 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 				arraydata.push(id+i);
 			}
 		}
-		for(i = -preload_back*2; i < preload_next*2; i++)
-		{
-			if(id+i >= 0 && id+i < pages.length)
-			{
-				arraythumb.push(pages[(id+i)].thumb_url);
-			}
-		}
-		jQuery.preload(arraythumb, {
-			threshold: 40,
-			enforceCache: true});
 		
 		jQuery.preload(array, {
 			threshold: 40,
@@ -287,6 +277,14 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 				}
 			}
 	
+		});
+		
+		jQuery.preload(arraythumb, {
+			threshold: 40,
+			enforceCache: true,
+			onComplete:function(data)
+			{
+			}
 		});
 	}
 	

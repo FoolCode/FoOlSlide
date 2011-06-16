@@ -15,8 +15,8 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 
 
 <style type="text/css">
-	.panel {width:1000px; margin: 0 auto;} 
-	.ads.banner{width:980px !important; max-width:none; text-align:center;}
+	.panel {max-width:1000px; margin: 0 auto;} 
+	.ads.banner{max-width:980px !important; max-width:none; text-align:center;}
 </style>
 
 <div class="panel">
@@ -162,46 +162,6 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		
 		//jQuery("#page").stop(true);
 
-		if (pages[id].width > 1000 && ((pages[id].width)/(pages[id].height)) > 1.2) {
-			if(parseInt(pages[id].height) < 1200) {
-				width = parseInt(pages[id].width);
-				height = parseInt(pages[id].height);
-			}
-			else { 
-				height = 1400;
-				width = parseInt(pages[id].width);
-				width = (height*width)/(parseInt(pages[id].height));
-			}
-			jQuery("#page").css({'max-width': 'none', 'overflow':'auto'});
-			jQuery("#page").animate({scrollLeft:9000},400);
-			jQuery("#page .inner img.open").css({'max-width':'99999px', 'height':height, 'width':width});
-			jQuery('#page .inner .preview img').attr({width:width, height:height});
-			jQuery('#page .inner img.open').attr({width:width, height:height});
-			if(jQuery("#page").width() < jQuery("#page .inner img.open").width()) {
-				isSpread = true;
-			}
-			else {
-				jQuery("#page").css({'max-width': width+10, 'overflow':'hidden'});
-				isSpread = false;
-			}
-		}
-		else{
-			if(parseInt(pages[id].width) < 1000) {
-				width = parseInt(pages[id].width);
-				height = parseInt(pages[id].height);
-			}
-			else { 
-				width = 1000;
-				height = parseInt(pages[id].height); 
-				height = (height*width)/(parseInt(pages[id].width));
-			}
-			jQuery("#page").css({'max-width':(width + 10) + 'px','overflow':'hidden'});
-			jQuery("#page .inner img.open").css({'height':height, 'max-width':'99%'});
-			jQuery('#page .inner .preview img').attr({width:width, height:height});
-			jQuery('#page .inner img.open').attr({width:width, height:height});
-			isSpread = false;
-		}
-		
 		if(pages[id].loaded !== true) {
 			jQuery('#page .inner img.open').css({'opacity':'0'});
 			jQuery('#page .inner .preview img').attr('src', pages[id].thumb_url);
@@ -212,6 +172,8 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('#page .inner img.open').attr('src', pages[id].url);
 			jQuery('#page .inner img.open').css({'opacity':'1'});
 		}
+		
+		resizePage(id);
 		
 		if(!nohash) History.pushState(null, null, baseurl+'page/' + (current_page + 1));
 		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
@@ -233,6 +195,49 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 	echo 'jQuery("#ads_iframe_bottom_banner iframe").attr("src","' . site_url() . 'content/ads/ads_bottom.html");';
 ?>
 		return false;
+	}
+
+
+	function resizePage(id) {
+		if (pages[id].width > 1000 && ((pages[id].width)/(pages[id].height)) > 1.2) {
+			if(parseInt(pages[id].height) < 1200) {
+				width = parseInt(pages[id].width);
+				height = parseInt(pages[id].height);
+			}
+			else { 
+				height = 1400;
+				width = parseInt(pages[id].width);
+				width = (height*width)/(parseInt(pages[id].height));
+			}
+			jQuery("#page").css({'max-width': 'none', 'overflow':'auto'});
+			jQuery("#page").animate({scrollLeft:9000},400);
+			jQuery('#page .inner .preview img').attr({width:width, height:height});
+			jQuery("#page .inner img.open").css({'max-width':'99999px'});
+			jQuery('#page .inner img.open').attr({width:width, height:height});
+			if(jQuery("#page").width() < jQuery("#page .inner img.open").width()) {
+				isSpread = true;
+			}
+			else {
+				jQuery("#page").css({'max-width': width+10, 'overflow':'hidden'});
+				isSpread = false;
+			}
+		}
+		else{
+			if(parseInt(pages[id].width) < 1000 && jQuery(document).width() > parseInt(pages[id].width)+10) {
+				width = parseInt(pages[id].width);
+				height = parseInt(pages[id].height);
+			}
+			else { 
+				width = (jQuery(document).width()>1000)?1000:jQuery(document).width()-10;
+				height = parseInt(pages[id].height); 
+				height = (height*width)/(parseInt(pages[id].width));
+			}
+			jQuery("#page").css({'max-width':(width + 10) + 'px','overflow':'hidden'});
+			jQuery("#page .inner img.open").css({'max-width':'100%'});
+			jQuery('#page .inner .preview img').attr({width:width, height:height});
+			jQuery('#page .inner img.open').attr({width:width, height:height});
+			isSpread = false;
+		}
 	}
 
 	function nextPage()
@@ -426,6 +431,9 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			changePage(url-1, false, true);
 			document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
 		});
+		
+		
+		
 		State = History.getState();
 		url = State.url.substr(State.url.lastIndexOf('/')+1);
 		if(url < 1)
@@ -434,6 +442,10 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		History.pushState(null, null, baseurl+'page/' + (current_page+1));
 		create_numberPanel();
 		changePage(current_page, false, true);
-		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;		
+		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;	
+		
+		jQuery(window).resize(function() {
+			resizePage(current_page);
+		});
 	});
 </script>

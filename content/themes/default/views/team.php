@@ -37,7 +37,7 @@ if (!defined('BASEPATH'))
 				continue;
 			echo '<div class="element">
 					<div class="image">'.get_gravatar($member->email, 75, NULL, NULL, TRUE).'</div>
-					<div class="title"><b>' . (HTMLpurify($member->profile_display_name, 'unallowed')) . '</b></div>
+					<div class="info"><b>' . (HTMLpurify(($member->profile_display_name)?$member->profile_display_name:$member->username, 'unallowed')) . '</b></div>
 					<div class="info">'._('Bio').': '.(HTMLpurify($member->profile_bio, 'unallowed')).'</div>';
 					if($member->profile_twitter) echo '<div class="info">'._('Twitter').': <a href="http://twitter.com/'.(HTMLpurify($member->profile_twitter, 'unallowed')).'" target="_blank">'.(HTMLpurify($member->profile_twitter, 'unallowed')).'</a></div>';
 				echo '</div>';
@@ -57,8 +57,10 @@ if (!defined('BASEPATH'))
 				continue;
 			echo '<div class="element">
 					<div class="image">'.get_gravatar($member->email, 75, NULL, NULL, TRUE).'</div>
-					<div class="title">' . $member->username . '</div>
-				</div>';
+					<div class="info"><b>' . (HTMLpurify(($member->profile_display_name)?$member->profile_display_name:$member->username, 'unallowed')) . '</b></div>
+					<div class="info">'._('Bio').': '.(HTMLpurify($member->profile_bio, 'unallowed')).'</div>';
+					if($member->profile_twitter) echo '<div class="info">'._('Twitter').': <a href="http://twitter.com/'.(HTMLpurify($member->profile_twitter, 'unallowed')).'" target="_blank">'.(HTMLpurify($member->profile_twitter, 'unallowed')).'</a></div>';
+				echo '</div>';
 		}
 	echo '</div>'
 	?>

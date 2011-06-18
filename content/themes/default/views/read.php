@@ -88,8 +88,8 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 
 	<div class="inner">
 		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return nextPage();" >
-			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?($pages[$current_page - 1]['width']):1000; ?>" /></div>
-			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" width="<?php echo $pages[$current_page - 1]['width'] ?>" height="<?php echo $pages[$current_page - 1]['height'] ?>" />
+			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?(($pages[$current_page - 1]['height']*$pages[$current_page - 1]['width'])/1000):1000; ?>" /></div>
+			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?(($pages[$current_page - 1]['height']*$pages[$current_page - 1]['width'])/1000):1000; ?>" />
 		</a>
 	</div>
 </div>
@@ -220,12 +220,12 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		
 		
 		if (page_width > nice_width && (page_width/page_height) > 1.2) {
-			if(page_height < 1400) {
+			if(page_height < 1610) {
 				width = page_width;
 				height = page_height;
 			}
 			else { 
-				height = 1400;
+				height = 1600;
 				width = page_width;
 				width = (height*width)/(page_height);
 			}

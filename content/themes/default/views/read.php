@@ -88,7 +88,7 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 
 	<div class="inner">
 		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return nextPage();" >
-			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" width="<?php echo $pages[$current_page - 1]['width'] ?>" height="<?php echo $pages[$current_page - 1]['height'] ?>" /></div>
+			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?($pages[$current_page - 1]['width']):1000; ?>" /></div>
 			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" width="<?php echo $pages[$current_page - 1]['width'] ?>" height="<?php echo $pages[$current_page - 1]['height'] ?>" />
 		</a>
 	</div>
@@ -135,7 +135,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 	
 	var baseurl = '<?php echo $chapter->href() ?>';
 	
-	var gt_page = '<?php echo addslashes(_("page")) ?>';
+	var gt_page = '<?php echo addslashes(_("Page")) ?>';
 	
 	function changePage(id, noscroll, nohash)
 	{
@@ -168,9 +168,9 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('#page .inner img.open').attr('src', pages[id].thumb_url);
 		}
 		else {
+			jQuery('#page .inner img.open').css({'opacity':'1'});
 			jQuery('#page .inner .preview img').attr('src', pages[id].thumb_url);
 			jQuery('#page .inner img.open').attr('src', pages[id].url);
-			jQuery('#page .inner img.open').css({'opacity':'1'});
 		}
 		
 		resizePage(id);
@@ -199,15 +199,35 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 
 	function resizePage(id) {
-		if (pages[id].width > 1000 && ((pages[id].width)/(pages[id].height)) > 1.2) {
-			if(parseInt(pages[id].height) < 1200) {
-				width = parseInt(pages[id].width);
-				height = parseInt(pages[id].height);
+		var doc_width = jQuery(document).width();
+		var page_width = parseInt(pages[id].width);
+		var page_height = parseInt(pages[id].height);
+		var nice_width = 980;
+		var perfect_width = 980;
+		
+		if(doc_width > 1200) {
+			nice_width = 1120;
+			perfect_width = 1000;
+		}
+		if(doc_width > 1600) {
+			nice_width = 1400;
+			perfect_width = 1300;
+		}
+		if(doc_width > 1800) {
+			nice_width = 1600;
+			perfect_width = 1500;
+		}
+		
+		
+		if (page_width > nice_width && (page_width/page_height) > 1.2) {
+			if(page_height < 1400) {
+				width = page_width;
+				height = page_height;
 			}
 			else { 
 				height = 1400;
-				width = parseInt(pages[id].width);
-				width = (height*width)/(parseInt(pages[id].height));
+				width = page_width;
+				width = (height*width)/(page_height);
 			}
 			jQuery("#page").css({'max-width': 'none', 'overflow':'auto'});
 			jQuery("#page").animate({scrollLeft:9000},400);
@@ -223,19 +243,19 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			}
 		}
 		else{
-			if(parseInt(pages[id].width) < 1000 && jQuery(document).width() > parseInt(pages[id].width)+10) {
-				width = parseInt(pages[id].width);
-				height = parseInt(pages[id].height);
+			if(page_width < nice_width && doc_width > page_width + 10) {
+				width = page_width;
+				height = page_height;
 			}
 			else { 
-				width = (jQuery(document).width()>1000)?1000:jQuery(document).width()-10;
-				height = parseInt(pages[id].height); 
-				height = (height*width)/(parseInt(pages[id].width));
+				width = (doc_width > perfect_width) ? perfect_width : doc_width - 10;
+				height = page_height; 
+				height = (height*width)/page_width;
 			}
-			jQuery("#page").css({'max-width':(width + 10) + 'px','overflow':'hidden'});
-			jQuery("#page .inner img.open").css({'max-width':'100%'});
 			jQuery('#page .inner .preview img').attr({width:width, height:height});
 			jQuery('#page .inner img.open').attr({width:width, height:height});
+			jQuery("#page").css({'max-width':(width + 10) + 'px','overflow':'hidden'});
+			jQuery("#page .inner img.open").css({'max-width':'100%'});
 			isSpread = false;
 		}
 	}

@@ -121,8 +121,8 @@ class Admin_Controller extends MY_Controller {
 			if (time() - $last_check > 3600) {
 				$this->db->update('preferences', array('value' => time()), array('name' => 'fs_cron_autoupgrade'));
 				$this->load->model('upgrade_model');
-				$latest = $this->upgrade_model->check_latest();
-				if ($latest[0]) {
+				$versions = $this->upgrade_model->check_latest(TRUE);
+				if ($versions[0]) {
 					$this->db->update('preferences', array('value' => $latest[0]->version . '.' . $latest[0]->subversion . '.' . $latest[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
 			}

@@ -29,7 +29,6 @@ class Upgrade_model extends CI_Model {
 			return FALSE;
 		}
 		$data = json_decode($result);
-		$latest = $data->versions[0];
 
 		$new_versions = array();
 		foreach ($data->versions as $new) {
@@ -40,6 +39,9 @@ class Upgrade_model extends CI_Model {
 		if (!empty($new_versions))
 			return $new_versions;
 
+		if($force)
+			return array($data->versions[0]);
+		
 		return FALSE;
 	}
 

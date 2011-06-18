@@ -73,7 +73,7 @@ class Members extends Admin_Controller {
 		else
 			$can_edit_limited = false;
 
-		if ($this->input->post() && $can_edit) {
+		if ($this->input->post() && $can_edit && $can_edit_limited) {
 			$profile = new Profile($id);
 			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
 		}

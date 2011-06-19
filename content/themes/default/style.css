@@ -859,6 +859,7 @@ ul.dropdown li a
 	background:#eeecea;
 	border: 1px solid #999;
 	overflow:hidden;
+	text-align:center;
 
 	border-radius:4px;
 	-moz-border-radius:4px;

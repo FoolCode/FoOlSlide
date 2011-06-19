@@ -107,7 +107,7 @@ class Comics extends Admin_Controller {
 					return false;
 				}
 			}
-			
+
 			// Did we change the stub of the comic? We need to redirect to the new page then.
 			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub) {
 				redirect('/admin/comics/comic/' . $comic->stub);
@@ -232,81 +232,34 @@ class Comics extends Admin_Controller {
 		}
 	}
 
-	function upload($type) {
+	function upload() {
 		$config['upload_path'] = 'content/cache/';
 
-		if ($this->input->post('uploader') == 'uploadify') {
-			$config['allowed_types'] = 'png|zip|rar|gif|jpg|jpeg';
-			$this->load->library('upload', $config);
-			if (!$this->upload->do_upload('Filedata')) {
-				log_message('error', 'durr' . print_r($_FILES, true));
-				print_r($error = array('error' => $this->upload->display_errors()));
-				log_message('error', $this->upload->display_errors());
-				return false;
-			}
-			else {
-				$data = $this->upload->data();
-				$data["chapter_id"] = $this->input->post('chapter_id');
-				$data["overwrite"] = $this->input->post('overwrite');
-
-				if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
-					$this->files_model->page($data);
-				else
-					$this->files_model->compressed_chapter($data);
-			}
-			if (!unlink($data["full_path"])) {
-				set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
-				return false;
-			}
-
-			echo 1;
-
-			return true;
+		$config['allowed_types'] = 'png|zip|rar|gif|jpg|jpeg';
+		$this->load->library('upload', $config);
+		if (!$this->upload->do_upload('Filedata')) {
+			log_message('error', 'durr' . print_r($_FILES, true));
+			print_r($error = array('error' => $this->upload->display_errors()));
+			log_message('error', $this->upload->display_errors());
+			return false;
 		}
+		else {
+			$data = $this->upload->data();
+			$data["chapter_id"] = $this->input->post('chapter_id');
+			$data["overwrite"] = $this->input->post('overwrite');
 
-		switch ($type) {
-			case "compressed_chapter":
-				$config['allowed_types'] = 'zip';
-				$this->load->library('upload', $config);
-				if (!$this->upload->do_upload('Filedata')) {
-					log_message('error', print_r($_FILES, true));
-					print_r($error = array('error' => $this->upload->display_errors()));
-					log_message('error', $this->upload->display_errors());
-					return false;
-				}
-				else {
-					$data = $this->upload->data();
-					$data["chapter_id"] = $this->input->post('chapter_id');
-					$data["overwrite"] = $this->input->post('overwrite');
-					$this->files_model->compressed_chapter($data);
-				}
-				if (!unlink($data["full_path"])) {
-					set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
-					return false;
-				}
-				$chapter = new Chapter();
-				$chapter->where('id', $data["chapter_id"])->get();
-				$comic = new Comic();
-				$comic->where('id', $chapter->comic_id)->get();
-
-				if ($this->input->post('uploader') == 'uploadify') {
-					$output['session'] = $this->session->get_js_session();
-					echo json_encode($output);
-					return;
-				}
-
-				redirect('admin/comics/comic/' . $comic->stub . '/' . $data["chapter_id"]);
-				break;
-
-			case "page":
-				$config['allowed_types'] = 'gif|jpg|png';
-				$this->load->library('upload', $config);
-				if (!$this->upload->do_upload()) {
-					$error = array('error' => $this->upload->display_errors());
-					//$this->load->view('upload_form', $error);
-					return false;
-				}
-				break;
+			if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
+				$this->files_model->page($data);
+			else
+				$this->files_model->compressed_chapter($data);
+		}
+		if (!unlink($data["full_path"])) {
+			set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
+			return false;
+		}
+		if ($this->input->post('uploader') == 'uploadify') {
+			echo 1;
+			return true;
 		}
 
 		return true;
@@ -315,7 +268,7 @@ class Comics extends Admin_Controller {
 	function get_sess_id() {
 		echo json_encode(array('session' => $this->session->get_js_session(), 'csrf' => $this->security->get_csrf_hash()));
 	}
-
+	
 	function delete($type, $id = 0) {
 		if (!isAjax()) {
 			echo _('You can\'t delete chapters from outside the admin panel through this link.');
@@ -367,9 +320,9 @@ class Comics extends Admin_Controller {
 	}
 
 	function import($stub) {
-		if(!$this->tank_auth->is_admin())
+		if (!$this->tank_auth->is_admin())
 			show_404();
-		
+
 		if (!$stub)
 			show_404();
 

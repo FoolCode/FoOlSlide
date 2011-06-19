@@ -128,7 +128,7 @@ if(jQuery)(
 						file_dialog_start_handler    : onDialogOpen,
 						file_queued_handler          : onSelect,
 						file_queue_error_handler     : onSelectError,
-						flash_ready_handler          : settings.onSWFReady,
+						swfupload_loaded_handler     : settings.onSWFReady,
 						upload_complete_handler      : onUploadComplete,
 						upload_error_handler         : onUploadError,
 						upload_progress_handler      : onUploadProgress,

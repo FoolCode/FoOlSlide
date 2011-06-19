@@ -10,7 +10,6 @@ class Api extends Public_Controller {
 		$this->load->library('pagination');
 		$this->load->library('template');
 		$this->load->helper('reader');
-		$this->template->set_layout('reader');
 	}
 
 	public function index() {
@@ -27,11 +26,9 @@ class Api extends Public_Controller {
 
 		$memberships = new Membership();
 		$members = $memberships->get_members($team->id);
-
-		$this->template->title(_('Team'));
-		$this->template->set('team', $team);
-		$this->template->set('members', $members);
-		$this->template->build('team');
+		$teamarray = $team->all_to_array();
+		$teamarray["members"] = $members->all_to_array(array("id", "username"));
+		echo json_encode($teamarray);
 	}
 
 	public function lista($page = 1) {
@@ -44,9 +41,7 @@ class Api extends Public_Controller {
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
 		}
 
-		$this->template->title(_('Series'));
-		$this->template->set('comics', $comics);
-		$this->template->build('list');
+		echo json_encode($comics->all_to_array());
 	}
 
 	public function latest($page = 1) {
@@ -62,9 +57,6 @@ class Api extends Public_Controller {
 		$chapters->get_teams();
 		$chapters->get_comic();
 
-		$this->template->set('chapters', $chapters);
-		$this->template->title(_('Latest'));
-		$this->template->build('latest');
 	}
 
 	public function chapter($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {

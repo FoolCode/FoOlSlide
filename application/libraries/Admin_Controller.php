@@ -123,7 +123,7 @@ class Admin_Controller extends MY_Controller {
 				$this->load->model('upgrade_model');
 				$versions = $this->upgrade_model->check_latest(TRUE);
 				if ($versions[0]) {
-					$this->db->update('preferences', array('value' => $latest[0]->version . '.' . $latest[0]->subversion . '.' . $latest[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
+					$this->db->update('preferences', array('value' => $versions[0]->version . '.' . $versions[0]->subversion . '.' . $versions[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
 			}
 

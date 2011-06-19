@@ -42,7 +42,7 @@ echo form_close();
     foreach ($chapters as $item)
     {
         echo '<div class="item">
-                <div class="title"><a href="'.site_url("admin/comics/comic/".$comic->stub."/".$item->id).'">'. (($item->name != "") ? $item->name : _('Chapter')." ".$item->chapter.".".$item->subchapter).'</a></div>
+                <div class="title"><a href="'.site_url("admin/comics/comic/".$comic->stub."/".$item->id).'">'. $item->title().'</a></div>
                 <div class="smalltext info">
                     Chapter #'.$item->chapter.'
                     Sub #'.$item->subchapter;

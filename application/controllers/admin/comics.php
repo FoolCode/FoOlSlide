@@ -115,7 +115,7 @@ class Comics extends Admin_Controller {
 		}
 
 		$chapters = new Chapter();
-		$chapters->where('comic_id', $comic->id)->include_related('team')
+		$chapters->where('comic_id', $comic->id)->include_related('team')->order_by('volume', 'DESC')
 				->order_by('chapter', 'DESC')->order_by('subchapter', 'DESC')->get();
 		foreach ($chapters->all as $key => $item) {
 			if ($item->joint_id > 0) {

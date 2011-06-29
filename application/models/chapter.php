@@ -888,7 +888,7 @@ class Chapter extends DataMapper {
 
 		// We do have a chapter or more. Get them.
 		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $this->comic->id)->where('chapter', $chapter->chapter)->where('language', $this->language)->where('subchapter', $chapter->subchapter)->get();
+		$chaptere->where('comic_id', $this->comic->id)->where('volume', $chapter->volume)->where('chapter', $chapter->chapter)->where('language', $this->language)->where('subchapter', $chapter->subchapter)->get();
 
 		$done = false;
 		// Do we have more than a next chapter? Make so it has the same teams on it.

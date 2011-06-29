@@ -3,6 +3,9 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
+		<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<?php echo $template['metadata']; ?>
 		<?php echo link_tag('assets/js/jquery.mobile.css') ?>
@@ -10,7 +13,7 @@
 
 	</head>
 	<body>
-		<div data-role="page">
+		<div data-role="page" data-add-back-btn="true">
 
 
 			<div data-role="header">

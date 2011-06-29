@@ -1,10 +1,10 @@
 <div data-role="content">
 	<ul data-role="listview" data-theme="c" data-dividertheme="b">
-		<div class="images_loader" onClick="nextPage()"><img style="width:100%;" src="" /></div>
+		<div class="images_loader" onClick="nextPage()"><img src="" /></div>
 	</ul>
 </div>
 
-<script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery.mobile.plugins.js"></script>
 <script type="text/javascript">
 	
 	var pages = <?php echo json_encode($pages); ?>;
@@ -25,6 +25,11 @@
 			jQuery.mobile.changePage(next_chapter, "slidedown");	
 			return false;
 		}
+		
+		if(id < 0){
+			current_page = 0;
+			id = 0;
+		} 
 		
 		preload(id);
 		next = parseInt(id+1);
@@ -72,19 +77,12 @@
 	
 	jQuery(document).ready(function(){
 		changePage(0);
-		jQuery(".images_loader").touchwipe({
-			wipeLeft: function() { 
-				nextPage();
-			},
-			wipeRight: function() { 
-				prevPage();
-			},
-			//wipeUp: function() { alert("up"); },
-			//wipeDown: function() { alert("down"); },
-			min_move_x: 40,
-			preventDefaultEvents: false
+		jQuery(".images_loader").swiperight(function(){
+			prevPage();
 		});
-		
+		jQuery(".images_loader").swipeleft(function(){
+			prevPage();
+		});
 	});
 
 </script>

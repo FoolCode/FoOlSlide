@@ -88,8 +88,8 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 
 	<div class="inner">
 		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return nextPage();" >
-			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?(($pages[$current_page - 1]['height']*$pages[$current_page - 1]['width'])/1000):1000; ?>" /></div>
-			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" width="<?php echo ($pages[$current_page - 1]['width']<1000)?$pages[$current_page - 1]['width']:1000; ?>" height="<?php echo ($pages[$current_page - 1]['width']<1000)?(($pages[$current_page - 1]['height']*$pages[$current_page - 1]['width'])/1000):1000; ?>" />
+			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" /></div>
+			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" />
 		</a>
 	</div>
 </div>
@@ -281,8 +281,8 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		{
 			if(id+i >= 0 && id+i < pages.length)
 			{
+				array.push(pages[(id+i)].thumb_url);
 				array.push(pages[(id+i)].url);
-				arraythumb.push(pages[(id+i)].thumb_url);
 				arraydata.push(id+i);
 			}
 		}
@@ -292,24 +292,20 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			enforceCache: true,
 			onComplete:function(data)
 			{
-				pages[arraydata[data.index]].loaded = true;
-				jQuery('#thumb_'+ arraydata[data.index]).addClass('loaded');
-				jQuery('.numbers .number_'+ (arraydata[data.index]+1)).addClass('loaded');
-				if(current_page == arraydata[data.index])
+				var idx = ((data.index/2).toFixed(0));
+				if(data.index/2 == page)
+					return false;
+				var page = arraydata[idx];
+				pages[page].loaded = true;
+				jQuery('#thumb_'+ page).addClass('loaded');
+				jQuery('.numbers .number_'+ (page+1)).addClass('loaded');
+				if(current_page == page)
 				{
 					jQuery('#page .inner img.open').animate({'opacity':'1.0'}, 800);
 					jQuery('#page .inner img.open').attr('src', pages[current_page].url);
 				}
 			}
 	
-		});
-		
-		jQuery.preload(arraythumb, {
-			threshold: 40,
-			enforceCache: true,
-			onComplete:function(data)
-			{
-			}
 		});
 	}
 	

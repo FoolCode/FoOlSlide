@@ -30,6 +30,11 @@ class Chapter extends DataMapper {
 			'rules' => array('stub', 'required', 'max_length' => 256),
 			'label' => 'Stub'
 		),
+		'volume' => array(
+			'rules' => array('is_int'),
+			'label' => 'Volume number',
+			'type' => 'input'
+		),
 		'chapter' => array(
 			'rules' => array('is_int', 'required'),
 			'label' => 'Chapter number',
@@ -39,11 +44,6 @@ class Chapter extends DataMapper {
 		'subchapter' => array(
 			'rules' => array('is_int'),
 			'label' => 'Subchapter number',
-			'type' => 'input'
-		),
-		'volume' => array(
-			'rules' => array('is_int'),
-			'label' => 'Volume number',
 			'type' => 'input'
 		),
 		'language' => array(

@@ -37,15 +37,15 @@ echo buttoner();
     if($comics->paged->has_previous)
     {
         ?>
-    <a href="<?= site_url('admin/comics/manage/') ?>">«« <?php echo _('First') ?></a>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->previous_page) ?>">« <?php echo _('Prev') ?></a>
+    <a href="<?php echo site_url('admin/comics/manage/') ?>">«« <?php echo _('First') ?></a>
+    <a href="<?php echo site_url('admin/comics/manage/'.$comics->paged->previous_page) ?>">« <?php echo _('Prev') ?></a>
         <?php
     }
     if($comics->paged->has_next)
     {
         ?>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->next_page) ?>"><?php echo _('Next') ?> »</a>
-    <a href="<?= site_url('admin/comics/manage/'.$comics->paged->total_pages) ?>"><?php echo _('Last'); ?> »»</a>
+    <a href="<?php echo site_url('admin/comics/manage/'.$comics->paged->next_page) ?>"><?php echo _('Next') ?> »</a>
+    <a href="<?php echo site_url('admin/comics/manage/'.$comics->paged->total_pages) ?>"><?php echo _('Last'); ?> »»</a>
         <?php
     }
 

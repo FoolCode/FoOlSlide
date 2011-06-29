@@ -1,4 +1,4 @@
-<?
+<?php
 	if( ! isset($save_button))
 	{
 		$save_button = 'Save';
@@ -15,24 +15,24 @@
 		}
 	}
 ?>
-<? if( ! empty($object->error->all)): ?>
+<?php if( ! empty($object->error->all)): ?>
 <div class="error">
 	<p>There was an error saving the form.</p> 
 	<ul><? foreach($object->error->all as $k => $err): ?>
-		<li><?= $err ?></li>
+		<li><?php echo $err ?></li>
 		<? endforeach; ?>
 	</ul>
 </div>
-<? endif; ?>
+<?php endif; ?>
 
-<form action="<?= $this->config->site_url($url) ?>" method="post">
+<form action="<?php echo $this->config->site_url($url) ?>" method="post">
 <table class="form">
-<?= $rows ?>
+<?php echo $rows ?>
 	<tr class="buttons">
-		<td colspan="2"><input type="submit" value="<?= $save_button ?>" /><?
+		<td colspan="2"><input type="submit" value="<?php echo $save_button ?>" /><?
 			if($reset_button !== FALSE)
 			{
-				?> <input type="reset" value="<?= $reset_button ?>" /><?
+				?> <input type="reset" value="<?php echo $reset_button ?>" /><?
 			}		
 		?></td>
 	</tr>

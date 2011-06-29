@@ -1,4 +1,4 @@
-<?
+<?php
 	if(!isset($row_id))
 	{
 		if( ! empty($id))
@@ -51,15 +51,15 @@
 	}
 
 ?>
-	<tr class="row<?= $row_class ?>"<?= $row_id ?>>
-		<td class="label"><label<?= $label_for ?>><?= $label ?>:</label></td>
+	<tr class="row<?php echo $row_class ?>"<?php echo $row_id ?>>
+		<td class="label"><label<?php echo $label_for ?>><?php echo $label ?>:</label></td>
 		<td class="field">
-			<?= $content ?>
-			<? /*
+			<?php echo $content ?>
+			<?php /*
 			// Enable this section to print errors out for each row.
 			if( ! empty($error)): ?>
-			<span class="error"><?= $error ?></span>
-			<? endif; */ ?>
+			<span class="error"><?php echo $error ?></span>
+			<?php endif; */ ?>
 
 		</td>
 	</tr>

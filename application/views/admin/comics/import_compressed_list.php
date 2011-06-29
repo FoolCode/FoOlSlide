@@ -186,28 +186,28 @@
 </style>
 
 <div id="tools">
-	Manual setup: write {cc} for where the chapter is positioned. {ss} for subchapter. {vv} for volume. The amount of letters sets the amount of numbers. "Chapter_123" is caught by writing "Chapter_{ccc}".
+	<?php echo _('Manual setup: write {cc} for where the chapter is positioned. {ss} for subchapter. {vv} for volume. The amount of letters sets the amount of numbers. "Chapter_123" is caught by writing "Chapter_{ccc}".') ?>
 	<br/>
 	<input type="text" id="manual_filename" value="" /> <a href="#" class="" onClick="try_filename(); return false;">Try</a>
 	<br/><br/>
-	Mass set the volume:<br/>
+	<?php echo _("Mass set the volume") ?>:<br/>
 	<input type="text" id="set_volume" value="" /> <a href="#" class="" onClick="set_volume(); return false;">Set</a>
 	<br/><br/>
-	Set first chapter number and +1 each next chapter:<br/>
+	<?php echo _("Set first chapter number and +1 each next chapter") ?>:<br/>
 	<input type="text" id="set_init_chapter" value="" /> <a href="#" class="" onClick="set_init_chapter(); return false;">Set</a>
 	<br/><br/>
-	Mass set the teams:<br/>
+	<?php echo _("Mass set the teams") ?>:<br/>
 	<div class="teams_setter" style="width:500px;">
 		<input type="text" class="set_teams" value="" /> <a href="#" class="" onClick="set_teams(); return false;">Set</a>
 		<br/><input type="text" class="set_teams" value="" onKeyUp="addField(this);" />
 	</div>
 	<br/><br/>
-	If you checked all chapter numbers:
+	<?php echo _("If you checked all chapter numbers") ?>:
 	<a href="#" onClick="submit_all(0)" class="">Submit all</a>
 </div>
 
 <br/>
 </div>
-<br/>Currently adding chapters to: <b><?php echo $comic->name ?></b><br/><br/>
+<br/><?php echo _("Currently adding chapters to") ?>: <b><?php echo $comic->name ?></b><br/><br/>
 
 <div id="chapters"></div>

@@ -32,6 +32,6 @@ if ($no_leader) {
 	echo '</td></tr></table>';
 }
 ?>
-<div class="section">Members:</div><br/>
+<div class="section"><?php echo _("Members") ?>:</div><br/>
 <?php
 echo $members;

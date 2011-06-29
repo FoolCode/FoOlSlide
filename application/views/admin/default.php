@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo _('Control panel') ?></title>
+		<title><?php echo get_setting('fs_gen_site_title'); ?> <?php echo _('Control panel') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link href="<?= base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo base_url() ?>assets/admin/style.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
         <script type="text/javascript">
             function slideDown(item) { jQuery(item).slideDown(); }
@@ -82,13 +82,13 @@
 					<a href="<?php echo site_url(); ?>">
 						<img class="icon off" src="<?php echo glyphish(158) ?>" />
 						<img class="icon on" src="<?php echo glyphish(158, TRUE) ?>" />
-							Homepage</a>
+							<?php _("Homepage") ?></a>
 				</div>
 				<?php if (isset($this->tank_auth) && logged_in()) { ?><div class="element">
 					<a href="<?php echo site_url('/admin/auth/logout'); ?>">
 						<img class="icon off" src="<?php echo glyphish(73) ?>" />
 						<img class="icon on" src="<?php echo glyphish(73, TRUE) ?>" />
-								Logout <?php echo $this->tank_auth->get_username(); ?></a>
+								<?php echo _("Logout") ?> <?php echo $this->tank_auth->get_username(); ?></a>
 					</div>
 				<?php } ?>
 			</div>

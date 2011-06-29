@@ -17,7 +17,7 @@ echo $table;
 echo form_close();
 ?>
 
-<div class="section">Pages:</div>
+<div class="section"><?php echo _("Pages") ?>:</div>
 
 
 <?php

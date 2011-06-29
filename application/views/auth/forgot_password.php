@@ -18,5 +18,5 @@
 
 <?php echo form_close();?>
 <div class="smalltext">
-    <a href="<?= site_url('auth/login'); ?>">Back to login</a>
+    <a href="<?php echo site_url('auth/login'); ?>">Back to login</a>
 </div>

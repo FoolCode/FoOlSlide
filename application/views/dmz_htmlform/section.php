@@ -1,3 +1,3 @@
 	<tr class="section">
-		<th colspan="2"><?= $content ?></th>
+		<th colspan="2"><?php echo $content ?></th>
 	</tr>

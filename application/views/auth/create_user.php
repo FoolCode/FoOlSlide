@@ -26,7 +26,7 @@
                 echo form_input($password_confirm); ?></td>
     </tr>
     <tr>
-        <td><?= form_reset(NULL,'Reset fields') ?> </td>
+        <td><?php echo form_reset(NULL,'Reset fields') ?> </td>
         <td><?php echo form_submit('submit', 'Submit');?></td>
     </tr>
 </table>
@@ -37,5 +37,5 @@
 </div>
 
 <div class="smalltext">
-    <a href="<?= site_url('auth/login'); ?>">Back to login</a>
+    <a href="<?php echo site_url('auth/login'); ?>">Back to login</a>
 </div>

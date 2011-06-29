@@ -23,7 +23,7 @@
         </td>
     </tr>
     <tr>
-        <td><?= form_reset(); ?></td>
+        <td><?php echo form_reset(); ?></td>
         <td><?php echo form_submit('submit', 'Change');?></td>
     </tr>
       

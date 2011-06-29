@@ -31,6 +31,6 @@
 </div>
 
 <div class="smalltext">
-    <a href="<?= site_url('auth/create_user'); ?>">Register</a>
-    | <a href="<?= site_url('auth/forgot_password'); ?>">Forgot your password?</a>
+    <a href="<?php echo site_url('auth/create_user'); ?>">Register</a>
+    | <a href="<?php echo site_url('auth/forgot_password'); ?>">Forgot your password?</a>
 </div>

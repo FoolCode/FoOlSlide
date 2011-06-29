@@ -14,7 +14,7 @@ echo form_close();
 
 
 
-<div class="section">Chapters:</div>
+<div class="section"><?php _("Chapters") ?>:</div>
 <?php
 	$this->buttoner = array(
 		array(

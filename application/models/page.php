@@ -249,7 +249,7 @@ class Page extends DataMapper {
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
-		$this->size = $filedata["size"];
+		$this->size = filesize($dir . $filedata["name"]);
 		$this->mime = image_type_to_mime_type($imagedata["2"]);
 		$this->thumbwidth = $thumbdata["0"];
 		$this->thumbheight = $thumbdata["1"];

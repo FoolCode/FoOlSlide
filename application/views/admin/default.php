@@ -82,7 +82,7 @@
 					<a href="<?php echo site_url(); ?>">
 						<img class="icon off" src="<?php echo glyphish(158) ?>" />
 						<img class="icon on" src="<?php echo glyphish(158, TRUE) ?>" />
-							<?php _("Homepage") ?></a>
+							<?php echo _("Homepage") ?></a>
 				</div>
 				<?php if (isset($this->tank_auth) && logged_in()) { ?><div class="element">
 					<a href="<?php echo site_url('/admin/auth/logout'); ?>">

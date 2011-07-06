@@ -18,9 +18,9 @@ class Upgrade_model extends CI_Model {
 	 * @return type FALSE or the download URL
 	 */
 	function check_latest($force = FALSE) {
-		if (function_exists('curl_open')) {
+		if (function_exists('curl_init')) {
 			$this->load->library('curl');
-			$result = $this->curl->simple_post($this->pod . '/api/software/foolslide', array('url' => site_url()));
+			$result = $this->curl->simple_post($this->pod . '/api/software/foolslide', array('url' => site_url(), 'version' => get_setting('fs_priv_version')));
 		}
 		else
 			$result = file_get_contents($this->pod . '/api/software/foolslide');
@@ -89,8 +89,8 @@ class Upgrade_model extends CI_Model {
 	 */
 	function get_file($url, $direct_url) {
 		$this->clean();
-		if (function_exists('curl_open')) {
-			$zip = $this->curl->simple_post($url, array('url' => site_url()));
+		if (function_exists('curl_init')) {
+			$zip = $this->curl->simple_post($url, array('url' => site_url(), 'version' => get_setting('fs_priv_version')));
 			if (!$zip) {
 				$zip = $this->curl->simple_get($direct_url);
 			}

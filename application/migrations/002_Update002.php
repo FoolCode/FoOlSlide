@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Update extends CI_Migration {
+class Migration_Update002 extends CI_Migration {
 
 	function up() {
 

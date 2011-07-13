@@ -2,14 +2,14 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Update extends CI_Migration {
+class Migration_Update004 extends CI_Migration {
 
 	function up() {
 
 		$this->db->query(
 				"INSERT INTO `" . $this->db->dbprefix('preferences') . "` (`name`, `value`, `group`) VALUES
 						('fs_reg_email_disabled', 0, 0),
-						('fs_dl_archive_max', 750, 0),
+						('fs_dl_archive_max', 350, 0),
 						('fs_dl_enabled', 0, 0),
 						('fs_cron_autoupgrade_version', 0, 0);"
 		);

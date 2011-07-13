@@ -271,11 +271,22 @@ if (!function_exists('ormer')) {
 				);
 			}
 		}
-		//echo '<pre>';
-		//print_r($result);
-		//echo '</pre>';
 
 		return $result;
+	}
+
+}
+
+if (!function_exists('form_dropdowner')) {
+
+	function form_dropdowner($column) {
+		if (isset($column['onKeyUp'])) {
+			$column['onChange'] = 'onChange="' . $column['onKeyUp'] . '"';
+			unset($column['onKeyUp']);
+		}
+		else
+			$column['onChange'] = '';
+		return form_dropdown($column['name'], $column['values'], $column['value'], $column['onChange']);
 	}
 
 }

@@ -10,7 +10,6 @@ class Database extends Admin_Controller {
 		if (!$this->input->is_cli_request()) {
 			$this->tank_auth->is_logged_in() or redirect('auth/login');
 			$this->tank_auth->is_admin() or redirect('admin');
-			$this->tank_auth->is_admin() or die(1);
 		}
 		$this->load->library('migration');
 		$this->config->load('migration');
@@ -46,12 +45,12 @@ class Database extends Admin_Controller {
 
 		$row = $this->db->get('migrations')->row();
 		$current = $row->version + 1;
-		if ($current <= $this->config->item('migration_version')) {
-			$this->migration->version($current);
-		}
+		//if ($current <= $this->config->item('migration_version')) {
+			$this->migration->latest();
+		//}
 
 		if ($this->input->is_cli_request())
-			echo 'Success.' . PHP_EOL;
+			echo _('Successfully updated the database.') . PHP_EOL;
 		else
 			echo json_encode(array('href' => site_url('admin/')));
 		return TRUE;

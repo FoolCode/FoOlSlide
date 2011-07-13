@@ -124,17 +124,18 @@ class Api extends Public_Controller {
 		
 		$comics = new Comic();
 		$comics->order_by('name', 'ASC')->limit(100)->get();
-		
-		$this->template->set('is_reader', TRUE);
-		$this->template->set('comic', $comice);
-		$this->template->set('chapter', $chaptere);
-		$this->template->set('chapters', $chapters);
-		$this->template->set('comics', $comics);
-		$this->template->set('current_page', $current_page);
-		$this->template->set('pages', $pages);
-		$this->template->set('next_chapter', $next_chapter);
-		$this->template->title($comice->name . ' :: ' . _('Chapter') . ' ' . $chaptere->chapter);
-		$this->template->build('read');
+                
+                
+                $result = array(
+                    'comic' => $comice->to_array(), 
+                    'chapter' => $chaptere->to_array(),
+                    'next_chapter' => $next_chapter,
+                    'pages' => $pages,
+                    'comics' => $chapters->to_array(), 
+                    'chapters' => $chapters->to_array()
+                );
+                
+                echo json_encode($result);
 	}
 
 	public function comic($stub = NULL) {
@@ -148,10 +149,12 @@ class Api extends Public_Controller {
 		$chapters = new Chapter();
 		$chapters->where('comic_id', $comic->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();
 
-		$this->template->set('comic', $comic);
-		$this->template->set('chapters', $chapters);
-		$this->template->title($comic->name);
-		$this->template->build('comic');
+                echo json_encode( 
+                    array(
+                        'comic' => $comic->to_array(),
+                        'chapters' => $chapters->to_array()
+                    )
+                );
 	}
 
 	public function search() {

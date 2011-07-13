@@ -23,6 +23,19 @@ class Install extends Install_Controller {
 			return FALSE;
 		}
 
+                
+                $form[] = array(
+			_('Database type'),
+			array(
+				'type' => 'dropdowner',
+				'name' => 'db_type',
+				'id' => 'db_type',
+                                'values' => array('mysql' => 'MySQL', 'mssql' => 'MSSQL', 'mysqli' => 'MySQLi', 'oci8' => 'OCI8', 'obdc' => 'OBDC', 'postgre' => 'Postgre', 'sqlite' => 'SQLite'),
+                                'value' => 'mysql',
+				'placeholder' => _('required'),
+				'help' => _('The type of database you\'re going to use. Leave it on MySQL if using a standard installation')
+			)
+		);
 		$form[] = array(
 			_('Database hostname'),
 			array(
@@ -123,7 +136,7 @@ class Install extends Install_Controller {
 				'maxlength' => '200',
 				'placeholder' => 'required',
 				'required' => 'required',
-				'help' => _('The email of the administrator\'s account. An email will be sent, requesting activation')
+				'help' => _('The email of the administrator\'s account')
 			)
 		);
 
@@ -144,10 +157,11 @@ class Install extends Install_Controller {
 
 	function _submit($post) {
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('db_hostname', _('Database hostname'), 'required');
-		$this->form_validation->set_rules('db_name', _('Database name'), 'required');
-		$this->form_validation->set_rules('db_username', _('Database username'), 'required');
-		$this->form_validation->set_rules('db_password', _('Database password'), 'required');
+		$this->form_validation->set_rules('db_type', _('Database type'), '');
+		$this->form_validation->set_rules('db_hostname', _('Database hostname'), '');
+		$this->form_validation->set_rules('db_name', _('Database name'), '');
+		$this->form_validation->set_rules('db_username', _('Database username'), '');
+		$this->form_validation->set_rules('db_password', _('Database password'), '');
 		$this->form_validation->set_rules('db_prefix', _('Database prefix'), '');
 		$this->form_validation->set_rules('username', _('Administrator username'), 'required|min_length[4]|max_length[20]');
 		$this->form_validation->set_rules('password', _('Administrator password'), 'required|min_length[5]|max_length[20]');
@@ -166,7 +180,7 @@ class Install extends Install_Controller {
 		$config["username"] = $post["db_username"];
 		$config["password"] = $post["db_password"];
 		$config["dbprefix"] = $post["db_prefix"];
-		$config['dbdriver'] = "mysql";
+		$config['dbdriver'] = $post["db_type"];
 		$config['pconnect'] = FALSE;
 		$config['db_debug'] = FALSE;
 		$config['cache_on'] = FALSE;
@@ -181,6 +195,7 @@ class Install extends Install_Controller {
 		}
 
 		$config = read_file('assets/config.sample.php');
+		$config = str_replace("\$db['default']['dbdriver'] = ''", "\$db['default']['dbdriver'] = '" . addslashes($post["db_type"]) . "'", $config);
 		$config = str_replace("\$db['default']['hostname'] = 'localhost'", "\$db['default']['hostname'] = '" . addslashes($post["db_hostname"]) . "'", $config);
 		$config = str_replace("\$db['default']['username'] = ''", "\$db['default']['username'] = '" . addslashes($post["db_username"]) . "'", $config);
 		$config = str_replace("\$db['default']['password'] = ''", "\$db['default']['password'] = '" . addslashes($post["db_password"]) . "'", $config);
@@ -197,7 +212,7 @@ class Install extends Install_Controller {
 		}
 
 		$this->load->library('migration');
-		$this->migration->version(1);
+		$this->migration->latest();
 		$this->load->library('session');
 		$this->load->library('tank_auth');
 		$this->load->library('datamapper');

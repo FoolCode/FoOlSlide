@@ -6,12 +6,17 @@
  * 
  * You can edit this file manually
  * 
+ * Notice that not all database types need all the data
+ * 
  */
+
+// Database type (in almost all cases it's MySQL)
+$db['default']['dbdriver'] = '';
 
 // Database hostname (in almost all cases it's localhost)
 $db['default']['hostname'] = 'localhost';
 
-// The username of the MySQL user with access to the database
+// The username of user with access to the database
 $db['default']['username'] = '';
 
 // The password of the MySQL user

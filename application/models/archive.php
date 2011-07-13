@@ -89,11 +89,23 @@ class Archive extends DataMapper {
 		$this->delete();
 	}
 
+	/**
+	 * Calculates the size of the currently stored ZIPs
+	 * 
+	 * @author Woxxy
+	 * @returns int 
+	 */
 	function calculate_size() {
 		$this->select_sum('size')->get();
 		return $this->size;
 	}
 
+	/**
+	 * Removes ZIPs that are over the specified size
+	 * 
+	 * @author Woxxy
+	 * @returns bool 
+	 */
 	function remove_old() {
 		while ($this->calculate_size() > (get_setting('fs_dl_archive_max') * 1024 * 1024)) {
 			$archive = new Archive();
@@ -101,11 +113,48 @@ class Archive extends DataMapper {
 			$archive->remove();
 		}
 	}
+	
+	/**
+	 * Removes all the ZIPs
+	 * 
+	 * @author Woxxy
+	 * @returns bool 
+	 */
+	function remove_all(){
+		$archives = new Archive();
+		$archives->get();
+		foreach($archive->all as $archive) {
+			$archive->remove();
+		}
+	}
 
+	/**
+	 * Creates the filename for the ZIP
+	 * 
+	 * @author Woxxy
+	 * @returns bool 
+	 */
 	function filename_compressed($chapter) {
 		$chapter->get_teams();
 		$chapter->get_comic();
 		$filename = "";
+		/*
+		 *  Proposal for guesser
+		 * 
+		 *  %comic% just name
+		 *  %_comic% name with underscores
+		 *	%volume% volume number
+		 *	%chapter% chapter number
+		 *  %subchapter% subchapter number
+		 *  {volume ... } section dedicated to the volume
+		 *  {chapter ... } section dedicated to the chapter
+		 *  {subchapter ... } section dedicated to the subchapter
+		 *  %group% print the name of the group
+		 *  %r_group% print the separator for beginning of groups
+		 *  %l_group% print the separator for end of group
+		 *  %mid_group% print separator between groups
+		 */
+		
 		foreach ($chapter->teams as $team) {
 			$filename .= "[" . $team->name . "]";
 		}
@@ -116,10 +165,11 @@ class Archive extends DataMapper {
 		if ($chapter->subchapter !== FALSE && $chapter->subchapter != 0)
 			$filename .= '_s' . $chapter->subchapter;
 
+		$filename = str_replace(" ", "_", $filename);
+		
 		$bad = array_merge(
 				array_map('chr', range(0, 31)), array("<", ">", ":", '"', "/", "\\", "|", "?", "*"));
 		$filename = str_replace($bad, "", $filename);
-		$filename = str_replace(" ", "_", $filename);
 
 		return $filename;
 	}

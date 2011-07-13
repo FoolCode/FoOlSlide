@@ -42,6 +42,8 @@ $route['default_controller'] = "reader";
 $route['admin'] = "admin/index";
 $route['reader/list'] = 'reader/lista';
 $route['reader/list/(:num)'] = 'reader/lista/$1';
+$route['api/list'] = 'api/lista';
+$route['api/list/(:num)'] = 'api/lista/$1';
 $route['admin/members/members'] = 'admin/members/membersa';
 $route['404_override'] = '';
 

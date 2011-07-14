@@ -23,7 +23,6 @@ body
 a
 {
 	text-decoration:none;
-	color:#f6f6f6;
 }
 
 a:hover
@@ -183,7 +182,18 @@ input[type="text"]
 
 #footer .text
 {
-	font-size:11px;
+    font-size:11px;
+}
+
+#footer>*>div{
+    width:70%;
+    align:left;
+}
+
+#footer>*>a{
+    position:absolute;
+    color:#bbb;
+    align:right;
 }
 
 .clearfooter
@@ -302,12 +312,12 @@ input[type="text"]
 {
 	padding:5px;
 	border:1px solid #999;
-	font-size:19px;
+	font-size:14px;
 	border-radius:4px;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
 	max-width:500px;
-	height:22px;
+	height:18px;
 	overflow:hidden;
 }
 
@@ -464,8 +474,8 @@ ul.dropdown li a
 	position:absolute;
 	top:0px;
 	text-align:center;
-	top:-7px;
-	left:-7px;
+	top:-9px;
+	left:-15px;
 }
 
 .icon_wrapper .icon.on {
@@ -567,7 +577,9 @@ ul.dropdown li a
 
 .large
 {
-	padding:10px;
+	padding:5px;
+        padding-top:6px;
+        padding-bottom:3px;
 	margin:0 0 10px;
 
 	overflow:hidden;
@@ -579,8 +591,8 @@ ul.dropdown li a
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	z-index:-1;
-
-	padding:15px 10px 15px 10px;
+        
+        
     color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
@@ -741,7 +753,7 @@ ul.dropdown li a
 	font-size:19px;
 	margin-left:4px;
 	text-shadow:none;
-	padding:5px;
+	padding:4px;
 	border-radius:4px;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;

@@ -112,6 +112,10 @@ input[type="text"]
 	overflow:visible !important;
 }
 
+.large .nooverflow{
+    
+}
+
 .placeholder {
 	color:#999;
 }

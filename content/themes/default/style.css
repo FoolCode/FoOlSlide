@@ -769,18 +769,19 @@ ul.dropdown li a
 {
 	font-size:19px;
 	margin-left:4px;
+        margin-top:1px;
 	text-shadow:none;
 	padding:4px;
+        padding-top:5px;
+        padding-bottom:5px;
 	border-radius:4px;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
 	text-align:center;
 	float:right;
-}
-
-.numbers .number
-{
-	border: 1px solid transparent;
+        border: 1px solid transparent;
+        font-size:14px;
+        font-family: Cambria, Georgia, Times, Times New Roman, serif;
 }
 
 .numbers .number a

@@ -474,12 +474,20 @@ ul.dropdown li a
 	overflow:hidden;
 }
 
+.element>.icon_wrapper{
+    overflow:visible;
+}
+
 .icon_wrapper .icon {
 	position:absolute;
 	top:0px;
 	text-align:center;
 	top:-9px;
-	left:-15px;
+        left:-11px;
+}
+
+.large>*>*>.icon{
+    left:-15px !important;
 }
 
 .icon_wrapper .icon.on {

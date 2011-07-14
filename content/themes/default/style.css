@@ -187,13 +187,17 @@ input[type="text"]
 
 #footer>*>div{
     width:70%;
-    align:left;
+    float:left;
 }
 
-#footer>*>a{
-    position:absolute;
+#footer>*>.cp_link{
+    width:25%;
+    float:right;
+    text-align:right;
+}
+
+#footer>*>.cp_link>a{
     color:#bbb;
-    align:right;
 }
 
 .clearfooter

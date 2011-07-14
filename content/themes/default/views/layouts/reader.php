@@ -141,7 +141,16 @@
 		</div>
 		<div id="footer">
 			<div class="text">
+                            <div>
 				<?php echo get_setting('fs_gen_footer_text'); ?>
+                            </div>
+                            <div class="cp_link">
+                                <?php 
+                                    if(get_setting('fs_reg_disabled') || $this->tank_auth->is_logged_in()) { 
+                                        echo '<a href="'.site_url('admin').'">'._('Control panel').'</a>'; 
+                                    }
+                                ?>
+                            </div>
 			</div>
 		</div>
 	</body>

@@ -884,56 +884,26 @@ ul.dropdown li a
     -webkit-border-radius:5px;
     
     color:white;
-    /*
-    margin:0px 0px 3px;
-    font-style:italic;
-    color:#1a2225;
-	color:#E2E2E2;
-	color:rgba(255,255,255,0.8);
-	text-shadow: 0px 0px 1px #444;
-    font-size: 17px;
-	border-bottom:1px solid rgba(71,82,87,1);
-	position:relative;
-	text-indent:30px;
+}
 
-	background:#535353;
-	background: -webkit-gradient(
-        linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.7)),
-        color-stop(1, rgba(56,56,56,1.0))
-    	);
-	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-	box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
-	moz-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
-	-webkit-box-shadow:	0px -1px 1px rgba(255,255,255,0.4) inset;
-    /*
-    background:#eeecea;
-    border:1px solid #999;
-    color:#aaa;
-    border-radius:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    z-index:-1;
+.topbar_left{
+    float:left;
+    width:50%;
+}
 
+.topbar_left>*{
+    float:left;
+    margin-left:5px;
+}
 
-    color:#666;
-    color:rgba(0,0,0,0.7);
-    text-shadow: 1px 1px #f6f6f6;
-    text-shadow: 1px 1px rgba(255,255,255,0.5);
-    border-radius:4px;
-    border:1px solid rgba(56,56,56,0.4);
-    background: -webkit-gradient(
-    linear, left top, left bottom,
-    color-stop(0, rgba(234, 231, 229,.8)),
-    color-stop(1, rgba(234, 231, 229,.5))
-            );
-    background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
-    background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
-    box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
-    -moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
-    -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
-    */
+.topbar_right{
+    float:right;
+    width:50%;
+}
+
+.topbar_right>*{
+    float:right;
+    margin-right:5px;
 }
 
 .dropdown_parent
@@ -954,7 +924,7 @@ ul.dropdown li a
 	height:18px;
 	overflow:hidden;
 }
-/**/
+/**
 .text>a{
     width:100%;
     height:100%;
@@ -1033,27 +1003,6 @@ ul.dropdown
     	);
 	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-        
-	font-size:14px;
-	position:absolute;
-	top:18px;
-	line-height:120%;
-	width:260px;
-	max-height:400px;
-	overflow:auto;
-	overflow-x:hidden;
-	z-index:1200;
-	padding:6px 5px;
-	list-style: none;
-        
-	border-top:4px solid #52a9e3;
-	border-bottom:4px solid #52a9e3;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	border-top-left-radius:0px;
-	-moz-border-radius-topleft:0px;
-	-webkit-border-top-left-radius:0px;
     */
 }
 
@@ -1086,58 +1035,35 @@ ul.dropdown li a
     margin-top:4px;
 }
 
-.topbar_left{
-    float:left;
-    width:50%;
-}
-
-.topbar_left>*{
-    float:left;
-    margin-left:5px;
-}
-
-.topbar_right{
-    float:right;
-    width:50%;
-}
-
-.topbar_right>*{
-    float:right;
-    margin-right:5px;
-}
-
 .divider
 {
     background:#999;
     height:30px;
-    width:1px;
-    margin:0px 5px;
+    width:1px
 }
 
 .number
 {
     text-shadow:none;
-    padding:4px;
-    padding-top:4px;
-    padding-bottom:4px;
+    
     
     border-radius:4px;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     
-    height:19px;
     text-align:center;
     font-size:14px;
     font-family: Cambria, Georgia, Times, Times New Roman, serif;
     border: 1px solid #999;
     
+    
 }
 
 .number a
 {
-    text-align:center;
-    width:100%;
-    height:100%;
+    display:block;
+    padding:5px;
+    
 }
 
 .number .current_page
@@ -1156,11 +1082,7 @@ ul.dropdown li a
 }
 
 .tbtitle{
-    font-size:20px;
-    /*border-bottom: 1px solid #999;*/
-    padding-bottom:8px;
-    margin-bottom:8px;
-    position:relative;
+    font-size:16px;
 }
 
 /********

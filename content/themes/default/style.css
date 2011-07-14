@@ -849,12 +849,15 @@ ul.dropdown li a
     padding-bottom:3px;
     margin:0 0 10px;
     
-    height:20px
-
+    height:40px;
+    
+    border:1px solid grey;
+    
     overflow:visible;
 }
 
 .topbar{
+    /*
     background:#eeecea;
     border:1px solid #999;
     color:#aaa;
@@ -880,19 +883,27 @@ ul.dropdown li a
     box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
     -moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
     -webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
+    */
+}
+
+.topbar>div{
+    margin-top:4px;
 }
 
 .topbar_left{
     float:left;
-}
-
-.topbar_right{
-    float:right;
+    width:50%;
 }
 
 .topbar_left>*{
     float:left;
 }
+
+.topbar_right{
+    float:right;
+    width:50%;
+}
+
 .topbar_right>*{
     float:right;
 }
@@ -1005,7 +1016,7 @@ ul.dropdown li a
 
 .tbtitle{
     font-size:20px;
-    border-bottom: 1px solid #999;
+    /*border-bottom: 1px solid #999;*/
     padding-bottom:8px;
     margin-bottom:8px;
     position:relative;

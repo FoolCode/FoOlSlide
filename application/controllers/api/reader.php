@@ -18,7 +18,7 @@ class Reader extends REST_Controller {
             $result = $comic->to_array();
             $this->response($result, 200); // 200 being the HTTP response code
         } else {
-            $this->response(array('error' => _('Comic could not be found')), 404);
+            $this->response(array('error' => _('Comics could not be found')), 404);
         }
     }
     

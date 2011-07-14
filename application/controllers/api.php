@@ -167,20 +167,17 @@ class Api extends Public_Controller {
 		$search = HTMLpurify($this->input->post('search'), 'unallowed');
 		$this->template->title(_('Search'));
 
-                $comice = array();
 		$comics = new Comic();
 		$comics->ilike('name', $search)->limit(20)->get();
 		foreach ($comics->all as $comic) {
-			$latest_chapter = new Chapter();
-			$latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();                        
-                        $comix = $comic->to_array();
-                        $comice[] = 
-                        
-                }
-                $comice = $comics->to_array();
-                
+			$comic->latest_chapter = new Chapter();
+			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();
+		}
 
-		echo json_encode(array('comics' => $comic->to_array()));
+
+		$this->template->set('search', $search);
+		$this->template->set('comics', $comics);
+		$this->template->build('search');
 	}
 
 }

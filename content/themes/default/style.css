@@ -200,6 +200,11 @@ input[type="text"]
     color:#bbb;
 }
 
+#footer>*>.cp_link>img{
+    width:60%;
+    padding-top:10px;
+}
+
 .clearfooter
 {
 	height:55px;

@@ -315,7 +315,6 @@ input[type="text"]
 	position:relative;
 	display:block;
 	z-index:2000;
-        padding-top:4px !important;
 }
 
 .dropdown_parent .text
@@ -839,6 +838,10 @@ ul.dropdown li a
 	margin:10px auto;
 }
 
+.element>.icon_wrapper{
+    overflow:visible;
+}
+
 /***********
 **Top Bar***
 ***********/
@@ -928,9 +931,7 @@ ul.dropdown li a
     overflow:hidden;
 }
 
-.element>.icon_wrapper{
-    overflow:visible;
-}
+
 
 .icon_wrapper .icon {
     position:absolute;
@@ -969,8 +970,6 @@ ul.dropdown li a
     width:26px;
     height:26px;
 }
-
-
 
 .number
 {

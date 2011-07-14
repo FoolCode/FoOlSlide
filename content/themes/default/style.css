@@ -315,6 +315,7 @@ input[type="text"]
 	position:relative;
 	display:block;
 	z-index:2000;
+        padding-top:4px !important;
 }
 
 .dropdown_parent .text
@@ -491,7 +492,12 @@ ul.dropdown li a
         left:-11px;
 }
 
+.large>*>.icon_wrapper{
+    
+}
+
 .large>*>*>.icon{
+    margin-top:4px;
     left:-15px !important;
 }
 
@@ -760,9 +766,13 @@ ul.dropdown li a
 .numbers .divider
 {
 	background:#999;
-	height:38px;
+	height:30px;
 	width:1px;
-	margin:-2px 5px;
+	margin-left:5px;
+        margin-right:5px;
+        margin-top:0px;
+        margin-bottom:8px;
+        overflow:visible;
 }
 
 .numbers .number
@@ -782,6 +792,10 @@ ul.dropdown li a
         border: 1px solid transparent;
         font-size:14px;
         font-family: Cambria, Georgia, Times, Times New Roman, serif;
+}
+
+.numbers .fright{
+    margin-top:4px;
 }
 
 .numbers .number a

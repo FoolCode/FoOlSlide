@@ -58,8 +58,6 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
                     </div>		
 
                     <div class="divider"></div>
-                            
-                    <div class="current">
                     <?php
                         //for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
                         for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
@@ -67,7 +65,6 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
                                 echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
                         }
                     ?>
-                    </div>
                 </div>
             </div>
 	</div>

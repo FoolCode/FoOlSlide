@@ -863,7 +863,6 @@ ul.dropdown li a
     margin:0px 0px 3px;
 	border-bottom:1px solid rgba(71,82,87,1);
 	position:relative;
-	text-indent:30px;
 
 	background:#535353;
 	background: -webkit-gradient(
@@ -972,7 +971,6 @@ ul.dropdown li a
 
 .number
 {
-    font-size:19px;
     text-shadow:none;
     padding:4px;
     padding-top:5px;
@@ -981,19 +979,16 @@ ul.dropdown li a
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     text-align:center;
-    float:right;
-    border: 1px solid transparent;
     font-size:14px;
     font-family: Cambria, Georgia, Times, Times New Roman, serif;
-    border:1px solid #444;
+    border: 1px solid #999;
 }
 
 .number a
 {
-    display:block;
+    text-align:center;
     width:100%;
     height:100%;
-    text-align:center;
 }
 
 .number .current_page

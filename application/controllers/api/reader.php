@@ -22,7 +22,7 @@ class Reader extends REST_Controller {
 
 		if ($comic->result_count() > 0) {
 			$result = array();
-			$result['comics'] = $comic->to_array();
+			$result['comics'] = $comic->all_to_array();
 			$this->response($result, 200); // 200 being the HTTP response code
 		} else {
 			$this->response(array('error' => _('Comics could not be found')), 404);

@@ -10,7 +10,7 @@ class Members extends REST_Controller {
 	 * @param int page
 	 */
 	function teams_get() {
-		if (!$this->get('page') || !is_int($this->get('page')) || $this->get('page') < 1)
+		if (!$this->get('page') || !is_numeric($this->get('page')) || $this->get('page') < 1)
 			$page = 1;
 		else
 			$page = (int) $this->get('page');
@@ -37,7 +37,7 @@ class Members extends REST_Controller {
 	 * @param int id
 	 */
 	function team_get() {
-		if (!$this->get('id')) {
+		if (!$this->get('id') || !is_numeric($this->get('id'))) {
 			$this->response(NULL, 400);
 		}
 
@@ -53,6 +53,30 @@ class Members extends REST_Controller {
 				$result['members'][$key]['display_name'] = $memb->profile_display_name;
 				$result['members'][$key]['twitter'] = $memb->profile_twitter;
 				$result['members'][$key]['bio'] = $memb->profile_bio;
+			}
+			$this->response($result, 200); // 200 being the HTTP response code
+		} else {
+			$this->response(array('error' => _('Team could not be found')), 404);
+		}
+	}
+	
+	/*
+	 * Returns the teams related to the joint
+	 * 
+	 * @param int id
+	 */
+	function joint_get() {
+		if (!$this->get('id') || !is_numeric($this->get('id'))) {
+			$this->response(NULL, 400);
+		}
+
+		$team = new Team();
+		$teams = $team->get_teams(0, $this->get('id'));
+
+		if (count($teams) > 0) {
+			$result = array();
+			foreach($teams as $item) {
+				$result[] = $item->to_array();
 			}
 			$this->response($result, 200); // 200 being the HTTP response code
 		} else {

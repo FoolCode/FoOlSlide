@@ -841,10 +841,6 @@ ul.dropdown li a
 	margin:10px auto;
 }
 
-.element>.icon_wrapper{
-    overflow:visible;
-}
-
 /***********
 **Top Bar***
 ***********/
@@ -877,9 +873,9 @@ ul.dropdown li a
     	);
 	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
 	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-	box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
-	moz-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset;
-	-webkit-box-shadow:	0px -1px 1px rgba(255,255,255,0.4) inset;
+	box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+	moz-box-shadow:0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
         
         border-radius:5px;
     -moz-border-radius:5px;
@@ -974,7 +970,7 @@ ul.dropdown
 
     font-size:14px;
     position:absolute;
-    top:18px;
+    top:16px;
     line-height:120%;
     width:260px;
     max-height:400px;
@@ -1135,4 +1131,8 @@ ul.dropdown li a
     right:4px;
     width:26px;
     height:26px;
+}
+
+.element>.icon_wrapper{
+    overflow:visible;
 }

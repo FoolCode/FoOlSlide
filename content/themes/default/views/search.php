@@ -20,7 +20,7 @@ if (!defined('BASEPATH'))
 		else
 			echo '<div class="element">
 					<div class="title">' . _("Latest release") . ': ' . $comic->latest_chapter->url() . '</div>
-					<div class="meta_r">' . _('by') . ' ' . $comic->latest_chapter->team_url() . ' ' . _('on') . ' ' . $comic->latest_chapter->date() . ' ' . $comic->latest_chapter->edit_url() . '</div>
+					<div class="meta_r">' . _('by') . ' ' . $comic->latest_chapter->team_url() . ', ' . $comic->latest_chapter->date() . ' ' . $comic->latest_chapter->edit_url() . '</div>
 				</div></div>';
 	}
 

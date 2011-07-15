@@ -991,7 +991,6 @@ ul.dropdown
     padding:6px 5px;
     list-style: none;
 
-    /*border-top:4px solid #52a9e3;*/
     border-bottom:4px solid #999;
     border-radius:4px;
     -moz-border-radius:4px;
@@ -999,20 +998,9 @@ ul.dropdown
     border-top-left-radius:0px;
     -moz-border-radius-topleft:0px;
     -webkit-border-top-left-radius:0px;
-    /*
-	display:none;
-        
-	background:#535353;
-	background: -webkit-gradient(
-        linear, left top, left bottom,
-        color-stop(0, rgba(56,56,56,.7)),
-        color-stop(1, rgba(56,56,56,1.0))
-    	);
-	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
-    */
     
     border-left:1px solid #999;
+    border-right:1px solid #999;
 }
 
 .dropdown_right ul.dropdown

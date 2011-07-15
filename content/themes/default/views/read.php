@@ -20,54 +20,53 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 </style>
 
 <div class="panel">
-	<div class="large nooverflow">
-		<h1 class="title dnone"><?php echo $comic->url() ?> :: <?php echo $chapter->url() ?></h1>
-		<div class="title fleft dropdown_parent"><div class="text"><?php echo $comic->url() ?> ⤵</div>
-			<?php
-			echo '<ul class="dropdown">';
-			foreach ($comics->all as $co) {
-				echo '<li>' . $co->url() . '</li>';
-			}
-			echo '</ul>'
-			?>
-		</div>	
-		<div class="title fleft dropdown_parent"><div class="text"><?php echo '<a href="'.$chapter->href().'">'. ((strlen($chapter->title()) > 58)?(substr($chapter->title(), 0, 50).'...'):$chapter->title()) . '</a>' ?> ⤵</div>
-			<?php
-			echo '<ul class="dropdown">';
-			foreach ($chapters->all as $ch) {
-				echo '<li>' . $ch->url() . '</li>';
-			}
-			echo '</ul>'
-			?>
-		</div>
-		<div class="title fleft icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
-		<?php echo $chapter->download_url(NULL, "fleft"); ?>
+	<div class="topbar">
+            <div>
+                <div class="topbar_left">
+                    <h1 class="tbtitle dnone"><?php echo $comic->url() ?> :: <?php echo $chapter->url() ?></h1>
+                    <div class="tbtitle dropdown_parent"><div class="text"><?php echo $comic->url() ?> ⤵</div>
+                            <?php
+                            echo '<ul class="dropdown">';
+                            foreach ($comics->all as $co) {
+                                    echo '<li>' . $co->url() . '</li>';
+                            }
+                            echo '</ul>'
+                            ?>
+                    </div>	
+                    <div class="tbtitle dropdown_parent"><div class="text"><?php echo '<a href="'.$chapter->href().'">'. ((strlen($chapter->title()) > 58)?(substr($chapter->title(), 0, 50).'...'):$chapter->title()) . '</a>' ?> ⤵</div>
+                            <?php
+                            echo '<ul class="dropdown">';
+                            foreach ($chapters->all as $ch) {
+                                    echo '<li>' . $ch->url() . '</li>';
+                            }
+                            echo '</ul>'
+                            ?>
+                    </div>
+                    <div class="tbtitle icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
+                    <?php echo $chapter->download_url(NULL, "fleft"); ?>
+                </div>
+                <div class="topbar_right">
+                    <div class="tbtitle dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
+                            <?php
+                            $url = $chapter->href();
+                            echo '<ul class="dropdown" style="width:90px;">';
+                            for ($i = 1; $i <= count($pages); $i++) {
+                                    echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . ($i - 1) . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
+                            }
+                            echo '</ul>'
+                            ?>
+                    </div>		
 
-		<div class="title fright dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
-			<?php
-			$url = $chapter->href();
-			echo '<ul class="dropdown" style="width:90px;">';
-			for ($i = 1; $i <= count($pages); $i++) {
-				echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . ($i - 1) . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
-			}
-			echo '</ul>'
-			?></div>		
-
-		<div class="numbers fright">
-
-			<div class="divider fright"></div>
-			<div class="current fright"><?php
-			//for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
-			for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
-				$current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
-				echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
-			}
-			?></div>
-		</div>
-
-
-		<div class="clearer"></div>
-
+                    <div class="divider"></div>
+                    <?php
+                        //for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
+                        for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
+                                $current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
+                                echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
+                        }
+                    ?>
+                </div>
+            </div>
 	</div>
 </div>
 

@@ -90,7 +90,7 @@ class Preferences extends Admin_Controller {
 
 
 		$form[] = array(
-			_('Default language'),
+			_('Default release language'),
 			array(
 				'type' => 'language',
 				'name' => 'fs_gen_default_lang',
@@ -99,12 +99,11 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			_('Show Anonymous as team?'),
+			_('Default software language'),
 			array(
-				'type' => 'checkbox',
-				'name' => 'fs_gen_anon_team_show',
-				'id' => 'anon_team_show',
-				'placeholder' => '',
+				'type' => 'dropdowner',
+				'name' => 'fs_gen_lang',
+				'values' => array('' => 'English', 'it_IT.utf8' => 'Italian'),
 				'preferences' => 'fs_gen'
 			)
 		);

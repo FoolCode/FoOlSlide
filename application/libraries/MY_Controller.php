@@ -18,19 +18,26 @@ class MY_Controller extends CI_Controller {
 				//
 				require_once("assets/geolite/GeoIP.php");
 				$gi = geoip_open("assets/geolite/GeoIP.dat", GEOIP_STANDARD);
-				$remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR']: '127.0.0.1';
+				$remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
 				$nation = geoip_country_code_by_addr($gi, $remote_addr);
 				geoip_close($gi);
 				$this->session->set_userdata('nation', $nation);
 			}
-			
+
 			// loads variables from database for get_setting()
 			load_settings();
-			
+			if (get_setting('fs_gen_lang')) {
+				$locale = get_setting('fs_gen_lang');
+				putenv("LANG=$locale");
+				setlocale(LC_ALL, $locale);
+				bindtextdomain("default", FCPATH . "assets/locale");
+				textdomain("default");
+			}
+
 			$this->config->config['tank_auth']['allow_registration'] = !get_setting('fs_reg_disabled');
 
-			$this->config->config['tank_auth']['email_activation'] = ((get_setting('fs_reg_email_disabled'))?FALSE:TRUE);
-			
+			$this->config->config['tank_auth']['email_activation'] = ((get_setting('fs_reg_email_disabled')) ? FALSE : TRUE);
+
 			$captcha_public = get_setting('fs_reg_recaptcha_public');
 			if ($captcha_public != "") {
 				$captcha_secret = get_setting('fs_reg_recaptcha_secret');

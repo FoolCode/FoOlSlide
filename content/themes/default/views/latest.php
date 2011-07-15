@@ -21,7 +21,7 @@
 			
 			echo '<div class="element">'.$chapter->download_url(NULL, 'fleft small').'
 					<div class="title">'.$chapter->url().'</div>
-					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ' ' . _('on') . ' ' . $chapter->date() . ' ' . $chapter->edit_url() . '</div>
+					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ', ' . $chapter->date() . ' ' . $chapter->edit_url() . '</div>
 				</div>';
 			$opendiv = TRUE;
 			

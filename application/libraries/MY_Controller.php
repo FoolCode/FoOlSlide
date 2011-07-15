@@ -26,6 +26,8 @@ class MY_Controller extends CI_Controller {
 
 			// loads variables from database for get_setting()
 			load_settings();
+			
+			// This is the first chance we get to load the right translation file
 			if (get_setting('fs_gen_lang')) {
 				$locale = get_setting('fs_gen_lang');
 				putenv("LANG=$locale");

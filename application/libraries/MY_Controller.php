@@ -7,7 +7,9 @@ class MY_Controller extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		if (file_exists(FCPATH . "config.php")) {
+		if (!file_exists(FCPATH . "config.php")) {
+			show_error("If you are here, and have no clue why FoOlSlide is not working, start by reading the <a href='http://trac.foolrulez.com/foolslide/wiki/installation_guide'>installation manual</a>.");
+		} else {
 			$this->load->database();
 			$this->load->library('session');
 			$this->load->library('tank_auth');

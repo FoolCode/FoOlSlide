@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-15 15:17+0100\n"
-"PO-Revision-Date: 2011-07-15 17:57+0100\n"
+"PO-Revision-Date: 2011-07-15 18:01+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <woxxy@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,7 +123,7 @@ msgstr "La cartella %s deve essere scrivibile. Usa questo comando dalla shell se
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:266
 #, php-format
 msgid "The %s directory needs to be writable as well. Use this command in your shell if possible: %s or change its permissions recursively to 777 with your own FTP software. You won't be able to install or run FoOlSlide without this."
-msgstr "Anche la directory %s deve essere scrivibile. Usa questo comando dalla tua riga di comando se possibile: %s oppure cambia i permessi ricorsivamente a 777 col tuo software FTP. Non sarai in grado di installare o avviare FoOlSlide se non fai questo."
+msgstr "Anche la directory %s deve essere scrivibili. Usa questo comando dalla tua riga di comando se possibile: %s oppure cambia i permessi ricorsivamente a 777 col tuo software FTP. Non sarai in grado di installare o avviare FoOlSlide se non fai questo."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:282
 #, php-format

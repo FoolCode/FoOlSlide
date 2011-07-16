@@ -25,9 +25,11 @@ $session_name = $this->session->get_js_session(TRUE);
 $session_data = $this->session->get_js_session();
 ?>
 
-<div class="jquery-file-upload">
+<div class="uploadify">
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
+	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
 	<script type="text/javascript">
 		
 		function deleteImage(id)
@@ -49,7 +51,7 @@ $session_data = $this->session->get_js_session();
 			jQuery.post('<?php echo site_url('/admin/comics/get_sess_id'); ?>', 
 			function(result){
 				
-				jQuery('#file_upload').uploadifySettings( 'postData', {
+				jQuery('#file_upload_flash').uploadifySettings( 'postData', {
 					'ci_sessionz' : result.session, 
 					'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
 					'chapter_id' : <?php echo $chapter->id; ?>,
@@ -59,8 +61,30 @@ $session_data = $this->session->get_js_session();
 				setTimeout('updateSession()', 6000);
 			}, 'json');
 		}
+		
+		jQuery(document).ready(function() {
+			jQuery('#file_upload_flash').uploadify({
+				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
+				'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+				'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
+				'checkExisting' : false,
+				'preventCaching' : false,
+				'multi' : true,
+				'buttonText' : '<?php echo _('Upload zip and images'); ?>',
+				'width': 200,
+				'auto'      : true,
+				'requeueErrors' : true,
+				'uploaderType'    : 'flash',
+				'postData' : {},
+				'onSWFReady'  : function() {
+					updateSession();
+				}
+			});
+		});
 
-	</script>	
+	</script>
+	
+	<div id="file_upload_flash"></div>
 </div>
 
 <?php echo form_open_multipart("", array('id' => 'file_upload')); ?>

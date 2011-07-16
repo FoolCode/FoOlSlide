@@ -1,0 +1,150 @@
+@charset 'UTF-8';
+/*
+ * jQuery File Upload Plugin CSS 4.2
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://creativecommons.org/licenses/MIT/
+ */
+
+form.file_upload, form.file_upload_small, form.file_upload_large {
+	font-size: 12px;
+	position:relative;
+	padding:4px 6px;
+	color:#f6f6f6 !important;
+	text-shadow:0px 0px 1px #333;
+	color:rgba(255,255,255,0.85) !important;
+	border:1px solid #ddd;
+	border:1px solid rgba(56,56,56,0.4);
+	margin: 0 4px 0 0;
+	min-width:50px;
+	max-width:120px;
+	text-align:center;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+
+	background:#535353;
+	background: -webkit-gradient(
+        linear, left top, left bottom,
+        color-stop(0, rgba(56,56,56,.7)),
+        color-stop(1, rgba(56,56,56,1.0))
+    	);
+	background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+	background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+
+	box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
+	moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5), 1px 1px 1px rgba(255,255,255,0.5) inset;
+}
+
+form.file_upload_highlight,
+form.file_upload:hover {
+	color:#333;
+	border:1px solid #444;
+	padding: 5px 5px 3px 7px;
+	box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
+	-moz-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
+	-webkit-box-shadow: 1px 1px 2px rgba(81,81,92,0.5) inset, 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+form.file_upload input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  border: 0px solid transparent;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  filter: alpha(opacity=0);
+  -o-transform: translate(-300px, -300px) scale(10);
+  -moz-transform: translate(-800px, 0) scale(10);
+  cursor: pointer;
+  height: 100%;
+}
+
+:root form.file_upload input {
+  height: auto;
+}
+
+form.file_upload button,
+.no-js .file_upload_label,
+.no-js .file_upload_overall_progress,
+.no-js .file_upload_buttons {
+  display: none;
+}
+
+.file_upload .file_upload_label,
+.file_upload .file_upload_overall_progress,
+.file_upload .file_upload_buttons {
+  display: block;
+}
+
+.file_upload img {
+  border: none;
+}
+
+.progressbar, .progressbar div {
+  border: 1px solid #aaa;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.progressbar div {
+  width: 100%;
+  height: 100%;
+  margin: -1px;
+}
+
+.file_upload_progress .ui-progressbar-value,
+.file_upload_overall_progress .ui-progressbar-value,
+.progressbar div {
+  background: url(images/progress.gif);
+}
+
+.file_upload_progress div {
+  width: 150px;
+  height: 17px;
+}
+
+.file_upload_overall_progress div {
+  width: 350px;
+  height: 17px;
+}
+
+.file_upload .file_name {
+  padding: 0 10px;
+  font-size: 1.1em;
+}
+
+.file_upload .file_size {
+  padding: 0 10px 0 0;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 1.1em;
+}
+
+.file_upload .files,
+.file_upload_overall_progress {
+  margin: 10px 0;
+}
+
+.file_upload_error .ui-progressbar,
+.file_upload_error .progressbar,
+.file_upload_error .file_upload_start button {
+  display: none;
+}
+
+.file_upload_error .error {
+  width: 100%;
+  height: 100%;
+  color: #CD0A0A;
+  font-size: 1.1em;
+}
+
+.file_upload .ui-widget {
+  font-size: 1em;
+}

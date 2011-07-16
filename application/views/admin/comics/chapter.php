@@ -25,9 +25,9 @@ $session_name = $this->session->get_js_session(TRUE);
 $session_data = $this->session->get_js_session();
 ?>
 
-<div class="uploadify">
-	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
+<div class="jquery-file-upload">
+	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
+	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
 	<script type="text/javascript">
 		
 		function deleteImage(id)
@@ -48,7 +48,7 @@ $session_data = $this->session->get_js_session();
 		{
 			jQuery.post('<?php echo site_url('/admin/comics/get_sess_id'); ?>', 
 			function(result){
-						
+				
 				jQuery('#file_upload').uploadifySettings( 'postData', {
 					'ci_sessionz' : result.session, 
 					'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
@@ -59,35 +59,16 @@ $session_data = $this->session->get_js_session();
 				setTimeout('updateSession()', 6000);
 			}, 'json');
 		}
-					
-		jQuery(document).ready(function() {
-			jQuery('#file_upload').uploadify({
-				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
-				'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
-				'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
-				'checkExisting' : false,
-				'preventCaching' : false,
-				'multi' : true,
-				'buttonText' : '<?php echo _('Upload zip and images'); ?>',
-				'width': 200,
-				'auto'      : true,
-				'requeueErrors' : true,
-				'uploaderType'    : 'flash',
-				'postData' : {},
-				'onSWFReady'  : function() {
-					updateSession();
-				}
-			});
-			
-			
-			
-		});
+
 	</script>	
-
-	<div id="file_upload">       
-
-	</div>
 </div>
+
+<?php echo form_open_multipart("", array('id' => 'file_upload')); ?>
+	<input type="file" name="Filedata" multiple />
+	<button><?php echo _('Upload ZIP and Images'); ?></button>
+	<div><?php echo _('Upload Files'); ?></div>
+<?php echo form_close(); ?>
+
 <?php
 $this->buttoner = array();
 $this->buttoner[] = array(
@@ -96,6 +77,50 @@ $this->buttoner[] = array(
 	'plug' => _('Do you really want to delete all the images in this chapter?'));
 echo buttoner();
 ?>
+
+<table id="files"></table>
+
+<script src="<?php echo site_url(); ?>assets/js/jquery-ui.js"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js"></script>
+<script>
+
+	$(function () {
+		$('#file_upload').fileUploadUI({
+			url: '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+			sequentialUploads: true,
+			uploadTable: $('#files'),
+			downloadTable: $('#files'),
+			formData: [
+				{
+					name: 'chapter_id',
+					value: <?php echo $chapter->id; ?>
+				}, {
+					name: 'uploader',
+					value: 'jquery-file-upload'
+				}, {
+					name: 'overwrite',
+					value: '1'
+				}
+			],
+			buildUploadRow: function (files, index) {
+				return $('<tr><td>' + files[index].name + '<\/td>' +
+					'<td class="file_upload_progress"><div><\/div><\/td>' +
+					'<td class="file_upload_cancel">' +
+					'<button class="ui-state-default ui-corner-all" title="Cancel">' +
+					'<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+					'<\/button><\/td><\/tr>');
+			},
+			buildDownloadRow: function (file) {
+				return $('<tr><td>' + file.name + ' (' + file.size + ' KB) - <?php _('Uploaded'); ?><\/td><\/tr>');
+			},
+			onCompleteAll: function (result) {
+				//window.location.reload(true);
+			}
+		});
+	});
+	
+</script>
 
 <div class="list pages">
 	<?php

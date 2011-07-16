@@ -261,6 +261,10 @@ class Comics extends Admin_Controller {
 			echo 1;
 			return true;
 		}
+		if ($this->input->post('uploader') == 'jquery-file-upload') {
+			echo '{"name":"' . $data['file_name'] . '", "type": "' . $data['file_type'] . '", "size": "' . $data['file_size'] . '"}';
+			return true;
+		}
 
 		return true;
 	}

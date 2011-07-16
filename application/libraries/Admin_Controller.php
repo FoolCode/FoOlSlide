@@ -22,6 +22,13 @@ class Admin_Controller extends MY_Controller {
 		}
 	}
 
+	/*
+	 * Non-dynamic sidebar array.
+	 * Permissions are set inside
+	 * 
+	 * @author Woxxy
+	 * @return sidebar array
+	 */
 	function sidebar_val() {
 		return $sidebar = array(
 	"dashboard" => array(
@@ -81,6 +88,11 @@ class Admin_Controller extends MY_Controller {
 		);
 	}
 
+	/*
+	 * Returns the sidebar code
+	 * 
+	 * @todo comment this
+	 */
 	public function sidebar() {
 		if (!$this->tank_auth->is_logged_in())
 			return false;
@@ -113,20 +125,34 @@ class Admin_Controller extends MY_Controller {
 		return $result;
 	}
 
+	/*
+	 * Controller for cron triggered by admin panel
+	 * Currently defaulted crons:
+	 * -check for updates
+	 * 
+	 * @author Woxxy
+	 */
 	public function cron() {
 		if ($this->tank_auth->is_admin()) {
 			$last_check = get_setting('fs_cron_autoupgrade');
 
 			// check for updates hourly
 			if (time() - $last_check > 3600) {
+				// update autoupgrade cron time
 				$this->db->update('preferences', array('value' => time()), array('name' => 'fs_cron_autoupgrade'));
+				
+				// load model
 				$this->load->model('upgrade_model');
+				// check
 				$versions = $this->upgrade_model->check_latest(TRUE);
+				
+				// if a version is outputted, save the new version number in database
 				if ($versions[0]) {
 					$this->db->update('preferences', array('value' => $versions[0]->version . '.' . $versions[0]->subversion . '.' . $versions[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
 			}
 
+			// reload the settings
 			load_settings();
 		}
 	}

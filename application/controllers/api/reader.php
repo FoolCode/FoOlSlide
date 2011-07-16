@@ -13,20 +13,23 @@ class Reader extends REST_Controller
 	 */
 	function comics_get()
 	{
-		$comic = new Comic();
+		$comics = new Comic();
 
 		// filter with orderby
-		$this->_orderby($comic);
+		$this->_orderby($comics);
 		// use page_to_offset function
-		$this->_page_to_offset($comic);
+		$this->_page_to_offset($comics);
 
 
-		$comic->get();
+		$comics->get();
 
-		if ($comic->result_count() > 0)
+		if ($comics->result_count() > 0)
 		{
 			$result = array();
-			$result['comics'] = $comic->all_to_array(); // use the all_to_array, not just to_array!
+			foreach ($comics->all as $key => $comic) {
+				$result['comics'][$key] = $comic->to_array();
+				$result['comics'][$key]["thumb_url"] = $comic->get_thumb();
+			}
 			$this->response($result, 200); // 200 being the HTTP response code
 		}
 		else
@@ -61,8 +64,9 @@ class Reader extends REST_Controller
 			$result = array();
 			
 			$result["comic"] = $comic->to_array();
+			$result["comic"]["thumb_url"] = $comic->get_thumb();
 
-			// order in the beautiful [comic][chapter][teams]
+			// order in the beautiful [comic][chapter][teams][page]
 			$result["chapters"] = array();
 			foreach ($chapters->all as $key => $chapter)
 			{
@@ -88,7 +92,7 @@ class Reader extends REST_Controller
 
 
 	/*
-	 * Returns 100 chapters from selected page
+	 * Returns chapters from selected page
 	 * 
 	 * Available filters: page, per_page (default:30, max:100), orderby
 	 * 
@@ -101,7 +105,7 @@ class Reader extends REST_Controller
 		// filter with orderby
 		$this->_orderby($chapters);
 		// use page_to_offset function
-		$this->_page_to_offset($chapters, 100);
+		$this->_page_to_offset($chapters);
 
 
 		// get the generic chapters and the comic coming with them
@@ -116,6 +120,7 @@ class Reader extends REST_Controller
 			foreach ($chapters->all as $key => $chapter)
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
+				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				$chapter->get_teams();
 				foreach ($chapter->teams as $item)
@@ -159,6 +164,7 @@ class Reader extends REST_Controller
 			// the pretty array gets pages too: [comic][chapter][teams][pages]
 			$result = array();
 			$result['comic'] = $chapter->comic->to_array();
+			$result['comic']["thumb_url"] = $chapter->comic->get_thumb();
 			$result['chapter'] = $chapter->to_array();
 			$result['teams'] = array();
 			foreach ($chapter->teams as $team)
@@ -181,7 +187,7 @@ class Reader extends REST_Controller
 
 
 	/*
-	 * Returns 100 chapters per page from team ID
+	 * Returns chapters per page from team ID
 	 * Includes releases from joints too
 	 * 
 	 * This is NOT a method light enough to lookup teams. use api/members/team for that
@@ -243,6 +249,7 @@ class Reader extends REST_Controller
 					$result['chapters'][$key]['teams'][] = $team->to_array();
 				}
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
+				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 			}
 
@@ -258,7 +265,7 @@ class Reader extends REST_Controller
 
 
 	/*
-	 * Returns 100 chapters per page by joint ID
+	 * Returns chapters per page by joint ID
 	 * Also returns the teams
 	 * 
 	 * This is not a method light enough to lookup teams. use api/members/joint for that
@@ -304,6 +311,7 @@ class Reader extends REST_Controller
 			foreach ($chapters->all as $key => $chapter)
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
+				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				$result['chapters'][$key]['teams'] = $result['teams'];
 			}

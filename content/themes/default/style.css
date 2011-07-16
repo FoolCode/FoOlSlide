@@ -430,7 +430,8 @@ ul.dropdown li a
 
 .panel a
 {
-	color:#333;
+    color:inherit;
+    width
 }
 
 .panel a:hover
@@ -441,33 +442,35 @@ ul.dropdown li a
 
 .list
 {
-	padding:10px;
-	margin:0;
+    padding:10px;
+    margin:0;
 
-	overflow:hidden;
+    overflow:hidden;
 
-	background:#eeecea;
-	color:#aaa;
-	border:1px solid #999;
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	z-index:-1;
+    background:#eeecea;
+    color:#aaa;
+    border:1px solid #999;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    z-index:-1;
 
-	padding:15px 10px 15px 10px;
+    padding:15px 10px 15px 10px;
+    
     color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
     border:1px solid rgba(56,56,56,0.4);
+    
     background: -webkit-gradient(
-        linear, left top, left bottom,
-        color-stop(0, rgba(234, 231, 229,.8)),
-        color-stop(1, rgba(234, 231, 229,.5))
-		);
-	background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
-	background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+    linear, left top, left bottom,
+    color-stop(0, rgba(234, 231, 229,.8)),
+    color-stop(1, rgba(234, 231, 229,.5))
+    );
+    background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+    background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
 
 
     box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
@@ -565,28 +568,27 @@ ul.dropdown li a
 
 .large
 {
-	padding:5px;
-        padding-top:6px;
-        padding-bottom:3px;
-	margin:0 0 10px;
+    padding:5px;
+    padding-top:6px;
+    padding-bottom:3px;
+    margin:0 0 10px;
 
-	overflow:hidden;
+    overflow:hidden;
 
-	background:#eeecea;
-	border:1px solid #999;
-	
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	z-index:-1;
+    background:#eeecea;
+    border:1px solid #999;
+
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    z-index:-1;
         
-        
-    
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
     border:1px solid rgba(56,56,56,0.4);
+    
     background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(234, 231, 229,.8)),
@@ -1043,8 +1045,46 @@ ul.dropdown li a
     height:100%;
 }
 
-.topbar a{
-    color:inherit;
+/***********
+*Bottom Bar*
+***********/
+
+#bottombar{
+    margin-bottom:5px;
+    margin-left:auto;
+    margin-right:auto;
+    
+    height:30px;
+    max-width:998px;
+    
+    border:1px solid black;
+    
+    background:black;
+}
+
+#bottombar .pagenumber{
+    float:left;
+    
+    width:30px;
+    
+    margin-top:4px;
+    margin-left:10px;
+}
+
+body{
+    cursor:crosshair !important;
+}
+
+#bottombar .socialbuttons{
+    padding-top:2px;
+    padding-right:5px;
+    
+    float:right;
+}
+
+#bottombar .socialbuttons img{
+    height:70%;
+    margin:2px;
 }
 
 /*************
@@ -1070,7 +1110,7 @@ ul.dropdown li a
 {
     display:block;
     padding:6px;
-    
+    color:inherit;
 }
 
 .number .current_page
@@ -1083,7 +1123,7 @@ ul.dropdown li a
     border:1px solid #93D4A3;
 }
 
-.number:hover 
+.number:hover
 {
     border:1px solid #444;
 }

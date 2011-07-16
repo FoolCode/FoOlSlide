@@ -2,127 +2,206 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Reader extends REST_Controller {
+class Reader extends REST_Controller
+{
 	/*
 	 * Returns 100 comics from selected page
 	 * 
-	 * @param int page
+	 * Available filters: page, per_page (default:30, max:100), orderby
+	 * 
+	 * @author Woxxy
 	 */
-
-	function comics_get() {
-		if (!$this->get('page') || !is_numeric($this->get('page')) || $this->get('page') < 1)
-			$page = 1;
-		else
-			$page = (int) $this->get('page');
-
-		$page = ($page * 100) - 100;
-
+	function comics_get()
+	{
 		$comic = new Comic();
-		$comic->limit(100, $page)->get();
 
-		if ($comic->result_count() > 0) {
+		// filter with orderby
+		$this->_orderby($comic);
+		// use page_to_offset function
+		$this->_page_to_offset($comic);
+
+
+		$comic->get();
+
+		if ($comic->result_count() > 0)
+		{
 			$result = array();
-			$result['comics'] = $comic->all_to_array();
+			$result['comics'] = $comic->all_to_array(); // use the all_to_array, not just to_array!
 			$this->response($result, 200); // 200 being the HTTP response code
-		} else {
+		}
+		else
+		{
+			// no comics
 			$this->response(array('error' => _('Comics could not be found')), 404);
 		}
 	}
 
+
 	/*
 	 * Returns the comic
 	 * 
-	 * @param int id
+	 * Available filters: id (required)
+	 * 
+	 * @author Woxxy
 	 */
+	function comic_get()
+	{
+		// check that the id is at least a valid number
+		$this->_check_id();
 
-	function comic_get() {
-		if (!$this->get('id') || !is_numeric($this->get('id'))) {
-			$this->response(NULL, 400);
-		}
-
+		// get the comic
 		$comic = new Comic();
 		$comic->where('id', $this->get('id'))->limit(1)->get();
 
-		if ($comic->result_count() == 1) {
+		if ($comic->result_count() == 1)
+		{
 			$chapters = new Chapter();
 			$chapters->where('comic_id', $comic->id)->get();
 			$chapters->get_teams();
 			$result = array();
+			
 			$result["comic"] = $comic->to_array();
+
+			// order in the beautiful [comic][chapter][teams]
 			$result["chapters"] = array();
-			foreach ($chapters->all as $key => $chapter) {
-				$result['chapters'][$key] = $chapter->to_array();
-				foreach ($chapter->teams as $team) {
+			foreach ($chapters->all as $key => $chapter)
+			{
+				$result['chapters'][$key]['comic'] = $comic->to_array();
+				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				
+				// teams is a normal array, can't use $team->all_to_array()
+				foreach ($chapter->teams as $team)
+				{
 					$result['chapters'][$key]['teams'][] = $team->to_array();
 				}
 			}
 
+			// all good
 			$this->response($result, 200); // 200 being the HTTP response code
-		} else {
+		}
+		else
+		{
+			// there's no comic with that id
 			$this->response(array('error' => _('Comic could not be found')), 404);
 		}
 	}
 
+
+	/*
+	 * Returns 100 chapters from selected page
+	 * 
+	 * Available filters: page, per_page (default:30, max:100), orderby
+	 * 
+	 * @author Woxxy
+	 */
+	function chapters_get()
+	{
+		$chapters = new Chapter();
+
+		// filter with orderby
+		$this->_orderby($chapters);
+		// use page_to_offset function
+		$this->_page_to_offset($chapters, 100);
+
+
+		// get the generic chapters and the comic coming with them
+		$chapters->get();
+		$chapters->get_comic();
+
+		if ($chapters->result_count() > 0)
+		{
+
+			// let's create a pretty array of chapters [comic][chapter][teams]
+			$result['chapters'] = array();
+			foreach ($chapters->all as $key => $chapter)
+			{
+				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
+				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				$chapter->get_teams();
+				foreach ($chapter->teams as $item)
+				{
+					$result['chapters'][$key]['teams'][] = $item->to_array();
+				}
+			}
+			
+			// all good
+			$this->response($result, 200); // 200 being the HTTP response code
+		}
+		else
+		{
+			// no comics
+			$this->response(array('error' => _('Comics could not be found')), 404);
+		}
+	}
+
+
 	/*
 	 * Returns the chapter
 	 * 
-	 * @param int id
+	 * Available filters: id (required)
+	 *
+	 * @author Woxxy
 	 */
+	function chapter_get()
+	{
+		// check that the id is at least a valid number
+		$this->_check_id();
 
-	function chapter_get() {
-		if (!$this->get('id') || !is_numeric($this->get('id'))) {
-			$this->response(NULL, 400);
-		}
-
+		// get the single chapter by id
 		$chapter = new Chapter();
 		$chapter->where('id', $this->get('id'))->limit(1)->get();
 
-		if ($chapter->result_count() == 1) {
+		if ($chapter->result_count() == 1)
+		{
 			$chapter->get_comic();
 			$chapter->get_teams();
 
+			// the pretty array gets pages too: [comic][chapter][teams][pages]
 			$result = array();
 			$result['comic'] = $chapter->comic->to_array();
 			$result['chapter'] = $chapter->to_array();
 			$result['teams'] = array();
-			foreach ($chapter->teams as $team) {
+			foreach ($chapter->teams as $team)
+			{
 				$result['teams'][] = $team->to_array();
 			}
+			
+			// this time we get the pages
 			$result['pages'] = $chapter->get_pages();
 
-
+			// all good
 			$this->response($result, 200); // 200 being the HTTP response code
-		} else {
+		}
+		else
+		{
+			// the chapter with that id doesn't exist
 			$this->response(array('error' => _('Chapter could not be found')), 404);
 		}
 	}
+
 
 	/*
 	 * Returns 100 chapters per page from team ID
 	 * Includes releases from joints too
 	 * 
-	 * This is not a method light enough to lookup teams. use api/members/team for that
+	 * This is NOT a method light enough to lookup teams. use api/members/team for that
 	 * 
-	 * @param int id team ID
-	 * @param int page 
+	 * Available filters: id (required), page, per_page (default:30, max:100), orderby
+	 * 
+	 * @author Woxxy
 	 */
+	function team_get()
+	{
+		// check that the id is at least a valid number
+		$this->_check_id();
 
-	function team_get() {
-		if (!$this->get('id') || !is_numeric($this->get('id'))) {
-			$this->response(NULL, 400);
-		}
-
-		if (!$this->get('page') || !is_numeric($this->get('page')) || $this->get('page') < 1)
-			$page = 1;
-		else
-			$page = (int) $this->get('page');
-
-		$page = ($page * 100) - 100;
-
+		// get the single team by id
 		$team = new Team();
 		$team->where('id', $this->get('id'))->limit(1)->get();
 
-		if ($team->result_count() == 1) {
+		// team found?
+		if ($team->result_count() == 1)
+		{
 			$result = array();
 			$result['team'] = $team->to_array();
 
@@ -132,84 +211,112 @@ class Reader extends REST_Controller {
 
 
 			$chapters = new Chapter();
+			// get all chapters with the team ID
 			$chapters->where('team_id', $team->id);
-			foreach ($joints->all as $joint) {
+			foreach ($joints->all as $joint)
+			{
+				// get also all chapters with the joints by the team
 				$chapters->or_where('joint_id', $joint->joint_id);
 			}
-			$chapters->limit(100, $page)->get();
+			
+			// filter for the page and the order
+			$this->_orderby($chapters);
+			$this->_page_to_offset($chapters);
+			$chapters->get();
 			$chapters->get_comic();
 
+			// let's save some power by reusing the variables we already have for team
+			// and put everything in the usual clean [comic][chapter][teams]
 			$result['chapters'] = array();
-			foreach ($chapters->all as $key => $chapter) {
-				if (!$chapter->team_id) {
+			foreach ($chapters->all as $key => $chapter)
+			{
+				if (!$chapter->team_id)
+				{
 					$chapter->get_teams();
-					foreach ($chapter->teams as $item) {
+					foreach ($chapter->teams as $item)
+					{
 						$result['chapters'][$key]['teams'][] = $item->to_array();
 					}
-				} else {
-						$result['chapters'][$key]['teams'][] = $team->to_array();
+				}
+				else
+				{
+					$result['chapters'][$key]['teams'][] = $team->to_array();
 				}
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 			}
 
+			// all good
 			$this->response($result, 200); // 200 being the HTTP response code
-		} else {
+		}
+		else
+		{
+			// that single team id wasn't found
 			$this->response(array('error' => _('Team could not be found')), 404);
 		}
 	}
+
 
 	/*
 	 * Returns 100 chapters per page by joint ID
 	 * Also returns the teams
 	 * 
-	 * This is not a method light enough to lookup teams. use api/members/team for that
+	 * This is not a method light enough to lookup teams. use api/members/joint for that
 	 * 
-	 * @param int id team ID
-	 * @param int page 
+	 * Available filters: id (required), page, per_page (default:30, max:100), orderby
+	 * 
+	 * @author Woxxy
 	 */
+	function joint_get()
+	{
+		// check that the id is at least a valid number
+		$this->_check_id();
 
-	function joint_get() {
-		if (!$this->get('id') || !is_numeric($this->get('id'))) {
-			$this->response(NULL, 400);
-		}
-
-		if (!$this->get('page') || !is_numeric($this->get('page')) || $this->get('page') < 1)
-			$page = 1;
-		else
-			$page = (int) $this->get('page');
-
-		$page = ($page * 100) - 100;
-
+		// grab by joint_id, id for joints means nothing much
 		$joint = new Joint();
 		$joint->where('joint_id', $this->get('id'))->limit(1)->get();
 
-		if ($joint->result_count() == 1) {
-
+		if ($joint->result_count() == 1)
+		{
+			// good old get_teams() will give us all Team objects in an array
 			$team = new Team();
 			$teams = $team->get_teams(0, $this->get('id'));
 
+			// $teams is a normal array, so we have to do a loop
 			$result = array();
-			foreach ($teams as $item) {
+			foreach ($teams as $item)
+			{
 				$result['teams'][] = $item->to_array();
 			}
 
+			// grab all the chapters from the same joint
 			$chapters = new Chapter();
 			$chapters->where('joint_id', $joint->joint_id);
-			$chapters->limit(100, $page)->get();
+			
+			// apply the limit and orderby filters
+			$this->_orderby($chapters);
+			$this->_page_to_offset($chapters);
+			$chapters->get();
 			$chapters->get_comic();
 
+			// let's put the chapters in a nice [comic][chapter][teams] list
 			$result['chapters'] = array();
-			foreach ($chapters->all as $key => $chapter) {
+			foreach ($chapters->all as $key => $chapter)
+			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				$result['chapters'][$key]['teams'] = $result['teams'];
 			}
 
+			// all good
 			$this->response($result, 200); // 200 being the HTTP response code
-		} else {
+		}
+		else
+		{
+			// nothing for this joint or page
 			$this->response(array('error' => _('Team could not be found')), 404);
 		}
 	}
+
 
 }

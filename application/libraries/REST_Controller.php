@@ -1,6 +1,9 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
 
-class REST_Controller extends MY_Controller {
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class REST_Controller extends MY_Controller
+{
 
 	protected $rest_format = NULL; // Set this in a controller to use a default format
 	protected $methods = array(); // contains a list of method properties such as limit, log and level
@@ -13,7 +16,6 @@ class REST_Controller extends MY_Controller {
 	protected $_delete_args = array();
 	protected $_args = array();
 	protected $_allow = TRUE;
-
 	// List all supported methods, the first will be the default format
 	protected $_supported_formats = array(
 		'xml' => 'application/xml',
@@ -79,7 +81,7 @@ class REST_Controller extends MY_Controller {
 				{
 					parse_str(file_get_contents('php://input'), $this->_put_args);
 				}
-				
+
 				break;
 
 			case 'delete':
@@ -107,7 +109,7 @@ class REST_Controller extends MY_Controller {
 		$this->auth_override = $this->_auth_override_check();
 
 		// When there is no specific override for the current class/method, use the default auth value set in the config
-		if ( $this->auth_override !== TRUE )
+		if ($this->auth_override !== TRUE)
 		{
 			if ($this->config->item('rest_auth') == 'basic')
 			{
@@ -132,11 +134,12 @@ class REST_Controller extends MY_Controller {
 		}
 
 		// only allow ajax requests
-		if ( ! $this->input->is_ajax_request() AND config_item('rest_ajax_only') )
+		if (!$this->input->is_ajax_request() AND config_item('rest_ajax_only'))
 		{
-			$this->response( array('status' => false, 'error' => 'Only AJAX requests are accepted.'), 505 );
+			$this->response(array('status' => false, 'error' => 'Only AJAX requests are accepted.'), 505);
 		}
 	}
+
 
 	/*
 	 * Remap
@@ -155,10 +158,10 @@ class REST_Controller extends MY_Controller {
 		$controller_method = $object_called . '_' . $this->request->method;
 
 		// Do we want to log this method (if allowed by config)?
-		$log_method = ! (isset($this->methods[$controller_method]['log']) AND $this->methods[$controller_method]['log'] == FALSE);
+		$log_method = !(isset($this->methods[$controller_method]['log']) AND $this->methods[$controller_method]['log'] == FALSE);
 
 		// Use keys for this method?
-		$use_key = ! (isset($this->methods[$controller_method]['key']) AND $this->methods[$controller_method]['key'] == FALSE);
+		$use_key = !(isset($this->methods[$controller_method]['key']) AND $this->methods[$controller_method]['key'] == FALSE);
 
 		// Get that useless shitty key out of here
 		if (config_item('rest_enable_keys') AND $use_key AND $this->_allow === FALSE)
@@ -167,16 +170,16 @@ class REST_Controller extends MY_Controller {
 		}
 
 		// Sure it exists, but can they do anything with it?
-		if ( ! method_exists($this, $controller_method))
+		if (!method_exists($this, $controller_method))
 		{
 			$this->response(array('status' => false, 'error' => 'Unknown method.'), 404);
 		}
 
 		// Doing key related stuff? Can only do it if they have a key right?
-		if (config_item('rest_enable_keys') AND ! empty($this->rest->key))
+		if (config_item('rest_enable_keys') AND !empty($this->rest->key))
 		{
 			// Check the limit
-			if (config_item('rest_enable_limits') AND ! $this->_check_limit($controller_method))
+			if (config_item('rest_enable_limits') AND !$this->_check_limit($controller_method))
 			{
 				$this->response(array('status' => false, 'error' => 'This API key has reached the hourly limit for this method.'), 401);
 			}
@@ -207,6 +210,7 @@ class REST_Controller extends MY_Controller {
 		call_user_func_array(array($this, $controller_method), $arguments);
 	}
 
+
 	/*
 	 * response
 	 *
@@ -216,9 +220,9 @@ class REST_Controller extends MY_Controller {
 	{
 		// If data is empty and not code provide, error and bail
 		if (empty($data) && $http_code === null)
-    	{
-    		$http_code = 404;
-    	}
+		{
+			$http_code = 404;
+		}
 
 		// Otherwise (if no data but 200 provided) or some data, carry on camping!
 		else
@@ -226,21 +230,21 @@ class REST_Controller extends MY_Controller {
 			is_numeric($http_code) OR $http_code = 200;
 
 			// If the format method exists, call and return the output in that format
-			if (method_exists($this, '_format_'.$this->response->format))
+			if (method_exists($this, '_format_' . $this->response->format))
 			{
 				// Set the correct format header
-				header('Content-Type: '.$this->_supported_formats[$this->response->format]);
+				header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
 
-				$output = $this->{'_format_'.$this->response->format}($data);
+				$output = $this->{'_format_' . $this->response->format}($data);
 			}
 
 			// If the format method exists, call and return the output in that format
-			elseif (method_exists($this->format, 'to_'.$this->response->format))
+			elseif (method_exists($this->format, 'to_' . $this->response->format))
 			{
 				// Set the correct format header
-				header('Content-Type: '.$this->_supported_formats[$this->response->format]);
+				header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
 
-				$output = $this->format->factory($data)->{'to_'.$this->response->format}();
+				$output = $this->format->factory($data)->{'to_' . $this->response->format}();
 			}
 
 			// Format not supported, output directly
@@ -256,6 +260,7 @@ class REST_Controller extends MY_Controller {
 
 		exit($output);
 	}
+
 
 	/*
 	 * Detect input format
@@ -284,6 +289,7 @@ class REST_Controller extends MY_Controller {
 		return NULL;
 	}
 
+
 	/*
 	 * Detect format
 	 *
@@ -298,9 +304,9 @@ class REST_Controller extends MY_Controller {
 		{
 			return $matches[1];
 		}
-		
+
 		// Check if a file extension is used
-		elseif ($this->_get_args AND ! is_array(end($this->_get_args)) AND preg_match($pattern, end($this->_get_args), $matches))
+		elseif ($this->_get_args AND !is_array(end($this->_get_args)) AND preg_match($pattern, end($this->_get_args), $matches))
 		{
 			// The key of the last argument
 			$last_key = end(array_keys($this->_get_args));
@@ -352,9 +358,8 @@ class REST_Controller extends MY_Controller {
 				}
 			}
 		} // End HTTP_ACCEPT checking
-		
 		// Well, none of that has worked! Let's see if the controller has a default
-		if ( ! empty($this->rest_format))
+		if (!empty($this->rest_format))
 		{
 			return $this->rest_format;
 		}
@@ -363,19 +368,19 @@ class REST_Controller extends MY_Controller {
 		return config_item('rest_default_format');
 	}
 
+
 	/*
 	 * Detect method
 	 *
 	 * Detect which method (POST, PUT, GET, DELETE) is being used
 	 */
-
 	protected function _detect_method()
 	{
 		$method = strtolower($this->input->server('REQUEST_METHOD'));
 
 		if ($this->config->item('enable_emulate_request') && $this->input->post('_method'))
 		{
-			$method =  $this->input->post('_method');
+			$method = $this->input->post('_method');
 		}
 
 		if (in_array($method, array('get', 'delete', 'post', 'put')))
@@ -386,12 +391,12 @@ class REST_Controller extends MY_Controller {
 		return 'get';
 	}
 
+
 	/*
 	 * Detect API Key
 	 *
 	 * See if the user has provided an API key
 	 */
-
 	protected function _detect_api_key()
 	{
 		// Work out the name of the SERVER entry based on config
@@ -404,13 +409,13 @@ class REST_Controller extends MY_Controller {
 		// Find the key from server or arguments
 		if ($key = isset($this->_args['API-Key']) ? $this->_args['API-Key'] : $this->input->server($key_name))
 		{
-			if ( ! $row = $this->rest->db->where('key', $key)->get(config_item('rest_keys_table'))->row())
+			if (!$row = $this->rest->db->where('key', $key)->get(config_item('rest_keys_table'))->row())
 			{
 				return FALSE;
 			}
 
 			$this->rest->key = $row->key;
-			
+
 			isset($row->level) AND $this->rest->level = $row->level;
 			isset($row->ignore_limits) AND $this->rest->ignore_limits = $row->ignore_limits;
 
@@ -421,15 +426,15 @@ class REST_Controller extends MY_Controller {
 		return FALSE;
 	}
 
+
 	/*
 	 * Detect language(s)
 	 *
 	 * What language do they want it in?
 	 */
-
 	protected function _detect_lang()
 	{
-		if ( ! $lang = $this->input->server('HTTP_ACCEPT_LANGUAGE'))
+		if (!$lang = $this->input->server('HTTP_ACCEPT_LANGUAGE'))
 		{
 			return NULL;
 		}
@@ -455,12 +460,12 @@ class REST_Controller extends MY_Controller {
 		return $lang;
 	}
 
+
 	/*
 	 * Log request
 	 *
 	 * Record the entry for awesomeness purposes
 	 */
-
 	protected function _log_request($authorized = FALSE)
 	{
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
@@ -474,12 +479,12 @@ class REST_Controller extends MY_Controller {
 		));
 	}
 
+
 	/*
 	 * Log request
 	 *
 	 * Record the entry for awesomeness purposes
 	 */
-
 	protected function _check_limit($controller_method)
 	{
 		// They are special, or it might not even have a limit
@@ -494,10 +499,10 @@ class REST_Controller extends MY_Controller {
 
 		// Get data on a keys usage
 		$result = $this->rest->db
-						->where('uri', $this->uri->uri_string())
-						->where('api_key', $this->rest->key)
-						->get(config_item('rest_limits_table'))
-						->row();
+				->where('uri', $this->uri->uri_string())
+				->where('api_key', $this->rest->key)
+				->get(config_item('rest_limits_table'))
+				->row();
 
 		// No calls yet, or been an hour since they called
 		if (!$result OR $result->hour_started < time() - (60 * 60))
@@ -529,12 +534,13 @@ class REST_Controller extends MY_Controller {
 
 		return TRUE;
 	}
+
+
 	/*
 	 * Auth override check
 	 *
 	 * Check if there is a specific auth type set for the current class/method being called
 	 */
-
 	protected function _auth_override_check()
 	{
 
@@ -542,13 +548,13 @@ class REST_Controller extends MY_Controller {
 		$this->overrides_array = $this->config->item('auth_override_class_method');
 
 		// Check to see if the override array is even populated, otherwise return false
-		if ( empty($this->overrides_array) )
+		if (empty($this->overrides_array))
 		{
 			return false;
 		}
 
 		// Check to see if there's an override value set for the current class/method being called
-		if ( empty($this->overrides_array[$this->router->class][$this->router->method]) )
+		if (empty($this->overrides_array[$this->router->class][$this->router->method]))
 		{
 			return false;
 		}
@@ -590,6 +596,7 @@ class REST_Controller extends MY_Controller {
 		return array_key_exists($key, $this->_get_args) ? $this->_xss_clean($this->_get_args[$key], $xss_clean) : FALSE;
 	}
 
+
 	public function post($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
@@ -599,6 +606,7 @@ class REST_Controller extends MY_Controller {
 
 		return $this->input->post($key, $xss_clean);
 	}
+
 
 	public function put($key = NULL, $xss_clean = TRUE)
 	{
@@ -610,6 +618,7 @@ class REST_Controller extends MY_Controller {
 		return array_key_exists($key, $this->_put_args) ? $this->_xss_clean($this->_put_args[$key], $xss_clean) : FALSE;
 	}
 
+
 	public function delete($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
@@ -619,6 +628,7 @@ class REST_Controller extends MY_Controller {
 
 		return array_key_exists($key, $this->_delete_args) ? $this->_xss_clean($this->_delete_args[$key], $xss_clean) : FALSE;
 	}
+
 
 	protected function _xss_clean($val, $bool)
 	{
@@ -632,12 +642,14 @@ class REST_Controller extends MY_Controller {
 		}
 	}
 
+
 	public function validation_errors()
 	{
 		$string = strip_tags($this->form_validation->error_string());
 
 		return explode("\n", trim($string, "\n"));
 	}
+
 
 	// SECURITY FUNCTIONS ---------------------------------------------------------
 
@@ -663,6 +675,7 @@ class REST_Controller extends MY_Controller {
 
 		return TRUE;
 	}
+
 
 	protected function _prepare_basic_auth()
 	{
@@ -690,6 +703,7 @@ class REST_Controller extends MY_Controller {
 			$this->_force_login();
 		}
 	}
+
 
 	protected function _prepare_digest_auth()
 	{
@@ -742,6 +756,7 @@ class REST_Controller extends MY_Controller {
 		}
 	}
 
+
 	protected function _force_login($nonce = '')
 	{
 		if ($this->config->item('rest_auth') == 'basic')
@@ -756,11 +771,12 @@ class REST_Controller extends MY_Controller {
 		$this->response(array('status' => false, 'error' => 'Not authorized'), 401);
 	}
 
+
 	// Force it into an array
 	protected function _force_loopable($data)
 	{
 		// Force it to be something useful
-		if ( ! is_array($data) AND ! is_object($data))
+		if (!is_array($data) AND !is_object($data))
 		{
 			$data = (array) $data;
 		}
@@ -768,13 +784,152 @@ class REST_Controller extends MY_Controller {
 		return $data;
 	}
 
-	// FORMATING FUNCTIONS ---------------------------------------------------------
 
+	// FORMATING FUNCTIONS ---------------------------------------------------------
 	// Many of these have been moved to the Format class for better separation, but these methods will be checked too
-	
 	// Encode as JSONP
 	protected function _format_jsonp($data = array())
 	{
 		return $this->get('callback') . '(' . json_encode($data) . ')';
 	}
+
+
+	/*
+	 * 
+	 * FUNCTIONS ADDED FOR FOOLSLIDE
+	 * 
+	 */
+	
+	/*
+	 * Commodity to check that the ID is not wrong and return a coherent error
+	 * 
+	 * @author Woxxy
+	 */
+	function _check_id()
+	{
+		if (!$this->get('id'))
+		{
+			$this->response(array('error' => _('ID not set')), 400);
+			return FALSE;
+		}
+		
+		if (!is_numeric($this->get('id')) || ($this->get('id') < 1))
+		{
+			$this->response(array('error' => _('ID is not a valid number')), 400);
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
+
+
+	/*
+	 * Checks that the orderby method is correct or ignores it if wrong.
+	 * 
+	 * @author Woxxy
+	 * @param DataMapper $object database query
+	 * @param array $add add accepted values for search
+	 * @param array $remove removes default accepted values
+	 * @param array $default default accepted values
+	 */
+	function _orderby($object, $add = array(), $remove = array(), $default = array('id', 'name', 'created', 'edited'))
+	{
+		// return TRUE if there's no orderby set
+		if (!$this->get('orderby'))
+			return TRUE;
+
+		// the tag is set
+		$order = $this->get('orderby');
+
+		// add and remove from default array
+		$default = array_merge($default, $add);
+		$default = array_diff($default, $remove);
+
+		// neutralize those caps
+		$order = strtolower($order);
+
+		// determine if ASC or DESC
+		$asc = substr($order, 0, 3);
+		if ($asc == "asc")
+		{
+			$asc = "ASC";
+			$order = substr($order, 4);
+		}
+		else if ($asc == "des")
+		{
+			$asc = "DESC";
+			$order = substr($order, 5);
+		}
+		else
+		{
+			// DESC or ASC was not set, return the error
+			$this->response(array('error' => _('"orderby" tag wasn\'t correctly used.')), 400);
+			return FALSE;
+		}
+
+		// check that the orderby method exists
+		if (in_array($order, $default))
+		{
+			$object->order_by($order, $asc);
+			return TRUE;
+		}
+
+		// there's no such method, return an error
+		$this->response(array('error' => _('"orderby" tag wasn\'t correctly used')), 400);
+		return FALSE;
+	}
+
+
+	/*
+	 * Retrieves the page tag and returns the correct limit for DataMapper
+	 * 
+	 * @author Woxxy
+	 * @param Datamapper $object
+	 * @param int $limit entries per page
+	 * @return $entry the entry from which the Datamapper limit function gets results
+	 */
+	function _page_to_offset($object, $default = 30, $max = 100)
+	{
+		// Give at least the first page if the page tag is not set or wrongly set
+		if (!$this->get('page'))
+		{
+			$page = 1;
+		}
+		else
+		{
+			// wrong page values
+			if (!is_numeric($this->get('page')) || $this->get('page') < 1)
+			{
+				$this->response(array('error' => _("The \"page\" tag was not a valid number.")), 400);
+				return FALSE;
+			}
+			// or use the page tag
+			$page = (int) $this->get('page');
+		}
+
+		// Give at least the first page if the page tag is not set or wrongly set
+		if (!$this->get('per_page') || !is_numeric($this->get('per_page')))
+		{
+			$per_page = $default;
+		}
+		else
+		{
+			// too large per_page number
+			if ($this->get('per_page') > $max)
+			{
+				$this->response(array('error' => _("You're trying to get a larger number of \"per_page\" results per request than allowed.")), 400);
+				return FALSE;
+			}
+			// or use the page tag
+			$per_page = (int) $this->get('per_page');
+		}
+
+		// the incredible algorithm to convert page to the right entry number
+		$entry = ($page * $per_page) - $per_page;
+
+		// trigger the limit
+		$object->limit($per_page, $entry);
+	}
+
+
 }

@@ -150,7 +150,6 @@
                                         echo '<a href="'.site_url('admin').'">'._('Control panel').'</a>'; 
                                     }
                                 ?>
-                                <br>
                                 <img src="<?php echo site_url().'content/themes/default/images/logo_footer.png'?>" />
                             </div>
 			</div>

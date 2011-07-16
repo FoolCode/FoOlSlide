@@ -94,10 +94,14 @@ class Admin_Controller extends MY_Controller {
 	 * @todo comment this
 	 */
 	public function sidebar() {
+		// not logged in users don't need the sidebar
 		if (!$this->tank_auth->is_logged_in())
 			return false;
+		
 		$result = "";
 		foreach ($this->sidebar_val() as $key => $item) {
+			
+			// segment 2 contains what's currently active so we can set it lighted up
 			if ($this->uri->segment(2) == $key)
 				$active = TRUE;
 			else

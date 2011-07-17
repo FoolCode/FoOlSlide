@@ -130,6 +130,7 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 /**
  * Returns a random string
  * 
+ * @todo this is returning only numbers for some reason
  * @param int length of string to generate
  * @return string random string
  */

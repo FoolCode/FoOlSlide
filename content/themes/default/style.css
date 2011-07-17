@@ -431,7 +431,6 @@ ul.dropdown li a
 .panel a
 {
     color:inherit;
-    width
 }
 
 .panel a:hover
@@ -886,7 +885,6 @@ ul.dropdown li a
 
 .topbar{
     margin:0px 0px 3px;
-    border-bottom:1px solid rgba(71,82,87,1);
     position:relative;
 
     background:#535353;
@@ -901,6 +899,9 @@ ul.dropdown li a
     moz-box-shadow:0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
 
+    
+    border-bottom:1px solid rgba(71,82,87,1);
+    
     border-radius:5px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
@@ -1056,10 +1057,27 @@ ul.dropdown li a
     
     height:30px;
     max-width:998px;
+}
+
+#bottombar{
+    background:#535353;
+    background: -webkit-gradient(
+    linear, left top, left bottom,
+    color-stop(0, rgba(56,56,56,.7)),
+    color-stop(1, rgba(56,56,56,1.0))
+    );
+    background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+    background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+    box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+    moz-box-shadow:0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+
     
-    border:1px solid black;
+    border-bottom:1px solid rgba(71,82,87,1);
     
-    background:black;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
 }
 
 #bottombar .pagenumber{
@@ -1072,7 +1090,7 @@ ul.dropdown li a
 }
 
 body{
-    cursor:crosshair !important;
+    cursor:crosshair !important;/*FUCK YEA SEAKING*/
 }
 
 #bottombar .socialbuttons{

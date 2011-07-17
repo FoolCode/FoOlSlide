@@ -141,7 +141,7 @@
 		</div>
                 <div id="bottombar">
                     <div class="pagenumber">
-                        -1-
+                        -<?php //echo $current_page ?>-
                     </div>
                     <div class="socialbuttons">
                         <img src="http://dl.dropbox.com/u/2082302/z-facebook_d.png" /><img src="http://dl.dropbox.com/u/2082302/z-twitter_d.png" />

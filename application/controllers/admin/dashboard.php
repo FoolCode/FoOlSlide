@@ -15,15 +15,23 @@ class Dashboard extends Admin_Controller {
 
 		$this->viewdata["main_content_view"] = $this->load->view("admin/dashboard/index", NULL, TRUE);
 
-
+		// print out the join request forms
 		$this->_get_memberships();
 		$this->_get_requests();
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
+	/*
+	 * Creates the form to show the people applying to a team
+	 * Gives the ability to team leaders to accept or reject applicants
+	 * 
+	 * @author Woxxy
+	 */
 	function _get_memberships() {
 		$application = array();
 		$members = new Membership();
+		
+		// if there are any applications
 		if ($members->get_applications()) {
 			foreach ($members->all as $key => $applicant) {
 				$application[] = array(
@@ -45,15 +53,25 @@ class Dashboard extends Admin_Controller {
 				);
 			}
 
+			// put the array in a form
 			$list = tabler($application, TRUE, FALSE);
+			
+			// add it to the content without printing
 			$data = array('application' => $list, 'section' => _('Pending applicants'));
 			$this->viewdata['main_content_view'] .= $this->load->view("admin/dashboard/applicants", $data, TRUE);
 		}
 	}
 
+	/*
+	 * Shows a form giving the ability to accept requests from teams to join them
+	 * 
+	 * @author Woxxy
+	 */
 	function _get_requests() {
 		$application = array();
 		$members = new Membership();
+		
+		// are there any requests?
 		if ($members->get_requests()) {
 			foreach ($members->all as $key => $applicant) {
 				$application[] = array(
@@ -74,7 +92,10 @@ class Dashboard extends Admin_Controller {
 				);
 			}
 
+			// put the array in a form
 			$list = tabler($application, TRUE, FALSE);
+			
+			// add it to the content without printing
 			$data = array('application' => $list, 'section' => _('Pending requests'));
 			$this->viewdata['main_content_view'] .= $this->load->view("admin/dashboard/applicants", $data, TRUE);
 		}

@@ -90,6 +90,7 @@ class Upgrade_model extends CI_Model {
 	function get_file($url, $direct_url) {
 		$this->clean();
 		if (function_exists('curl_init')) {
+			$this->load->library('curl');
 			$zip = $this->curl->simple_post($url, array('url' => site_url(), 'version' => get_setting('fs_priv_version')));
 			if (!$zip) {
 				$zip = $this->curl->simple_get($direct_url);
@@ -107,6 +108,7 @@ class Upgrade_model extends CI_Model {
 		if (!is_dir('content/cache/upgrade'))
 			mkdir('content/cache/upgrade');
 		write_file('content/cache/upgrade/upgrade.zip', $zip);
+		$this->load->library('unzip');
 		$this->unzip->extract('content/cache/upgrade/upgrade.zip');
 		return TRUE;
 	}

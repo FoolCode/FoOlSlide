@@ -7,12 +7,18 @@ class Database extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
+		// don't redirect if it's coming from the command line
+		// that's because command line has no login skills...
 		if (!$this->input->is_cli_request()) {
 			$this->tank_auth->is_logged_in() or redirect('auth/login');
 			$this->tank_auth->is_admin() or redirect('admin');
 		}
+		
+		// power the migration library
 		$this->load->library('migration');
 		$this->config->load('migration');
+		
+		// title on top
 		$this->viewdata['controller_title'] = _("Database");
 	}
 
@@ -36,7 +42,7 @@ class Database extends Admin_Controller {
 			redirect('admin');
 		}
 
-		// title on top
+		// subtitle on top
 		$this->viewdata['function_title'] = _('Upgrade');
 			
 		// variable for suggesting command via command line
@@ -64,7 +70,7 @@ class Database extends Admin_Controller {
 		if ($this->input->is_cli_request())
 			echo _('Successfully updated the database.') . PHP_EOL;
 		else
-			echo json_encode(array('href' => site_url('admin/')));
+			echo json_encode(array('href' => site_url('admin/'))); // give the url to go back to
 		return TRUE;
 	}
 

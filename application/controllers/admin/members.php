@@ -207,16 +207,16 @@ class Members extends Admin_Controller
 			if (($post = $this->input->post()) && ($can_edit || $can_edit_limited))
 			{
 				$post["id"] = $team->id;
-				
+
 				// don't allow editing of name for team leaders
 				if ($can_edit_limited)
 				{
 					unset($post['name']);
 				}
-				
+
 				// send the data to database
 				$team->update_team($post);
-				
+
 				// green box to tell data is saved
 				set_notice('notice', _('Saved.'));
 			}
@@ -248,10 +248,16 @@ class Members extends Admin_Controller
 			foreach ($users->all as $key => $item)
 			{
 				$users_arr[$key][] = '<a href="' . site_url('/admin/members/member/' . $item->id) . '">' . $item->username . '</a>';
+
+				// show the email only to admins and mods
 				if ($can_edit)
 					$users_arr[$key][] = $item->email;
 				$users_arr[$key][] = $item->last_login;
+
+				// leader of normal member?
 				$users_arr[$key][] = ($item->is_leader) ? _('Leader') : _('Member');
+
+
 				if ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed())
 				{
 					$buttoner = array();
@@ -261,6 +267,8 @@ class Members extends Admin_Controller
 						'plug' => _('Do you want to remove this team member?')
 					);
 				}
+
+				// add button to array or stay silent if there's no button
 				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 				if (!$item->is_leader && ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed()))
 				{
@@ -280,6 +288,7 @@ class Members extends Admin_Controller
 						'plug' => _('Do you want to remove this user from the team leadership?')
 					);
 				}
+				// add button to array or stay silent if there's no button
 				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 			}
 
@@ -298,6 +307,11 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Redirects to the right team
+	 * 
+	 * @author Woxxy
+	 */
 	function home_team()
 	{
 		$team = new Team();
@@ -306,9 +320,20 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Form to add teams, admin and mod only
+	 * 
+	 * @author Woxxy
+	 */
 	function add_team()
 	{
+		// only admins and mods are allowed to create teams
+		if (!$this->tank_auth->is_allowed())
+		{
+			show_404();
+		}
 
+		// save the data if POST
 		if ($post = $this->input->post())
 		{
 			$team = new Team();
@@ -318,24 +343,34 @@ class Members extends Admin_Controller
 
 		$team = new Team();
 
+		// set title and subtitle
 		$this->viewdata["function_title"] = "Team";
 		$this->viewdata["extra_title"][] = 'New';
 
+		// transform the Datamapper array to a form
 		$result = ormer($team);
 		$result = tabler($result, FALSE, TRUE);
 		$data['table'] = $result;
+
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/form', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
 
+	/*
+	 * Allows an user to apply for a team
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function apply_team($team_id)
 	{
 		if (!isAjax())
 		{
 			return false;
 		}
-		$this->viewdata["function_title"] = "Applying to team...";
 		$team = new Team($team_id);
 		if ($team->result_count() != 1)
 			return false;
@@ -347,6 +382,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Allows a team leader to accept applications
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function accept_application($team_id, $user_id = NULL)
 	{
 		if (!isAjax())
@@ -366,6 +408,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Allows a team leader to reject applications
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function reject_application($team_id, $user_id = NULL)
 	{
 		if (!isAjax())
@@ -385,6 +434,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Allows an user to apply for a team
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function make_team_leader($team_id, $user_id)
 	{
 		if (!isAjax())
@@ -402,6 +458,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Allows a team leader, an admin or a mod to create a new leader for the selected team
+	 * 
+	 * This is NOT triggered via AJAX
+	 * 
+	 * @author Woxxy
+	 */
 	function make_team_leader_username($team_id)
 	{
 		if (!$this->tank_auth->is_team_leader($team_id) && !$this->tank_auth->is_allowed())
@@ -422,6 +485,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Allows team leaders, admins and mods to remove leaders
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function remove_team_leader($team_id, $user_id)
 	{
 		if (!isAjax())
@@ -439,6 +509,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Makes an user an admin, only admins can do this
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function make_admin($user_id)
 	{
 		if (!isAjax())
@@ -458,6 +535,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Removes an admin, only admins can do this
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function remove_admin($user_id)
 	{
 		if (!isAjax())
@@ -477,6 +561,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Gives mod powers, only admins can do this
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function make_mod($user_id)
 	{
 		if (!isAjax())
@@ -496,6 +587,13 @@ class Members extends Admin_Controller
 	}
 
 
+	/*
+	 * Removes mod powers, only admins can do this
+	 * 
+	 * Ajax protected until CSRF is setup
+	 * 
+	 * @author Woxxy
+	 */
 	function remove_mod($user_id)
 	{
 		if (!isAjax())

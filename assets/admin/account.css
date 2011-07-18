@@ -329,16 +329,16 @@ input:-moz-placeholder {
 .incontent.login {
 	width:400px;
 	margin-top:-40px;
-	padding: 15px 15px 25px;
+	padding: 20px 15px 20px;
 	font-size:15px;
 }
 
 .incontent.login .formgroup {
-	margin: 0px auto 14px;
+	margin: 0px auto 16px;
 }
 
 .incontent.login .formgroup div {
-	margin: 5px auto;
+	margin: 0px auto 5px;
 }
 
 .incontent.login div input[type=text],

@@ -146,7 +146,7 @@ class Oauth extends Public_Controller {
 	function sign_in()
 	{
 		// Check if user is signed in, if so redirect them on to /authorise
-		$user_id = $this->session->userdata('user_id');
+		$user_id = $this->tank_auth->get_user_id();
 		if ($user_id)
 		{
 			redirect(site_url($this->session->userdata('sign_in_redirect')), 'location');

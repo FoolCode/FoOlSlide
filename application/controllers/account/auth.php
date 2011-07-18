@@ -20,7 +20,7 @@ class Auth extends Account_Controller
 			
 			$this->viewdata["function_title"] = _("Message");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/general_message', array('message' => $message), TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
+			$this->load->view("auth/default.php", $this->viewdata);
 		} else {
 			redirect('/account/auth/login/');
 		}
@@ -99,7 +99,7 @@ class Auth extends Account_Controller
 			
 			$this->viewdata["function_title"] = _("Login");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/login_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
+			$this->load->view("auth/default.php", $this->viewdata);
 		}
 	}
 
@@ -198,7 +198,7 @@ class Auth extends Account_Controller
 			
 			$this->viewdata["function_title"] = _("Register");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/register_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
+			$this->load->view("auth/default.php", $this->viewdata);
 		}
 	}
 
@@ -236,7 +236,7 @@ class Auth extends Account_Controller
 			
 			$this->viewdata["function_title"] = _("Resend activation email");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/send_again_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
+			$this->load->view("auth/default.php", $this->viewdata);
 		}
 	}
 
@@ -298,7 +298,7 @@ class Auth extends Account_Controller
 			}
 			$this->viewdata["function_title"] = _("Forgot password");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/forgot_password_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);	
+			$this->load->view("auth/default.php", $this->viewdata);	
 		}
 	}
 
@@ -346,7 +346,7 @@ class Auth extends Account_Controller
 		}
 		$this->viewdata["function_title"] = _("Reset password");
 		$this->viewdata["main_content_view"] = $this->load->view('auth/reset_password_form', $data, TRUE);
-		$this->load->view("admin/default.php", $this->viewdata);	
+		$this->load->view("auth/default.php", $this->viewdata);	
 	}
 
 	/**
@@ -379,7 +379,7 @@ class Auth extends Account_Controller
 			}
 			$this->viewdata["function_title"] = _("Change password");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/change_password_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);	
+			$this->load->view("auth/default.php", $this->viewdata);	
 		}
 	}
 
@@ -418,7 +418,7 @@ class Auth extends Account_Controller
 			}
 			$this->viewdata["function_title"] = _("Change email");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/change_email_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);	
+			$this->load->view("auth/default.php", $this->viewdata);	
 		}
 	}
 
@@ -471,7 +471,7 @@ class Auth extends Account_Controller
 			}
 			$this->viewdata["function_title"] = _("Unregister");
 			$this->viewdata["main_content_view"] = $this->load->view('auth/unregister_form', $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
+			$this->load->view("auth/default.php", $this->viewdata);
 			
 		}
 	}

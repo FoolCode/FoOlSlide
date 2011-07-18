@@ -24,6 +24,7 @@ class Files_model extends CI_Model {
 			log_message('error', 'page: function add_page failed');
 			return false;
 		}
+		return $page;
 		return true;
 	}
 
@@ -112,6 +113,8 @@ class Files_model extends CI_Model {
 			}
 			if ($error)
 				set_notice('error', 'Some pages weren\'t uploaded');
+			
+			$this->pages_added[] = $page;
 		}
 	}
 

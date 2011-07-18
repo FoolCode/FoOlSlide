@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Index extends Admin_Controller {
+class Index extends Account_Controller {
 
 	function __construct() {
 		parent::__construct();

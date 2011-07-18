@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Auth extends Admin_Controller
+class Auth extends Account_Controller
 {
 	function __construct()
 	{

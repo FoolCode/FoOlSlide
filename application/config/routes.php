@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "reader";
 $route['admin'] = "admin/index";
+$route['account'] = "account/index";
 $route['reader/list'] = 'reader/lista';
 $route['reader/list/(:num)'] = 'reader/lista/$1';
 $route['api/list'] = 'api/lista';

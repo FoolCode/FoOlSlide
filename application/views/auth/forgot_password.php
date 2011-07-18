@@ -1,6 +1,6 @@
 <div id="infoMessage"><?php echo $message;?></div>
 
-<?php echo form_open("auth/forgot_password");?>
+<?php echo form_open("/account/auth/forgot_password");?>
 
 <table class="form">
     <tr>
@@ -18,5 +18,5 @@
 
 <?php echo form_close();?>
 <div class="smalltext">
-    <a href="<?php echo site_url('auth/login'); ?>">Back to login</a>
+    <a href="<?php echo site_url('/account/auth/login'); ?>">Back to login</a>
 </div>

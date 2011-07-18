@@ -7,6 +7,7 @@ class Account_Controller extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
+		if($this->uri->segment(2) == login)
 		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
 	}
 }

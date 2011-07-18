@@ -119,6 +119,10 @@ class REST_Controller extends MY_Controller
 			{
 				$this->_prepare_digest_auth();
 			}
+			elseif ($this->config->item('rest_auth') == 'oauth')
+			{
+				$this->_prepare_oauth();
+			}
 		}
 
 		// Load DB if its enabled
@@ -757,6 +761,59 @@ class REST_Controller extends MY_Controller
 	}
 
 
+	private function _prepare_oauth()
+	{
+		$this->load->config('oauth_resource_server');
+
+		// Get the access token
+		$access_token = trim($this->input->get($this->config->item('oauth_access_token_param')));
+
+		if (!$access_token || $access_token == "")
+		{
+			header('HTTP/1.0 401 Unauthorized');
+			header('HTTP/1.1 401 Unauthorized');
+			exit;
+		}
+
+		// Verify the access token
+		$this->load->library('curl');
+
+		// Build the verify url
+		$verify_params = $this->config->item('oauth_verify_uri_params');
+		$verify_params['access_token'] = $access_token;
+
+		$verify_uri = $this->config->item('oauth_verify_uri') . '?' . http_build_query($verify_params);
+
+		$verify = $this->CI->curl->simple_get($verify_url, array(), array(CURLOPT_FAILONERROR => FALSE));
+
+		// Successful response from the auth server				
+		if ($verify)
+		{
+			$verify = json_decode($verify);
+
+			// Access token was invalid	
+			if (isset($verify->error))
+			{
+				header('HTTP/1.0 401 Unauthorized');
+				header('HTTP/1.1 401 Unauthorized');
+				exit;
+			}
+			else
+			{
+				// Looks like the token is okay, allow the request
+			}
+		}
+
+		// Auth server failed to reply / bad network connection
+		else
+		{
+			header('HTTP/1.0 502 Bad Gateway');
+			header('HTTP/1.1 502 Bad Gateway');
+			exit;
+		}
+	}
+
+
 	protected function _force_login($nonce = '')
 	{
 		if ($this->config->item('rest_auth') == 'basic')
@@ -799,7 +856,7 @@ class REST_Controller extends MY_Controller
 	 * FUNCTIONS ADDED FOR FOOLSLIDE
 	 * 
 	 */
-	
+
 	/*
 	 * Commodity to check that the ID is not wrong and return a coherent error
 	 * 
@@ -812,13 +869,13 @@ class REST_Controller extends MY_Controller
 			$this->response(array('error' => _('ID not set')), 400);
 			return FALSE;
 		}
-		
+
 		if (!is_numeric($this->get('id')) || ($this->get('id') < 1))
 		{
 			$this->response(array('error' => _('ID is not a valid number')), 400);
 			return FALSE;
 		}
-		
+
 		return TRUE;
 	}
 

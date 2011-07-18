@@ -85,7 +85,7 @@
 							<?php echo _("Homepage") ?></a>
 				</div>
 				<?php if (isset($this->tank_auth) && $this->tank_auth->is_logged_in()) { ?><div class="element">
-					<a href="<?php echo site_url('/admin/auth/logout'); ?>">
+					<a href="<?php echo site_url('/account/auth/logout'); ?>">
 						<img class="icon off" src="<?php echo glyphish(73) ?>" />
 						<img class="icon on" src="<?php echo glyphish(73, TRUE) ?>" />
 								<?php echo _("Logout") ?> <?php echo $this->tank_auth->get_username(); ?></a>
@@ -114,10 +114,10 @@
 				<div class="title"><?php
 echo $controller_title;
 if (isset($function_title))
-	echo ' » ' . $function_title;
+	echo ' ¬ª ' . $function_title;
 if (isset($extra_title) && !empty($extra_title)) {
 	foreach ($extra_title as $item)
-		echo ' » ' . $item;
+		echo ' ¬ª ' . $item;
 }
 ?></div>
 				<div class="content">
@@ -163,7 +163,7 @@ if (isset($extra_title) && !empty($extra_title)) {
 
 	<div id="footer"><div class="text">FoOlSlide Version <?php if (isset($this->tank_auth))
 	echo get_setting('fs_priv_version') ?><?php if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
-	echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>'; ?></div></div>
+	echo ' ‚Äì <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>'; ?></div></div>
 </body>
 
 </html>

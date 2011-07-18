@@ -8,13 +8,13 @@ $CI->buttoner = array();
 
 if ($CI->tank_auth->get_user_id() == $user->id)
 	$CI->buttoner[] = array(
-		'href' => site_url('/admin/auth/change_password/'),
+		'href' => site_url('/account/auth/change_password/'),
 		'text' => _('Reset password'),
 	);
 
 if ($CI->tank_auth->get_user_id() == $user->id)
 	$CI->buttoner[] = array(
-		'href' => site_url('/admin/auth/change_email/'),
+		'href' => site_url('/account/auth/change_email/'),
 		'text' => _('Change email'),
 	);
 

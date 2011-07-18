@@ -7,7 +7,6 @@ class Comics extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		if (!($this->tank_auth->is_allowed()))
 			redirect('admin');
 		$this->load->model('files_model');

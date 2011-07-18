@@ -8,7 +8,6 @@ class Members extends Admin_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->viewdata['controller_title'] = "Members";
 	}
 

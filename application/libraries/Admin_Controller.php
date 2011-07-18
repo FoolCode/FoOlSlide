@@ -8,6 +8,7 @@ class Admin_Controller extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 
+		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
 		$this->viewdata["sidebar"] = $this->sidebar();
 
 		// Check if the database is upgraded to the the latest available

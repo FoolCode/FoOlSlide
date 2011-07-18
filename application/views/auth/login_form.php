@@ -101,13 +101,13 @@ $captcha = array(
 <?php
 $CI = & get_instance();
 $CI->buttoner[] = array(
-	'href' => site_url('/admin/auth/forgot_password/'),
+	'href' => site_url('/account/auth/forgot_password/'),
 	'text' => _('Forgot password')
 );
 
 if ($this->config->item('allow_registration', 'tank_auth'))
 	$CI->buttoner[] = array(
-		'href' => site_url('/admin/auth/register/'),
+		'href' => site_url('/account/auth/register/'),
 		'text' => _('Register')
 	);
 

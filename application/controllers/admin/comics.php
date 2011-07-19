@@ -253,10 +253,10 @@ class Comics extends Admin_Controller {
 			else
 				$pages = $this->files_model->compressed_chapter($data);
 		}
-		#if (!unlink($data["full_path"])) {
-		#	set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
-		#	return false;
-		#}
+		if (!unlink($data["full_path"])) {
+			set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
+			return false;
+		}
 		if ($this->input->post('uploader') == 'uploadify') {
 			echo 1;
 			return true;

@@ -15,7 +15,7 @@ $this->output->enable_profiler(TRUE);		if (!file_exists(FCPATH . "config.php")) 
 			$this->load->library('tank_auth');
 			$this->load->library('datamapper');
 
-			if (!$this->session->userdata('nation')) {
+			if (!$this->session->userdata('nation') && $_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
 				// If the user doesn't have a nation set, let's grab it
 				//
 				require_once("assets/geolite/GeoIP.php");
@@ -24,6 +24,10 @@ $this->output->enable_profiler(TRUE);		if (!file_exists(FCPATH . "config.php")) 
 				$nation = geoip_country_code_by_addr($gi, $remote_addr);
 				geoip_close($gi);
 				$this->session->set_userdata('nation', $nation);
+			}
+			
+			if($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+				$this->session->set_userdata('nation', '');
 			}
 
 			// loads variables from database for get_setting()

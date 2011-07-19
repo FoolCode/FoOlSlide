@@ -69,6 +69,9 @@ class Team extends DataMapper
 			parent::__construct();
 			foreach($team->to_array() as $key => $t) {
 				$this->$key = $t;
+				
+				// fill also the all array so result_count() is correctly 1
+				$this->all[0]->$key = $t;
 			}
 			return TRUE;
 		}

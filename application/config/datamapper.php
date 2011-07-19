@@ -25,9 +25,9 @@ $config['all_array_uses_ids'] = FALSE;
 // Set to any acceptable parameters to $CI->database() to override the default.
 $config['db_params'] = '';
 // Uncomment to enable the production cache
-// $config['production_cache'] = 'datamapper/cache';
+//$config['production_cache'] = FCPATH.'content/cache/datamapper';
 $config['extensions_path'] = 'datamapper';
-$config['extensions'] = array('tools', 'array', 'json');
+$config['extensions'] = array('tools', 'array');
 
 /* End of file datamapper.php */
 /* Location: ./application/config/datamapper.php */

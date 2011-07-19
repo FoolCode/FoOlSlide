@@ -264,13 +264,13 @@ class Comics extends Admin_Controller {
 		if ($this->input->post('uploader') == 'jquery-file-upload') {
 			foreach ($pages as $page) {
 				$info[] = array(
-				    'name' => $page->filename,
-				    'size' => $page->size,
-				    'url' => $page->page_url(),
-				    'thumbnail_url' => $page->page_url(TRUE),
-				    'delete_url' => site_url() . 'admin/comics/delete/page/',
-				    'delete_data' => $page->id,
-				    'delete_type' => 'POST'
+					'name' => $page->filename,
+					'size' => $page->size,
+					'url' => $page->page_url(),
+					'thumbnail_url' => $page->page_url(TRUE),
+					'delete_url' => site_url() . 'admin/comics/delete/page/',
+					'delete_data' => $page->id,
+					'delete_type' => 'POST'
 				);
 			}
 			// return a json array
@@ -281,12 +281,30 @@ class Comics extends Admin_Controller {
 		return true;
 	}
 
-	function get_file_object($file) {
-		return null;
-	}
-	
 	function get_file_objects() {
-		return array_values(array_filter(array($this, 'get_file_object', scandir(''))));
+		// Generate JSON File Output (Required by jQuery File Upload)
+		header('Content-type: application/json');
+		header('Pragma: no-cache');
+		header('Cache-Control: private, no-cache');
+		header('Content-Disposition: inline; filename="files.json"');
+
+		$id = $this->input->post('id');
+		$chapter = new Chapter($id);
+		$pages = $chapter->get_pages();
+		foreach ($pages as $page) {
+			$info[] = array(
+				'name' => $page['filename'],
+				'size' => intval($page['size']),
+				'url' => $page['url'],
+				'thumbnail_url' => $page['thumb_url'],
+				'delete_url' => site_url() . 'admin/comics/delete/page/',
+				'delete_data' => $page['id'],
+				'delete_type' => 'POST'
+			);
+		}
+		
+		echo json_encode($info);
+		return true;
 	}
 	
 	function get_sess_id() {

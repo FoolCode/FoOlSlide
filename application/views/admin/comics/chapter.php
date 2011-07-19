@@ -200,7 +200,7 @@ echo buttoner();
 			]
 		});
 
-		$.getJSON($('#fileupload form').prop('action'), function (files) {
+		$.post('<?php echo site_url('/admin/comics/get_file_objects'); ?>', { id : <?php echo $chapter->id; ?> }, function (files) {
 			var fu = $('#fileupload').data('fileupload');
 			fu._adjustMaxNumberOfFiles(-files.length);
 			fu._renderDownload(files)
@@ -209,7 +209,6 @@ echo buttoner();
 				$(this).show();
 			});
 		});
-
 
 		$('#fileupload .files a:not([target^=_blank])').live('click', function (e) {
 			e.preventDefault();
@@ -232,5 +231,5 @@ echo buttoner();
                 <img id="image_' . $item['id'] . '" src="' . $item["thumb_url"] . '" />
              </div>';
 	}
-	?> 
+	?>
 </div>

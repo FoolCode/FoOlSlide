@@ -201,7 +201,7 @@ input[type="text"]
     max-width: 1000px;
     padding:10px 10px 9px;
     color: #bbb;
-    margin:10px auto 0;
+    margin:0 auto;
 }
 
 #footer .text
@@ -1051,9 +1051,9 @@ ul.dropdown li a
 ***********/
 
 #bottombar{
-    margin-bottom:5px;
-    margin-left:auto;
+    margin-top:10px;
     margin-right:auto;
+    margin-left:auto;
     
     height:30px;
     max-width:998px;
@@ -1087,22 +1087,26 @@ ul.dropdown li a
     
     margin-top:4px;
     margin-left:10px;
-}
-
-body{
-    cursor:crosshair !important;/*FUCK YEA SEAKING*/
+    
+    color:white;
 }
 
 #bottombar .socialbuttons{
-    padding-top:2px;
-    padding-right:5px;
     
     float:right;
 }
 
-#bottombar .socialbuttons img{
-    height:70%;
-    margin:2px;
+#bottombar .socialbuttons .tweet{
+    margin-top:4px;
+    
+    float:right;
+    position:relative;
+}
+
+#bottombar .socialbuttons .fblike{
+    display:block;
+    overflow:hidden;
+    width:20px;
 }
 
 /*************

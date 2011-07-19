@@ -115,6 +115,18 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 
 <div class="clearer"></div>
+
+<div id="bottombar">
+    <div class="pagenumber">
+        -<?php echo $current_page ?>-
+    </div>
+    <div class="socialbuttons">
+        <div class="tweet">
+            <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="<?php echo get_setting_twitter();?>" data-related="woxxy">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
 <script type="text/javascript">
 

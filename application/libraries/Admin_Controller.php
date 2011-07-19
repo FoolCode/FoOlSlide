@@ -155,10 +155,9 @@ class Admin_Controller extends MY_Controller {
 				if ($versions[0]) {
 					$this->db->update('preferences', array('value' => $versions[0]->version . '.' . $versions[0]->subversion . '.' . $versions[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
+				// reload the settings
+				load_settings();
 			}
-
-			// reload the settings
-			load_settings();
 		}
 	}
 

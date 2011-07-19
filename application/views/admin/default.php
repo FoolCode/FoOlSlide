@@ -114,10 +114,10 @@
 				<div class="title"><?php
 echo $controller_title;
 if (isset($function_title))
-	echo ' ¬ª ' . $function_title;
+	echo ' » ' . $function_title;
 if (isset($extra_title) && !empty($extra_title)) {
 	foreach ($extra_title as $item)
-		echo ' ¬ª ' . $item;
+		echo ' » ' . $item;
 }
 ?></div>
 				<div class="content">

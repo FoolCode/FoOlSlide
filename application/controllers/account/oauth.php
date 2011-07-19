@@ -89,7 +89,7 @@ class Oauth extends Public_Controller {
 		$this->session->set_userdata(array('params'=>$params));
 
 		// Check if user is signed in already
-		$user_id = $this->session->userdata('user_id'); // returns string or FALSE
+		$user_id = $this->tank_auth->get_user_id(); // returns string or FALSE
 				
 		// If the user is already signed in and the app has the flag 'auto_approve'
 		// Then generate a new auth code and redirect the user back to the application
@@ -166,6 +166,7 @@ class Oauth extends Public_Controller {
 			'error_messages' => array()
 		);
 		
+		/*
 		// If the form has been posted
 		if ($this->input->post('validate_user'))
 		{
@@ -210,7 +211,7 @@ class Oauth extends Public_Controller {
 		}
 		
 		$this->load->view('oauth_auth_server/sign_in', $vars);
-		
+		*/
 	}
 	
 	
@@ -243,7 +244,7 @@ class Oauth extends Public_Controller {
 	function authorise()
 	{
 		// Check if the user is signed in
-		$user_id = $this->session->userdata('user_id');
+		$user_id = $this->tank_auth->get_user_id();
 		if ($user_id == FALSE)
 		{
 			$this->session->set_userdata('sign_in_redirect', array('oauth', 'authorise'));
@@ -394,7 +395,7 @@ class Oauth extends Public_Controller {
 	 * Resource servers will make use of this URL to validate an access token
 	 */
 	function verify_access_token()
-	{
+		{
 		// Get query string parameters
 		// ?grant_type=access_token=XXX&scope=YYY
 		$params = $this->oauth_auth_server->validate_params(array('access_token'=>TRUE, 'scope'=>FALSE));

@@ -34,8 +34,7 @@ if(!function_exists('get_setting_twitter'))
 	function get_setting_twitter($team = NULL)
 	{
 		if(is_null($team)) return get_home_team()->twitter;
-		$team = new Team();
-		$team->where('name', $team)->limit(1)->get();
+		$team = get_home_team();
 		return $team->twitter;
 	}
 }
@@ -71,8 +70,7 @@ if(!function_exists('get_setting_irc'))
 	function get_setting_irc($team = NULL)
 	{
 		if(is_null($team)) return get_home_team()->irc;
-		$team = new Team();
-		$team->where('name', $team)->limit(1)->get();
+		$team = get_home_team();
 		return $team->irc;
 	}
 }
@@ -109,8 +107,7 @@ if(!function_exists('get_setting_facebook'))
 	function get_setting_facebook($team = NULL)
 	{
 		$hometeam = get_setting('fs_gen_default_team');
-		$team = new Team();
-		$team->where('name', $hometeam)->limit(1)->get();
+		$team = get_home_team();
 		return $team->facebook;
 	}
 }

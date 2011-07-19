@@ -3,8 +3,10 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Team extends DataMapper {
+class Team extends DataMapper
+{
 
+	static $cached = array();
 	var $has_one = array();
 	var $has_many = array('chapter');
 	var $validation = array(
@@ -61,20 +63,82 @@ class Team extends DataMapper {
 		)
 	);
 
-	function __construct($id = NULL) {
+	function __construct($id = NULL)
+	{
+		if (!is_null($id) && $team = $this->get_cached($id)) {
+			parent::__construct();
+			foreach($team->to_array() as $key => $t) {
+				$this->$key = $t;
+			}
+			return TRUE;
+		}
 		parent::__construct($id);
 	}
 
-	function post_model_init($from_cache = FALSE) {
+
+	function post_model_init($from_cache = FALSE)
+	{
 		
 	}
+
+
+	/**
+	 * Overwrite of the get() function to add filters to the search.
+	 * Refer to DataMapper ORM for get() function details.
+	 *
+	 * @author	Woxxy
+	 * @param	integer|NULL $limit Limit the number of results.
+	 * @param	integer|NULL $offset Offset the results when limiting.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function get($limit = NULL, $offset = NULL)
+	{
+		$result = parent::get($limit, $offset);
+		// let's put the result in a small cache, since teams are always the same
+		if ($this->result_count() > 0)
+		{
+			foreach ($this->all as $team)
+			{
+				// if it's not yet cached, let's cache it
+				if (!$this->get_cached($team->id))
+				{
+					if(count(self::$cached) > 10)
+					array_shift(self::$cached);
+					self::$cached[] = $team->get_clone();
+				}
+			}
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * Returns the teams that have been already called before
+	 * 
+	 * @author Woxxy
+	 * @param int $id team_id
+	 */
+	public function get_cached($id)
+	{
+		foreach (self::$cached as $cache)
+		{
+			if ($cache->id == $id)
+			{
+				return $cache;
+			}
+		}
+		return FALSE;
+	}
+
 
 	/**
 	 * Leaving this here to make sure I can restore it later in case somewhere it was used
 	 *
 	 * @deprecated
 	 */
-	public function add_team($name, $url = "", $forum = "", $irc = "", $twitter = "", $facebook = "", $facebookid = "") {
+	public function add_team($name, $url = "", $forum = "", $irc = "", $twitter = "", $facebook = "", $facebookid = "")
+	{
 		$this->name = $name;
 		$this->url = $url;
 		$this->forum = $forum;
@@ -83,7 +147,8 @@ class Team extends DataMapper {
 		$this->facebook = $facebook;
 		$this->facebookid = $facebookid;
 
-		if (!$this->update_team()) {
+		if (!$this->update_team())
+		{
 			log_message('error', 'add_team: failed adding team');
 			return false;
 		}
@@ -91,13 +156,17 @@ class Team extends DataMapper {
 		return true;
 	}
 
-	public function update_team($data = array()) {
+
+	public function update_team($data = array())
+	{
 
 		// Check if we're updating or creating a new entry by looking at $data["id"].
 		// False is pushed if the ID was not found.
-		if (isset($data["id"]) && $data['id'] != '') {
+		if (isset($data["id"]) && $data['id'] != '')
+		{
 			$this->where("id", $data["id"])->get();
-			if ($this->result_count() == 0) {
+			if ($this->result_count() == 0)
+			{
 				set_notice('error', _('Failed to find the selected team\'s ID.'));
 				log_message('error', 'update_team_db: failed to find requested id');
 				return false;
@@ -106,19 +175,21 @@ class Team extends DataMapper {
 			$old_stub = $this->stub;
 			$old_name = $this->name;
 		}
-		else { // let's set the creator name if it's a new entry
+		else
+		{ // let's set the creator name if it's a new entry
 			$this->creator = $this->logged_id();
 		}
 
 		// always set the editor name
 		$this->editor = $this->logged_id();
 
-		
+
 		// Loop over the array and assign values to the variables.
-		foreach ($data as $key => $value) {
+		foreach ($data as $key => $value)
+		{
 			$this->$key = $value;
 		}
-		
+
 		// Unset sensible variables
 		unset($data["creator"]);
 		unset($data["editor"]);
@@ -130,7 +201,7 @@ class Team extends DataMapper {
 			unset($data["created"]);
 		if (!$CI->tank_auth->is_allowed())
 			unset($data["edited"]);
-		
+
 		// Double check that we have all the necessary automated variables
 		if (!isset($this->uniqid))
 			$this->uniqid = uniqid();
@@ -138,7 +209,7 @@ class Team extends DataMapper {
 			$this->stub = $this->stub();
 
 		// Create a new stub if the name has changed
-		if(isset($old_name) && isset($old_stub) && ($old_name != $this->name))
+		if (isset($old_name) && isset($old_stub) && ($old_name != $this->name))
 		{
 			// Prepare a new stub.
 			$this->stub = $this->name;
@@ -149,57 +220,71 @@ class Team extends DataMapper {
 
 		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
 		// In case this chapter already has a stub and it wasn't changed, don't change it!
-		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub)) {
+		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub))
+		{
 			$i = 1;
 			$found = FALSE;
 
 			$team = new Team();
 			$team->where('stub', $this->stub)->get();
-			if ($team->result_count() == 0) {
+			if ($team->result_count() == 0)
+			{
 				$found = TRUE;
 			}
 
-			while (!$found) {
+			while (!$found)
+			{
 				$i++;
 				$pre_stub = $this->stub . '_' . $i;
 				$team = new Team();
 				$team->where('stub', $pre_stub)->get();
-				if ($team->result_count() == 0) {
+				if ($team->result_count() == 0)
+				{
 					$this->stub = $pre_stub;
 					$found = TRUE;
 				}
 			}
 		}
-		
+
 		// let's save and give some error check. Push false if fail, true if good.
-		if (!$this->save()) {
-			if (!$this->valid) {
+		if (!$this->save())
+		{
+			if (!$this->valid)
+			{
 				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'update_team: failed validation');
 			}
-			else {
+			else
+			{
 				set_notice('error', _('Failed to update the team in the database for unknown reasons.'));
 				log_message('error', 'update_team: failed to save');
 			}
 			return false;
 		}
-		else {
+		else
+		{
 			return true;
 		}
 	}
 
-	public function remove_team($also_chapters = FALSE) {
-		if ($this->result_count() != 1) {
+
+	public function remove_team($also_chapters = FALSE)
+	{
+		if ($this->result_count() != 1)
+		{
 			set_notice('error', _('Failed to remove the chapter directory. Please, check file permissions.'));
 			log_message('error', 'remove_team: id not found');
 			return false;
 		}
 
-		if ($also_chapters) {
+		if ($also_chapters)
+		{
 			$chapters = new Chapter();
 			$chapters->where("team_id", $this->id)->get();
-			foreach ($chapters->all as $chapter) {
-				if (!$chapter->remove()) {
+			foreach ($chapters->all as $chapter)
+			{
+				if (!$chapter->remove())
+				{
 					set_notice('error', _('Failed removing the chapters while removing the team.'));
 					log_message('error', 'remove_team: failed removing chapter');
 					return false;
@@ -208,12 +293,14 @@ class Team extends DataMapper {
 		}
 
 		$joint = new Joint();
-		if (!$joint->remove_team_from_all($this->id)) {
+		if (!$joint->remove_team_from_all($this->id))
+		{
 			log_message('error', 'remove_team: failed removing traces of team in joints');
 			return false;
 		}
 
-		if (!$this->delete()) {
+		if (!$this->delete())
+		{
 			set_notice('error', _('Failed to delete the team for unknown reasons.'));
 			log_message('error', 'remove_team: failed removing team');
 			return false;
@@ -222,18 +309,23 @@ class Team extends DataMapper {
 		return true;
 	}
 
+
 	// this works by inputting an array of names (not stubs)
-	public function get_teams_id($array, $create_joint = FALSE) {
-		if (count($array) < 1) {
+	public function get_teams_id($array, $create_joint = FALSE)
+	{
+		if (count($array) < 1)
+		{
 			set_notice('error', _('There were no groups selected.'));
 			log_message('error', 'get_groups: input array empty');
 			return false;
 		}
 
-		if (count($array) == 1) {
+		if (count($array) == 1)
+		{
 			$team = new Team();
 			$team->where("name", $array[0])->get();
-			if ($team->result_count() < 1) {
+			if ($team->result_count() < 1)
+			{
 				set_notice('error', _('There\'s no team under this ID.'));
 				log_message('error', 'get_groups: team not found');
 				return false;
@@ -242,12 +334,15 @@ class Team extends DataMapper {
 			return $result;
 		}
 
-		if (count($array) > 1) {
+		if (count($array) > 1)
+		{
 			$id_array = array();
-			foreach ($array as $key => $arra) {
+			foreach ($array as $key => $arra)
+			{
 				$team = new Team();
 				$team->where('name', $arra[$key])->get();
-				if ($team->result_count() < 1) {
+				if ($team->result_count() < 1)
+				{
 					set_notice('error', _('There\'s no teams under this ID.'));
 					log_message('error', 'get_groups: team not found');
 					return false;
@@ -255,8 +350,10 @@ class Team extends DataMapper {
 				$id_array[$key] = $team->id;
 			}
 			$joint = new Joint();
-			if (!$joint->check_joint($id_array) && $create_joint) {
-				if (!$joint->add_joint($id_array)) {
+			if (!$joint->check_joint($id_array) && $create_joint)
+			{
+				if (!$joint->add_joint($id_array))
+				{
 					log_message('error', 'get_groups: could not create new joint');
 					return false;
 				}
@@ -269,26 +366,40 @@ class Team extends DataMapper {
 		return false;
 	}
 
+
 	//////// UNFINISHED! // Or is it finished...? @_@
 
-	public function get_teams($team_id, $joint_id = 0) {
-		if ($joint_id > 0) {
+	public function get_teams($team_id, $joint_id = 0)
+	{
+		// if it's a joint, let's deal it as a joing
+		if ($joint_id > 0)
+		{
+			// get all the joint entries so we have all the teams
 			$joint = new Joint();
 			$joint->where("joint_id", $joint_id)->get();
-			if ($joint->result_count() < 1) {
+
+			// not an existing joint?
+			if ($joint->result_count() < 1)
+			{
 				log_message('error', 'get_teams: joint -> joint not found');
 				return false;
 			}
 
+			// result array
 			$teamarray = array();
-			$team = new Team();
-			foreach ($joint->all as $key => $join) {
-				$team->where('id', $join->team_id);
-				$team->get();
+			foreach ($joint->all as $key => $join)
+			{
+				if (!$team = $this->get_cached($join->team_id))
+				{
+					$team = new Team();
+					$team->where('id', $join->team_id);
+					$team->get();
+				}
 				$teamarray[] = $team->get_clone();
 			}
 
-			if ($team->result_count() < 1) {
+			if (empty($teamarray))
+			{
 				log_message('error', 'get_teams: joint -> no teams found');
 				return false;
 			}
@@ -296,9 +407,12 @@ class Team extends DataMapper {
 			return $teamarray;
 		}
 
-		$team = new Team($team_id);
+		// if we're here, it means it's a simple team
+		if (!$team = $this->get_cached($team_id))
+			$team = new Team($team_id);
 		return array($team);
 	}
+
 
 }
 

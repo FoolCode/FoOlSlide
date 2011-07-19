@@ -249,26 +249,46 @@ class Comics extends Admin_Controller {
 			$data["overwrite"] = $this->input->post('overwrite');
 
 			if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
-				$this->files_model->page($data);
+				$pages = $this->files_model->page($data);
 			else
-				$this->files_model->compressed_chapter($data);
+				$pages = $this->files_model->compressed_chapter($data);
 		}
-		if (!unlink($data["full_path"])) {
-			set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
-			return false;
-		}
+		#if (!unlink($data["full_path"])) {
+		#	set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
+		#	return false;
+		#}
 		if ($this->input->post('uploader') == 'uploadify') {
 			echo 1;
 			return true;
 		}
 		if ($this->input->post('uploader') == 'jquery-file-upload') {
-			echo '{"name":"' . $data['file_name'] . '", "type": "' . $data['file_type'] . '", "size": "' . $data['file_size'] . '"}';
+			foreach ($pages as $page) {
+				$info[] = array(
+				    'name' => $page->filename,
+				    'size' => $page->size,
+				    'url' => $page->page_url(),
+				    'thumbnail_url' => $page->page_url(TRUE),
+				    'delete_url' => site_url() . 'admin/comics/delete/page/',
+				    'delete_data' => $page->id,
+				    'delete_type' => 'POST'
+				);
+			}
+			// return a json array
+			echo json_encode($info);
 			return true;
 		}
 
 		return true;
 	}
 
+	function get_file_object($file) {
+		return null;
+	}
+	
+	function get_file_objects() {
+		return array_values(array_filter(array($this, 'get_file_object', scandir(''))));
+	}
+	
 	function get_sess_id() {
 		echo json_encode(array('session' => $this->session->get_js_session(), 'csrf' => $this->security->get_csrf_hash()));
 	}
@@ -304,7 +324,7 @@ class Comics extends Admin_Controller {
 			case("page"):
 				$page = new Page($this->input->post('id'));
 				$page->get_chapter();
-				$comic = new Chapter($chapter->comic_id);
+				$page->chapter->get_comic();
 				if (!$data = $page->remove_page()) {
 					log_message("error", "Controller: comics.php/remove: failed page removal");
 					return false;

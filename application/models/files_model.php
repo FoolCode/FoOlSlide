@@ -24,7 +24,7 @@ class Files_model extends CI_Model {
 			log_message('error', 'page: function add_page failed');
 			return false;
 		}
-		return array($page);
+		return array($page->get_clone());
 	}
 
 	// This is just a plug to adapt the variable names for the comic_model
@@ -115,7 +115,7 @@ class Files_model extends CI_Model {
 			if ($error)
 				set_notice('error', 'Some pages weren\'t uploaded');
 			
-			$pages_added[] = $page;
+			$pages_added[] = $page->get_clone();
 		}
 		return $pages_added;
 	}

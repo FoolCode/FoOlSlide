@@ -92,7 +92,7 @@ $session_data = $this->session->get_js_session();
         <div class="fileupload-buttonbar">
 		<label class="fileinput-button">
 			<span>Add files...</span>
-			<input type="file" name="Filedata" multiple>
+			<input type="file" name="Filedata[]" multiple>
 		</label>
 		<button type="submit" class="start">Start upload</button>
 		<button type="reset" class="cancel">Cancel upload</button>

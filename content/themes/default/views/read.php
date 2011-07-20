@@ -122,7 +122,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
     </div>
     <div class="socialbuttons">
         <div class="tweet">
-            <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="<?php echo get_setting_twitter();?>" data-related="woxxy">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            <a href="http://twitter.com/share" class="twitter-share-button" data-url="<?php echo $chapter->href() ?>" data-count="horizontal" data-via="<?php echo get_setting_twitter(); ?>" data-related="<?php echo get_setting_twitter(); ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
         </div>
     </div>
 </div>

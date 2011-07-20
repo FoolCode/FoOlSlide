@@ -166,7 +166,7 @@ $session_data = $this->session->get_js_session();
     </tr>
 </script>
 <script src="<?php echo site_url(); ?>assets/js/jquery-ui.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery.tmpl.js"></script>
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js"></script>
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js"></script>
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js"></script>

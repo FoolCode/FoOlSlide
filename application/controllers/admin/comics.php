@@ -268,7 +268,7 @@ class Comics extends Admin_Controller {
 					'size' => $page->size,
 					'url' => $page->page_url(),
 					'thumbnail_url' => $page->page_url(TRUE),
-					'delete_url' => site_url() . 'admin/comics/delete/page/',
+					'delete_url' => site_url("admin/comics/delete/page"),
 					'delete_data' => $page->id,
 					'delete_type' => 'POST'
 				);
@@ -297,7 +297,7 @@ class Comics extends Admin_Controller {
 				'size' => intval($page['size']),
 				'url' => $page['url'],
 				'thumbnail_url' => $page['thumb_url'],
-				'delete_url' => site_url() . 'admin/comics/delete/page/',
+				'delete_url' => site_url("admin/comics/delete/page"),
 				'delete_data' => $page['id'],
 				'delete_type' => 'POST'
 			);

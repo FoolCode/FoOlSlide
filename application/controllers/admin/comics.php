@@ -249,9 +249,9 @@ class Comics extends Admin_Controller {
 			$data["overwrite"] = $this->input->post('overwrite');
 
 			if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
-				$this->files_model->page($data);
+				$pages = $this->files_model->page($data);
 			else
-				$this->files_model->compressed_chapter($data);
+				$pages = $this->files_model->compressed_chapter($data);
 		}
 		if (!unlink($data["full_path"])) {
 			set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
@@ -261,10 +261,52 @@ class Comics extends Admin_Controller {
 			echo 1;
 			return true;
 		}
+		if ($this->input->post('uploader') == 'jquery-file-upload') {
+			foreach ($pages as $page) {
+				$info[] = array(
+					'name' => $page->filename,
+					'size' => $page->size,
+					'url' => $page->page_url(),
+					'thumbnail_url' => $page->page_url(TRUE),
+					'delete_url' => site_url("admin/comics/delete/page"),
+					'delete_data' => $page->id,
+					'delete_type' => 'POST'
+				);
+			}
+			// return a json array
+			echo json_encode($info);
+			return true;
+		}
 
 		return true;
 	}
 
+	function get_file_objects() {
+		// Generate JSON File Output (Required by jQuery File Upload)
+		header('Content-type: application/json');
+		header('Pragma: no-cache');
+		header('Cache-Control: private, no-cache');
+		header('Content-Disposition: inline; filename="files.json"');
+
+		$id = $this->input->post('id');
+		$chapter = new Chapter($id);
+		$pages = $chapter->get_pages();
+		foreach ($pages as $page) {
+			$info[] = array(
+				'name' => $page['filename'],
+				'size' => intval($page['size']),
+				'url' => $page['url'],
+				'thumbnail_url' => $page['thumb_url'],
+				'delete_url' => site_url("admin/comics/delete/page"),
+				'delete_data' => $page['id'],
+				'delete_type' => 'POST'
+			);
+		}
+		
+		echo json_encode($info);
+		return true;
+	}
+	
 	function get_sess_id() {
 		echo json_encode(array('session' => $this->session->get_js_session(), 'csrf' => $this->security->get_csrf_hash()));
 	}
@@ -300,7 +342,7 @@ class Comics extends Admin_Controller {
 			case("page"):
 				$page = new Page($this->input->post('id'));
 				$page->get_chapter();
-				$comic = new Chapter($chapter->comic_id);
+				$page->chapter->get_comic();
 				if (!$data = $page->remove_page()) {
 					log_message("error", "Controller: comics.php/remove: failed page removal");
 					return false;

@@ -24,7 +24,7 @@ class Files_model extends CI_Model {
 			log_message('error', 'page: function add_page failed');
 			return false;
 		}
-		return true;
+		return array($page);
 	}
 
 	// This is just a plug to adapt the variable names for the comic_model
@@ -60,7 +60,7 @@ class Files_model extends CI_Model {
 		if (strtolower($data["file_ext"]) == '.zip')
 			$this->uncompress_zip($data["full_path"], $cachedir);
 
-		$this->folder_chapter($cachedir, $chapter, $overwrite);
+		$pages_added = $this->folder_chapter($cachedir, $chapter, $overwrite);
 
 		// Let's delete all the cache
 		if (!delete_files($cachedir, TRUE)) {
@@ -73,7 +73,8 @@ class Files_model extends CI_Model {
 				return FALSE;
 			}
 		}
-		return TRUE;
+		
+		return $pages_added;
 	}
 
 	public function uncompress_rar($path, $cachedir) {
@@ -98,6 +99,7 @@ class Files_model extends CI_Model {
 		$dirarray = get_dir_file_info($cachedir, FALSE);
 
 		$this->db->reconnect();
+		$pages_added = array();
 		foreach ($dirarray as $key => $value) {
 			$extentsion = "";
 			$extension = pathinfo($value["server_path"], PATHINFO_EXTENSION);
@@ -112,7 +114,10 @@ class Files_model extends CI_Model {
 			}
 			if ($error)
 				set_notice('error', 'Some pages weren\'t uploaded');
+			
+			$pages_added[] = $page;
 		}
+		return $pages_added;
 	}
 
 	public function import_list($data) {

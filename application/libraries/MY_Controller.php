@@ -8,6 +8,7 @@ class MY_Controller extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		if (!file_exists(FCPATH . "config.php")) {
+			if($this->uri->segment(1) != "install")
 			show_error("If you are here, and have no clue why FoOlSlide is not working, start by reading the <a href='http://trac.foolrulez.com/foolslide/wiki/installation_guide'>installation manual</a>.");
 		} else {
 			$this->load->database();

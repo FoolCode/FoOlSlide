@@ -233,46 +233,69 @@ class Comics extends Admin_Controller {
 	}
 
 	function upload() {
-		$config['upload_path'] = 'content/cache/';
+		$this->load->library('upload');
+		
+		$info = array();
+		for ($file = 0; $file < count($_FILES['Filedata']['tmp_name']); $file++) {
+			$config['upload_path'] = 'content/cache/';
+			$config['allowed_types'] = 'png|zip|rar|gif|jpg|jpeg';
+			
+			$_FILES['userfile'] = array('tmp_name' => '', 'name' => '', 'type' => '', 'size' => '', 'error' => '');
+			if (isset($_FILES['Filedata']['tmp_name'][1])) {
+				$_FILES['userfile']['tmp_name'] = $_FILES['Filedata']['tmp_name'][$file];
+				$_FILES['userfile']['name'] = $_FILES['Filedata']['name'][$file];
+				$_FILES['userfile']['type'] = $_FILES['Filedata']['type'][$file];
+				$_FILES['userfile']['size'] = $_FILES['Filedata']['size'][$file];
+				$_FILES['userfile']['error'] = $_FILES['Filedata']['error'][$file];
+			}
+			else {
+				$_FILES['userfile']['tmp_name'] = $_FILES['Filedata']['tmp_name'][0];
+				$_FILES['userfile']['name'] = $_FILES['Filedata']['name'][0];
+				$_FILES['userfile']['type'] = $_FILES['Filedata']['type'][0];
+				$_FILES['userfile']['size'] = $_FILES['Filedata']['size'][0];
+				$_FILES['userfile']['error'] = $_FILES['Filedata']['error'][0];
+			}
+			
+			$this->upload->initialize($config);
+			
+			if (!$this->upload->do_upload('userfile')) {
+				log_message('error', 'durr' . print_r($_FILES, true));
+				print_r($error = array('error' => $this->upload->display_errors()));
+				log_message('error', $this->upload->display_errors());
+				return false;
+			}
+			else {
+				$data = $this->upload->data();
+				$data["chapter_id"] = $this->input->post('chapter_id');
+				$data["overwrite"] = $this->input->post('overwrite');
 
-		$config['allowed_types'] = 'png|zip|rar|gif|jpg|jpeg';
-		$this->load->library('upload', $config);
-		if (!$this->upload->do_upload('Filedata')) {
-			log_message('error', 'durr' . print_r($_FILES, true));
-			print_r($error = array('error' => $this->upload->display_errors()));
-			log_message('error', $this->upload->display_errors());
-			return false;
-		}
-		else {
-			$data = $this->upload->data();
-			$data["chapter_id"] = $this->input->post('chapter_id');
-			$data["overwrite"] = $this->input->post('overwrite');
-
-			if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
-				$pages = $this->files_model->page($data);
-			else
-				$pages = $this->files_model->compressed_chapter($data);
-		}
-		if (!unlink($data["full_path"])) {
-			set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
-			return false;
+				if (strtolower($data['file_ext']) != ".zip" && strtolower($data['file_ext']) != ".rar")
+					$pages = $this->files_model->page($data);
+				else
+					$pages = $this->files_model->compressed_chapter($data);
+					
+				foreach ($pages as $page) {
+					$info[] = array(
+						'name' => $page->filename,
+						'size' => $page->size,
+						'url' => $page->page_url(),
+						'thumbnail_url' => $page->page_url(TRUE),
+						'delete_url' => site_url("admin/comics/delete/page"),
+						'delete_data' => $page->id,
+						'delete_type' => 'POST'
+					);
+				}		
+			}
+			if (!unlink($data["full_path"])) {
+				set_notice('error', 'comics.php/upload: couldn\'t remove cache file ' . $data["full_path"]);
+				return false;
+			}
 		}
 		if ($this->input->post('uploader') == 'uploadify') {
 			echo 1;
 			return true;
 		}
 		if ($this->input->post('uploader') == 'jquery-file-upload') {
-			foreach ($pages as $page) {
-				$info[] = array(
-					'name' => $page->filename,
-					'size' => $page->size,
-					'url' => $page->page_url(),
-					'thumbnail_url' => $page->page_url(TRUE),
-					'delete_url' => site_url("admin/comics/delete/page"),
-					'delete_data' => $page->id,
-					'delete_type' => 'POST'
-				);
-			}
 			// return a json array
 			echo json_encode($info);
 			return true;

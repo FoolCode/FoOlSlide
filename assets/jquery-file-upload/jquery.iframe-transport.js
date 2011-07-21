@@ -46,6 +46,7 @@
                             .unbind('load')
                             .bind('load', function () {
                                 var response;
+								alert(iframe);
                                 // Wrap in a try/catch block to catch exceptions thrown
                                 // when trying to access cross-domain iframe contents:
                                 try {

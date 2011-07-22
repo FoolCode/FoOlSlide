@@ -24,7 +24,6 @@ echo form_close();
 $session_name = $this->session->get_js_session(TRUE);
 $session_data = $this->session->get_js_session();
 ?>
-<?php /*
 <div class="uploadify">
 	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
 	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
@@ -66,7 +65,7 @@ $session_data = $this->session->get_js_session();
 				'checkExisting' : false,
 				'preventCaching' : false,
 				'multi' : true,
-				'buttonText' : '<?php echo _('Upload zip and images'); ?>',
+				'buttonText' : '<?php echo _('Use flash upload'); ?>',
 				'width': 200,
 				'auto'      : true,
 				'requeueErrors' : true,
@@ -74,24 +73,24 @@ $session_data = $this->session->get_js_session();
 				'postData' : {},
 				'onSWFReady'  : function() {
 					updateSession();
-				}
+				},
+				'onUploadSuccess' : function(file, data, response) {
+					var files = jQuery.parseJSON(data);
+					var fu = jQuery('#fileupload').data('fileupload');
+					fu._adjustMaxNumberOfFiles(-files.length);
+					fu._renderDownload(files)
+					.appendTo(jQuery('#fileupload .files'))
+					.fadeIn(function () {
+						jQuery(this).show();
+					});
+				}	
 			});
 		});
 
 	</script>
-
 	<div id="file_upload_flash"></div>
 </div>
 
-<?php
-$this->buttoner = array();
-$this->buttoner[] = array(
-	'text' => _('Delete all pages'),
-	'href' => site_url('/admin/comics/delete/allpages/' . $chapter->id),
-	'plug' => _('Do you really want to delete all the images in this chapter?'));
-echo buttoner();
-?>
-*/ ?>
 <div id="fileupload">
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
@@ -178,7 +177,7 @@ echo buttoner();
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js"></script>
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js"></script>
 
-<script>
+<script type="text/javascript">
 
 	jQuery(function () {
 		jQuery('#fileupload').fileupload({

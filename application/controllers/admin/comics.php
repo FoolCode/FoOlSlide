@@ -265,7 +265,13 @@ class Comics extends Admin_Controller
 	function upload()
 	{
 		$info = array();
-		log_message('error', print_r($_FILES, true));
+		
+		// compatibility for flash uploader and browser not supporting multiple upload
+		if(is_array($_FILES['Filedata']) && !is_array($_FILES['Filedata']['tmp_name'])) {
+			$_FILES['Filedata']['tmp_name'] = array($_FILES['Filedata']['tmp_name']);
+			$_FILES['Filedata']['name'] = array($_FILES['Filedata']['name']);
+		}
+		
 		for ($file = 0; $file < count($_FILES['Filedata']['tmp_name']); $file++)
 		{
 			$valid = explode('|', 'png|zip|rar|gif|jpg|jpeg');
@@ -291,11 +297,8 @@ class Comics extends Admin_Controller
 			}
 		}
 
-		log_message('error', print_r($info, true));
 		// return a json array
 		echo json_encode($info);
-
-
 		return true;
 	}
 

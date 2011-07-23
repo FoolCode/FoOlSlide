@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-23 12:46+0100\n"
-"PO-Revision-Date: 2011-07-23 13:24+0100\n"
+"POT-Creation-Date: 2011-07-23 13:39+0100\n"
+"PO-Revision-Date: 2011-07-23 13:44+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <woxxy@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -440,131 +440,151 @@ msgstr "Titolo del sito"
 msgid "comic reader"
 msgstr "lettore di fumetti"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:100
-msgid "Back URL"
-msgstr "Link al sito"
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:96
+msgid "Title that appears on top of your Slide"
+msgstr "Il titolo che appare in alto nel tuo Slide"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:112
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:101
+msgid "Back URL"
+msgstr "Link al sito principale"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:109
+msgid "Small link that appears near title in public pages"
+msgstr "Il piccolo link che appare vicino al titolo nelle pagine pubbliche"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:114
 msgid "Default team"
 msgstr "Gruppo di default"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:125
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:122
+msgid "Default team for widgets and releases"
+msgstr "Il team predefinito per i widget e le pubblicazioni"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:128
 msgid "Default release language"
 msgstr "Lingua di default delle pubblicazioni"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:134
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:133
+msgid "Change the default release language, so you don't have to change it from English every time"
+msgstr "Cambia la lingua di pubblicazione predefinita, così non devi cambiarlo dall'Inglese ogni volta"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:138
 msgid "Default software language"
 msgstr "Lingua di default del software"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:166
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:144
+msgid "Changes the overall language of the FoOlSlide software. If you can't find your language, you can contribute by translating on <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">our transifex project</a>"
+msgstr "Cambia la lingua del software FoOlSlide. Se non trovi la tua lingua, puoi contribuire traducendo il nostro <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">progetto su transifex</a>"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:171
 msgid "Theme"
 msgstr "Tema"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:172
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:177
 msgid "Select theme"
 msgstr "Seleziona tema"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:182
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:187
 msgid "Footer text"
 msgstr "Testo del footer"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:192
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:197
 msgid "Header code"
 msgstr "Codice dell'header"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:202
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:207
 msgid "Footer code"
 msgstr "Codice del footer"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:233
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:238
 msgid "Advertising"
 msgstr "Pubblicità"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:239
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:244
 msgid "Top banner"
 msgstr "Banner in alto"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:243
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:275
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:248
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:280
 msgid "Insert the HTML provided by your advertiser"
 msgstr "Inserisci l'HTML dal tuo pubblicitario"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:249
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:281
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:254
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:286
 msgid "Reload every pageview?"
 msgstr "Ricarica ogni visualizzazione di pagina?"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:255
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:287
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:260
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:292
 msgid "Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser."
 msgstr "Ricarica la pubblicità. Utile con ProjectWonderful.com. Usalo senza violare i termini di servizio del tuo pubblicitario."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:261
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:293
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:266
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:298
 msgid "Active"
 msgstr "Attivo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:271
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:276
 msgid "Bottom banner"
 msgstr "Banner in basso"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:328
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:333
 msgid "Couldn't save the advertising code in the HTML"
 msgstr "Non ho potuto salvare il codice della pubblicità nell'HTML"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:345
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:350
 msgid "Registration"
 msgstr "Registrazione"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:352
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:357
 msgid "Disable registration"
 msgstr "Disabilita registrazione"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:358
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:363
 msgid "Disable registration in case you're not expecting any"
 msgstr "Disattiva le registrazioni nel tu non ne stia attendendo alcuna"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:363
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:368
 msgid "Disable activation email"
 msgstr "Disattiva email d'attivazione"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:369
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:374
 msgid "Disable the necessity to proceed with an activation after registering"
 msgstr "Disabilita la necessità di attivarsi dopo la registrazione"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:374
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:379
 msgid "reCaptcha public key"
 msgstr "Chiave pubblica reCaptcha"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:381
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:386
 msgid "Use <a href=\"http://www.google.com/recaptcha\">reCaptcha</a> service, avoid hellish captchas!"
 msgstr "Usa il servizio <a href=\"http://www.google.com/recaptcha\">reCaptcha</a>, evita captcha del diavolo!"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:386
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:391
 msgid "reCaptcha secret key"
 msgstr "Chiave segreta reCaptcha"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:391
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:396
 msgid "You must insert both public and secret key if you want to use reCaptcha"
 msgstr "Devi inserire sia la chiave privata, sia la chiave pubblica, per usare reCaptcha"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:417
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:422
 msgid "Reading"
 msgstr "Leggendo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:424
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:429
 msgid "Enable direct downloads"
 msgstr "Abilita download diretti"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:430
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:435
 msgid "Direct downloads usually increase the bandwidth usage by one-third. The issue is wheter you have enough space to keep both images and ZIPs. FoOlSlide tries to avoid dealing with the problem by using on-the-fly ZIP compression and caching."
 msgstr "I download diretti solitamente aumentano l'uso della banda di un terzo. Il problema è se hai abbastanza spazio sul disco per ospitare sia immagini e ZIP. FoOlSlide prova ad evitare questo problema creando ZIP al volo e mantenendoli in una cache."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:435
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:440
 msgid "Maximum direct download cache in Megabyte"
 msgstr "Cache massima per i download diretti in Megabyte"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:441
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:446
 msgid "Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely."
 msgstr "Oltre a questa dimensione, i ZIP che sono stati scaricati più tempo addietro verranno rimossi. Se inserisci un numero molto grande, i ZIP saranno mantenuti in cache per un tempo indefinito."
 

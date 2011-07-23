@@ -39,7 +39,7 @@ class Files_model extends CI_Model {
 		$uniqid = uniqid();
 
 		if(is_dir($path)) {
-			$this->folder_chapter($path, $chapter, $overwrite);
+			$this->folder_chapter($path, $chapter);
 			return TRUE;
 		}
 		$cachedir = 'content/cache/' . time() . "_" . $uniqid;
@@ -181,7 +181,10 @@ class Files_model extends CI_Model {
 			return array('error' => "Couldn't create the chapter.");
 		}
 		
-		if (!$this->compressed_chapter($this->input->post('server_path'), 'file'.$ext, $chapter->id)) {
+		if(!is_dir($this->input->post('server_path')))
+		$extension = pathinfo($this->input->post('server_path'), PATHINFO_EXTENSION);
+		
+		if (!$this->compressed_chapter($this->input->post('server_path'), 'file'.$extension, $chapter->id)) {
 			$chapter->remove();
 			log_message('error', 'import_compressed(): Couldn\'t add the pages to the chapter');
 			return array('error' => "Couldn't add the pages to the chapter.");

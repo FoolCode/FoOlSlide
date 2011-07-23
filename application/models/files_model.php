@@ -11,21 +11,14 @@ class Files_model extends CI_Model {
 	}
 
 	// This is just a plug to adapt the variable names for the comic_model
-	public function page($data) {
-		// $data["chapter_id"];
-		// $data["raw_name"];
-		$file["server_path"] = $data["full_path"];
-		$file["name"] = $data["file_name"];
-		$file["size"] = $data["file_size"];
-		$file['overwrite'] = ($data["overwrite"] == 1);
+	public function page($path, $filename, $chapter_id) {
 
 		$page = new Page();
-		if (!$page->add_page($file, $data["chapter_id"], 0, "")) {
+		if (!$page->add_page($path, $filename, $chapter_id)) {
 			log_message('error', 'page: function add_page failed');
 			return false;
 		}
-		return $page;
-		return true;
+		return array($page->get_clone());
 	}
 
 	// This is just a plug to adapt the variable names for the comic_model
@@ -40,28 +33,28 @@ class Files_model extends CI_Model {
 		return true;
 	}
 
-	public function compressed_chapter($data) {
+	public function compressed_chapter($path, $filename, $chapter_id) {
 		$chapter = new Chapter();
-		$chapter->where("id", $data["chapter_id"])->get();
+		$chapter->where("id", $chapter_id)->get();
 		$uniqid = uniqid();
-		$overwrite = ($data["overwrite"] == 1);
-		if(is_dir($data["full_path"])) {
-			$this->folder_chapter($data["full_path"], $chapter, $overwrite);
+
+		if(is_dir($path)) {
+			$this->folder_chapter($path, $chapter);
 			return TRUE;
 		}
-		$cachedir = 'content/cache/' . $data["raw_name"] . "_" . $uniqid;
+		$cachedir = 'content/cache/' . time() . "_" . $uniqid;
 		if (!mkdir($cachedir)) {
 			log_message('error', 'compressed_chapter: failed creating dir');
 			return FALSE;
 		}
 		
-		if(function_exists('rar_open') && strtolower($data["file_ext"]) == '.rar')
-			$this->uncompress_rar($data["full_path"], $cachedir);
+		if(function_exists('rar_open') && strtolower(substr($filename, -4)) == '.rar')
+			$this->uncompress_rar($path, $cachedir);
 		
-		if (strtolower($data["file_ext"]) == '.zip')
-			$this->uncompress_zip($data["full_path"], $cachedir);
+		if (strtolower(substr($filename, -4)) == '.zip')
+			$this->uncompress_zip($path, $cachedir);
 
-		$this->folder_chapter($cachedir, $chapter, $overwrite);
+		$pages_added = $this->folder_chapter($cachedir, $chapter);
 
 		// Let's delete all the cache
 		if (!delete_files($cachedir, TRUE)) {
@@ -74,7 +67,8 @@ class Files_model extends CI_Model {
 				return FALSE;
 			}
 		}
-		return TRUE;
+		
+		return $pages_added;
 	}
 
 	public function uncompress_rar($path, $cachedir) {
@@ -94,28 +88,30 @@ class Files_model extends CI_Model {
 		$this->unzip->extract($path, $cachedir);
 	}
 
-	public function folder_chapter($cachedir, $chapter, $overwrite) {
+	public function folder_chapter($cachedir, $chapter) {
 		// Get the filename
 		$dirarray = get_dir_file_info($cachedir, FALSE);
 
 		$this->db->reconnect();
+		$pages_added = array();
 		foreach ($dirarray as $key => $value) {
 			$extentsion = "";
 			$extension = pathinfo($value["server_path"], PATHINFO_EXTENSION);
 			if ($extension && !in_array(strtolower($extension), array('jpeg', 'jpg', 'png', 'gif')))
 				continue;
-			$value['overwrite'] = $overwrite;
+
 			$page = new Page();
 			$error = false;
-			if (!$page->add_page($value, $chapter->id, 0, "")) {
+			if (!$page->add_page($value['server_path'], $value['name'], $chapter->id)) {
 				log_message('error', 'compressed_chapter: one page in the loop failed being added');
 				$error = true;
 			}
 			if ($error)
 				set_notice('error', 'Some pages weren\'t uploaded');
 			
-			$this->pages_added[] = $page;
+			$pages_added[] = $page->get_clone();
 		}
+		return $pages_added;
 	}
 
 	public function import_list($data) {
@@ -184,13 +180,11 @@ class Files_model extends CI_Model {
 			log_message('error', 'import_compressed(): Couldn\'t create chapter');
 			return array('error' => "Couldn't create the chapter.");
 		}
-		$data['chapter_id'] = $chapter->id;
-		$data['overwrite'] = 1;
-		$data['full_path'] = $this->input->post('server_path');
-		$data['raw_name'] = 'import_' . $chapter->id;
-		if(!is_dir($data["full_path"]))
-		$data['file_ext'] = '.'.end(explode('.', $this->input->post('server_path')));
-		if (!$this->compressed_chapter($data)) {
+		
+		if(!is_dir($this->input->post('server_path')))
+		$extension = pathinfo($this->input->post('server_path'), PATHINFO_EXTENSION);
+		
+		if (!$this->compressed_chapter($this->input->post('server_path'), 'file'.$extension, $chapter->id)) {
 			$chapter->remove();
 			log_message('error', 'import_compressed(): Couldn\'t add the pages to the chapter');
 			return array('error' => "Couldn't add the pages to the chapter.");

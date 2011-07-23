@@ -90,7 +90,8 @@ class Preferences extends Admin_Controller
 				'id' => 'site_title',
 				'maxlength' => '200',
 				'placeholder' => _('comic reader'),
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Title that appears on top of your Slide')
 			)
 		);
 
@@ -102,7 +103,8 @@ class Preferences extends Admin_Controller
 				'id' => 'back_url',
 				'maxlength' => '200',
 				'placeholder' => 'http://',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Small link that appears near title in public pages')
 			)
 		);
 
@@ -114,7 +116,8 @@ class Preferences extends Admin_Controller
 				'id' => 'default_team',
 				'maxlength' => '200',
 				'placeholder' => 'Anonymous',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Default team for widgets and releases')
 			)
 		);
 
@@ -124,7 +127,8 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'language',
 				'name' => 'fs_gen_default_lang',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Change the default release language, so you don\'t have to change it from English every time')
 			)
 		);
 
@@ -133,8 +137,9 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
-				'values' => array('' => 'English', 'it_IT.utf8' => 'Italian'),
-				'preferences' => 'fs_gen'
+				'values' => array('' => 'English', 'it_IT.utf8' => 'Italian', 'pt_PT.utf8' => 'Portuguese'),
+				'preferences' => 'fs_gen',
+				'help' => _('Changes the overall language of the FoOlSlide software. If you can\'t find your language, you can contribute by translating on <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">our transifex project</a>')
 			)
 		);
 

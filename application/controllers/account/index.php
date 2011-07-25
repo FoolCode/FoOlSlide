@@ -10,7 +10,9 @@ class Index extends Account_Controller {
 	}
 
 	function index() {
-		redirect('/account/auth/');
+		if(!$this->tank_auth->is_logged_in())
+		redirect('/account/');
+		redirect('/account/auth/login/');
 	}
 
 }

@@ -76,30 +76,6 @@ class Members extends Admin_Controller
 
 
 	/*
-	 * The "you" function is just a way to make it easier to keep track of one own's POST saving
-	 * In the end it calls the member function by sending the user ID
-	 * 
-	 * @author Woxxy
-	 */
-	function you()
-	{
-		// get the data to save. low on security because the user can only save to himself from here
-		if ($this->input->post())
-		{
-			$profile = new Profile($this->tank_auth->get_user_id());
-			// use the from_array to be sure what's being inputted
-			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
-		}
-
-		// let's be pretty and add the username on top (and that's you that always sounds cool)
-		$this->viewdata["extra_title"][] = $this->tank_auth->get_username() . " (" . _("That's you!") . ")";
-
-		// the rest is handled by the member method
-		return $this->member($this->tank_auth->get_user_id());
-	}
-
-
-	/*
 	 * shows the data of a member, and allows admins and mods to change it
 	 */
 	function member($id)
@@ -118,7 +94,7 @@ class Members extends Admin_Controller
 		// the second part of the if makes sure that if "member" method is called from "you"
 		// the user is not redirected to "you" again
 		if ($this->tank_auth->get_user_id() == $id && $this->uri->segment(3) != 'you')
-			redirect('/admin/members/you/');
+			redirect('/account/profile/edit/');
 
 		// give admins and mods ability to edit user profiles
 		if ($this->input->post() && $this->tank_auth->is_allowed())

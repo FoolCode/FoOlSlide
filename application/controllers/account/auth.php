@@ -34,7 +34,7 @@ class Auth extends Account_Controller
 	function login()
 	{
 		if ($this->tank_auth->is_logged_in()) {									// logged in
-			redirect('/admin/');
+			redirect('/account/');
 
 		} elseif ($this->tank_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/account/auth/send_again/');

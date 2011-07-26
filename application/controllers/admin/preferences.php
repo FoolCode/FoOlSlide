@@ -139,7 +139,7 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
-				'values' => array('' => 'English', 'es_ES.utf8' => 'Spanish', 'it_IT.utf8' => 'Italian', 'pt_PT.utf8' => 'Portuguese'),
+				'values' => array('' => 'English', 'es_ES.utf8' => 'Spanish', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)'),
 				'preferences' => 'fs_gen',
 				'help' => _('Changes the overall language of the FoOlSlide software. If you can\'t find your language, you can contribute by translating on <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">our transifex project</a>')
 			)

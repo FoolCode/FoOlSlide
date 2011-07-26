@@ -1,0 +1,1381 @@
+# 
+# Andrei Dheku <andrei.sanoliveira@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: FoOlSlide\n"
+"Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
+"POT-Creation-Date: 2011-07-23 13:39+0100\n"
+"PO-Revision-Date: 2011-07-26 18:51+0100\n"
+"Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
+"Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Poedit-Basepath: /Users/woxxy/github/FoOlSlide\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: /Users/woxxy/github/FoOlSlide\n"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:40
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:185
+msgid "Database type"
+msgstr "Tipo de base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:47
+msgid "required"
+msgstr "Obrigatório"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:48
+msgid "The type of database you're going to use. Leave it on MySQL if using a standard installation"
+msgstr "O tipo de base de dados que você vai usar. Deixe-o em \"MySQL\" se estiver usando uma instalação padrão"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:52
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:186
+msgid "Database hostname"
+msgstr "Hostname da base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
+#, php-format
+msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgstr "O nome do host que hospeda a base de dados. 99.8% das vezes é \"localhost\""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:187
+msgid "Database name"
+msgstr "Nome da base da dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:74
+msgid "The name of the database"
+msgstr "Nome da base da dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:79
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:188
+msgid "Database username"
+msgstr "O nome de usuário da base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:87
+msgid "The username of the user with permissions to the database"
+msgstr "O nome de usuário com permissões à base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:92
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:189
+msgid "Database password"
+msgstr "Senha da base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:100
+msgid "The password of the user with permissions to the database"
+msgstr "A senha do usuário com permissões à base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:105
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:190
+msgid "Database prefix"
+msgstr "Prefixo da base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:112
+msgid "Add a database prefix to avoid collisions, in example if you have other FoOlSlides"
+msgstr "Adicionar um prefixo da base de dados para evitar conflitos, por exemplo: se você tiver outros FoOlSlides"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:117
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:191
+msgid "Administrator username"
+msgstr "Username do administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:125
+msgid "The username of the administrator's account"
+msgstr "O nome de usuário da conta do administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:130
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:192
+msgid "Administrator password"
+msgstr "Senha de administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:138
+msgid "The password of the administrator's account"
+msgstr "A senha da conta do administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:143
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:193
+msgid "Administrator email"
+msgstr "E-mail do administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:151
+msgid "The email of the administrator's account"
+msgstr "O e-mail da conta do administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:225
+msgid "Connection with database not enstabilished: check the database fields."
+msgstr "Conexão com a base de dados não estabelecida: verifique os campos da base de dados!"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:293
+msgid "FoOlSlide has installed successfully. Check the preferences and make sure you create a team for your own chapters."
+msgstr "FoOlSlide foi instalado com sucesso. Verifique as preferências e certifique-se de criar uma equipe para os seus próprios capítulos."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:310
+#, php-format
+msgid "The file %s was removed. The installation can't continue without that file. You can find it in the FoOlSlide download."
+msgstr "O arquivo %s foi removido. A instalação não pode continuar sem esse arquivo. Você pode encontrá-lo na página de download do FoOlSlide."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:317
+#, php-format
+msgid "The %s directory needs to be writable. Use this command in your shell if possible: %s or change its permissions recursively to 777 with your own FTP software. You won't be able to install or run FoOlSlide without this."
+msgstr "O diretório %s precisa ser gravável. Use este comando no seu shell, se possível: %s ou altere suas permissões para 777 com o seu próprio software FTP. Você não será capaz de instalar ou executar FoOlSlide sem isso."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:324
+#, php-format
+msgid "The %s directory needs to be writable as well. Use this command in your shell if possible: %s or change its permissions recursively to 777 with your own FTP software. You won't be able to install or run FoOlSlide without this."
+msgstr "O diretório %s precisa ser escrito assim. Use este comando no seu shell, se possível: %s ou altere suas permissões recursivamente para 777 com o seu próprio software FTP. Você não será capaz de instalar ou executar FoOlSlide sem isso."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:350
+#, php-format
+msgid "The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s"
+msgstr "O diretório %s seria melhor se gravável, a fim de entregar atualizações automáticas. Use este comando no seu shell, se possível: %s"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:352
+#, php-format
+msgid "The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it's www-data or Apache)"
+msgstr "O diretório %s seria melhor se gravável, a fim de entregar atualizações automáticas. <br/> Foi impossível determinar o usuário executando o PHP. Use este comando no seu shell, se possível: %s, onde www-data é um exemplo (geralmente é www-data ou Apache)"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:353
+#, php-format
+msgid "If you can't do the above, after the installation you will be given a textfile to paste in config.php. More info after submitting."
+msgstr "Se você não pode fazer o descrito acima, após a instalação você receberá um arquivo de texto para colar no config.php. Mais informações após o envio."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:360
+msgid "If you made any changes, just refresh this page to recheck the directory permissions."
+msgstr "Se você fez qualquer alteração, apenas atualize esta página para verificar novamente as permissões do diretório."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:31
+msgid "Team"
+msgstr "Equipe"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:38
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:56
+msgid "Series list"
+msgstr "Lista de séries"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:50
+msgid "Series"
+msgstr "Séries"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:69
+msgid "Latest"
+msgstr "Último"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:147
+msgid "Chapter"
+msgstr "Capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:227
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:233
+msgid "Search"
+msgstr "Pesquisa"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:14
+msgid "Authorization"
+msgstr "Autorização"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:21
+msgid "Message"
+msgstr "Mensagem"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:100
+msgid "Login"
+msgstr "Login"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:199
+msgid "Register"
+msgstr "Registrar"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:237
+msgid "Resend activation email"
+msgstr "Reenviar email de ativação"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:299
+msgid "Forgot password"
+msgstr "Esqueceu a senha"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:347
+msgid "Reset password"
+msgstr "Resetar senha"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:380
+msgid "Change password"
+msgstr "Alterar a senha"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:419
+msgid "Change email"
+msgstr "Alterar e-mail"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/auth.php:472
+msgid "Unregister"
+msgstr "Cancelar o registro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:16
+msgid "Comics"
+msgstr "Mangás"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:28
+msgid "manage"
+msgstr "administrar"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:35
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:52
+msgid "Searching"
+msgstr "Pesquisando"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:53
+msgid "The comic you looked for doesn't exist."
+msgstr "O mangá que você procurou não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:78
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:199
+msgid "Teams"
+msgstr "Equipes"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:83
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:204
+msgid "Insert the names of the teams who worked on this chapter."
+msgstr "Inserir os nomes das equipes que trabalharam neste capítulo."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:158
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:246
+msgid "Licensed in"
+msgstr "Licenciado em"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:163
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:251
+msgid "Insert the nations where the comic is licensed in order to limit the availability."
+msgstr "Inserir as nações onde o Mangá é licenciado de forma a limitar a disponibilidade."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:177
+msgid "Add new"
+msgstr "Adicionar Novo"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:192
+msgid "Chapter in"
+msgstr "Capítulo em"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:258
+msgid "Comic"
+msgstr "Mangá"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:346
+msgid "You can't delete chapters from outside the admin panel through this link."
+msgstr "Você não pode excluir capítulos de fora do painel de administração através deste link."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:414
+msgid "Absolute directory path to ZIP archive for the series"
+msgstr "Caminho absoluto para o arquivo ZIP para a série"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:418
+#, php-format
+msgid "Insert the absolute directory path. This means from the lowest accessible directory. Example: %s"
+msgstr "Insira o caminho do diretório absoluto. Isso significa que a partir do menor diretório acessível. Exemplo: %s"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:424
+msgid "Import"
+msgstr "Importar"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/comics.php:430
+msgid "The directory you set does not exist."
+msgstr "O diretório que você configurou não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:11
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:44
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:83
+msgid "Accept"
+msgstr "Aceitar"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:45
+msgid "Do you really want to accept this applicant?"
+msgstr "Você realmente quer aceitar esse candidato?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:50
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:89
+msgid "Reject"
+msgstr "Rejeitar"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:51
+msgid "Do you really want to reject this applicant?"
+msgstr "Você realmente quer para rejeitar este candidato?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:60
+msgid "Pending applicants"
+msgstr "Candidatos pendentes"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:84
+msgid "Do you really want to join this team?"
+msgstr "Você realmente quer participar desta equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:90
+msgid "Do you really want to reject the request to join this team?"
+msgstr "Você realmente deseja rejeitar o pedido para participar dessa equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/dashboard.php:99
+msgid "Pending requests"
+msgstr "Solicitações pendentes"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:22
+msgid "Database"
+msgstr "Base de dados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:46
+msgid "Upgrade"
+msgstr "Atualização"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:71
+msgid "Successfully updated the database."
+msgstr "Base de dados atualizado com sucesso."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:96
+msgid "That's you!"
+msgstr "Esse é você!"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:133
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:258
+msgid "Member"
+msgstr "Membro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:221
+msgid "Saved."
+msgstr "Salvo."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:258
+msgid "Leader"
+msgstr "Líder"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:265
+msgid "Remove member"
+msgstr "Remover membro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:267
+msgid "Do you want to remove this team member?"
+msgstr "Você deseja remover este membro da equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:277
+msgid "Make leader"
+msgstr "Tornar líder"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:279
+msgid "Do you want to make this user a team leader?"
+msgstr "Você quer tornar este usuário um líder de equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:286
+msgid "Remove leader"
+msgstr "Remover líder"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:288
+msgid "Do you want to remove this user from the team leadership?"
+msgstr "Você deseja remover este usuário da liderança de equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:380
+msgid "You have applied for membership in this team. Come later to check the status of your application."
+msgstr "Você já pediu a adesão nesta equipe. Venha mais tarde para verificar o status do seu pedido."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:399
+msgid "Accepting into team..."
+msgstr "Aceitar na equipe ..."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:405
+msgid "User accepted into the team."
+msgstr "Usuário aceito na equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:425
+msgid "Removing from team..."
+msgstr "Removendo da equipe ..."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:431
+msgid "User removed from the team."
+msgstr "Usuário removido da equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:455
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:483
+msgid "You have made the user a team leader."
+msgstr "Você fez o usuário um líder de equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:477
+msgid "User not found."
+msgstr "Usuário não encontrado."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:506
+msgid "You have removed the user from his team leader position."
+msgstr "Você removeu o usuário de sua posição de líder da equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:530
+msgid "You have added the user to the admin group."
+msgstr "Você adicionou o usuário ao grupo admin."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:556
+msgid "You have removed the user from the administrators group."
+msgstr "Você removeu o usuário do grupo administradores."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:582
+msgid "You have added the user to the moderators group."
+msgstr "Você adicionou o usuário ao grupo de moderadores."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:608
+msgid "You have removed the user from the moderators group."
+msgstr "Você removeu o usuário do grupo moderadores."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:18
+msgid "Preferences"
+msgstr "Preferências"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:70
+msgid "Settings changed."
+msgstr "Configurações alteradas."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:81
+msgid "General"
+msgstr "Geral"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:88
+msgid "Site title"
+msgstr "Título do site"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:94
+msgid "comic reader"
+msgstr "Leitor de mangá"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:96
+msgid "Title that appears on top of your Slide"
+msgstr "Título que aparece no topo do seu slide"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:101
+msgid "Back URL"
+msgstr "URL de volta"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:109
+msgid "Small link that appears near title in public pages"
+msgstr "Pequeno link que aparece perto do título em páginas públicas"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:114
+msgid "Default team"
+msgstr "Equipe padrão"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:122
+msgid "Default team for widgets and releases"
+msgstr "Equipe padrão para widgets e lançamentos"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:128
+msgid "Default release language"
+msgstr "Linguagem padrão do lançamento"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:133
+msgid "Change the default release language, so you don't have to change it from English every time"
+msgstr "Alterar o idioma padrão de liberação, para você não ter que mudar toda vez para Português."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:138
+msgid "Default software language"
+msgstr "Linguagem padrão do software "
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:144
+msgid "Changes the overall language of the FoOlSlide software. If you can't find your language, you can contribute by translating on <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">our transifex project</a>"
+msgstr "Muda o idioma global do software FoOlSlide. Se você não consegue encontrar seu idioma, você pode contribuir, traduzindo em <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">nosso projeto Transifex</a>"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:171
+msgid "Theme"
+msgstr "Tema"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:177
+msgid "Select theme"
+msgstr "Escolher tema"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:187
+msgid "Footer text"
+msgstr "Texto do rodapé"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:197
+msgid "Header code"
+msgstr "Código de cabeçalho"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:207
+msgid "Footer code"
+msgstr "Código do rodapé"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:238
+msgid "Advertising"
+msgstr "Publicidade"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:244
+msgid "Top banner"
+msgstr "Banner superior"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:248
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:280
+msgid "Insert the HTML provided by your advertiser"
+msgstr "Inserir o HTML fornecido pelo anunciante"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:254
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:286
+msgid "Reload every pageview?"
+msgstr "Atualizar a cada pageview?"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:260
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:292
+msgid "Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser."
+msgstr "Recarregar a publicidade. Usá-lo sem violar o termos de contratação do seu anunciante."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:266
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:298
+msgid "Active"
+msgstr "Ativo"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:276
+msgid "Bottom banner"
+msgstr "Banner inferior"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:333
+msgid "Couldn't save the advertising code in the HTML"
+msgstr "Não foi possível salvar o código de publicidade no HTML"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:350
+msgid "Registration"
+msgstr "Registro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:357
+msgid "Disable registration"
+msgstr "Desativar o registro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:363
+msgid "Disable registration in case you're not expecting any"
+msgstr "Desativar o registro. Niguém mais poderá se registrar."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:368
+msgid "Disable activation email"
+msgstr "Desativar e-mail de activação"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:374
+msgid "Disable the necessity to proceed with an activation after registering"
+msgstr "Desabilitar a necessidade de prosseguir com uma ativação após o registro"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:379
+msgid "reCaptcha public key"
+msgstr "chave pública do reCaptcha"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:386
+msgid "Use <a href=\"http://www.google.com/recaptcha\">reCaptcha</a> service, avoid hellish captchas!"
+msgstr "Use o serviço <a href=\"http://www.google.com/recaptcha\">reCaptcha</a>, evitar captchas do capeta!"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:391
+msgid "reCaptcha secret key"
+msgstr "chave secreta do reCaptcha "
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:396
+msgid "You must insert both public and secret key if you want to use reCaptcha"
+msgstr "Você deve inserir a chave pública e a secreta, se você quiser usar reCaptcha!"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:422
+msgid "Reading"
+msgstr "Lendo"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:429
+msgid "Enable direct downloads"
+msgstr "Permitir downloads diretos"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:435
+msgid "Direct downloads usually increase the bandwidth usage by one-third. The issue is wheter you have enough space to keep both images and ZIPs. FoOlSlide tries to avoid dealing with the problem by using on-the-fly ZIP compression and caching."
+msgstr "Downloads diretos geralmente aumentam o uso de banda em um terço. A questão é se você tem espaço suficiente para manter as imagens e os ZIPs. O FoOlSlide tenta evitar lidar com o problema usando compressão ZIP on-the-fly  e cache."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:440
+msgid "Maximum direct download cache in Megabyte"
+msgstr "Cache máximo de download direto em Megabyte"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:446
+msgid "Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely."
+msgstr "de acordo com esse tamanho, os ZIPs inativos serão removidos. Se você inserir um número muito grande, os ZIPs serão armazenados por tempo indeterminado."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/upgrade.php:72
+msgid "Upgrade failed: check file permissions."
+msgstr "Falha na atualização: verificar permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:32
+msgid "Teams could not be found"
+msgstr "Equipes não encotradas"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:70
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:98
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:262
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:325
+msgid "Team could not be found"
+msgstr "Equipe não pôde ser encontrada"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:38
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:138
+msgid "Comics could not be found"
+msgstr "Mangás não encontrados"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:89
+msgid "Comic could not be found"
+msgstr "Mangá não pôde ser encontrado"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:184
+msgid "Chapter could not be found"
+msgstr "Capítulo não pôde ser encontrado"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:168
+msgid "Today"
+msgstr "Hoje"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:171
+msgid "Tomorrow"
+msgstr "Amanhã"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:174
+msgid "Yesterday"
+msgstr "Ontem"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/reader_helper.php:56
+#, php-format
+msgid "%sFollow us%s on Twitter"
+msgstr "%s Siga-nos %s no Twitter!"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/reader_helper.php:94
+msgid "Come chatting with us on"
+msgstr "Venha conversar conosco"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:19
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:65
+msgid "Save"
+msgstr "Salvar"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:52
+msgid "Edit"
+msgstr "Editar"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:49
+msgid "Manage"
+msgstr "Administrar"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:54
+msgid "Members"
+msgstr "Membros"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:59
+msgid "Member list"
+msgstr "Lista de membros"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:60
+msgid "Your profile"
+msgstr "Seu perfil"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:61
+msgid "Team list"
+msgstr "Lista de equipes"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:62
+msgid "Home team"
+msgstr "Equipe da casa"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:63
+msgid "Add team"
+msgstr "Adicionar equipe"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:73
+msgid "Reader"
+msgstr "Leitor"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:812
+msgid "ID not set"
+msgstr "ID não definida"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:818
+msgid "ID is not a valid number"
+msgstr "ID não é um número válido"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:866
+msgid "\"orderby\" tag wasn't correctly used."
+msgstr "a tag \"Orderby\" não foi corretamente utilizada."
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:878
+msgid "\"orderby\" tag wasn't correctly used"
+msgstr "a tag \"Orderby\" não foi corretamente utilizada"
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:903
+msgid "The \"page\" tag was not a valid number."
+msgstr "A tag da \"página\" não é um número válido."
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:920
+msgid "You're trying to get a larger number of \"per_page\" results per request than allowed."
+msgstr "Você está tentando obter um número maior de resultados \"per_page\" do que o permitido."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:121
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:78
+msgid "Name"
+msgstr "Nome"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:122
+msgid "Insert the title of the chapter, if available."
+msgstr "Insira o título do capítulo, se disponível."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:123
+msgid "Chapter number"
+msgstr "Número do capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:124
+msgid "Insert the chapter number."
+msgstr "Insira o número do capítulo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:125
+msgid "Subchapter number"
+msgstr "Número sub-capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:126
+msgid "Insert a sub number to identify extra chapters. Zero for main chapter."
+msgstr "Inserir um número para identificar sub-capítulos extra, como omakes e etc.Escreva Zero para o capítulo principal."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:127
+msgid "Volume"
+msgstr "Volume"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:128
+msgid "Insert the volume number."
+msgstr "Insira o número do volume."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:129
+msgid "Language"
+msgstr "Idioma"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:130
+msgid "Insert the language of the chapter."
+msgstr "Insira o idioma do capítulo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:131
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:80
+msgid "Description"
+msgstr "Descrição"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:132
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:81
+msgid "Insert a description."
+msgstr "Inserir uma descrição."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:133
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:82
+msgid "Hidden"
+msgstr "Escondido"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:134
+msgid "Hide the chapter from public view."
+msgstr "Esconder o capítulo da vista do público."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:303
+msgid "The comic you were adding the chapter to doesn't exist."
+msgstr "O mangá que você esta inserindo capítulos não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:344
+msgid "You're trying to delete something that doesn't even have a related comic'?"
+msgstr "Você está tentando apagar algo que não tem sequer um capítulo relacionado?"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:384
+msgid "The chapter you tried to edit doesn't exist."
+msgstr "O capítulo que você tentou editar não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:403
+msgid "The comic you were referring to doesn't exist."
+msgstr "O mangá que você se referiu não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:492
+msgid "The team you were referring this chapter to doesn't exist."
+msgstr "A equipe que você está relacionando esse capítulo não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:499
+msgid "You must select at least one team for this chapter"
+msgstr "Você deve selecionar pelo menos uma equipe para este capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:507
+msgid "You haven't selected any team in relation to this chapter."
+msgstr "Você não relacionou nenhuma equipe à este capítulo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:518
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:374
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:104
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:136
+msgid "Check that you have inputted all the required fields."
+msgstr "Verifique se você digitou todos os campos necessários."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:522
+msgid "Failed to save to database for unknown reasons."
+msgstr "Falha ao salvar na base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:553
+msgid "Failed to remove the chapter from the database for unknown reasons."
+msgstr "Falha ao remover o capítulo da base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:571
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:597
+msgid "No comic related to this chapter."
+msgstr "Sem mangás relacionados a este capítulo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:579
+msgid "Failed to create the chapter directory. Please, check file permissions."
+msgstr "Falha ao criar o diretório do capítulo. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:607
+msgid "Failed to remove the files inside the chapter directory. Please, check file permissions."
+msgstr "Falha ao remover os arquivos dentro do diretório do capítulo. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:614
+msgid "Failed to remove the chapter directory. Please, check file permissions."
+msgstr "Falha ao remover o diretório do capítulo. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:745
+msgid "Vol."
+msgstr "Vol."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:79
+msgid "Insert the title of the comic."
+msgstr "Insira o título do mangá."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:83
+msgid "Hide the comic from public view."
+msgstr "Esconder o mangá da vista do público."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:84
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:85
+msgid "Upload an image to use as thumbnail."
+msgstr "Upload de uma imagem para usar como miniatura."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:281
+msgid "The comic you wanted to edit doesn't exist."
+msgstr "O mangá que você quer editar não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:378
+msgid "Failed saving the Comic to database for unknown reasons."
+msgstr "Falha ao salvar mangá à base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:415
+msgid "The comic couldn't be removed from the database for unknown reasons."
+msgstr "O mangá não pôde ser removido da base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:433
+msgid "The directory could not be created. Please, check file permissions."
+msgstr "O diretório não pôde ser criado. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:452
+msgid "The files inside the comic directory could not be removed. Please, check the file permissions."
+msgstr "Os arquivos dentro do diretório do mangá não podem ser removido. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:459
+msgid "The directory could not be removed. Please, check file permissions."
+msgstr "O diretório não pôde ser removido. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:485
+msgid "Failed to create the thumbnail image for the comic. Check file permissions."
+msgstr "Falha ao criar a miniatura para o mangá. Verifique as permissões de arquivos."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:508
+msgid "Failed to create the thumbnail image for the comic. Resize function didn't work"
+msgstr "Falha ao criar a miniatura para o Mangá. Função de redimensionamento não funcionou"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:522
+msgid "Failed to save the thumbnail image in the database."
+msgstr "Falha ao salvar a miniatura na base de dados."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:544
+msgid "Failed to remove the thumbnail's original image. Please, check file permissions."
+msgstr "Falha ao remover a miniatura. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:551
+msgid "Failed to remove the thumbnail image. Please, check file permissions."
+msgstr "Falha ao remover a miniatura. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:559
+msgid "Failed to remove the thumbnail image from the database."
+msgstr "Falha ao remover a miniatura da base de dados."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:75
+msgid "One of the named teams doesn't exist."
+msgstr "Uma das equipes referidas não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:108
+msgid "Couldn't save joint to database due to an unknown error."
+msgstr "Não foi possível salvar a parceria à base de dados devido a um erro desconhecido."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:121
+msgid "The joint couldn't be removed."
+msgstr "A parceria não pôde ser removida."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:140
+msgid "Couldn't add team to joint for unknown reasons."
+msgstr "Não foi possível adicionar a equipe parceira por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:150
+msgid "Couldn't remove the team from the joint."
+msgstr "Não foi possível remover a equipe parceira."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/joint.php:160
+msgid "Couldn't remove the team from all the joints."
+msgstr "Não foi possível remover o grupo de todas as parcerias."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:320
+msgid "There isn't a page in the database related to this ID."
+msgstr "Não há uma página na base de dados relacionados a este ID."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:328
+msgid "There was no selected chapter."
+msgstr "Não tem nenhum capítulo selecionado."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:336
+msgid "The selected chapter doesn't exist."
+msgstr "O capítulo selecionado não existe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:376
+msgid "Failed to write to database for unknown reasons."
+msgstr "Falha ao gravar na base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:396
+msgid "Failed to remove the page from the database."
+msgstr "Falha ao remover a página da base de dados."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:420
+msgid "Failed to add the page's file. Please, check file permissions."
+msgstr "Falha ao adicionar a página. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:439
+msgid "Failed to create the thumbnail of the page."
+msgstr "Falha ao criar a miniatura da página."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:466
+msgid "Failed to remove the page's file. Please, check file permissions."
+msgstr "Falha ao remover a página. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:473
+msgid "Failed to remove the page's thumbnail. Please, check file permissions."
+msgstr "Falha ao remover a miniatura da página. Por favor, verifique as permissões do arquivo."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:101
+msgid "Failed to find the selected team's ID."
+msgstr "Não foi possível encontrar o ID da equipe de selecionada."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:181
+msgid "Failed to update the team in the database for unknown reasons."
+msgstr "Falha ao atualizar a equipe na base de dados por razões desconhecidas."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:203
+msgid "Failed removing the chapters while removing the team."
+msgstr "Falha remover os capítulos durante a remoção da equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:217
+msgid "Failed to delete the team for unknown reasons."
+msgstr "Falha ao excluir a equipe por motivos desconhecidos."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:228
+msgid "There were no groups selected."
+msgstr "Não existe grupos selecionados."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:237
+msgid "There's no team under this ID."
+msgstr "Não há equipe sob esse ID."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:251
+msgid "There's no teams under this ID."
+msgstr "Não há equipes sob este ID."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/team.php:267
+msgid "There's no group found with this ID."
+msgstr "Não há grupo com este ID."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/upgrade2_model.php:76
+msgid "We're currently upgrading FoOlSlide. This process usually takes few seconds or a couple minutes, check back soon!"
+msgstr "No momento, estamos atualizando o FoOlSlide. Este processo geralmente leva alguns segundos ou alguns minutos, volte em breve!"
+
+#: /Users/woxxy/github/FoOlSlide/application/models/upgrade_model.php:28
+msgid "FoOlPod server could not be contacted: impossible to check for new versions."
+msgstr "O servidor do FoOlPod não pôde ser contatado: impossível verificar se há novas versões."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/upgrade_model.php:104
+msgid "Can't get the update file from FoOlPod. It might be a momentary problem, or a problem with your server security configuration. Browse <a href=\"http://foolrulez.com/pod/human\">http://foolrulez.com/pod/human</a> to check if it's a known issue."
+msgstr "Não é possível obter o arquivo de atualização do FoOlPod. Pode ser um problema momentâneo, ou um problema com sua configuração de segurança do servidor. Procurar <a href=\"http://foolrulez.com/pod/human\">http://foolrulez.com/pod/human</a> para verificar se é um problema conhecido."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/upgrade_model.php:178
+#, php-format
+msgid "If you can't do the above, you can follow the manual upgrade instructons at %sthis link%s."
+msgstr "Se você não pode fazer o acima, você pode seguir o manual de atualização %sneste link%s."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:4
+msgid "Control panel"
+msgstr "Painel de controle"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:86
+msgid "Homepage"
+msgstr "Página inicial"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:93
+msgid "Logout"
+msgstr "Sair"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:100
+msgid "control panel"
+msgstr "painel de controle"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:176
+msgid "New upgrade available:"
+msgstr "Nova atualização disponível:"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/chapter.php:3
+msgid "Delete chapter"
+msgstr "Excluir capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/chapter.php:5
+msgid "Do you really want to delete this chapter and its pages?"
+msgstr "Você realmente deseja excluir este capítulo e suas páginas?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/chapter.php:9
+msgid "Read chapter"
+msgstr "Ler o capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/chapter.php:20
+msgid "Pages"
+msgstr "Páginas"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/chapter.php:68
+msgid "Use flash upload"
+msgstr "Usar o upload em flash"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:3
+msgid "Delete comic"
+msgstr "Excluir Manga"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:5
+msgid "Do you really want to delete this comic and its chapters?"
+msgstr "Você realmente quer apagar este mangá e seus capítulos?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:17
+msgid "Chapters"
+msgstr "Capítulos"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:22
+msgid "Add chapter"
+msgstr "Adicionar capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:30
+msgid "Import from folder"
+msgstr "Importação por pasta"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/comic.php:62
+msgid "Quick tools"
+msgstr "Ferramentas rápidas"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import.php:1
+msgid "Here you can select a directory and import chapters from it. This directory must contain ZIP, RAR or directories with each representing one single chapter. After you select a valid directory, the interface will give you the ability to fine-tune the import of each chapter. Notice that every directory, ZIP or RAR will be scanned for images and these will all be put in the same folder. If there are two files with the same name in the same ZIP, RAR or directory, the second found will overwrite the first."
+msgstr "Aqui você pode selecionar um diretório e capítulos de importação. Este diretório deve conter ZIP, RAR ou diretórios com cada pasta representando um único capítulo. Depois de selecionar um diretório válido, a interface lhe dará a capacidade de melhorar a importação de cada capítulo. Observe que cada arquivo ZIP ou RAR serão digitalizados para imagens e estes serão todos colocados na mesma pasta. Se existirem dois arquivos com o mesmo nome no ZIP, RAR ou diretório, o segundo encontrado irá substituir o primeiro."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:9
+msgid "Chapter filename"
+msgstr "Nome de arquivo do capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:189
+msgid "Manual setup: write {cc} for where the chapter is positioned. {ss} for subchapter. {vv} for volume. The amount of letters sets the amount of numbers. \"Chapter_123\" is caught by writing \"Chapter_{ccc}\"."
+msgstr "Configuração manual: escreva {cc} onde o capítulo é posicionado. {ss} para sub-capítulos. {vv} para volumes. A quantidade de letras define a quantidade de números. \"Chapter_123\" é encontrado escrevendo \"Chapter_{ccc}\"."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:193
+msgid "Mass set the volume"
+msgstr "Definir o volume em massa"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:196
+msgid "Set first chapter number and +1 each next chapter"
+msgstr "Defina o número do primeiro capítulo e +1 em cada capítulo seguinte"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:199
+msgid "Mass set the teams"
+msgstr "definir as equipes em massa"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:205
+msgid "If you checked all chapter numbers"
+msgstr "Se você marcou todos os números de capítulo"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/import_compressed_list.php:211
+msgid "Currently adding chapters to"
+msgstr "Atualmente acrescentando capítulos para"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:4
+msgid "To search, write and hit enter"
+msgstr "Para pesquisar, escreva e tecle enter"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:14
+msgid "Add comic"
+msgstr "Adicionar mangá"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:40
+msgid "First"
+msgstr "Primeira"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:41
+msgid "Prev"
+msgstr "Anterior"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:47
+msgid "Next"
+msgstr "Próxima"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/comics/manage.php:48
+msgid "Last"
+msgstr "Última"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/database/upgrade.php:6
+msgid "There's a newer version of the database available. Just update it by clicking on the update button."
+msgstr "Há uma versão mais recente da base de dados disponível. Atualize clicando no botão \"atualizar\"."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/database/upgrade.php:8
+#, php-format
+msgid "In case you're using a very large installation of FoOlSlide, to avoid timeouts while updating the database, you can use the command line, and enter this: %s"
+msgstr "Se você estiver usando uma instalação muito grande do FoOlSlide, para evitar tempos de espera durante a atualização da base de dados, você pode usar a linha de comando, digite isto: %s"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/database/upgrade.php:14
+msgid "Do you really want to upgrade your database?"
+msgstr "Você realmente deseja atualizar sua base de dados?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/members/team.php:9
+msgid "Apply for membership"
+msgstr "Inscrever para adesão"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/members/team.php:11
+msgid "Do you really want to apply for membership in this team?"
+msgstr "Você realmente quer se candidatar a membro nesta equipe?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/members/team.php:25
+msgid "Make an user a leader by submitting his username:"
+msgstr "Fazer um úsuario líder escrevendo o nome dele:"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:11
+msgid "Upgrade FoOlSlide automatically"
+msgstr "Atualizar o FoOlSlide automaticamente "
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:13
+msgid "Do you really want to upgrade to the latest version?"
+msgstr "Você realmente quer fazer a atualização para a versão mais recente?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:18
+msgid "Download latest version"
+msgstr "Baixe a última versão"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:26
+msgid "Your FoOlSlide is up to date."
+msgstr "Seu FoOlSlide está atualizado."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/login_form.php:81
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:105
+msgid "Confirmation Code"
+msgstr "Código de Confirmação"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/login_form.php:89
+msgid "Remember me"
+msgstr "Lembre-me"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:1
+msgid "This registration is for future administrators, moderators and team members."
+msgstr "Esse registro é para os futuros administradores, moderadores e membros da equipe."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:2
+msgid "An administrator or team leader will have to accept you in their group."
+msgstr "Um administrador ou líder de equipe terá que aceitá-lo."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:3
+msgid "No functions will be available upon simple registration."
+msgstr "Nenhuma função estará disponível após o registro simples."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:53
+msgid "Username"
+msgstr "Nome de Usuário"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:59
+msgid "Email Address"
+msgstr "Endereço de e-mail"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:64
+msgid "Password"
+msgstr "Senha"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:69
+msgid "Confirm Password"
+msgstr "Confirme sua senha"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:81
+msgid "Get another CAPTCHA"
+msgstr "Obter outro CAPTCHA"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:82
+msgid "Get an audio CAPTCHA"
+msgstr "Obter um CAPTCHA de áudio"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:83
+msgid "Get an image CAPTCHA"
+msgstr "Obter uma imagem de CAPTCHA"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:88
+msgid "Enter the words above"
+msgstr "Digite as palavras acima"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:89
+msgid "Enter the numbers you hear"
+msgstr "Digite os números que ouvir"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/register_form.php:98
+msgid "Enter the code exactly as it appears"
+msgstr "Digite o código EXATAMENTE como aparece"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:24
+msgid "Make administrator"
+msgstr "Tornar administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:25
+msgid "Are you sure you want to make this user an administrator?"
+msgstr "Tem certeza que quer fazer este usuário um administrador?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:31
+msgid "Remove administrator"
+msgstr "Remover administrador"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:32
+msgid "Are you sure you want to remove this user from the administrator group?"
+msgstr "Tem certeza de que deseja remover este usuário do grupo administrador?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:38
+msgid "Make moderator"
+msgstr "Tornar moderador"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:39
+msgid "Are you sure you want to make this user a moderator?"
+msgstr "Tem certeza de que quer fazer este usuário moderador?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:45
+msgid "Remove moderator"
+msgstr "Remover moderador"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:46
+msgid "Are you sure you want to remove this user from the moderator group?"
+msgstr "Tem certeza de que deseja remover este usuário do grupo moderador?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/auth/user.php:53
+msgid "Profile"
+msgstr "Perfil"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/install/index.php:6
+msgid "This is all the needed information to install and run FoOlSlide. Don't worry: you can change this information later in case you need it changed."
+msgstr "Esta é toda a informação necessária para instalar e executar o FoOlSlide. Não se preocupe: você pode alterar essas informações mais tarde se precisar."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/install/manual_config.php:6
+#, php-format
+msgid "The installation was unable to automatically create the config.php file. You'll have to create %s and paste all the following inside the file. When done, just press on the button on the bottom to be redirected to your FoOlSlide installation."
+msgstr "A instalação não foi capaz de criar automaticamente o arquivo config.php. Você terá que criar %s e cole tudo a seguir dentro do arquivo. Quando terminar, basta pressionar no botão na parte inferior para ser redirecionado para a sua instalação do FoOlSlide."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/install/manual_config.php:28
+msgid "Done"
+msgstr "Pronto"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/comic.php:13
+msgid "Title"
+msgstr "Título"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/comic.php:22
+msgid "All chapters available for"
+msgstr "Todos os capítulos disponíveis para"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/comic.php:28
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/latest.php:24
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/list.php:24
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search.php:23
+msgid "by"
+msgstr "por"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/latest.php:4
+msgid "Latest released chapters"
+msgstr "Últimos capítulos lançados"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/list.php:8
+msgid "List of the available comics"
+msgstr "Lista de mangás disponíveis"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/list.php:18
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search.php:17
+msgid "No releases for this series"
+msgstr "Não existe lançamentos desta série"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/list.php:23
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search.php:22
+msgid "Latest release"
+msgstr "Lançamento mais recente"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/read.php:51
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/read.php:138
+msgid "Page"
+msgstr "Página"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search.php:8
+msgid "Search results for"
+msgstr "Resultados da busca por"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search_pre.php:7
+msgid "Search series"
+msgstr "pesquisar séries"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search_pre.php:10
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:100
+#: /Users/woxxy/github/FoOlSlide/content/themes/mobile/views/layouts/reader.php:24
+msgid "To search series, type and hit enter"
+msgstr "Para buscar uma série, escreva e tecle enter"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:8
+msgid "Team's page"
+msgstr "Página da equipe"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:13
+msgid "Informations"
+msgstr "Informações"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:16
+msgid "URL"
+msgstr "URL"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:18
+msgid "IRC"
+msgstr "IRC"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:20
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:42
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:62
+msgid "Twitter"
+msgstr "Twitter"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:22
+msgid "Facebook"
+msgstr "Facebook"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:27
+msgid "Team leaders"
+msgstr "Líderes da equipe"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:31
+msgid "No leaders in this team"
+msgstr "Nenhum líder nesta equipe"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:41
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:61
+msgid "Bio"
+msgstr "Bio"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/team.php:51
+msgid "No members in this team"
+msgstr "Nenhum membro nesta equipe"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:92
+msgid "Latest releases"
+msgstr "Últimos lançamentos"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/mobile/views/latest.php:3
+msgid "Go to series list"
+msgstr "Ir para a lista de séries"
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/mobile/views/layouts/reader.php:21
+msgid "Home"
+msgstr "Principal"
+

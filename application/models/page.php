@@ -195,10 +195,10 @@ class Page extends DataMapper {
 	 * @param	string|$description NOT USED
 	 * @return	boolean true on success, false on failure.
 	 */
-	public function add_page($filedata, $chapter_id, $hidden = 0, $description = "") {
+	public function add_page($path, $filename, $chapter_id) {
 
 		// Check if that file is actually an image
-		if (!$imagedata = @getimagesize($filedata["server_path"])) {
+		if (!$imagedata = @getimagesize($path)) {
 			log_message('error', 'add_page: uploaded file doesn\'t seem to be an image');
 			return false;
 		}
@@ -212,17 +212,9 @@ class Page extends DataMapper {
 			return false;
 		}
 
-		if ($hidden == 1)
-			$this->hidden = 1; else
-			$this->hidden = 0;
-		$this->description = $description;
-
-		// Decide if it should overwrite. Normally files get overwritten.
-		$overwrite = $filedata["overwrite"];
-
 		// Throw the image to the folder with this function
 		// While we aren't looking, this also creates the thumbnails
-		if (!$this->add_page_file($filedata)) {
+		if (!$this->add_page_file($path, $filename)) {
 			log_message('error', 'add_page: failed creating file');
 			return false;
 		}
@@ -234,26 +226,26 @@ class Page extends DataMapper {
 		// $imagedata = @getimagesize($filedata["server_path"]);
 		// We had set $imagedata before
 		// We already have the thumbnail! Get data for that too.
-		$thumbdata = @getimagesize($dir . "thumb_" . $filedata["name"]);
+		$thumbdata = @getimagesize($dir . "thumb_" . $filename);
 
 		// If a page in this chapter with the same filename exists, pick its ID and start updating it
 		// This makes so everything gets overwritten with no error
 		$page = new Page();
-		$page->where('chapter_id', $this->chapter_id)->where('filename', $filedata["name"])->get();
+		$page->where('chapter_id', $this->chapter_id)->where('filename', $filename)->get();
 		if ($page->result_count() > 0) {
 			$this->id = $page->id;
 		}
 
 		// Prepare the variables
-		$this->filename = $filedata["name"];
+		$this->filename = $filename;
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
-		$this->size = filesize($dir . $filedata["name"]);
+		$this->size = filesize($dir . $filename);
 		$this->mime = image_type_to_mime_type($imagedata["2"]);
 		$this->thumbwidth = $thumbdata["0"];
 		$this->thumbheight = $thumbdata["1"];
-		$this->thumbsize = filesize($dir . "thumb_" . $filedata["name"]);
+		$this->thumbsize = filesize($dir . "thumb_" . $filename);
 
 		// Check from the thumbnail if the image is in colors or not
 		$is_bw = $this->is_bw();
@@ -418,13 +410,13 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function add_page_file($filedata) {
+	public function add_page_file($path, $filename) {
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
 
 		// Get the directory and copy the image in the cache to the directory
 		$dir = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/";
-		if (!copy($filedata["server_path"], $dir . $filedata["name"])) {
+		if (!copy($path, $dir . $filename)) {
 			set_notice('error', _('Failed to add the page\'s file. Please, check file permissions.'));
 			log_message('error', 'add_page_file: failed to create/copy the image');
 			return false;
@@ -434,9 +426,8 @@ class Page extends DataMapper {
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
 		$img_config['image_library'] = 'GD2';
-		$img_config['source_image'] = $filedata["server_path"];
-		$img_config["new_image"] = $dir . "thumb_" . $filedata["name"];
-		$img_config['maintain_ratio'] = TRUE;
+		$img_config['source_image'] = $path;
+		$img_config["new_image"] = $dir . "thumb_" . $filename;
 		$img_config['width'] = 250;
 		$img_config['height'] = 250;
 		$img_config['maintain_ratio'] = TRUE;

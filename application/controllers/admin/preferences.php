@@ -3,22 +3,44 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Preferences extends Admin_Controller {
-
-	function __construct() {
+class Preferences extends Admin_Controller
+{
+	function __construct()
+	{
 		parent::__construct();
+
+		// preferences are settable only by admins!
 		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->tank_auth->is_admin() or redirect('admin');
 		$this->tank_auth->is_admin() or die(1);
+
+		// set controller title
 		$this->viewdata['controller_title'] = _("Preferences");
 	}
 
-	function index() {
+
+	/*
+	 * Just redirects to general
+	 * 
+	 * @author Woxxy
+	 */
+	function index()
+	{
 		redirect('/admin/preferences/general');
 	}
 
-	function _submit($post, $form) {
-		foreach ($form as $key => $item) {
+
+	/*
+	 * _submit is a private function that submits to the "preferences" table.
+	 * entries that don't exist are created. the preferences table could get very large
+	 * but it's not really an issue as long as the variables are kept all different.
+	 * 
+	 * @author Woxxy
+	 */
+	function _submit($post, $form)
+	{
+		foreach ($form as $key => $item)
+		{
 
 			if (isset($post[$item[1]['name']]))
 				$value = $post[$item[1]['name']];
@@ -27,10 +49,12 @@ class Preferences extends Admin_Controller {
 
 			$this->db->from('preferences');
 			$this->db->where(array('name' => $item[1]['name']));
-			if($this->db->count_all_results() == 1) {
+			if ($this->db->count_all_results() == 1)
+			{
 				$this->db->update('preferences', array('value' => $value), array('name' => $item[1]['name']));
 			}
-			else {
+			else
+			{
 				$this->db->insert('preferences', array('name' => $item[1]['name'], 'value' => $value));
 			}
 		}
@@ -38,20 +62,28 @@ class Preferences extends Admin_Controller {
 		$CI = & get_instance();
 		$array = $CI->db->get('preferences')->result_array();
 		$result = array();
-		foreach ($array as $item) {
+		foreach ($array as $item)
+		{
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
 		set_notice('notice', _('Settings changed.'));
 	}
 
-	function general() {
+
+	/*
+	 * Generic info influcencing all of FoOlSlide
+	 * 
+	 * @author Woxxy
+	 */
+	function general()
+	{
 		$this->viewdata["function_title"] = _("General");
 
 
 		$form = array();
 
-
+		// build the array for the form
 		$form[] = array(
 			_('Site title'),
 			array(
@@ -60,7 +92,8 @@ class Preferences extends Admin_Controller {
 				'id' => 'site_title',
 				'maxlength' => '200',
 				'placeholder' => _('comic reader'),
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Title that appears on top of your Slide')
 			)
 		);
 
@@ -72,7 +105,8 @@ class Preferences extends Admin_Controller {
 				'id' => 'back_url',
 				'maxlength' => '200',
 				'placeholder' => 'http://',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Small link that appears near title in public pages')
 			)
 		);
 
@@ -84,45 +118,56 @@ class Preferences extends Admin_Controller {
 				'id' => 'default_team',
 				'maxlength' => '200',
 				'placeholder' => 'Anonymous',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Default team for widgets and releases')
 			)
 		);
 
 
 		$form[] = array(
-			_('Default language'),
+			_('Default release language'),
 			array(
 				'type' => 'language',
 				'name' => 'fs_gen_default_lang',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Change the default release language, so you don\'t have to change it from English every time')
 			)
 		);
 
 		$form[] = array(
-			_('Show Anonymous as team?'),
+			_('Default software language'),
 			array(
-				'type' => 'checkbox',
-				'name' => 'fs_gen_anon_team_show',
-				'id' => 'anon_team_show',
-				'placeholder' => '',
-				'preferences' => 'fs_gen'
+				'type' => 'dropdowner',
+				'name' => 'fs_gen_lang',
+				'values' => array('' => 'English', 'es_ES.utf8' => 'Spanish', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)'),
+				'preferences' => 'fs_gen',
+				'help' => _('Changes the overall language of the FoOlSlide software. If you can\'t find your language, you can contribute by translating on <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">our transifex project</a>')
 			)
 		);
 
-		if ($post = $this->input->post()) {
+		if ($post = $this->input->post())
+		{
 			$this->_submit($post, $form);
 		}
 
+		// create a form
 		$table = tabler($form, FALSE);
-
 		$data['table'] = $table;
 
-
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	function theme() {
+
+
+	/*
+	 * Allows setting basic variables for theme.
+	 * Does not yet allow adding more variables from current theme.
+	 * 
+	 * @author Woxxy
+	 */
+	function theme()
+	{
 		$this->viewdata["function_title"] = _("Theme");
 
 
@@ -147,7 +192,7 @@ class Preferences extends Admin_Controller {
 				'preferences' => 'fs_gen'
 			)
 		);
-		
+
 		$form[] = array(
 			_('Header code'),
 			array(
@@ -157,7 +202,7 @@ class Preferences extends Admin_Controller {
 				'preferences' => 'fs_gen'
 			)
 		);
-		
+
 		$form[] = array(
 			_('Footer code'),
 			array(
@@ -167,21 +212,29 @@ class Preferences extends Admin_Controller {
 				'preferences' => 'fs_gen'
 			)
 		);
-		
-		if ($post = $this->input->post()) {
+
+		if ($post = $this->input->post())
+		{
 			$this->_submit($post, $form);
 		}
 
+		// create the form
 		$table = tabler($form, FALSE);
-
 		$data['table'] = $table;
 
-
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
-	function advertising() {
+
+	/*
+	 * Code boxes to add the ads' code, supporting top and bottom ads
+	 * 
+	 * @author Woxxy
+	 */
+	function advertising()
+	{
 		$this->viewdata["function_title"] = _("Advertising");
 
 		$form = array();
@@ -220,38 +273,6 @@ class Preferences extends Admin_Controller {
 		);
 
 		$form[] = array(
-			_('Right banner'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_ads_left_banner',
-				'help' => _('Insert the HTML provided by your advertiser'),
-				'preferences' => 'fs_ads'
-			)
-		);
-
-		$form[] = array(
-			_('Reload every pageview?'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_left_banner_reload',
-				'placeholder' => '',
-				'preferences' => 'fs_ads',
-				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
-			)
-		);
-
-
-		$form[] = array(
-			_('Active'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_left_banner_active',
-				'placeholder' => '',
-				'preferences' => 'fs_ads'
-			)
-		);
-
-		$form[] = array(
 			_('Bottom banner'),
 			array(
 				'type' => 'textarea',
@@ -283,9 +304,11 @@ class Preferences extends Admin_Controller {
 			)
 		);
 
-		if ($post = $this->input->post()) {
+		if ($post = $this->input->post())
+		{
 			$this->_submit($post, $form);
 
+			// this code is necessary to keep the ad well centered inside iframes
 			$ad_before = '<!DOCTYPE html>
 						<html>
 						  <head>
@@ -297,25 +320,33 @@ class Preferences extends Admin_Controller {
 			$ad_after = '</body>
 						</html>';
 
-			$ads = array('fs_ads_top_banner' => 'ads_top.html', 'fs_ads_bottom_banner' => 'ads_bottom.html', 'fs_ads_left_banner' => 'ads_left.html');
-			foreach ($ads as $ad => $adfile) {
-				if (!write_file('./content/ads/' . $adfile, $ad_before . $this->input->post($ad) . $ad_after)) {
+			// available ads
+			$ads = array('fs_ads_top_banner' => 'ads_top.html', 'fs_ads_bottom_banner' => 'ads_bottom.html');
+
+			// write an HTML file, so calling it will use less processor power than calling the database via Codeigniter
+			// this recreates the files every time one saves
+			foreach ($ads as $ad => $adfile)
+			{
+				if (!write_file('./content/ads/' . $adfile, $ad_before . $this->input->post($ad) . $ad_after))
+				{
 					log_message('error', 'preferences.php/advertising: couldn\'t update HTML files');
 					set_notice('error', _('Couldn\'t save the advertising code in the HTML'));
 				}
 			}
 		}
 
+		// create the form
 		$table = tabler($form, FALSE);
-
 		$data['table'] = $table;
 
-
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	function registration() {
+
+
+	function registration()
+	{
 		$this->viewdata["function_title"] = _("Registration");
 
 
@@ -332,7 +363,7 @@ class Preferences extends Admin_Controller {
 				'help' => _('Disable registration in case you\'re not expecting any')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Disable activation email'),
 			array(
@@ -366,20 +397,28 @@ class Preferences extends Admin_Controller {
 			)
 		);
 
-		if ($post = $this->input->post()) {
+		if ($post = $this->input->post())
+		{
 			$this->_submit($post, $form);
 		}
 
+		// prepare form
 		$table = tabler($form, FALSE);
-
 		$data['table'] = $table;
 
-
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	function reader() {
+
+
+	/*
+	 * Reader configuration
+	 * 
+	 * @author Woxxy
+	 */
+	function reader()
+	{
 		$this->viewdata["function_title"] = _("Reading");
 
 
@@ -408,47 +447,19 @@ class Preferences extends Admin_Controller {
 			)
 		);
 
-		if ($post = $this->input->post()) {
+		if ($post = $this->input->post())
+		{
 			$this->_submit($post, $form);
 		}
 
+		// create form
 		$table = tabler($form, FALSE);
-
 		$data['table'] = $table;
 
-
+		// print out
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
-	function server() {
-		show_404();
-		$this->viewdata["function_title"] = _("Server");
-
-		if ($post = $this->input->post()) {
-			$this->_submit($post);
-		}
-
-		$form = array();
-
-
-		$form[] = array(
-			_('Input on each line the URL of FoOlSlide on the other server.'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_srv_servers',
-				'placeholder' => _('List of servers'),
-				'preferences' => 'fs_srv'
-			)
-		);
-
-		$table = tabler($form, FALSE);
-
-		$data['table'] = $table;
-
-
-		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
-		$this->load->view("admin/default.php", $this->viewdata);
-	}
 
 }

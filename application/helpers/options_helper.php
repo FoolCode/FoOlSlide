@@ -130,6 +130,7 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 /**
  * Returns a random string
  * 
+ * @todo this is returning only numbers for some reason
  * @param int length of string to generate
  * @return string random string
  */
@@ -164,15 +165,17 @@ function relative_date($time) {
 	$reldays = ($time - $today) / 86400;
 
 	if ($reldays >= 0 && $reldays < 1) {
-		return 'Today';
+		return _('Today');
 	}
 	else if ($reldays >= 1 && $reldays < 2) {
-		return 'Tomorrow';
+		return _('Tomorrow');
 	}
 	else if ($reldays >= -1 && $reldays < 0) {
-		return 'Yesterday';
+		return _('Yesterday');
 	}
 
+	/* THIS SCREWS UP WITH THE GETTEXT
+	 * @todo fix the relative days' gettext
 	if (abs($reldays) < 7) {
 		if ($reldays > 0) {
 			$reldays = floor($reldays);
@@ -183,7 +186,8 @@ function relative_date($time) {
 			return $reldays . ' day' . ($reldays != 1 ? 's' : '') . ' ago';
 		}
 	}
-
+	*/
+	
 	if (abs($reldays) < 182) {
 		return date('jS F', $time ? $time : time());
 	}

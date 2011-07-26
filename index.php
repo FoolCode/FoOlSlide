@@ -179,17 +179,6 @@ else {
 }
 
 
-/*
-
-  $locale = "it_IT.utf8";
-  putenv("LANG=$locale");
-  setlocale(LC_ALL, $locale);
-  bindtextdomain("admin", FCPATH."assets/locale");
-  textdomain("admin");
- * 
- * 
- */
-
 if (!function_exists("gettext")) {
 	include('assets/php-gettext/gettext.inc');
 }

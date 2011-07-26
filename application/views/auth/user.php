@@ -50,7 +50,7 @@ if ($CI->tank_auth->is_admin() && $CI->tank_auth->is_mod($user->id))
 echo buttoner();
 echo $table;
 ?>
-<div class="section"><?php _("Profile") ?></div>
+<div class="section"><?php echo _("Profile") ?></div>
 
 <?php
 $CI->buttoner = array();

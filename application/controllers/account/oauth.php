@@ -31,12 +31,12 @@
   THE SOFTWARE.
  */
 
-class Oauth extends Public_Controller
+class Oauth extends Account_Controller
 {
 	function __construct()
 	{
+		show_404();
 		parent::__construct();
-
 		$this->load->helper('url');
 		$this->load->library('oauth_auth_server');
 	}

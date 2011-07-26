@@ -334,21 +334,30 @@ input:-moz-placeholder {
 }
 
 .incontent.login .formgroup {
-	margin: 0px auto 16	px;
+	margin: 0px auto 13px;
 }
 
 .incontent.login .formgroup div {
-	margin: 0px auto 5px;
+	margin: 0px auto 2px;
 }
 
 .incontent.login div input[type=text],
 .incontent.login div input[type=password]
 {
+	background: rgba(255,255,255,0.8);
 	width:384px;
 	height:25px;
 	font-size:14px;
 	padding:2px 8px;
 	border:1px solid #bbb;
+}
+
+.incontent.login div input[type=text]:hover,
+.incontent.login div input[type=password]:hover,
+.incontent.login div input[type=text]:focus,
+.incontent.login div input[type=password]:focus{
+	background: rgba(255,255,255,1.0);
+	border:1px solid #999;
 }
 
 .incontent.login div input[type=checkbox]

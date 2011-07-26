@@ -29,6 +29,10 @@ class Profile extends Account_Controller
 		$data["user_display_name"] = $profile->display_name;
 		$data["user_twitter"] = $profile->twitter;
 		$data["user_bio"] = $profile->bio;
+		
+		$this->viewdata["function_title"] = _("Your profile");
+		$this->viewdata["main_content_view"] = $this->load->view('account/profile/profile', $data, TRUE);
+		$this->load->view("account/default.php", $this->viewdata);
 	}
 
 

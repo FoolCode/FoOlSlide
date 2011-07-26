@@ -70,7 +70,7 @@ class Members extends Admin_Controller
 		$data['table'] = tabler($form, TRUE, FALSE);
 
 		// print out
-		$this->viewdata["main_content_view"] = $this->load->view('auth/member_list', $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
@@ -122,7 +122,7 @@ class Members extends Admin_Controller
 		$data['profile'] = tabler($profile_table, TRUE, ($this->tank_auth->is_allowed() || $this->uri->segment(3) != 'you'));
 
 		// print out
-		$this->viewdata["main_content_view"] = $this->load->view('auth/user', $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view('admin/members/user', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
 	}
 

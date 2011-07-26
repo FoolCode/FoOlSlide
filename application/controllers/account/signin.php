@@ -31,10 +31,11 @@
 	THE SOFTWARE.
 */
 
-class Signin extends Public_Controller {
+class Signin extends Account_Controller {
 	
 	function __construct()
 	{
+		show_404();
 		parent::__construct();
 	}
 		

@@ -201,7 +201,7 @@ input[type="text"]
     max-width: 1000px;
     padding:10px 10px 9px;
     color: #bbb;
-    margin:10px auto 0;
+    margin:0 auto;
 }
 
 #footer .text
@@ -430,7 +430,7 @@ ul.dropdown li a
 
 .panel a
 {
-	color:#333;
+    color:inherit;
 }
 
 .panel a:hover
@@ -441,33 +441,35 @@ ul.dropdown li a
 
 .list
 {
-	padding:10px;
-	margin:0;
+    padding:10px;
+    margin:0;
 
-	overflow:hidden;
+    overflow:hidden;
 
-	background:#eeecea;
-	color:#aaa;
-	border:1px solid #999;
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	z-index:-1;
+    background:#eeecea;
+    color:#aaa;
+    border:1px solid #999;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    z-index:-1;
 
-	padding:15px 10px 15px 10px;
+    padding:15px 10px 15px 10px;
+    
     color:#666;
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
     border:1px solid rgba(56,56,56,0.4);
+    
     background: -webkit-gradient(
-        linear, left top, left bottom,
-        color-stop(0, rgba(234, 231, 229,.8)),
-        color-stop(1, rgba(234, 231, 229,.5))
-		);
-	background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
-	background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+    linear, left top, left bottom,
+    color-stop(0, rgba(234, 231, 229,.8)),
+    color-stop(1, rgba(234, 231, 229,.5))
+    );
+    background: -o-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
+    background: -moz-linear-gradient(rgba(234, 231, 229,.8),rgba(234, 231, 229,.5));
 
 
     box-shadow: 1px 1px 2px rgba(81,81,92,0.7) inset, 1px 1px 1px rgba(255,255,255,0.7);
@@ -565,28 +567,27 @@ ul.dropdown li a
 
 .large
 {
-	padding:5px;
-        padding-top:6px;
-        padding-bottom:3px;
-	margin:0 0 10px;
+    padding:5px;
+    padding-top:6px;
+    padding-bottom:3px;
+    margin:0 0 10px;
 
-	overflow:hidden;
+    overflow:hidden;
 
-	background:#eeecea;
-	border:1px solid #999;
-	
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	z-index:-1;
+    background:#eeecea;
+    border:1px solid #999;
+
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    z-index:-1;
         
-        
-    
     color:rgba(0,0,0,0.7);
     text-shadow: 1px 1px #f6f6f6;
     text-shadow: 1px 1px rgba(255,255,255,0.5);
     border-radius:4px;
     border:1px solid rgba(56,56,56,0.4);
+    
     background: -webkit-gradient(
         linear, left top, left bottom,
         color-stop(0, rgba(234, 231, 229,.8)),
@@ -884,7 +885,6 @@ ul.dropdown li a
 
 .topbar{
     margin:0px 0px 3px;
-    border-bottom:1px solid rgba(71,82,87,1);
     position:relative;
 
     background:#535353;
@@ -899,6 +899,9 @@ ul.dropdown li a
     moz-box-shadow:0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
 
+    
+    border-bottom:1px solid rgba(71,82,87,1);
+    
     border-radius:5px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
@@ -919,7 +922,7 @@ ul.dropdown li a
     /*width:50%;*/
 }
 
-.topbar_right>*{
+.topbar_right div{
     float:right;
     margin-right:5px;
 }
@@ -989,15 +992,18 @@ ul.dropdown
 {
     display:none;
     
-    background: rgb(249,249,249); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(255,255,255,1) 74%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(249,249,249,1)), color-stop(74%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(249,249,249,1) 0%,rgba(255,255,255,1) 74%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(249,249,249,1) 0%,rgba(255,255,255,1) 74%); /* Opera11.10+ */
-    background: -ms-linear-gradient(top, rgba(249,249,249,1) 0%,rgba(255,255,255,1) 74%); /* IE10+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-    background: linear-gradient(top, rgba(249,249,249,1) 0%,rgba(255,255,255,1) 74%); /* W3C */
-
+    background:#535353;
+    background: -webkit-gradient(
+    linear, left top, left bottom,
+    color-stop(0, rgba(56,56,56,.8)),
+    color-stop(1, rgba(56,56,56,1.0))
+    );
+    background: -o-linear-gradient(rgba(56,56,56,.8),rgba(56,56,56,1.0));
+    background: -moz-linear-gradient(rgba(56,56,56,.8),rgba(56,56,56,1.0));
+    box-shadow: 0px -1px 1px rgba(255,255,255,0.8) inset, 0px 0px 4px rgba(0,0,0,1);
+    moz-box-shadow:0px -1px 1px rgba(255,255,255,.8) inset, 0px 0px 4px rgba(0,0,0,1);
+    -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.8) inset, 0px 0px 4px rgba(0,0,0,1);
+    
     font-size:14px;
     position:absolute;
     top:16px;
@@ -1024,7 +1030,7 @@ ul.dropdown
 
 .dropdown_right ul.dropdown
 {
-    right:0px;
+    right:4px;
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -1043,15 +1049,76 @@ ul.dropdown li a
     height:100%;
 }
 
-.topbar a{
-    color:inherit;
+/***********
+*Bottom Bar*
+***********/
+
+#bottombar{
+    margin-top:10px;
+    margin-right:auto;
+    margin-left:auto;
+    
+    height:30px;
+    max-width:998px;
+    
+    color:white;
+}
+
+#bottombar{
+    background:#535353;
+    background: -webkit-gradient(
+    linear, left top, left bottom,
+    color-stop(0, rgba(56,56,56,.7)),
+    color-stop(1, rgba(56,56,56,1.0))
+    );
+    background: -o-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+    background: -moz-linear-gradient(rgba(56,56,56,.7),rgba(56,56,56,1.0));
+    box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+    moz-box-shadow:0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,0.4) inset, 0px 0px 4px rgba(0,0,0,0.5);
+
+    
+    border-bottom:1px solid rgba(71,82,87,1);
+    
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+}
+
+#bottombar .pagenumber{
+    float:left;
+    
+    width:30px;
+    
+    margin-top:4px;
+    margin-left:10px;
+    
+    color:white;
+}
+
+#bottombar .socialbuttons{
+    
+    float:right;
+}
+
+#bottombar .socialbuttons .tweet{
+    margin-top:4px;
+    
+    float:right;
+    position:relative;
+}
+
+#bottombar .socialbuttons .fblike{
+    display:block;
+    overflow:hidden;
+    width:20px;
 }
 
 /*************
-*page numbers*
+*Page Numbers*
 *************/
 
-.number
+.topbar_right .number
 {
     text-shadow:none;
     
@@ -1063,27 +1130,27 @@ ul.dropdown li a
     text-align:center;
     font-size:14px;
     font-family: Cambria, Georgia, Times, Times New Roman, serif;
-    border: 1px solid #999;
+    border: 1px dashed #999;
 }
 
-.number a
+.topbar_right .number a
 {
     display:block;
     padding:6px;
-    
+    color:inherit;
 }
 
-.number .current_page
+.topbar_right .number.current_page
 {
-    border:1px solid #999 !important;
+    border:1px solid lightgray !important;
 }
 
-.number .loaded
+.topbar_right .number.loaded
 {
-    border:1px solid #93D4A3;
+    border:1px solid #999;
 }
 
-.number:hover 
+.topbar_right .number:hover
 {
     border:1px solid #444;
 }

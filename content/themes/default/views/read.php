@@ -58,13 +58,15 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
                     </div>		
 
                     <div class="divider"></div>
-                    <?php
-                        //for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
-                        for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
-                                $current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
-                                echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
-                        }
-                    ?>
+                    <span class="numbers">
+                        <?php
+                            //for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
+                            for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
+                                    $current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
+                                    echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
+                            }
+                        ?>
+                    </span>
                 </div>
             </div>
 	</div>
@@ -115,6 +117,18 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 
 
 <div class="clearer"></div>
+
+<div id="bottombar">
+    <div class="pagenumber">
+        -<?php echo $current_page ?>-
+    </div>
+    <div class="socialbuttons">
+        <div class="tweet">
+            <a href="http://twitter.com/share" class="twitter-share-button" data-url="<?php echo $chapter->href() ?>" data-count="horizontal" data-via="<?php echo get_setting_twitter(); ?>" data-related="<?php echo get_setting_twitter(); ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
 <script type="text/javascript">
 
@@ -315,17 +329,19 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			nextnumber = ((j/1000 < 1 && pages.length >= 1000)?'0':'') + ((j/100 < 1 && pages.length >= 100)?'0':'') + ((j/10 < 1 && pages.length >= 10)?'0':'') + j;
 			result += "<div class='number number_"+ j +" dnone'><a href='" + baseurl + "page/" + j + "' onClick='changePage("+(j-1)+"); return false;'>"+nextnumber+"</a></div>"; 
 		}
-		jQuery(".numbers .current").html(result);
+		jQuery(".topbar_right .numbers").html(result);
 	}
 	
 	function update_numberPanel()
 	{
-		jQuery('.number.current_page').removeClass('current_page');
-		jQuery('.numbers .number_'+(current_page+1)).addClass('current_page');
-		jQuery('.numbers .number').addClass('dnone');
+		jQuery('.topbar_right .number.current_page').removeClass('current_page');
+		jQuery('.topbar_right .number_'+(current_page+1)).addClass('current_page');
+		jQuery('.topbar_right .number').addClass('dnone');
 		for (i = ((val = current_page - 1) <= 0)?(1):val; i <= pages.length && i < current_page + 4; i++) {
-			jQuery('.numbers .number_'+i).removeClass('dnone');
+			jQuery('.number_'+i).removeClass('dnone');
 		}
+                
+                jQuery('.pagenumber').html('-' + (current_page+1) + '-');
 	}
 	
 	function chapters_dropdown()
@@ -455,8 +471,9 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			url = 1;
 		current_page = url-1;
 		History.pushState(null, null, baseurl+'page/' + (current_page+1));
-		create_numberPanel();
 		changePage(current_page, false, true);
+                create_numberPanel();
+                update_numberPanel();
 		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;	
 		
 		jQuery(window).resize(function() {

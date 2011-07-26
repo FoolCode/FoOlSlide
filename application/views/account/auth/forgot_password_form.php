@@ -16,15 +16,20 @@
 		$login_label = 'Email';
 	}
 	?>
-<?php echo form_open($this->uri->uri_string()); ?>
+	<?php echo form_open($this->uri->uri_string()); ?>
 	<div class="formgroup">
 		<div><?php echo form_label($login_label, $login['id']); ?></div>
 		<div><?php echo form_input($login); ?></div>
 		<div style="color: red;"><?php echo form_error($login['name']); ?><?php echo isset($errors[$login['name']]) ? $errors[$login['name']] : ''; ?></div>
 	</div>
 	<div class="formgroup">
-<?php echo form_submit('reset', 'Get a new password'); ?>
+		<div>
+			<?php echo form_submit('reset', 'Get a new password'); ?>
+		</div>
 	</div>
-<?php echo form_close(); ?>
-
-<a href="<? echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
+	<?php echo form_close(); ?>
+	<div class="formgroup">
+		<div>
+			<a href="<? echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
+		</div>
+	</div>

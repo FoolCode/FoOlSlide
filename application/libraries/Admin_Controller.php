@@ -58,7 +58,6 @@ class Admin_Controller extends MY_Controller {
 		"icon" => 122,
 		"content" => array(
 			"members" => array("level" => "mod", "name" => _("Member list")),
-			"you" => array("level" => "member", "name" => _("Your profile")),
 			"teams" => array("level" => "member", "name" => _("Team list")),
 			"home_team" => array("level" => "member", "name" => _("Home team")),
 			"add_team" => array("level" => "mod", "name" => _("Add team"))

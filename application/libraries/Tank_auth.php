@@ -171,7 +171,7 @@ class Tank_auth
 		if (is_null($user_id))
 		{
 			// use the userdata
-			if ($this->ci->session->userdata('group') === 1)
+			if ($this->ci->session->userdata('group') === '1')
 			{
 				return TRUE;
 			}
@@ -206,7 +206,7 @@ class Tank_auth
 		if (is_null($user_id))
 		{
 			// use the userdata
-			if ($this->ci->session->userdata('group') === 3)
+			if ($this->ci->session->userdata('group') === '3')
 			{
 				return TRUE;
 			}
@@ -236,7 +236,7 @@ class Tank_auth
 			return FALSE;
 		if ($this->is_mod() || $this->is_admin())
 			return TRUE;
-		return false;
+		return FALSE;
 	}
 
 
@@ -266,8 +266,8 @@ class Tank_auth
 		$group = new Group();
 		$group->where('name', $group_name)->get();
 		if ($group->id == $group_id)
-			return true;
-		return false;
+			return TRUE;
+		return FALSE;
 	}
 
 
@@ -913,11 +913,15 @@ class Tank_auth
 					{
 
 						// Login user
+						$profile = new Profile();
+						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
 							'status' => STATUS_ACTIVATED,
+							'group' => $profile->group_id
 						));
+						
 
 						// Renew users cookie to prevent it from expiring
 						set_cookie(array(

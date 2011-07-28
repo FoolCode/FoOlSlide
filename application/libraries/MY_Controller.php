@@ -27,7 +27,7 @@ class MY_Controller extends CI_Controller {
 				geoip_close($gi);
 				$this->session->set_userdata('nation', $nation);
 			}
-			
+
 			if($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
 				$this->session->set_userdata('nation', '');
 			}
@@ -35,7 +35,8 @@ class MY_Controller extends CI_Controller {
 			// loads variables from database for get_setting()
 			load_settings();
 			
-			// This is the first chance we get to load the right translation file
+			// This 
+			//is the first chance we get to load the right translation file
 			if (get_setting('fs_gen_lang')) {
 				$locale = get_setting('fs_gen_lang');
 				putenv("LANG=$locale");

@@ -316,33 +316,43 @@ input:-moz-placeholder {
 
 
 .incontent {
-	background: #C2E6FF;
-	width:900px;
-	margin: 0 auto;
-	box-shadow: 0px 2px 8px #555;
-	-webkit-box-shadow: 0px 2px 8px #555;
-	-moz-box-shadow: 0px 2px 8px #555;
+	font-family: Cambria, Georgia, Times, Times New Roman, serif;
 	color: #444;
 	color: rgba(0,0,0,0.7);
 }
 
 .incontent.login {
+	background: #C2E6FF;
 	width:400px;
 	margin-top:-40px;
 	padding: 20px 15px 20px;
 	font-size:15px;
+	box-shadow: 0px 2px 8px #555;
+	-webkit-box-shadow: 0px 2px 8px #555;
+	-moz-box-shadow: 0px 2px 8px #555;
 }
 
-.incontent.login .formgroup {
+.incontent.panel {
+	width:960px;
+	margin: 20px auto 0px;
+}
+
+.incontent .formgroup {
 	margin: 0px auto 13px;
 }
 
-.incontent.login .formgroup div {
+.incontent .formgroup div {
 	margin: 0px auto 2px;
 }
 
-.incontent.login div input[type=text],
-.incontent.login div input[type=password]
+.incontent div input
+{
+    font-family: Arial, sans-serif;
+}
+
+.incontent div input[type=text],
+.incontent div input[type=password],
+.incontent div textarea
 {
 	background: rgba(255,255,255,0.8);
 	width:384px;
@@ -352,20 +362,26 @@ input:-moz-placeholder {
 	border:1px solid #bbb;
 }
 
-.incontent.login div input[type=text]:hover,
-.incontent.login div input[type=password]:hover,
-.incontent.login div input[type=text]:focus,
-.incontent.login div input[type=password]:focus{
+.incontent div input[type=text]:hover,
+.incontent div input[type=password]:hover,
+.incontent div textarea:hover,
+.incontent div input[type=text]:focus,
+.incontent div input[type=password]:focus,
+.incontent div textarea:focus {
 	background: rgba(255,255,255,1.0);
 	border:1px solid #999;
 }
 
-.incontent.login div input[type=checkbox]
+.incontent div textarea {
+	height:150px;
+}
+
+.incontent div input[type=checkbox]
 {
 	margin-left: 8px;
 }
 
-.incontent.login div input[type=submit]
+.incontent div input[type=submit]
 {
 	width:400px;
 	height:30px;
@@ -379,7 +395,7 @@ input:-moz-placeholder {
 	border:2px solid #88EB88;
 }
 
-.incontent.login table {
+.incontent table {
 	width:100%;
 	text-align:center;
 	border-collapse:collapse;
@@ -390,7 +406,8 @@ input:-moz-placeholder {
 	width:50%;
 }
 
-.incontent.login a.button {
+.incontent a.button {
+    font-family: Arial, sans-serif;
 	font-size:13px;
 	color:#fff;
 	padding: 4px 0;
@@ -405,16 +422,16 @@ input:-moz-placeholder {
 	text-align:center;
 }
 
-.incontent.login table a:hover,.incontent.login input[type=submit]:hover {
+.incontent table a:hover,.incontent input[type=submit]:hover {
 	background:#44AF44;
 	cursor:pointer;
 }
 
-.incontent.login a.yellow {
+.incontent a.yellow {
 	background:#ECB96B;
 	border: 2px solid #F5D5A6;
 }
 
-.incontent.login a.yellow:hover {
+.incontent a.yellow:hover {
 	background:#D39841;
 }

@@ -87,6 +87,14 @@ if ($CI->agent->is_browser('MSIE'))
 						<img class="icon on" src="<?php echo glyphish(158, TRUE) ?>" />
 						<?php echo _("Reader") ?></a>
 				</div>
+				<?php if (isset($this->tank_auth) && $this->tank_auth->is_allowed())
+				{ ?><div class="element">
+						<a href="<?php echo site_url('admin'); ?>">
+							<img class="icon off" src="<?php echo glyphish(116) ?>" />
+							<img class="icon on" src="<?php echo glyphish(116, TRUE) ?>" />
+							<?php echo _("Admin panel") ?></a>
+					</div>
+				<?php } ?>
 				<?php if (isset($this->tank_auth) && $this->tank_auth->is_logged_in())
 				{ ?><div class="element">
 						<a href="<?php echo site_url('/account/auth/logout'); ?>">
@@ -102,7 +110,7 @@ if ($CI->agent->is_browser('MSIE'))
 				<div class="title"><?php if (isset($this->tank_auth))
 					echo get_setting('fs_gen_site_title'); ?> - <?php echo _('Account'); ?></div>
 
-				<div class="subtitle"><?php echo $function_title ?></div>
+				<div class="subtitle"><?php if($this->tank_auth->is_logged_in()) echo $this->tank_auth->get_username().': '; echo $function_title ?></div>
 
 
 			</div>

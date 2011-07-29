@@ -42,6 +42,7 @@ $route['default_controller'] = "reader";
 $route['admin'] = "admin/index";
 $route['account'] = "account/index/profile";
 $route['account/profile'] = "account/index/profile";
+$route['account/teams'] = "account/index/teams";
 $route['reader/list'] = 'reader/lista';
 $route['reader/list/(:num)'] = 'reader/lista/$1';
 $route['admin/members/members'] = 'admin/members/membersa';

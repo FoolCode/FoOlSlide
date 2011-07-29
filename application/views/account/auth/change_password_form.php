@@ -19,7 +19,7 @@
 		'size' => 30,
 	);
 	?>
-	<?php echo form_open($this->uri->uri_sdiving()); ?>
+	<?php echo form_open(); ?>
 	<div class="formgroup">
 		<div><?php echo form_label('Old Password', $old_password['id']); ?></div>
 		<div><?php echo form_password($old_password); ?></div>
@@ -41,4 +41,6 @@
 		</div>
 	</div>
 	<?php echo form_close(); ?>
+	<a href="<? echo site_url('/account/profile/') ?>" class="button yellow"><?php echo _("Back to profile") ?></a>
+
 </div>

@@ -110,9 +110,17 @@ if ($CI->agent->is_browser('MSIE'))
 				<div class="title"><?php if (isset($this->tank_auth))
 					echo get_setting('fs_gen_site_title'); ?> - <?php echo _('Account'); ?></div>
 
-				<div class="subtitle"><?php if($this->tank_auth->is_logged_in()) echo $this->tank_auth->get_username().': '; echo $function_title ?></div>
+				<div class="subtitle"><?php if ($this->tank_auth->is_logged_in())
+						echo $this->tank_auth->get_username() . ': '; echo $function_title ?></div>
 
-
+				<?php
+				if (isset($navbar))
+				{
+					echo '<div id="navbar">';
+					echo $navbar;
+					echo '</div>';
+				}
+				?>
 			</div>
 
 			<div id="content_wrap">
@@ -158,7 +166,7 @@ if ($CI->agent->is_browser('MSIE'))
 							?>
 						</div>
 
-						<?php echo $main_content_view; ?>
+<?php echo $main_content_view; ?>
 
 					</div></div>
 				<div class="clearer"></div>

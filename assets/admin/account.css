@@ -61,11 +61,20 @@ h2
 
 table
 {
+	width:100%;
+	text-align:left;
+	margin: 8px 0;
+}
+
+tr
+{
+	border-bottom:1px solid #999;
 }
 
 td
 {
     padding: 3px;
+	text-align:left;
 }
 
 form {
@@ -121,6 +130,9 @@ input:-moz-placeholder {
 	font-family: Cambria, Georgia, Times, Times New Roman, serif;
 	padding:0px 15px 8px 15px;
 	text-align:center;
+	position:relative;
+	border-bottom: 	2px solid #C2E6FF;
+
 }
 
 #header a
@@ -149,12 +161,41 @@ input:-moz-placeholder {
 	padding-top:3px;
 }
 
+#navbar {
+
+	width:960px;
+	margin:0 auto;
+	position:absolute;
+	bottom:-2px;
+	right: 50%;
+	margin-right: -480px;
+}
+
+#navbar a {
+	text-align:center;
+	width: 120px;
+	padding: 4px 0 2px;
+	display:block;
+	float:left;
+	background: #fff;
+	margin-right:6px;
+	border: 2px solid #C2E6FF;
+	border-bottom:none;
+	font-size:16px;
+	color:#444;
+}
+
+#navbar a.active, #navbar a:hover {
+	background:#D3EDFF;
+	padding: 4px 0;
+}
 
 #nav {
     font-family: Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
 	position:absolute;
 	top:0;
 	right:20px;
+	z-index:800;
 	font-size:14px;
 	text-shadow:0px 0px 1px #333;
 	margin:0px 0px 3px;
@@ -319,6 +360,10 @@ input:-moz-placeholder {
 	font-family: Cambria, Georgia, Times, Times New Roman, serif;
 	color: #444;
 	color: rgba(0,0,0,0.7);
+	overflow:hidden;
+	margin: 0 auto;
+	position:relative;
+	z-index:500;
 }
 
 .incontent.login {
@@ -335,6 +380,18 @@ input:-moz-placeholder {
 .incontent.panel {
 	width:960px;
 	margin: 20px auto 0px;
+}
+
+.incontent .left {
+	float:left;
+	width:400px;
+	margin: 0 80px 0 0;
+}
+
+.incontent .right {
+	float:right;
+	width:400px;
+	margin: 0 0 0 80px;
 }
 
 .incontent .formgroup {
@@ -402,7 +459,7 @@ input:-moz-placeholder {
 	border-spacing:0px;
 }
 
-.incontent.login table td {
+.incontent table td {
 	width:50%;
 }
 
@@ -412,7 +469,7 @@ input:-moz-placeholder {
 	color:#fff;
 	padding: 4px 0;
 	display:block;
-	margin:0px;
+	margin:0px auto;
 	font-weight:bold;
 	background:#63C563;
 	border-radius:5px;
@@ -422,7 +479,7 @@ input:-moz-placeholder {
 	text-align:center;
 }
 
-.incontent table a:hover,.incontent input[type=submit]:hover {
+.incontent a:hover, .incontent input[type=submit]:hover {
 	background:#44AF44;
 	cursor:pointer;
 }

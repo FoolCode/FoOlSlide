@@ -296,7 +296,7 @@ class Tank_auth
 		{
 			$memberships = new Membership();
 			$memberships->where('user_id', $this->get_user_id())->where('accepted', 1)->get();
-			$this->cached['memberships'] = $memberships;
+			$this->cached['memberships'] = $memberships->get_clone();
 		}
 		else
 		{
@@ -378,7 +378,7 @@ class Tank_auth
 		{
 			$memberships = new Membership();
 			$memberships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1)->get();
-			$this->cached['leaderships'] = $memberships;
+			$this->cached['leaderships'] = $memberships->get_clone();
 		}
 		else
 		{

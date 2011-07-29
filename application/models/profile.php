@@ -17,17 +17,17 @@ class Profile extends DataMapper {
 			'label' => 'Group ID',			
 		),
 		'display_name' => array(
-			'rules' => array(),
+			'rules' => array('max_length' => 20),
 			'label' => 'Publicly displayed username',
 			'type'	=> 'input'
-		),
+		), 
 		'twitter' => array(
-			'rules' => array(),
+			'rules' => array('max_length' => 30),
 			'label' => 'Twitter username',
 			'type'	=> 'input'
 		),
 		'bio' => array(
-			'rules' => array(),
+			'rules' => array('max_length' => 140),
 			'label' => 'Bio',
 			'type'	=> 'textarea'
 		)

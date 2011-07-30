@@ -8,7 +8,6 @@ class Members extends Admin_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->viewdata['controller_title'] = "Members";
 	}
 
@@ -68,35 +67,11 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
-		$data['table'] = tabler($form, TRUE, FALSE);
+		$data['list'] = tabler($form, TRUE, FALSE);
 
 		// print out
-		$this->viewdata["main_content_view"] = $this->load->view('auth/member_list', $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
-	}
-
-
-	/*
-	 * The "you" function is just a way to make it easier to keep track of one own's POST saving
-	 * In the end it calls the member function by sending the user ID
-	 * 
-	 * @author Woxxy
-	 */
-	function you()
-	{
-		// get the data to save. low on security because the user can only save to himself from here
-		if ($this->input->post())
-		{
-			$profile = new Profile($this->tank_auth->get_user_id());
-			// use the from_array to be sure what's being inputted
-			$profile->from_array($this->input->post(), array('display_name', 'twitter', 'bio'), TRUE);
-		}
-
-		// let's be pretty and add the username on top (and that's you that always sounds cool)
-		$this->viewdata["extra_title"][] = $this->tank_auth->get_username() . " (" . _("That's you!") . ")";
-
-		// the rest is handled by the member method
-		return $this->member($this->tank_auth->get_user_id());
 	}
 
 
@@ -119,7 +94,7 @@ class Members extends Admin_Controller
 		// the second part of the if makes sure that if "member" method is called from "you"
 		// the user is not redirected to "you" again
 		if ($this->tank_auth->get_user_id() == $id && $this->uri->segment(3) != 'you')
-			redirect('/admin/members/you/');
+			redirect('/account/profile/edit/');
 
 		// give admins and mods ability to edit user profiles
 		if ($this->input->post() && $this->tank_auth->is_allowed())
@@ -147,7 +122,7 @@ class Members extends Admin_Controller
 		$data['profile'] = tabler($profile_table, TRUE, ($this->tank_auth->is_allowed() || $this->uri->segment(3) != 'you'));
 
 		// print out
-		$this->viewdata["main_content_view"] = $this->load->view('auth/user', $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view('admin/members/user', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
 	}
 
@@ -358,32 +333,11 @@ class Members extends Admin_Controller
 	}
 
 
-	/*
-	 * Allows an user to apply for a team
-	 * 
-	 * Ajax protected until CSRF is setup
-	 * 
-	 * @author Woxxy
-	 */
-	function apply_team($team_id)
-	{
-		if (!isAjax())
-		{
-			return false;
-		}
-		$team = new Team($team_id);
-		if ($team->result_count() != 1)
-			return false;
-
-		$member = new Membership();
-		$member->apply($team->id, $this->tank_auth->get_user_id());
-		flash_notice('notice', _('You have applied for membership in this team. Come later to check the status of your application.'));
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
-	}
+	 
 
 
 	/*
-	 * Allows a team leader to accept applications
+	 * Allows a team leader or user to accept applications
 	 * 
 	 * Ajax protected until CSRF is setup
 	 * 

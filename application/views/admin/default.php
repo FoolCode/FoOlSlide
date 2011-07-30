@@ -83,11 +83,19 @@ if ($CI->agent->is_browser('MSIE'))
 					<a href="<?php echo site_url(); ?>">
 						<img class="icon off" src="<?php echo glyphish(158) ?>" />
 						<img class="icon on" src="<?php echo glyphish(158, TRUE) ?>" />
-						<?php echo _("Homepage") ?></a>
+						<?php echo _("Reader") ?></a>
 				</div>
+				<?php if (isset($this->tank_auth) && $this->tank_auth->is_allowed())
+				{ ?><div class="element">
+						<a href="<?php echo site_url('account'); ?>">
+							<img class="icon off" src="<?php echo glyphish(121) ?>" />
+							<img class="icon on" src="<?php echo glyphish(121, TRUE) ?>" />
+							<?php echo _("Your profile") ?></a>
+					</div>
+				<?php } ?>
 				<?php if (isset($this->tank_auth) && $this->tank_auth->is_logged_in())
 				{ ?><div class="element">
-						<a href="<?php echo site_url('/admin/auth/logout'); ?>">
+						<a href="<?php echo site_url('/account/auth/logout'); ?>">
 							<img class="icon off" src="<?php echo glyphish(73) ?>" />
 							<img class="icon on" src="<?php echo glyphish(73, TRUE) ?>" />
 							<?php echo _("Logout") ?> <?php echo $this->tank_auth->get_username(); ?></a>

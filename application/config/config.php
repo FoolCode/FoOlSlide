@@ -251,7 +251,7 @@ $config['encryption_key'] = '';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
 $config['sess_expire_on_close'] = FALSE;
-$config['sess_encrypt_cookie'] = FALSE;
+$config['sess_encrypt_cookie'] = TRUE;
 $config['sess_use_database'] = TRUE;
 $config['sess_table_name'] = 'ci_sessions';
 $config['sess_match_ip'] = FALSE;
@@ -343,7 +343,7 @@ $config['time_reference'] = 'local';
   | in your view files.  Options are TRUE or FALSE (boolean)
   |
  */
-$config['rewrite_short_tags'] = TRUE;
+$config['rewrite_short_tags'] = FALSE;
 
 
 /*

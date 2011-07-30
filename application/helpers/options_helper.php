@@ -59,7 +59,8 @@ if (!function_exists('get_home_team')) {
 			$team = new Team();
 			$team->limit(1)->get();
 		}
-
+		
+		$CI->fs_loaded->home_team = $team;
 		return $team;
 	}
 

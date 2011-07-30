@@ -10,7 +10,6 @@ class Database extends Admin_Controller {
 		// don't redirect if it's coming from the command line
 		// that's because command line has no login skills...
 		if (!$this->input->is_cli_request()) {
-			$this->tank_auth->is_logged_in() or redirect('auth/login');
 			$this->tank_auth->is_admin() or redirect('admin');
 		}
 		

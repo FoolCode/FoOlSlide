@@ -3,8 +3,10 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Comic extends DataMapper {
+class Comic extends DataMapper
+{
 
+	static $cached = array();
 	var $has_one = array();
 	var $has_many = array('chapter', 'license');
 	var $validation = array(
@@ -52,21 +54,40 @@ class Comic extends DataMapper {
 		)
 	);
 
-	function __construct($id = NULL) {
+	function __construct($id = NULL)
+	{
 		// Set language
 		$this->help_lang();
 
+		if (!is_null($id) && $comic = $this->get_cached($id)) {
+			parent::__construct();
+			foreach($comic->to_array() as $key => $c) {
+				$this->$key = $c;
+				
+				// fill also the all array so result_count() is correctly 1
+				$this->all[0]->$key = $c;
+			}
+			if(isset($comic->licenses))$this->licenses = $comic->licenses;
+			if(isset($comic->chapters))$this->chapters = $comic->chapters;
+			
+			return TRUE;
+		} 
+		
 		parent::__construct(NULL);
 
 		// We've overwrote the get() function so we need to look for $id from here
-		if (!empty($id) && is_numeric($id)) {
+		if (!empty($id) && is_numeric($id))
+		{
 			$this->where('id', $id)->get();
 		}
 	}
 
-	function post_model_init($from_cache = FALSE) {
+
+	function post_model_init($from_cache = FALSE)
+	{
 		
 	}
+
 
 	/**
 	 * This function sets the translations for the validation values.
@@ -74,16 +95,18 @@ class Comic extends DataMapper {
 	 * @author Woxxy
 	 * @return void
 	 */
-	function help_lang() {
+	function help_lang()
+	{
 		$this->validation['name']['label'] = _('Name');
-		$this->validation['name']['help'] = _('Insert the title of the comic.');
+		$this->validation['name']['help'] = _('Insert the title of the serie.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
 		$this->validation['hidden']['label'] = _('Hidden');
-		$this->validation['hidden']['help'] = _('Hide the comic from public view.');
+		$this->validation['hidden']['help'] = _('Hide the serie from public view.');
 		$this->validation['thumbnail']['label'] = _('Thumbnail');
 		$this->validation['thumbnail']['help'] = _('Upload an image to use as thumbnail.');
 	}
+
 
 	/**
 	 * Overwrite of the get() function to add filters to the search.
@@ -94,12 +117,14 @@ class Comic extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get($limit = NULL, $offset = NULL) {
+	public function get($limit = NULL, $offset = NULL)
+	{
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
 		// Check if the user is allowed to see protected chapters.
-		if (!$CI->tank_auth->is_allowed()) {
+		if (!$CI->tank_auth->is_allowed())
+		{
 			$this->where('hidden', 0);
 		}
 
@@ -109,21 +134,56 @@ class Comic extends DataMapper {
 
 		$CI = & get_instance();
 
-		if (!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team()) {
-		// Remove from the array the comics licensed in the user's nation
-			foreach ($this->all as $key => $item) {
-				if (in_array($CI->session->userdata('nation'), $this->licenses)) {
+		if (!$CI->tank_auth->is_allowed() && !$CI->tank_auth->is_team())
+		{
+			// Remove from the array the serie licensed in the user's nation
+			foreach ($this->all as $key => $item)
+			{
+				if (in_array($CI->session->userdata('nation'), $this->licenses))
+				{
 					unset($this->all[$key]);
 				}
 			}
-			if (in_array($CI->session->userdata('nation'), $this->licenses)) {
+			if (in_array($CI->session->userdata('nation'), $this->licenses))
+			{
 				$this->clear();
 			}
 		}
-			
+
+		// let's put the result in a small cache, since teams are always the same
+		foreach ($this->all as $comic)
+		{
+			// if it's not yet cached, let's cache it
+			if (!$this->get_cached($comic->id))
+			{
+				if (count(self::$cached) > 10)
+					array_shift(self::$cached);
+				self::$cached[] = $comic->get_clone();
+			}
+		}
 
 		return $result;
 	}
+
+
+	/**
+	 * Returns the series that have been already called before
+	 * 
+	 * @author Woxxy
+	 * @param int $id team_id
+	 */
+	public function get_cached($id)
+	{
+		foreach (self::$cached as $cache)
+		{
+			if ($cache->id == $id)
+			{
+				return $cache;
+			}
+		}
+		return FALSE;
+	}
+
 
 	/**
 	 * Overwrite of the get_iterated() function to add filters to the search.
@@ -134,7 +194,8 @@ class Comic extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get_iterated($limit = NULL, $offset = NULL) {
+	public function get_iterated($limit = NULL, $offset = NULL)
+	{
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
@@ -149,8 +210,9 @@ class Comic extends DataMapper {
 		return parent::get_iterated($limit, $offset);
 	}
 
+
 	/**
-	 * Comodity get() function that fetches extra data for the comic selected.
+	 * Comodity get() function that fetches extra data for the serie selected.
 	 * It doesn't get the chapters.
 	 * 
 	 * CURRENTLY USELESS.
@@ -160,7 +222,8 @@ class Comic extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get_bulk($limit = NULL, $offset = NULL) {
+	public function get_bulk($limit = NULL, $offset = NULL)
+	{
 		// Call the get()
 		$result = $this->get($limit, $offset);
 		// Return instantly on false.
@@ -168,26 +231,30 @@ class Comic extends DataMapper {
 			return $result;
 
 		// For each item we fetched, add the data, beside the pages
-		foreach ($this->all as $item) {
+		foreach ($this->all as $item)
+		{
 			
 		}
 
 		return $result;
 	}
 
+
 	/**
-	 * Gets the nations where the comic is licensed
+	 * Gets the nations where the serie is licensed
 	 * 
 	 * @author	Woxxy
 	 * @return	bool true on success
 	 */
-	public function get_licenses() {
+	public function get_licenses()
+	{
 		if (isset($this->licenses))
 			return true;
 		$license = new License();
 		$this->licenses = $license->get_by_comic($this->id);
 		// Check if the variable is not yet set, in order to save a databse read.
-		foreach ($this->all as $item) {
+		foreach ($this->all as $item)
+		{
 			if (isset($item->licenses))
 				continue;
 			$license = new License();
@@ -198,8 +265,9 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
-	 * Function to create a new entry for a comic from scratch. It creates
+	 * Function to create a new entry for a serie from scratch. It creates
 	 * both a directory and a database entry, and removes them if something
 	 * goes wrong.
 	 *
@@ -208,8 +276,9 @@ class Comic extends DataMapper {
 	 * 			false and do nothing.
 	 * @return	Returns true on success, false on failure.
 	 */
-	public function add($data = array()) {
-		// For the comic, the stub is just the name.
+	public function add($data = array())
+	{
+		// For the serie, the stub is just the name.
 		$this->to_stub = $data['name'];
 		// Uniqid to prevent directory clash
 		$this->uniqid = uniqid();
@@ -217,14 +286,16 @@ class Comic extends DataMapper {
 		$this->stub = $this->stub();
 
 		// Check if dir is created. GUI errors in inner function.
-		if (!$this->add_comic_dir()) {
+		if (!$this->add_comic_dir())
+		{
 			log_message('error', 'add_comic: failed creating dir');
 			return false;
 		}
 
-		// Check if the comic database entry and remove dir in case it's not.
+		// Check if the serie database entry and remove dir in case it's not.
 		// GUI errors are inner to the function
-		if (!$this->update_comic_db($data)) {
+		if (!$this->update_comic_db($data))
+		{
 			log_message('error', 'add_comic: failed writing to database');
 			$this->remove_comic_dir();
 			return false;
@@ -234,23 +305,27 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
-	 * Removes comic from database, all its pages, chapters, and its directory.
+	 * Removes serie from database, all its pages, chapters, and its directory.
 	 * There's no going back from this!
 	 *
 	 * @author	Woxxy
 	 * @return	boolean true on success, false on failure
 	 */
-	public function remove() {
+	public function remove()
+	{
 
 		// Remove the directory through function
-		if (!$this->remove_comic_dir()) {
+		if (!$this->remove_comic_dir())
+		{
 			log_message('error', 'remove_comic: failed to delete dir');
 			return false;
 		}
 
 		// Remove database entry through function
-		if (!$this->remove_comic_db()) {
+		if (!$this->remove_comic_db())
+		{
 			log_message('error', 'remove_comic: failed to delete database entry');
 			return false;
 		}
@@ -258,8 +333,9 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
-	 * Handles both creating of new comics in the database and editing old ones.
+	 * Handles both creating of new series in the database and editing old ones.
 	 * It determines if it should update or not by checking if $this->id has
 	 * been set. It can get the values from both the $data array and direct 
 	 * variable assignation. Be aware that array > variables. The latter ones
@@ -271,14 +347,17 @@ class Comic extends DataMapper {
 	 * @param	array $data contains the minimal data
 	 * @return	boolean true on success, false on failure
 	 */
-	public function update_comic_db($data = array()) {
+	public function update_comic_db($data = array())
+	{
 
-		// Check if we're updating or creating a new comic by looking at $data["id"].
+		// Check if we're updating or creating a new serie by looking at $data["id"].
 		// False is returned if the chapter ID was not found.
-		if (isset($data["id"]) && $data['id'] != '') {
+		if (isset($data["id"]) && $data['id'] != '')
+		{
 			$this->where("id", $data["id"])->get();
-			if ($this->result_count() == 0) {
-				set_notice('error', _('The comic you wanted to edit doesn\'t exist.'));
+			if ($this->result_count() == 0)
+			{
+				set_notice('error', _('The serie you wanted to edit doesn\'t exist.'));
 				log_message('error', 'update_comic_db: failed to find requested id');
 				return false;
 			}
@@ -286,7 +365,8 @@ class Comic extends DataMapper {
 			$old_stub = $this->stub;
 			$old_name = $this->name;
 		}
-		else {
+		else
+		{
 			// let's set the creator name if it's a new entry
 			$this->creator = $this->logged_id();
 		}
@@ -308,7 +388,8 @@ class Comic extends DataMapper {
 			unset($data["edited"]);
 
 		// Loop over the array and assign values to the variables.
-		foreach ($data as $key => $value) {
+		foreach ($data as $key => $value)
+		{
 			$this->$key = $value;
 		}
 
@@ -319,7 +400,7 @@ class Comic extends DataMapper {
 			$this->stub = $this->stub();
 
 		// Create a new stub if the name has changed
-		if(isset($old_name) && isset($old_stub) && ($old_name != $this->name))
+		if (isset($old_name) && isset($old_stub) && ($old_name != $this->name))
 		{
 			// Prepare a new stub.
 			$this->stub = $this->name;
@@ -330,22 +411,26 @@ class Comic extends DataMapper {
 
 		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
 		// In case this chapter already has a stub and it wasn't changed, don't change it!
-		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub)) {
+		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub))
+		{
 			$i = 1;
 			$found = FALSE;
 
 			$comic = new Comic();
 			$comic->where('stub', $this->stub)->get();
-			if ($comic->result_count() == 0) {
+			if ($comic->result_count() == 0)
+			{
 				$found = TRUE;
 			}
 
-			while (!$found) {
+			while (!$found)
+			{
 				$i++;
 				$pre_stub = $this->stub . '_' . $i;
 				$comic = new Comic();
 				$comic->where('stub', $pre_stub)->get();
-				if ($comic->result_count() == 0) {
+				if ($comic->result_count() == 0)
+				{
 					$this->stub = $pre_stub;
 					$found = TRUE;
 				}
@@ -361,7 +446,8 @@ class Comic extends DataMapper {
 			$this->hidden = 0;
 
 		// rename the folder if the stub changed
-		if (isset($old_stub) && $old_stub != $this->stub && is_dir("content/comics/" . $old_stub . "_" . $this->uniqid)) {
+		if (isset($old_stub) && $old_stub != $this->stub && is_dir("content/comics/" . $old_stub . "_" . $this->uniqid))
+		{
 			$dir_old = "content/comics/" . $old_stub . "_" . $this->uniqid;
 			$dir_new = "content/comics/" . $this->stub . "_" . $this->uniqid;
 			rename($dir_old, $dir_new);
@@ -369,19 +455,23 @@ class Comic extends DataMapper {
 
 		// let's save and give some error check. Push false if fail, true if good.
 		$success = $this->save();
-		if (!$success) {
-			if (!$this->valid) {
+		if (!$success)
+		{
+			if (!$this->valid)
+			{
 				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'update_comic_db: failed validation');
 			}
-			else {
-				set_notice('error', _('Failed saving the Comic to database for unknown reasons.'));
+			else
+			{
+				set_notice('error', _('Failed saving the serie to database for unknown reasons.'));
 				log_message('error', 'update_comic_db: failed to save');
 			}
 			return false;
 		}
 
-		if (!isset($data['licensed'])) {
+		if (!isset($data['licensed']))
+		{
 			$data['licensed'] = array();
 		}
 
@@ -391,28 +481,32 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
-	 * Removes the comic from the database, but before it removes all the 
+	 * Removes the serie from the database, but before it removes all the 
 	 * related chapters and their pages from the database (not the files).
 	 *
 	 * @author	Woxxy
-	 * @return	object a copy of the comic that has been deleted
+	 * @return	object a copy of the serie that has been deleted
 	 */
-	public function remove_comic_db() {
+	public function remove_comic_db()
+	{
 		// Get all its chapters
 		$chapters = new Chapter();
 		$chapters->where("comic_id", $this->id)->get_iterated();
 
 		// Remove all the chapters from the database. This will also remove all the pages
-		foreach ($chapters as $chapter) {
+		foreach ($chapters as $chapter)
+		{
 			$chapter->remove_chapter_db();
 		}
 
 		// We need a clone if we want to keep the variables after deletion
 		$temp = $this->get_clone();
 		$success = $this->delete();
-		if (!$success) {
-			set_notice('error', _('The comic couldn\'t be removed from the database for unknown reasons.'));
+		if (!$success)
+		{
+			set_notice('error', _('The serie couldn\'t be removed from the database for unknown reasons.'));
 			log_message('error', 'remove_comic_db: id found but entry not removed');
 			return false;
 		}
@@ -421,15 +515,18 @@ class Comic extends DataMapper {
 		return $temp;
 	}
 
+
 	/**
 	 * Creates the necessary empty folder for the comic
 	 * 
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function add_comic_dir() {
+	public function add_comic_dir()
+	{
 		// Just create the folder
-		if (!mkdir("content/comics/" . $this->directory())) {
+		if (!mkdir("content/comics/" . $this->directory()))
+		{
 			set_notice('error', _('The directory could not be created. Please, check file permissions.'));
 			log_message('error', 'add_comic_dir: folder could not be created');
 			return false;
@@ -437,25 +534,30 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
-	 * Removes the comic directory with all the data that was inside of it.
+	 * Removes the serie directory with all the data that was inside of it.
 	 * This means chapters, pages and props too.
 	 *
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function remove_comic_dir() {
+	public function remove_comic_dir()
+	{
 		$dir = "content/comics/" . $this->directory() . "/";
 
 		// Delete all inner files
-		if (!delete_files($dir, TRUE)) {
-			set_notice('error', _('The files inside the comic directory could not be removed. Please, check the file permissions.'));
+		if (!delete_files($dir, TRUE))
+		{
+			set_notice('error', _('The files inside the serie directory could not be removed. Please, check the file permissions.'));
 			log_message('error', 'remove_comic_dir: files inside folder could not be removed');
 			return false;
 		}
-		else {
+		else
+		{
 			// On success delete the directory itself
-			if (!rmdir($dir)) {
+			if (!rmdir($dir))
+			{
 				set_notice('error', _('The directory could not be removed. Please, check file permissions.'));
 				log_message('error', 'remove_comic_dir: folder could not be removed');
 				return false;
@@ -465,6 +567,7 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
 	 * Creates the thumbnail and saves the original as well
 	 *
@@ -472,7 +575,8 @@ class Comic extends DataMapper {
 	 * @param	array|$filedata a standard array coming from CodeIgniter's upload
 	 * @return	boolean true on success, false on failure
 	 */
-	public function add_comic_thumb($filedata) {
+	public function add_comic_thumb($filedata)
+	{
 		// If there's already one, remove it.
 		if ($this->thumbnail != "")
 			$this->remove_comic_thumb();
@@ -481,8 +585,9 @@ class Comic extends DataMapper {
 		$dir = "content/comics/" . $this->directory() . "/";
 
 		// Copy the full image over
-		if (!copy($filedata["server_path"], $dir . $filedata["name"])) {
-			set_notice('error', _('Failed to create the thumbnail image for the comic. Check file permissions.'));
+		if (!copy($filedata["server_path"], $dir . $filedata["name"]))
+		{
+			set_notice('error', _('Failed to create the thumbnail image for the serie. Check file permissions.'));
 			log_message('error', 'add_comic_thumb: failed to create/copy the image');
 			return false;
 		}
@@ -504,8 +609,9 @@ class Comic extends DataMapper {
 		$CI->image_lib->initialize($img_config);
 
 		// Resize! And return false of failure
-		if (!$CI->image_lib->resize()) {
-			set_notice('error', _('Failed to create the thumbnail image for the comic. Resize function didn\'t work'));
+		if (!$CI->image_lib->resize())
+		{
+			set_notice('error', _('Failed to create the thumbnail image for the serie. Resize function didn\'t work'));
 			log_message('error', 'add_comic_thumb: failed to create thumbnail');
 			return false;
 		}
@@ -513,12 +619,13 @@ class Comic extends DataMapper {
 		// Whatever we might want to do later, we better clear the library now!
 		$CI->image_lib->clear();
 
-		// The thumbnail is actually the filename of the original for comic thumbnails
+		// The thumbnail is actually the filename of the original for serie thumbnails
 		// It's different from page thumbnails - those have "thumb_" in this variable!
 		$this->thumbnail = $filedata["name"];
 
 		// Save hoping we're lucky
-		if (!$this->save()) {
+		if (!$this->save())
+		{
 			set_notice('error', _('Failed to save the thumbnail image in the database.'));
 			log_message('error', 'add_comic_thumb: failed to add to database');
 			return false;
@@ -528,26 +635,30 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
 	 * Removes the thumbnail and its original image both from database and directory.
 	 *
 	 * @author	Woxxy
 	 * @return	string true on success, false on failure.
 	 */
-	public function remove_comic_thumb() {
+	public function remove_comic_thumb()
+	{
 
 		// Get directory
 		$dir = "content/comics/" . $this->directory() . "/";
 
 		// Remove the full image
-		if (!unlink($dir . $this->thumbnail)) {
+		if (!unlink($dir . $this->thumbnail))
+		{
 			set_notice('error', _('Failed to remove the thumbnail\'s original image. Please, check file permissions.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete image');
 			return false;
 		}
 
 		// Remove the thumbnail
-		if (!unlink($dir . "thumb_" . $this->thumbnail)) {
+		if (!unlink($dir . "thumb_" . $this->thumbnail))
+		{
 			set_notice('error', _('Failed to remove the thumbnail image. Please, check file permissions.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to delete thumbnail');
 			return false;
@@ -555,7 +666,8 @@ class Comic extends DataMapper {
 
 		// Set the thumbnail variable to empty and save to database
 		$this->thumbnail = "";
-		if (!$this->save()) {
+		if (!$this->save())
+		{
 			set_notice('error', _('Failed to remove the thumbnail image from the database.'));
 			log_message('error', 'Model: comic_model.php/remove_comic_thumb: failed to remove from database');
 			return false;
@@ -565,6 +677,7 @@ class Comic extends DataMapper {
 		return true;
 	}
 
+
 	/**
 	 * Returns href to thumbnail. Uses load-balancer system.
 	 *
@@ -572,33 +685,40 @@ class Comic extends DataMapper {
 	 * @param boolean|$full if set to true, the function returns the full image
 	 * @return	string href to thumbnail.
 	 */
-	public function get_thumb($full = FALSE) {
+	public function get_thumb($full = FALSE)
+	{
 		if ($this->thumbnail != "")
 			return balance_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
 		return false;
 	}
 
-	function update_license($nations) {
+
+	function update_license($nations)
+	{
 		$comic_id = $this->id;
-		log_message('error', 'updatecomic');
 		$licenses = new License();
 		$licenses->where('comic_id', $comic_id)->get();
 
 		$removeme = array();
-		foreach ($licenses->all as $key => $license) {
+		foreach ($licenses->all as $key => $license)
+		{
 			$removeme[$key] = $license->nation;
 		}
 
 		$temp_nations = $nations;
-		foreach ($nations as $key => $nation) {
+		foreach ($nations as $key => $nation)
+		{
 			$found = false;
-			foreach ($licenses->all as $subkey => $license) {
-				if ($nation == $license->nation) {
+			foreach ($licenses->all as $subkey => $license)
+			{
+				if ($nation == $license->nation)
+				{
 					unset($removeme[$subkey]);
 					$found = true;
 				}
 			}
-			if (!$found && $nation != "") {
+			if (!$found && $nation != "")
+			{
 				$new_license = new License();
 				$new_license->comic_id = $comic_id;
 				$new_license->nation = $nation;
@@ -606,11 +726,13 @@ class Comic extends DataMapper {
 			}
 		}
 
-		foreach ($removeme as $key => $nation) {
+		foreach ($removeme as $key => $nation)
+		{
 			$remove = new License();
 			$remove->where('comic_id', $comic_id)->where('nation', $nation)->get()->remove();
 		}
 	}
+
 
 	/**
 	 * Returns directory name without slashes
@@ -618,9 +740,11 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @return	string Directory name.
 	 */
-	public function directory() {
+	public function directory()
+	{
 		return $this->stub . '_' . $this->uniqid;
 	}
+
 
 	/**
 	 * Returns a ready to use html <a> link that points to the reader
@@ -628,9 +752,11 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @return	string <a> to reader
 	 */
-	public function url() {
+	public function url()
+	{
 		return '<a href="' . $this->href() . '" title="' . $this->title() . '">' . $this->title() . '</a>';
 	}
+
 
 	/**
 	 * Returns a nicely built title for a chapter
@@ -638,9 +764,11 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @return	string the formatted title for the chapter, with chapter and subchapter
 	 */
-	public function title() {
+	public function title()
+	{
 		return $this->name;
 	}
+
 
 	/**
 	 * Returns the href to the chapter editing
@@ -648,12 +776,14 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @return	string href to chapter editing
 	 */
-	public function edit_href() {
+	public function edit_href()
+	{
 		$CI = & get_instance();
 		if (!$CI->tank_auth->is_allowed())
 			return "";
-		return site_url('/admin/comics/comic/' . $this->stub);
+		return site_url('/admin/series/serie/' . $this->stub);
 	}
+
 
 	/**
 	 * Returns the url to the chapter editing
@@ -661,12 +791,14 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @return	string <a> to chapter editing
 	 */
-	public function edit_url() {
+	public function edit_url()
+	{
 		$CI = & get_instance();
 		if (!$CI->tank_auth->is_allowed())
 			return "";
 		return '<a href="' . $this->edit_href() . '" title="' . _('Edit') . ' ' . $this->title() . '">' . _('Edit') . '</a>';
 	}
+
 
 	/**
 	 * Returns the href to the reader. This will create the shortest possible URL.
@@ -674,13 +806,15 @@ class Comic extends DataMapper {
 	 * @author	Woxxy
 	 * @returns string href to reader.
 	 */
-	public function href() {
+	public function href()
+	{
 		// If we already used this function, no need to recalc it.
 		if (isset($this->href))
 			return $this->href;
 
-		return site_url('/reader/comic/' . $this->stub);
+		return site_url('/reader/serie/' . $this->stub);
 	}
+
 
 }
 

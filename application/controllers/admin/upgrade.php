@@ -10,7 +10,6 @@ class Upgrade extends Admin_Controller
 		parent::__construct();
 
 		// only admins should do this
-		$this->tank_auth->is_logged_in() or redirect('/admin/auth/login');
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// we need the upgrade module's functions

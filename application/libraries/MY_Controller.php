@@ -7,16 +7,17 @@ class MY_Controller extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+
 		if (!file_exists(FCPATH . "config.php")) {
 			if($this->uri->segment(1) != "install")
 			show_error("If you are here, and have no clue why FoOlSlide is not working, start by reading the <a href='http://trac.foolrulez.com/foolslide/wiki/installation_guide'>installation manual</a>.");
 		} else {
 			$this->load->database();
 			$this->load->library('session');
-			$this->load->library('tank_auth');
 			$this->load->library('datamapper');
+			$this->load->library('tank_auth');
 
-			if (!$this->session->userdata('nation')) {
+			if (!$this->session->userdata('nation') && $_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
 				// If the user doesn't have a nation set, let's grab it
 				//
 				require_once("assets/geolite/GeoIP.php");
@@ -27,10 +28,15 @@ class MY_Controller extends CI_Controller {
 				$this->session->set_userdata('nation', $nation);
 			}
 
+			if($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+				$this->session->set_userdata('nation', '');
+			}
+
 			// loads variables from database for get_setting()
 			load_settings();
 			
-			// This is the first chance we get to load the right translation file
+			// This 
+			//is the first chance we get to load the right translation file
 			if (get_setting('fs_gen_lang')) {
 				$locale = get_setting('fs_gen_lang');
 				putenv("LANG=$locale");

@@ -39,11 +39,15 @@
 */
 
 $route['default_controller'] = "reader";
-$route['admin'] = "admin/index";
+$route['admin'] = "admin/series";
+$route['account'] = "account/index/profile";
+$route['account/profile'] = "account/index/profile";
+$route['account/teams'] = "account/index/teams";
+$route['account/leave_team/(:any)'] = "account/index/leave_team/$1";
+$route['account/request/(:any)'] = "account/index/request/$1";
+$route['account/leave_leadership/(:any)'] = "account/index/leave_leadership/$1";
 $route['reader/list'] = 'reader/lista';
 $route['reader/list/(:num)'] = 'reader/lista/$1';
-$route['api/list'] = 'api/lista';
-$route['api/list/(:num)'] = 'api/lista/$1';
 $route['admin/members/members'] = 'admin/members/membersa';
 $route['404_override'] = '';
 

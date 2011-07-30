@@ -19,11 +19,14 @@ define('STATUS_NOT_ACTIVATED', '0');
  * @based on	DX Auth by Dexcell (http://dexcell.shinsengumiteam.com/dx_auth)
  * @license		MIT License Copyright (c) 2008 Erick Hartanto
  */
-class Tank_auth {
+class Tank_auth
+{
 
 	private $error = array();
+	private $cached = array();
 
-	function __construct() {
+	function __construct()
+	{
 		$this->ci = & get_instance();
 
 		$this->ci->load->config('tank_auth', TRUE);
@@ -36,6 +39,7 @@ class Tank_auth {
 		$this->autologin();
 	}
 
+
 	/**
 	 * Login user on the site. Return TRUE if login is successful
 	 * (user exists and activated, password is correct), otherwise FALSE.
@@ -45,41 +49,56 @@ class Tank_auth {
 	 * @param	bool
 	 * @return	bool
 	 */
-	function login($login, $password, $remember, $login_by_username, $login_by_email) {
-		if ((strlen($login) > 0) AND (strlen($password) > 0)) {
+	function login($login, $password, $remember, $login_by_username, $login_by_email)
+	{
+		if ((strlen($login) > 0) AND (strlen($password) > 0))
+		{
 
 			// Which function to use to login (based on config)
-			if ($login_by_username AND $login_by_email) {
+			if ($login_by_username AND $login_by_email)
+			{
 				$get_user_func = 'get_user_by_login';
 			}
-			else if ($login_by_username) {
+			else if ($login_by_username)
+			{
 				$get_user_func = 'get_user_by_username';
 			}
-			else {
+			else
+			{
 				$get_user_func = 'get_user_by_email';
 			}
 
-			if (!is_null($user = $this->ci->users->$get_user_func($login))) { // login ok
+			if (!is_null($user = $this->ci->users->$get_user_func($login)))
+			{ // login ok
 				// Does password match hash in database?
 				$hasher = new PasswordHash(
 								$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 								$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-				if ($hasher->CheckPassword($password, $user->password)) {  // password ok
-					if ($user->banned == 1) {   // fail - banned
+				if ($hasher->CheckPassword($password, $user->password))
+				{  // password ok
+					if ($user->banned == 1)
+					{   // fail - banned
 						$this->error = array('banned' => $user->ban_reason);
 					}
-					else {
+					else
+					{
+						$profile = new Profile();
+						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
 							'status' => ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+							'group' => $profile->group_id,
 						));
 
-						if ($user->activated == 0) { // fail - not activated
+						if ($user->activated == 0)
+						{ // fail - not activated
 							$this->error = array('not_activated' => '');
 						}
-						else {   // success
-							if ($remember) {
+						else
+						{   // success
+							if ($remember)
+							{
 								$this->create_autologin($user->id);
 							}
 
@@ -91,12 +110,14 @@ class Tank_auth {
 						}
 					}
 				}
-				else {  // fail - wrong password
+				else
+				{  // fail - wrong password
 					$this->increase_login_attempt($login);
 					$this->error = array('password' => 'auth_incorrect_password');
 				}
 			}
-			else {   // fail - wrong login
+			else
+			{   // fail - wrong login
 				$this->increase_login_attempt($login);
 				$this->error = array('login' => 'auth_incorrect_login');
 			}
@@ -104,19 +125,22 @@ class Tank_auth {
 		return FALSE;
 	}
 
+
 	/**
 	 * Logout user from the site
 	 *
 	 * @return	void
 	 */
-	function logout() {
+	function logout()
+	{
 		$this->delete_autologin();
 
 		// See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
-		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => ''));
+		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => '', 'group' => ''));
 
 		$this->ci->session->sess_destroy();
 	}
+
 
 	/**
 	 * Check if user logged in. Also test if user is activated or not.
@@ -124,9 +148,11 @@ class Tank_auth {
 	 * @param	bool
 	 * @return	bool
 	 */
-	function is_logged_in($activated = TRUE) {
+	function is_logged_in($activated = TRUE)
+	{
 		return $this->ci->session->userdata('status') === ($activated ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED);
 	}
+
 
 	/**
 	 * Check if user is administrator
@@ -135,17 +161,33 @@ class Tank_auth {
 	 * @param int $user_id
 	 * @return bool
 	 */
-	function is_admin($user_id = NULL) {
+	function is_admin($user_id = NULL)
+	{
+		// not logged users gonna login
 		if (!$this->is_logged_in() && is_null($user_id))
-			return false;
+			return FALSE;
+
+		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
-			$user_id = $this->get_user_id();
+		{
+			// use the userdata
+			if ($this->ci->session->userdata('group') === '1')
+			{
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		// we're checking if another user is an admin
 		$user = new Profile();
-		$user->where('user_id', $user_id)->get();
+		$user->where('user_id', $user_id)->limit(1)->get();
 		if ($user->group_id == 1)
-			return true;
-		return false;
+		{
+			return TRUE;
+		}
+		return FALSE;
 	}
+
 
 	/**
 	 * Check if user is a moderator
@@ -154,17 +196,33 @@ class Tank_auth {
 	 * @param int $user_id
 	 * @return bool
 	 */
-	function is_mod($user_id = NULL) {
+	function is_mod($user_id = NULL)
+	{
+		// not logged users gonna login
 		if (!$this->is_logged_in() && is_null($user_id))
-			return false;
+			return FALSE;
+
+		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
-			$user_id = $this->get_user_id();
+		{
+			// use the userdata
+			if ($this->ci->session->userdata('group') === '3')
+			{
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		// we're checking if another user is an admin
 		$user = new Profile();
-		$user->where('user_id', $user_id)->get();
+		$user->where('user_id', $user_id)->limit(1)->get();
 		if ($user->group_id == 3)
-			return true;
-		return false;
+		{
+			return TRUE;
+		}
+		return FALSE;
 	}
+
 
 	/**
 	 * Check if user is allowed by being in the team, mod or administrator
@@ -172,13 +230,15 @@ class Tank_auth {
 	 * @author Woxxy
 	 * @return bool
 	 */
-	function is_allowed() {
+	function is_allowed()
+	{
 		if (!$this->is_logged_in())
-			return false;
-		if($this->is_mod() || $this->is_admin())
-			return true;
-		return false;
+			return FALSE;
+		if ($this->is_mod() || $this->is_admin())
+			return TRUE;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the group ID
@@ -186,28 +246,30 @@ class Tank_auth {
 	 * @author Woxxy
 	 * @return int
 	 */
-	function get_group_id() {
+	function get_group_id()
+	{
 		if (!$this->is_logged_in())
-			return false;
-		$profile = new Profile();
-		$profile->where('user_id', $this->get_user_id())->get();
-		return $profile->group_id;
-		return false;
+			return FALSE;
+		return $this->ci->session->userdata('group');
+		return FALSE;
 	}
 
-	function is_group($group_name) {
+
+	function is_group($group_name)
+	{
 		if (!$this->is_logged_in())
-			return false;
+			return FALSE;
 		if ($group_name == 'member')
-			return true;
+			return TRUE;
 		if (!$group_id = $this->get_group_id())
-			return false;
+			return FALSE;
 		$group = new Group();
 		$group->where('name', $group_name)->get();
 		if ($group->id == $group_id)
-			return true;
-		return false;
+			return TRUE;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns team objects of the user, false in case no team
@@ -216,40 +278,59 @@ class Tank_auth {
 	 * @returns object Teams
 	 * 
 	 */
-	function is_team($team_id = NULL, $joint_id = NULL) {
+	function is_team($team_id = NULL, $joint_id = NULL)
+	{
+		// not logged in? get booted
 		if (!$this->is_logged_in())
-			return false;
-		
-		if(!is_null($joint_id) && $joint_id != 0)
+			return FALSE;
+
+		// this calls another function in order to cycle each team in the joint with is_team
+		if (!is_null($joint_id) && $joint_id != 0)
 		{
 			$teams = new Team();
 			return($this->is_team_array($teams->get_teams(0, $joint_id)));
 		}
 
-		$memberships = new Membership();
-		$memberships->where('user_id', $this->get_user_id())->where('accepted', 1);
-
-		if (is_numeric($team_id)) {
-			$memberships->where('team_id', $team_id);
-			$memberships->get();
-			if ($memberships->result_count() != 1)
-				return false;
-			$team = new Team();
-			$team->where('id', $team_id)->get();
-			return $team;
+		// let's get all the memberships
+		if (!isset($this->cached['memberships']))
+		{
+			$memberships = new Membership();
+			$memberships->where('user_id', $this->get_user_id())->where('accepted', 1)->get();
+			$this->cached['memberships'] = $memberships->get_clone();
+		}
+		else
+		{
+			$memberships = $this->cached['memberships'];
 		}
 
-		$memberships->get();
+		// if not member of any team, return FALSE
 		if ($memberships->result_count() < 1)
-			return false;
+			return FALSE;
+
+		// if a team is set, let's grab the team and return the data of the team
+		if (is_numeric($team_id))
+		{
+			foreach ($memberships->all as $membership)
+			{
+				if ($membership->team_id == $team_id)
+				{
+					return new Team($team_id);
+				}
+			}
+			return FALSE;
+		}
+
+
 		$teams = new Team();
 		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any team!
-		foreach ($memberships->all as $key => $membership) {
+		foreach ($memberships->all as $key => $membership)
+		{
 			$teams->or_where('id', $membership->team_id);
 		}
 		$teams->get();
 		return $teams;
 	}
+
 
 	/**
 	 * Returns member team objects, false in case user is not a team member
@@ -260,13 +341,16 @@ class Tank_auth {
 	 * @return object Teams
 	 * 
 	 */
-	function is_team_array($teams) {
-		foreach ($teams as $team) {
+	function is_team_array($teams)
+	{
+		foreach ($teams as $team)
+		{
 			if ($return = $this->is_team($team->id))
 				return $return;
 		}
 		return false;
 	}
+
 
 	/**
 	 * Returns leader team objects, false in case user is not a team leader
@@ -276,34 +360,59 @@ class Tank_auth {
 	 * @return object Teams
 	 * 
 	 */
-	function is_team_leader($team_id = NULL) {
+	function is_team_leader($team_id = NULL, $joint_id = NULL)
+	{
+		// not logged in? get booted
 		if (!$this->is_logged_in())
 			return FALSE;
 
-		$leaderships = new Membership();
-		$leaderships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1);
-
-		if (is_numeric($team_id)) {
-			$leaderships->where('team_id', $team_id);
-			$leaderships->get();
-			if ($leaderships->result_count() != 1)
-				return FALSE;
-			$team = new Team();
-			$team->where('id', $team_id)->get();
-			return $team;
+		// this calls another function in order to cycle each team in the joint with is_team
+		if (!is_null($joint_id) && $joint_id != 0)
+		{
+			$teams = new Team();
+			return($this->is_team_leader_array($teams->get_teams(0, $joint_id)));
 		}
 
-		$leaderships->get();
-		if ($leaderships->result_count() < 1)
+		// let's get all the memberships
+		if (!isset($this->cached['leaderships']))
+		{
+			$memberships = new Membership();
+			$memberships->where('user_id', $this->get_user_id())->where('accepted', 1)->where('is_leader', 1)->get();
+			$this->cached['leaderships'] = $memberships->get_clone();
+		}
+		else
+		{
+			$memberships = $this->cached['leaderships'];
+		}
+
+		// if not member of any team, return FALSE
+		if ($memberships->result_count() < 1)
 			return FALSE;
+
+		// if a team is set, let's grab the team and return the data of the team
+		if (is_numeric($team_id))
+		{
+			foreach ($memberships->all as $membership)
+			{
+				if ($membership->team_id == $team_id)
+				{
+					return new Team($team_id);
+				}
+			}
+			return FALSE;
+		}
+
+
 		$teams = new Team();
 		// Notice that if you remove the result count on $leaderships, this will not run and the user will be leader of any team!
-		foreach ($leaderships->all as $key => $leadership) {
-			$teams->or_where('id', $leadership->team_id);
+		foreach ($memberships->all as $key => $membership)
+		{
+			$teams->or_where('id', $membership->team_id);
 		}
 		$teams->get();
 		return $teams;
 	}
+
 
 	/**
 	 * Returns leader team objects, false in case user is not a team leader
@@ -314,31 +423,38 @@ class Tank_auth {
 	 * @return object Teams
 	 * 
 	 */
-	function is_team_leader_array($teams) {
-		foreach ($teams as $team) {
+	function is_team_leader_array($teams)
+	{
+		foreach ($teams as $team)
+		{
 			if ($result = $this->is_team_leader($team->id))
 				return $result;
 		}
 		return false;
 	}
 
+
 	/**
 	 * Get user_id
 	 *
 	 * @return	string
 	 */
-	function get_user_id() {
+	function get_user_id()
+	{
 		return $this->ci->session->userdata('user_id');
 	}
+
 
 	/**
 	 * Get username
 	 *
 	 * @return	string
 	 */
-	function get_username() {
+	function get_username()
+	{
 		return $this->ci->session->userdata('username');
 	}
+
 
 	/**
 	 * Create new user on the site and return some data about it:	
@@ -350,14 +466,18 @@ class Tank_auth {
 	 * @param	bool
 	 * @return	array
 	 */
-	function create_user($username, $email, $password, $email_activation) {
-		if ((strlen($username) > 0) AND !$this->ci->users->is_username_available($username)) {
+	function create_user($username, $email, $password, $email_activation)
+	{
+		if ((strlen($username) > 0) AND !$this->ci->users->is_username_available($username))
+		{
 			$this->error = array('username' => 'auth_username_in_use');
 		}
-		elseif (!$this->ci->users->is_email_available($email)) {
+		elseif (!$this->ci->users->is_email_available($email))
+		{
 			$this->error = array('email' => 'auth_email_in_use');
 		}
-		else {
+		else
+		{
 			// Hash password using phpass
 			$hasher = new PasswordHash(
 							$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
@@ -371,10 +491,12 @@ class Tank_auth {
 				'last_ip' => $this->ci->input->ip_address(),
 			);
 
-			if ($email_activation) {
+			if ($email_activation)
+			{
 				$data['new_email_key'] = md5(rand() . microtime());
 			}
-			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation))) {
+			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation)))
+			{
 				$data['user_id'] = $res['user_id'];
 				$data['password'] = $password;
 				unset($data['last_ip']);
@@ -384,6 +506,7 @@ class Tank_auth {
 		return NULL;
 	}
 
+
 	/**
 	 * Check if username available for registering.
 	 * Can be called for instant form validation.
@@ -391,9 +514,11 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function is_username_available($username) {
+	function is_username_available($username)
+	{
 		return ((strlen($username) > 0) AND $this->ci->users->is_username_available($username));
 	}
+
 
 	/**
 	 * Check if email available for registering.
@@ -402,9 +527,11 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function is_email_available($email) {
+	function is_email_available($email)
+	{
 		return ((strlen($email) > 0) AND $this->ci->users->is_email_available($email));
 	}
+
 
 	/**
 	 * Change email for activation and return some data about user:
@@ -414,31 +541,37 @@ class Tank_auth {
 	 * @param	string
 	 * @return	array
 	 */
-	function change_email($email) {
+	function change_email($email)
+	{
 		$user_id = $this->ci->session->userdata('user_id');
 
-		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, FALSE))) {
+		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, FALSE)))
+		{
 
 			$data = array(
 				'user_id' => $user_id,
 				'username' => $user->username,
 				'email' => $email,
 			);
-			if (strtolower($user->email) == strtolower($email)) {  // leave activation key as is
+			if (strtolower($user->email) == strtolower($email))
+			{  // leave activation key as is
 				$data['new_email_key'] = $user->new_email_key;
 				return $data;
 			}
-			elseif ($this->ci->users->is_email_available($email)) {
+			elseif ($this->ci->users->is_email_available($email))
+			{
 				$data['new_email_key'] = md5(rand() . microtime());
 				$this->ci->users->set_new_email($user_id, $email, $data['new_email_key'], FALSE);
 				return $data;
 			}
-			else {
+			else
+			{
 				$this->error = array('email' => 'auth_email_in_use');
 			}
 		}
 		return NULL;
 	}
+
 
 	/**
 	 * Activate user using given key
@@ -448,14 +581,17 @@ class Tank_auth {
 	 * @param	bool
 	 * @return	bool
 	 */
-	function activate_user($user_id, $activation_key, $activate_by_email = TRUE) {
+	function activate_user($user_id, $activation_key, $activate_by_email = TRUE)
+	{
 		$this->ci->users->purge_na($this->ci->config->item('email_activation_expire', 'tank_auth'));
 
-		if ((strlen($user_id) > 0) AND (strlen($activation_key) > 0)) {
+		if ((strlen($user_id) > 0) AND (strlen($activation_key) > 0))
+		{
 			return $this->ci->users->activate_user($user_id, $activation_key, $activate_by_email);
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Set new password key for user and return some data about user:
@@ -465,9 +601,12 @@ class Tank_auth {
 	 * @param	string
 	 * @return	array
 	 */
-	function forgot_password($login) {
-		if (strlen($login) > 0) {
-			if (!is_null($user = $this->ci->users->get_user_by_login($login))) {
+	function forgot_password($login)
+	{
+		if (strlen($login) > 0)
+		{
+			if (!is_null($user = $this->ci->users->get_user_by_login($login)))
+			{
 
 				$data = array(
 					'user_id' => $user->id,
@@ -479,12 +618,14 @@ class Tank_auth {
 				$this->ci->users->set_password_key($user->id, $data['new_pass_key']);
 				return $data;
 			}
-			else {
+			else
+			{
 				$this->error = array('login' => 'auth_incorrect_email_or_username');
 			}
 		}
 		return NULL;
 	}
+
 
 	/**
 	 * Check if given password key is valid and user is authenticated.
@@ -493,13 +634,16 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function can_reset_password($user_id, $new_pass_key) {
-		if ((strlen($user_id) > 0) AND (strlen($new_pass_key) > 0)) {
+	function can_reset_password($user_id, $new_pass_key)
+	{
+		if ((strlen($user_id) > 0) AND (strlen($new_pass_key) > 0))
+		{
 			return $this->ci->users->can_reset_password(
 					$user_id, $new_pass_key, $this->ci->config->item('forgot_password_expire', 'tank_auth'));
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Replace user password (forgotten) with a new one (set by user)
@@ -509,10 +653,13 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function reset_password($user_id, $new_pass_key, $new_password) {
-		if ((strlen($user_id) > 0) AND (strlen($new_pass_key) > 0) AND (strlen($new_password) > 0)) {
+	function reset_password($user_id, $new_pass_key, $new_password)
+	{
+		if ((strlen($user_id) > 0) AND (strlen($new_pass_key) > 0) AND (strlen($new_password) > 0))
+		{
 
-			if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
+			if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE)))
+			{
 
 				// Hash password using phpass
 				$hasher = new PasswordHash(
@@ -521,7 +668,8 @@ class Tank_auth {
 				$hashed_password = $hasher->HashPassword($new_password);
 
 				if ($this->ci->users->reset_password(
-								$user_id, $hashed_password, $new_pass_key, $this->ci->config->item('forgot_password_expire', 'tank_auth'))) { // success
+								$user_id, $hashed_password, $new_pass_key, $this->ci->config->item('forgot_password_expire', 'tank_auth')))
+				{ // success
 					// Clear all user's autologins
 					$this->ci->load->model('tank_auth/user_autologin');
 					$this->ci->user_autologin->clear($user->id);
@@ -538,6 +686,7 @@ class Tank_auth {
 		return NULL;
 	}
 
+
 	/**
 	 * Change user password (only when user is logged in)
 	 *
@@ -545,16 +694,19 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function change_password($old_pass, $new_pass) {
+	function change_password($old_pass, $new_pass)
+	{
 		$user_id = $this->ci->session->userdata('user_id');
 
-		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
+		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE)))
+		{
 
 			// Check if old password correct
 			$hasher = new PasswordHash(
 							$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 							$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-			if ($hasher->CheckPassword($old_pass, $user->password)) {   // success
+			if ($hasher->CheckPassword($old_pass, $user->password))
+			{   // success
 				// Hash new password using phpass
 				$hashed_password = $hasher->HashPassword($new_pass);
 
@@ -562,12 +714,14 @@ class Tank_auth {
 				$this->ci->users->change_password($user_id, $hashed_password);
 				return TRUE;
 			}
-			else {   // fail
+			else
+			{   // fail
 				$this->error = array('old_password' => 'auth_incorrect_password');
 			}
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Change user email (only when user is logged in) and return some data about user:
@@ -578,44 +732,53 @@ class Tank_auth {
 	 * @param	string
 	 * @return	array
 	 */
-	function set_new_email($new_email, $password) {
+	function set_new_email($new_email, $password)
+	{
 		$user_id = $this->ci->session->userdata('user_id');
 
-		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
+		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE)))
+		{
 
 			// Check if password correct
 			$hasher = new PasswordHash(
 							$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 							$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-			if ($hasher->CheckPassword($password, $user->password)) {   // success
+			if ($hasher->CheckPassword($password, $user->password))
+			{   // success
 				$data = array(
 					'user_id' => $user_id,
 					'username' => $user->username,
 					'new_email' => $new_email,
 				);
 
-				if ($user->email == $new_email) {
+				if ($user->email == $new_email)
+				{
 					$this->error = array('email' => 'auth_current_email');
 				}
-				elseif ($user->new_email == $new_email) {  // leave email key as is
+				elseif ($user->new_email == $new_email)
+				{  // leave email key as is
 					$data['new_email_key'] = $user->new_email_key;
 					return $data;
 				}
-				elseif ($this->ci->users->is_email_available($new_email)) {
+				elseif ($this->ci->users->is_email_available($new_email))
+				{
 					$data['new_email_key'] = md5(rand() . microtime());
 					$this->ci->users->set_new_email($user_id, $new_email, $data['new_email_key'], TRUE);
 					return $data;
 				}
-				else {
+				else
+				{
 					$this->error = array('email' => 'auth_email_in_use');
 				}
 			}
-			else {   // fail
+			else
+			{   // fail
 				$this->error = array('password' => 'auth_incorrect_password');
 			}
 		}
 		return NULL;
 	}
+
 
 	/**
 	 * Activate new email, if email activation key is valid.
@@ -624,13 +787,16 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function activate_new_email($user_id, $new_email_key) {
-		if ((strlen($user_id) > 0) AND (strlen($new_email_key) > 0)) {
+	function activate_new_email($user_id, $new_email_key)
+	{
+		if ((strlen($user_id) > 0) AND (strlen($new_email_key) > 0))
+		{
 			return $this->ci->users->activate_new_email(
 					$user_id, $new_email_key);
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Delete user from the site (only when user is logged in)
@@ -638,26 +804,31 @@ class Tank_auth {
 	 * @param	string
 	 * @return	bool
 	 */
-	function delete_user($password) {
+	function delete_user($password)
+	{
 		$user_id = $this->ci->session->userdata('user_id');
 
-		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
+		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE)))
+		{
 
 			// Check if password correct
 			$hasher = new PasswordHash(
 							$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 							$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-			if ($hasher->CheckPassword($password, $user->password)) {   // success
+			if ($hasher->CheckPassword($password, $user->password))
+			{   // success
 				$this->ci->users->delete_user($user_id);
 				$this->logout();
 				return TRUE;
 			}
-			else {   // fail
+			else
+			{   // fail
 				$this->error = array('password' => 'auth_incorrect_password');
 			}
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Get error message.
@@ -665,9 +836,11 @@ class Tank_auth {
 	 *
 	 * @return	string
 	 */
-	function get_error_message() {
+	function get_error_message()
+	{
 		return $this->error;
 	}
+
 
 	/**
 	 * Save data for user's autologin
@@ -675,14 +848,16 @@ class Tank_auth {
 	 * @param	int
 	 * @return	bool
 	 */
-	private function create_autologin($user_id) {
+	private function create_autologin($user_id)
+	{
 		$this->ci->load->helper('cookie');
 		$key = substr(md5(uniqid(rand() . get_cookie($this->ci->config->item('sess_cookie_name')))), 0, 16);
 
 		$this->ci->load->model('tank_auth/user_autologin');
 		$this->ci->user_autologin->purge($user_id);
 
-		if ($this->ci->user_autologin->set($user_id, md5($key))) {
+		if ($this->ci->user_autologin->set($user_id, md5($key)))
+		{
 			set_cookie(array(
 				'name' => $this->ci->config->item('autologin_cookie_name', 'tank_auth'),
 				'value' => serialize(array('user_id' => $user_id, 'key' => $key)),
@@ -693,14 +868,17 @@ class Tank_auth {
 		return FALSE;
 	}
 
+
 	/**
 	 * Clear user's autologin data
 	 *
 	 * @return	void
 	 */
-	private function delete_autologin() {
+	private function delete_autologin()
+	{
 		$this->ci->load->helper('cookie');
-		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE)) {
+		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE))
+		{
 
 			$data = unserialize($cookie);
 
@@ -711,29 +889,39 @@ class Tank_auth {
 		}
 	}
 
+
 	/**
 	 * Login user automatically if he/she provides correct autologin verification
 	 *
 	 * @return	void
 	 */
-	private function autologin() {
-		if (!$this->is_logged_in() AND !$this->is_logged_in(FALSE)) {   // not logged in (as any user)
+	private function autologin()
+	{
+		if (!$this->is_logged_in() AND !$this->is_logged_in(FALSE))
+		{   // not logged in (as any user)
 			$this->ci->load->helper('cookie');
-			if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE)) {
+			if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE))
+			{
 
 				$data = unserialize($cookie);
 
-				if (isset($data['key']) AND isset($data['user_id'])) {
+				if (isset($data['key']) AND isset($data['user_id']))
+				{
 
 					$this->ci->load->model('tank_auth/user_autologin');
-					if (!is_null($user = $this->ci->user_autologin->get($data['user_id'], md5($data['key'])))) {
+					if (!is_null($user = $this->ci->user_autologin->get($data['user_id'], md5($data['key']))))
+					{
 
 						// Login user
+						$profile = new Profile();
+						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
 							'status' => STATUS_ACTIVATED,
+							'group' => $profile->group_id
 						));
+						
 
 						// Renew users cookie to prevent it from expiring
 						set_cookie(array(
@@ -752,20 +940,24 @@ class Tank_auth {
 		return FALSE;
 	}
 
+
 	/**
 	 * Check if login attempts exceeded max login attempts (specified in config)
 	 *
 	 * @param	string
 	 * @return	bool
 	 */
-	function is_max_login_attempts_exceeded($login) {
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
+	function is_max_login_attempts_exceeded($login)
+	{
+		if ($this->ci->config->item('login_count_attempts', 'tank_auth'))
+		{
 			$this->ci->load->model('tank_auth/login_attempts');
 			return $this->ci->login_attempts->get_attempts_num($this->ci->input->ip_address(), $login)
 			>= $this->ci->config->item('login_max_attempts', 'tank_auth');
 		}
 		return FALSE;
 	}
+
 
 	/**
 	 * Increase number of attempts for given IP-address and login
@@ -774,14 +966,18 @@ class Tank_auth {
 	 * @param	string
 	 * @return	void
 	 */
-	private function increase_login_attempt($login) {
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
-			if (!$this->is_max_login_attempts_exceeded($login)) {
+	private function increase_login_attempt($login)
+	{
+		if ($this->ci->config->item('login_count_attempts', 'tank_auth'))
+		{
+			if (!$this->is_max_login_attempts_exceeded($login))
+			{
 				$this->ci->load->model('tank_auth/login_attempts');
 				$this->ci->login_attempts->increase_attempt($this->ci->input->ip_address(), $login);
 			}
 		}
 	}
+
 
 	/**
 	 * Clear all attempt records for given IP-address and login
@@ -790,13 +986,16 @@ class Tank_auth {
 	 * @param	string
 	 * @return	void
 	 */
-	private function clear_login_attempts($login) {
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
+	private function clear_login_attempts($login)
+	{
+		if ($this->ci->config->item('login_count_attempts', 'tank_auth'))
+		{
 			$this->ci->load->model('tank_auth/login_attempts');
 			$this->ci->login_attempts->clear_attempts(
 					$this->ci->input->ip_address(), $login, $this->ci->config->item('login_attempt_expire', 'tank_auth'));
 		}
 	}
+
 
 }
 

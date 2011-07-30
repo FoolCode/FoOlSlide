@@ -8,6 +8,9 @@ class Admin_Controller extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 
+		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
+		$this->tank_auth->is_allowed() or show_404();
+
 		$this->viewdata["sidebar"] = $this->sidebar();
 
 		// Check if the database is upgraded to the the latest available
@@ -31,17 +34,8 @@ class Admin_Controller extends MY_Controller {
 	 */
 	function sidebar_val() {
 		return $sidebar = array(
-	"dashboard" => array(
-		"name" => _("Dashboard"),
-		"level" => "member",
-		"default" => "index",
-		"icon" => 91,
-		"content" => array(
-			"index" => array("level" => "member", "name" => "Dashboard"),
-		)
-	),
-	"comics" => array(
-		"name" => _("Comics"),
+	"series" => array(
+		"name" => _("Series"),
 		"level" => "mod",
 		"default" => "manage",
 		"icon" => 43,
@@ -53,11 +47,10 @@ class Admin_Controller extends MY_Controller {
 	"members" => array(
 		"name" => _("Members"),
 		"level" => "member",
-		"default" => "you",
+		"default" => "members",
 		"icon" => 122,
 		"content" => array(
 			"members" => array("level" => "mod", "name" => _("Member list")),
-			"you" => array("level" => "member", "name" => _("Your profile")),
 			"teams" => array("level" => "member", "name" => _("Team list")),
 			"home_team" => array("level" => "member", "name" => _("Home team")),
 			"add_team" => array("level" => "mod", "name" => _("Add team"))
@@ -154,10 +147,9 @@ class Admin_Controller extends MY_Controller {
 				if ($versions[0]) {
 					$this->db->update('preferences', array('value' => $versions[0]->version . '.' . $versions[0]->subversion . '.' . $versions[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
+				// reload the settings
+				load_settings();
 			}
-
-			// reload the settings
-			load_settings();
 		}
 	}
 

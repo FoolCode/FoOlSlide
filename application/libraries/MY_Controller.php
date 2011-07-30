@@ -14,8 +14,8 @@ class MY_Controller extends CI_Controller {
 		} else {
 			$this->load->database();
 			$this->load->library('session');
-			$this->load->library('tank_auth');
 			$this->load->library('datamapper');
+			$this->load->library('tank_auth');
 
 			if (!$this->session->userdata('nation') && $_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
 				// If the user doesn't have a nation set, let's grab it

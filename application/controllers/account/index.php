@@ -10,24 +10,27 @@ class Index extends Account_Controller
 		parent::__construct();
 		if (!$this->tank_auth->is_logged_in())
 			redirect('/account/auth/login/');
-		if($this->uri->segment(2) == 'index')
-				redirect('/account/'.$this->uri->segment(3));
+		if ($this->uri->segment(2) == 'index')
+			redirect('/account/' . $this->uri->segment(3));
 		$this->load->library('form_validation');
 		$this->_navbar();
 	}
-	
-	function _navbar() {
+
+
+	function _navbar()
+	{
 		$echo = "";
 		$array = array(
 			'profile' => _('Profile'),
 			'teams' => _('Teams'),
 		);
-		
-		foreach($array as $key => $item)
+
+		foreach ($array as $key => $item)
 		{
-			$echo .= '<a href="'.site_url('/account/'.$key.'/').'"';
-			if ($this->uri->segment(2) == $key) $echo .= ' class="active" ';
-			$echo .= '>'.$item.'</a>';
+			$echo .= '<a href="' . site_url('/account/' . $key . '/') . '"';
+			if ($this->uri->segment(2) == $key || ( $this->uri->segment(2) == FALSE && $key == "profile"))
+				$echo .= ' class="active" ';
+			$echo .= '>' . $item . '</a>';
 		}
 		$this->viewdata["navbar"] = $echo;
 	}
@@ -55,7 +58,10 @@ class Index extends Account_Controller
 				$profile->display_name = $this->form_validation->set_value('display_name');
 				$profile->twitter = $this->form_validation->set_value('twitter');
 				$profile->bio = $this->form_validation->set_value('bio');
-				$profile->save();
+				if ($profile->save())
+				{
+					$data["saved"] = TRUE;
+				}
 			}
 		}
 		$user = new User($this->tank_auth->get_user_id());
@@ -72,16 +78,115 @@ class Index extends Account_Controller
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/profile', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
 	}
-	
+
+
 	function teams()
 	{
+		if ($this->input->post('action'))
+		{
+			if ($this->input->post('action') == 'apply_with_team_name')
+			{
+				if (($error = $this->_accept_application()) !== TRUE)
+					$data["errors"]['team_name'] = $error;
+			}
+		}
 		// this is a datamapper object
 		$teams = $this->tank_auth->is_team();
-		$data["teams"] = $teams->all_to_array(array('name', 'stub'));
+		$data["teams"] = $teams?$teams->all_to_array(array('name', 'stub')):array();
 		
+		$teams_leaded = $this->tank_auth->is_team_leader();
+		$data["teams_leaded"] = $teams_leaded?$teams_leaded->all_to_array(array('name', 'stub')):array();
+
 		$this->viewdata["function_title"] = _("Your teams");
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/teams', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
+	}
+
+
+	function leave_team($team_stub)
+	{
+		$this->viewdata["navbar"] = "";
+		$team = new Team();
+		$team->where('stub', $team_stub)->get();
+		if ($team->result_count() != 1)
+		{
+			show_404();
+		}
+
+		if ($this->input->post())
+		{
+			$member = new Membership();
+			if (!$member->reject_application($team->id))
+			{
+				return FALSE;
+			}
+			redirect('/account/teams/');
+		}
+
+		$this->viewdata["function_title"] = _("Leave team");
+		$data["team_name"] = $team->name;
+		$data["team_id"] = $team->id;
+		$this->viewdata["main_content_view"] = $this->load->view('account/profile/leave_team', $data, TRUE);
+		$this->load->view("account/default.php", $this->viewdata);
+	}
+	
+	function leave_leadership($team_stub)
+	{
+		$this->viewdata["navbar"] = "";
+		$team = new Team();
+		$team->where('stub', $team_stub)->get();
+		if ($team->result_count() != 1)
+		{
+			show_404();
+		}
+		
+		if (!$this->tank_auth->is_team_leader($team->id) && !$this->tank_auth->is_allowed())
+		{
+			show_404();
+		}
+
+
+		if ($this->input->post())
+		{
+			$member = new Membership();
+			if (!$member->remove_team_leader($team->id))
+			{
+				return FALSE;
+			}
+			redirect('/account/teams/');
+		}
+
+		$this->viewdata["function_title"] = _("Leave team leadership");
+		$data["team_name"] = $team->name;
+		$data["team_id"] = $team->id;
+		$this->viewdata["main_content_view"] = $this->load->view('account/profile/leave_leadership', $data, TRUE);
+		$this->load->view("account/default.php", $this->viewdata);
+	}
+
+
+	/**
+	 * Allows a team leader or user to accept applications
+	 * 
+	 * @author Woxxy
+	 */
+	function _accept_application()
+	{
+		$this->form_validation->set_rules('team_name', _('Team name'), 'required|trim|xss_clean');
+		if ($this->form_validation->run())
+		{
+			$team = new Team();
+			$team->where('name', $this->form_validation->set_value('team_name'))->get();
+			if ($team->result_count() != 1)
+			{
+				return _("Team does not exist");
+			}
+			$member = new Membership();
+			if (!$member->accept_application($team->id))
+			{
+				return FALSE;
+			}
+			return TRUE;
+		}
 	}
 
 

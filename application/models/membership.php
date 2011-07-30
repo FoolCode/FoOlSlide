@@ -246,11 +246,13 @@ class Membership extends DataMapper {
 	 * @param int $user_id
 	 * @return bool 
 	 */
-	function remove_team_leader($team_id, $user_id) {
+	function remove_team_leader($team_id, $user_id = NULL) {
 		$CI = & get_instance();
 		if (!$CI->tank_auth->is_team_leader($team_id) && !$CI->tank_auth->is_allowed()) {
 			return FALSE;
 		}
+		if(is_null($user_id))
+			$user_id = $CI->tank_auth->get_user_id();
 		$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 		if ($this->result_count() != 1)
 			return FALSE;

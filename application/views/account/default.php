@@ -110,8 +110,14 @@ if ($CI->agent->is_browser('MSIE'))
 				<div class="title"><?php if (isset($this->tank_auth))
 					echo get_setting('fs_gen_site_title'); ?> - <?php echo _('Account'); ?></div>
 
-				<div class="subtitle"><?php if ($this->tank_auth->is_logged_in())
-						echo $this->tank_auth->get_username() . ': '; echo $function_title ?></div>
+				<div class="subtitle"><?php
+					if ($this->tank_auth->is_logged_in())
+					{
+						echo '<img src="'.get_gravatar($user_email, 28).'" /> ';
+						echo $this->tank_auth->get_username() . ': ';
+					}
+					echo $function_title
+				?></div>
 
 				<?php
 				if (isset($navbar))

@@ -333,32 +333,11 @@ class Members extends Admin_Controller
 	}
 
 
-	/*
-	 * Allows an user to apply for a team
-	 * 
-	 * Ajax protected until CSRF is setup
-	 * 
-	 * @author Woxxy
-	 */
-	function apply_team($team_id)
-	{
-		if (!isAjax())
-		{
-			return false;
-		}
-		$team = new Team($team_id);
-		if ($team->result_count() != 1)
-			return false;
-
-		$member = new Membership();
-		$member->apply($team->id, $this->tank_auth->get_user_id());
-		flash_notice('notice', _('You have applied for membership in this team. Come later to check the status of your application.'));
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
-	}
+	 
 
 
 	/*
-	 * Allows a team leader to accept applications
+	 * Allows a team leader or user to accept applications
 	 * 
 	 * Ajax protected until CSRF is setup
 	 * 

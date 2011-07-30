@@ -174,7 +174,7 @@ input:-moz-placeholder {
 #navbar a {
 	text-align:center;
 	width: 120px;
-	padding: 4px 0 2px;
+	padding: 4px 0 4px;
 	display:block;
 	float:left;
 	background: #fff;
@@ -187,7 +187,11 @@ input:-moz-placeholder {
 
 #navbar a.active, #navbar a:hover {
 	background:#D3EDFF;
-	padding: 4px 0;
+	padding: 4px 0 6px;
+}
+
+#navbar a:hover {
+	background:#F3FAFF;
 }
 
 #nav {
@@ -384,14 +388,14 @@ input:-moz-placeholder {
 
 .incontent .left {
 	float:left;
-	width:400px;
-	margin: 0 80px 0 0;
+	width:420px;
+	margin: 0 20px 0 0;
 }
 
-.incontent .right {
+.incontent .right {
 	float:right;
-	width:400px;
-	margin: 0 0 0 80px;
+	width:420px;
+	margin: 0 0 0 40px;
 }
 
 .incontent .formgroup {
@@ -479,16 +483,16 @@ input:-moz-placeholder {
 	text-align:center;
 }
 
-.incontent a:hover, .incontent input[type=submit]:hover {
+.incontent a.button:hover, .incontent input[type=submit]:hover {
 	background:#44AF44;
 	cursor:pointer;
 }
 
-.incontent a.yellow {
+.incontent a.button.yellow {
 	background:#ECB96B;
 	border: 2px solid #F5D5A6;
 }
 
-.incontent a.yellow:hover {
+.incontent a.button.yellow:hover {
 	background:#D39841;
 }

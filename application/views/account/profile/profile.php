@@ -40,12 +40,13 @@
 
 		<div class="formgroup">
 			<div><?php echo form_submit('submit', _('Save')); ?></div>
+			<div style="color: green;"><?php if(isset($saved)) echo _("Saved") ?></div>
 		</div>
 		<?php echo form_close(); ?>
 	</div>
-	<div class="left">
+	<div class="right">
 		<div class="formgroup">
-			<div style="text-align:center"><img src="<?php echo get_gravatar($user_email, 150); ?>" /></div>
+			<div style="text-align:center"><img width="150" height="150" src="<?php echo get_gravatar($user_email, 150); ?>" /></div>
 			<div><a href="http://gravatar.com" class="button" target="_blank"><?php echo _('Change avatar (via Gravatar.com)') ?></a></div>
 		</div>
 		<div class="formgroup">

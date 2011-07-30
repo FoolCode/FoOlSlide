@@ -139,7 +139,7 @@
 		
 		index = jQuery('.input_hidden', box).val();
 
-		jQuery.post('<?php echo site_url('/admin/comics/import/' . $comic->stub) ?>', {
+		jQuery.post('<?php echo site_url('/admin/series/import/' . $comic->stub) ?>', {
 			action: 'execute',
 			type: 'single_compressed',
 			name: '',

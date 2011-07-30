@@ -1,8 +1,8 @@
 <?php
 $this->buttoner[] = array(
-	'text' => _('Delete comic'),
-	'href' => site_url('/admin/comics/delete/comic/'.$comic->id),
-	'plug' => _('Do you really want to delete this comic and its chapters?')
+	'text' => _('Delete serie'),
+	'href' => site_url('/admin/series/delete/serie/'.$comic->id),
+	'plug' => _('Do you really want to delete this serie and its chapters?')
 );
 
 echo buttoner();
@@ -18,7 +18,7 @@ echo form_close();
 <?php
 	$this->buttoner = array(
 		array(
-			'href' => site_url('/admin/comics/add_new/'.$comic->stub),
+			'href' => site_url('/admin/series/add_new/'.$comic->stub),
 			'text' => _('Add chapter')
 		)
 	);
@@ -26,7 +26,7 @@ echo form_close();
 	if($this->tank_auth->is_admin())
 	{
 		$this->buttoner[] = array(
-			'href' => site_url('/admin/comics/import/'.$comic->stub),
+			'href' => site_url('/admin/series/import/'.$comic->stub),
 			'text' => _('Import from folder')
 		);
 	}
@@ -42,7 +42,7 @@ echo form_close();
     foreach ($chapters as $item)
     {
         echo '<div class="item">
-                <div class="title"><a href="'.site_url("admin/comics/comic/".$comic->stub."/".$item->id).'">'. $item->title().'</a></div>
+                <div class="title"><a href="'.site_url("admin/series/serie/".$comic->stub."/".$item->id).'">'. $item->title().'</a></div>
                 <div class="smalltext info">
                     Chapter #'.$item->chapter.'
                     Sub #'.$item->subchapter;

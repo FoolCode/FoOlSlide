@@ -1,7 +1,7 @@
 <?php
 $this->buttoner[] = array(
 	'text' => _('Delete chapter'),
-	'href' => site_url('/admin/comics/delete/chapter/' . $chapter->id),
+	'href' => site_url('/admin/series/delete/chapter/' . $chapter->id),
 	'plug' => _('Do you really want to delete this chapter and its pages?')
 );
 
@@ -31,21 +31,21 @@ $session_data = $this->session->get_js_session();
 		
 		function deleteImage(id)
 		{
-			jQuery.post('<?php echo site_url('/admin/comics/delete/page/') ?>', {id: id}, function(){
+			jQuery.post('<?php echo site_url('/admin/series/delete/page/') ?>', {id: id}, function(){
 				jQuery('#image_' + id).hide();
 			});
 		}
 	
 		function deleteAllPages()
 		{
-			jQuery.post('<?php echo site_url('/admin/comics/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
+			jQuery.post('<?php echo site_url('/admin/series/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
 				location.reload();
 			});
 		}
 	
 		function updateSession()
 		{
-			jQuery.post('<?php echo site_url('/admin/comics/get_sess_id'); ?>', 
+			jQuery.post('<?php echo site_url('/admin/series/get_sess_id'); ?>', 
 			function(result){
 				
 				jQuery('#file_upload_flash').uploadifySettings( 'postData', {
@@ -60,7 +60,7 @@ $session_data = $this->session->get_js_session();
 		jQuery(document).ready(function() {
 			jQuery('#file_upload_flash').uploadify({
 				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
-				'uploader'    : '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+				'uploader'    : '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
 				'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
 				'checkExisting' : false,
 				'preventCaching' : false,
@@ -181,7 +181,7 @@ $session_data = $this->session->get_js_session();
 
 	jQuery(function () {
 		jQuery('#fileupload').fileupload({
-			url: '<?php echo site_url('/admin/comics/upload/compressed_chapter'); ?>',
+			url: '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
 			sequentialUploads: true,
 			formData: [
 				{
@@ -191,7 +191,7 @@ $session_data = $this->session->get_js_session();
 			]
 		});
 
-		jQuery.post('<?php echo site_url('/admin/comics/get_file_objects'); ?>', { id : <?php echo $chapter->id; ?> }, function (files) {
+		jQuery.post('<?php echo site_url('/admin/series/get_file_objects'); ?>', { id : <?php echo $chapter->id; ?> }, function (files) {
 			var fu = jQuery('#fileupload').data('fileupload');
 			fu._adjustMaxNumberOfFiles(-files.length);
 			fu._renderDownload(files)

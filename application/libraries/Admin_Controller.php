@@ -9,6 +9,8 @@ class Admin_Controller extends MY_Controller {
 		parent::__construct();
 
 		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
+		$this->tank_auth->is_allowed() or show_404();
+
 		$this->viewdata["sidebar"] = $this->sidebar();
 
 		// Check if the database is upgraded to the the latest available
@@ -32,17 +34,8 @@ class Admin_Controller extends MY_Controller {
 	 */
 	function sidebar_val() {
 		return $sidebar = array(
-	"dashboard" => array(
-		"name" => _("Dashboard"),
-		"level" => "member",
-		"default" => "index",
-		"icon" => 91,
-		"content" => array(
-			"index" => array("level" => "member", "name" => "Dashboard"),
-		)
-	),
-	"comics" => array(
-		"name" => _("Comics"),
+	"series" => array(
+		"name" => _("Series"),
 		"level" => "mod",
 		"default" => "manage",
 		"icon" => 43,

@@ -50,7 +50,7 @@ class License extends DataMapper
 
 
 	/**
-	 * Gets all the comics' licensed nations and puts the country codes in an array
+	 * Gets all the series' licensed nations and puts the country codes in an array
 	 * 
 	 * @param int $id comic_id
 	 * @return array country codes

@@ -67,7 +67,7 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
-		$data['table'] = tabler($form, TRUE, FALSE);
+		$data['list'] = tabler($form, TRUE, FALSE);
 
 		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);

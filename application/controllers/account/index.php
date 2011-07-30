@@ -86,20 +86,50 @@ class Index extends Account_Controller
 		{
 			if ($this->input->post('action') == 'apply_with_team_name')
 			{
-				if (($error = $this->_accept_application()) !== TRUE)
+				if (($error = $this->_apply()) !== TRUE)
 					$data["errors"]['team_name'] = $error;
 			}
 		}
 		// this is a datamapper object
 		$teams = $this->tank_auth->is_team();
-		$data["teams"] = $teams?$teams->all_to_array(array('name', 'stub')):array();
-		
-		$teams_leaded = $this->tank_auth->is_team_leader();
-		$data["teams_leaded"] = $teams_leaded?$teams_leaded->all_to_array(array('name', 'stub')):array();
+		$data["teams"] = $teams ? $teams->all_to_array(array('name', 'stub')) : array();
 
+		$teams_leaded = $this->tank_auth->is_team_leader();
+		$data["teams_leaded"] = $teams_leaded ? $teams_leaded->all_to_array(array('name', 'stub')) : array();
+
+		$members = new Membership();
+		$members->get_applications();
+		$data["requests"] = $members;
+		
 		$this->viewdata["function_title"] = _("Your teams");
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/teams', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
+	}
+
+
+	/**
+	 * Allows a team leader or user to accept applications
+	 * 
+	 * @author Woxxy
+	 */
+	function _apply()
+	{
+		$this->form_validation->set_rules('team_name', _('Team name'), 'required|trim|xss_clean');
+		if ($this->form_validation->run())
+		{
+			$team = new Team();
+			$team->where('name', $this->form_validation->set_value('team_name'))->get();
+			if ($team->result_count() != 1)
+			{
+				return _("Team does not exist");
+			}
+			$member = new Membership();
+			if (!$member->apply($team->id))
+			{
+				return FALSE;
+			}
+			return TRUE;
+		}
 	}
 
 
@@ -129,7 +159,8 @@ class Index extends Account_Controller
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/leave_team', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
 	}
-	
+
+
 	function leave_leadership($team_stub)
 	{
 		$this->viewdata["navbar"] = "";
@@ -139,7 +170,7 @@ class Index extends Account_Controller
 		{
 			show_404();
 		}
-		
+
 		if (!$this->tank_auth->is_team_leader($team->id) && !$this->tank_auth->is_allowed())
 		{
 			show_404();
@@ -161,32 +192,6 @@ class Index extends Account_Controller
 		$data["team_id"] = $team->id;
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/leave_leadership', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
-	}
-
-
-	/**
-	 * Allows a team leader or user to accept applications
-	 * 
-	 * @author Woxxy
-	 */
-	function _accept_application()
-	{
-		$this->form_validation->set_rules('team_name', _('Team name'), 'required|trim|xss_clean');
-		if ($this->form_validation->run())
-		{
-			$team = new Team();
-			$team->where('name', $this->form_validation->set_value('team_name'))->get();
-			if ($team->result_count() != 1)
-			{
-				return _("Team does not exist");
-			}
-			$member = new Membership();
-			if (!$member->accept_application($team->id))
-			{
-				return FALSE;
-			}
-			return TRUE;
-		}
 	}
 
 

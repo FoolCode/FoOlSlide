@@ -48,7 +48,13 @@ class Membership extends DataMapper {
 		return ($member->result_count() == 1);
 	}
 
-	function apply($team_id, $user_id) {
+	function apply($team_id, $user_id = NULL) {
+		if(is_null($user_id))
+		{
+			$CI = & get_instance();
+			$user_id = $CI->tank_auth->get_user_id();
+		}
+			
 		if ($this->check($team_id, $user_id))
 			return FALSE;
 		$this->team_id = $team_id;

@@ -32,6 +32,23 @@
 			}
 			echo '</table>';
 		}
+		
+		echo '<br/><br/>';
+		
+		if (!empty($requests->all))
+		{
+			echo _("These users are applying for a team of yours:");
+			echo '<table>';
+			foreach ($requests->all as $key => $request)
+			{
+				echo '<tr>';
+				echo '<td>'._("User:") . $request->user->username . ' » '.$request->team->name.'</td>';
+				echo '<td style="text-align:right"><a href="'.site_url('/account/reject_request/'.$team["stub"].'/'.$request->user->id).'">'._("Reject").'</a></td>';
+				echo '<td style="text-align:right"><a href="'.site_url('/account/accept_request/'.$team["stub"].'/'.$request->user->id).'">'._("Accept").'</a></td>';
+				echo '</tr>';
+			}
+			echo '</table>';
+		}
 		?>
 	</div>
 	<div class="right">

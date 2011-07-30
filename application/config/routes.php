@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "reader";
-$route['admin'] = "admin/index";
+$route['admin'] = "admin/series";
 $route['account'] = "account/index/profile";
 $route['account/profile'] = "account/index/profile";
 $route['account/teams'] = "account/index/teams";

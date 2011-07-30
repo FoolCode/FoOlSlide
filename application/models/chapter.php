@@ -296,16 +296,16 @@ class Chapter extends DataMapper {
 		// Stub function converts the $this->to_stub if available, and processes it.
 		$this->stub = $this->stub();
 
-		// Check if comic_id is set and confirm there's a corresponding comic
+		// Check if comic_id is set and confirm there's a corresponding serie
 		// If not, make an error message and stop adding the chapter
 		$comic = new Comic($data['comic_id']);
 		if ($comic->result_count() == 0) {
-			set_notice('error', _('The comic you were adding the chapter to doesn\'t exist.'));
+			set_notice('error', _('The serie you were adding the chapter to doesn\'t exist.'));
 			log_message('error', 'add: comic_id does not exist in comic database');
 			return false;
 		}
 
-		// The comic exists? Awesome, set it as soon as possible.
+		// The serie exists? Awesome, set it as soon as possible.
 		$this->comic_id = $data['comic_id'];
 
 		// Create the directory. The GUI error messages are inside the function.
@@ -322,7 +322,7 @@ class Chapter extends DataMapper {
 			return false;
 		}
 
-		// Oh, since we already have the comic, let's put it into its variable.
+		// Oh, since we already have the serie, let's put it into its variable.
 		// This is very comfy for redirection!
 		$this->comic = $comic;
 
@@ -338,10 +338,10 @@ class Chapter extends DataMapper {
 	 * @return	object the comic the chapter derives from.
 	 */
 	public function remove() {
-		// Get comic and check if existant. We don't want to have empty stub on this!
+		// Get serie and check if existant. We don't want to have empty stub on this!
 		$comic = new Comic($this->comic_id);
 		if ($this->result_count() == 0) {
-			set_notice('error', _('You\'re trying to delete something that doesn\'t even have a related comic\'?'));
+			set_notice('error', _('You\'re trying to delete something that doesn\'t even have a related serie\'?'));
 			log_message('error', 'update_chapter_db: failed to find requested id');
 			return false;
 		}
@@ -373,7 +373,7 @@ class Chapter extends DataMapper {
 	 *
 	 * @author	Woxxy
 	 * @param	array $data contains the minimal data
-	 * @return	object the comic the chapter derives from.
+	 * @return	object the serie the chapter derives from.
 	 */
 	public function update_chapter_db($data = array()) {
 		// Check if we're updating or creating a new chapter by looking at $data["id"].
@@ -392,15 +392,15 @@ class Chapter extends DataMapper {
 		else { // if we're here, it means that we're creating a new chapter
 			// Set the creator name if it's a new chapter.	
 			if (!isset($this->comic_id)) {
-				set_notice('error', 'You didn\'t select a comic to refer to.');
+				set_notice('error', 'You didn\'t select a serie to refer to.');
 				log_message('error', 'update_chapter_db: comic_id was not set');
 				return false;
 			}
 
-			// Check that the related comic is defined, and exists.
+			// Check that the related serie is defined, and exists.
 			$comic = new Comic($this->comic_id);
 			if ($comic->result_count() == 0) {
-				set_notice('error', _('The comic you were referring to doesn\'t exist.'));
+				set_notice('error', _('The serie you were referring to doesn\'t exist.'));
 				log_message('error', 'update_chapter_db: comic_id does not exist in comic database');
 				return false;
 			}
@@ -566,9 +566,9 @@ class Chapter extends DataMapper {
 	 * @return	boolean true if success, false if failure.
 	 */
 	public function add_chapter_dir() {
-		// Get the comic if we didn't yet.
+		// Get the serie if we didn't yet.
 		if (!$this->get_comic()) {
-			set_notice('error', _('No comic related to this chapter.'));
+			set_notice('error', _('No serie related to this chapter.'));
 			log_message('error', 'add_chapter_dir: comic did not exist');
 			return false;
 		}
@@ -592,9 +592,9 @@ class Chapter extends DataMapper {
 	 * @return	boolean true if success, false if failure.
 	 */
 	public function remove_chapter_dir() {
-		// Get the comic if we didn't yet.
+		// Get the serie if we didn't yet.
 		if (!$this->get_comic()) {
-			set_notice('error', _('No comic related to this chapter.'));
+			set_notice('error', _('No serie related to this chapter.'));
 			log_message('error', 'remove_chapter_dir: comic did not exist');
 			return false;
 		}
@@ -780,7 +780,7 @@ class Chapter extends DataMapper {
 		if (!$CI->tank_auth->is_team_leader_array($this->teams))
 			return "";
 		$this->get_comic();
-		return site_url('/admin/comics/comic/' . $this->comic->stub . '/' . $this->id);
+		return site_url('/admin/series/serie/' . $this->comic->stub . '/' . $this->id);
 	}
 
 	/**

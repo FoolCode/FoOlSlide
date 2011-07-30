@@ -98,9 +98,14 @@ class Index extends Account_Controller
 		$data["teams_leaded"] = $teams_leaded ? $teams_leaded->all_to_array(array('name', 'stub')) : array();
 
 		$members = new Membership();
-		$members->get_applications();
+		$members->get_applicants();
 		$data["requests"] = $members;
 		
+		$members = new Membership();
+		$members->get_applications();
+		$data["applications"] = $members;
+		$data["user_id"] = $this->tank_auth->get_user_id();
+
 		$this->viewdata["function_title"] = _("Your teams");
 		$this->viewdata["main_content_view"] = $this->load->view('account/profile/teams', $data, TRUE);
 		$this->load->view("account/default.php", $this->viewdata);
@@ -126,10 +131,53 @@ class Index extends Account_Controller
 			$member = new Membership();
 			if (!$member->apply($team->id))
 			{
-				return FALSE;
+				return show_404();
 			}
 			return TRUE;
 		}
+	}
+
+
+	function request($team_stub, $user_id)
+	{
+		$this->viewdata["navbar"] = "";
+		$team = new Team();
+		$team->where('stub', $team_stub)->get();
+		$user = new User($user_id);
+		if ($team->result_count() != 1 || $user->result_count() != 1)
+		{
+			show_404();
+		}
+
+		if ($this->input->post('action'))
+		{
+			$member = new Membership();
+
+			if ($this->input->post('action') == 'accept')
+			{
+				if (!$member->accept_application($team->id, $user->id))
+				{
+					return show_404();
+				}
+			}
+
+			if ($this->input->post('action') == 'reject')
+			{
+				if (!$member->reject_application($team->id, $user->id))
+				{
+					return show_404();
+				}
+			}
+
+			redirect('/account/teams/');
+		}
+
+		$this->viewdata["function_title"] = _("Accept request");
+		$data["team_name"] = $team->name;
+		$data["user_name"] = $user->username;
+		$data["show_accept"] = $this->tank_auth->is_team_leader($team->id);
+		$this->viewdata["main_content_view"] = $this->load->view('account/profile/request', $data, TRUE);
+		$this->load->view("account/default.php", $this->viewdata);
 	}
 
 
@@ -148,7 +196,7 @@ class Index extends Account_Controller
 			$member = new Membership();
 			if (!$member->reject_application($team->id))
 			{
-				return FALSE;
+				return show_404();
 			}
 			redirect('/account/teams/');
 		}
@@ -182,7 +230,7 @@ class Index extends Account_Controller
 			$member = new Membership();
 			if (!$member->remove_team_leader($team->id))
 			{
-				return FALSE;
+				return show_404();
 			}
 			redirect('/account/teams/');
 		}

@@ -43,8 +43,7 @@
 			{
 				echo '<tr>';
 				echo '<td>'._("User:") . $request->user->username . ' » '.$request->team->name.'</td>';
-				echo '<td style="text-align:right"><a href="'.site_url('/account/reject_request/'.$team["stub"].'/'.$request->user->id).'">'._("Reject").'</a></td>';
-				echo '<td style="text-align:right"><a href="'.site_url('/account/accept_request/'.$team["stub"].'/'.$request->user->id).'">'._("Accept").'</a></td>';
+				echo '<td style="text-align:right"><a href="'.site_url('/account/request/'.$team["stub"].'/'.$request->user->id).'">'._("Options").'</a></td>';
 				echo '</tr>';
 			}
 			echo '</table>';
@@ -71,5 +70,22 @@
 		<div class="formgroup">
 			<div><?php echo form_submit('submit', _('Apply')); ?></div>
 		</div>
+		<?php
+		echo '<br/><br/>';
+		
+		if (!empty($applications->all))
+		{
+			echo _("You have pending applications for the following teams:");
+			echo '<table>';
+			foreach ($applications->all as $key => $request)
+			{
+				echo '<tr>';
+				echo '<td>'.$request->team->name.'</td>';
+				echo '<td style="text-align:right"><a href="'.site_url('/account/request/'.$request->team->stub.'/'.$user_id).'">'._("Options").'</a></td>';
+				echo '</tr>';
+			}
+			echo '</table>';
+		}
+		?>
 	</div>
 </div>

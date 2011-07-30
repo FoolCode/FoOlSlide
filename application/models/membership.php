@@ -97,7 +97,7 @@ class Membership extends DataMapper {
 	 *  @param int $team_id if NULL it returns the applications from every team in which the user is leader
 	 * 	@return object User
 	 */
-	function get_applications($team_id = NULL) {
+	function get_applicants($team_id = NULL) {
 		$CI = & get_instance();
 
 		if (is_null($team_id)) {
@@ -139,6 +139,30 @@ class Membership extends DataMapper {
 			$user_id = $CI->tank_auth->get_user_id();
 		}
 		$this->where('user_id', $user_id)->where('accepted', 0)->where('requested', 1)->get();
+		$teams = new Team();
+		foreach ($this->all as $request) {
+			$request->team = new Team($request->team_id);
+		}
+		return TRUE;
+	}
+	
+	/**
+	 * 	Returns teams that have requested the user to join
+	 * 
+	 *  @author Woxxy
+	 *  @param int $team_id if NULL it returns for the current user
+	 * 	@return object User
+	 */
+	function get_applications($user_id = NULL) {
+		$CI = & get_instance();
+		if (is_null($user_id)) {
+			$user_id = $CI->tank_auth->get_user_id();
+		}
+		$this->where('user_id', $user_id)->where('accepted', 0)->where('applied', 1)->get();
+		if($this->result_count() != 1)
+		{
+			return FALSE;
+		}
 		$teams = new Team();
 		foreach ($this->all as $request) {
 			$request->team = new Team($request->team_id);
@@ -192,9 +216,9 @@ class Membership extends DataMapper {
 	function reject_application($team_id, $user_id = NULL) {
 		$CI = & get_instance();
 
-		if (is_null($user_id)) {
+		if (is_null($user_id) || $user_id = $CI->tank_auth->get_user_id()) {
 			$user_id = $CI->tank_auth->get_user_id();
-			$this->where('team_id', $team_id)->where('user_id', $user_id)->where('requested', 1)->get();
+			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 			if ($this->result_count() != 1) {
 				return FALSE;
 			}

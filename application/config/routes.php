@@ -44,6 +44,7 @@ $route['account'] = "account/index/profile";
 $route['account/profile'] = "account/index/profile";
 $route['account/teams'] = "account/index/teams";
 $route['account/leave_team/(:any)'] = "account/index/leave_team/$1";
+$route['account/request/(:any)'] = "account/index/request/$1";
 $route['account/leave_leadership/(:any)'] = "account/index/leave_leadership/$1";
 $route['reader/list'] = 'reader/lista';
 $route['reader/list/(:num)'] = 'reader/lista/$1';

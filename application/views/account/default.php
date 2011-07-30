@@ -113,7 +113,7 @@ if ($CI->agent->is_browser('MSIE'))
 				<div class="subtitle"><?php
 					if ($this->tank_auth->is_logged_in())
 					{
-						echo '<img src="'.get_gravatar($user_email, 28).'" /> ';
+						echo '<img src="'.get_gravatar($user_email, 16).'" /> ';
 						echo $this->tank_auth->get_username() . ': ';
 					}
 					echo $function_title

@@ -25,8 +25,8 @@ echo buttoner();
     foreach ($comics as $item)
     {
         echo '<div class="item">
-                <div class="title"><a href="'.site_url("admin/series/serie/".$item->stub).'">'.$item->name.'</a></div>
-                <div class="smalltext">'._('Quick tools').'</div>';
+                <div class="title"><a href="'.site_url("admin/series/serie/".$item->stub).'">'.$item->name.'</a></div>';
+                //echo '<div class="smalltext">'._('Quick tools').'</div>';
              echo '</div>';
     }
 

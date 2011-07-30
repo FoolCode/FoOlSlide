@@ -463,8 +463,13 @@ input:-moz-placeholder {
 	border-spacing:0px;
 }
 
+.incontent.login table tr {
+	border:none;
+}
+
 .incontent table td {
 	width:50%;
+	border:none;
 }
 
 .incontent a.button {

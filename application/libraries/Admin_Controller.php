@@ -47,7 +47,7 @@ class Admin_Controller extends MY_Controller {
 	"members" => array(
 		"name" => _("Members"),
 		"level" => "member",
-		"default" => "you",
+		"default" => "members",
 		"icon" => 122,
 		"content" => array(
 			"members" => array("level" => "mod", "name" => _("Member list")),

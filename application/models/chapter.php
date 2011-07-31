@@ -342,7 +342,7 @@ class Chapter extends DataMapper {
 		$comic = new Comic($this->comic_id);
 		if ($this->result_count() == 0) {
 			set_notice('error', _('You\'re trying to delete something that doesn\'t even have a related serie\'?'));
-			log_message('error', 'update_chapter_db: failed to find requested id');
+			log_message('error', 'remove_chapter: failed to find requested id');
 			return false;
 		}
 

@@ -220,7 +220,7 @@ class Files_model extends CI_Model
 		else
 			$extension = '';
 
-		if (!$this->compressed_chapter($this->input->post('server_path'), 'file' . $extension, $chapter->id))
+		if (!$this->compressed_chapter($this->input->post('server_path'), 'file.' . $extension, $chapter->id))
 		{
 			$chapter->remove();
 			log_message('error', 'import_compressed(): Couldn\'t add the pages to the chapter');

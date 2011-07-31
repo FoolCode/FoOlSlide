@@ -665,10 +665,13 @@ input[type="text"]
 	margin: 10px 0px;
 	padding:7px 10px;
 	text-decoration:none !important;
-	background:#eeecea;
 	border: 1px solid #999;
 	overflow:hidden;
 	text-align:center;
+	border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+	box-shadow:inset 0px 0px 5px rgba(120,120,120,0.3);
 }
 
 .ads.banner *

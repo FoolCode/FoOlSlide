@@ -2,9 +2,9 @@
 	exit('No direct script access allowed'); ?>
 
 	<div class="large comic">
-		<div class="title">
+		<h1 class="title">
 			<?php echo $comic->name; ?>
-		</div>
+		</h1>
 		<?php if ($comic->get_thumb()): ?><div class="thumbnail">
 				<img src="<?php echo $comic->get_thumb(); ?>" />
 			</div><?php endif; ?>

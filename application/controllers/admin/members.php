@@ -67,7 +67,7 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
-		$data['list'] = tabler($form, TRUE, FALSE);
+		$data['table'] = tabler($form, TRUE, FALSE);
 
 		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);
@@ -150,7 +150,7 @@ class Members extends Admin_Controller
 				$rows[] = array('title' => '<a href="' . site_url('admin/members/teams/' . $team->stub) . '">' . $team->name . '</a>');
 			}
 			// put in a list the teams
-			$data['list'] = lister($rows);
+			$data['table'] = lister($rows);
 
 			// print out
 			$this->viewdata["main_content_view"] = $this->load->view('admin/members/users', $data, TRUE);

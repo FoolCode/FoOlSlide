@@ -180,6 +180,28 @@ class Preferences extends Admin_Controller
 				'preferences' => 'fs_gen'
 			)
 		);
+		
+		$form[] = array(
+			_('Pre-header text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_gen_preheader_text',
+				'placeholder' => '',
+				'preferences' => 'fs_gen',
+				'help' => _("This allows adding HTML code before the header navigation block.")
+			)
+		);
+		
+		$form[] = array(
+			_('Header text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_gen_header_text',
+				'placeholder' => '',
+				'preferences' => 'fs_gen',
+				'help' => _("You can use this area to add text, a banner or any HTML in the header, where the navigation links are")
+			)
+		);
 
 		$form[] = array(
 			_('Footer text'),
@@ -187,7 +209,8 @@ class Preferences extends Admin_Controller
 				'type' => 'textarea',
 				'name' => 'fs_gen_footer_text',
 				'placeholder' => '',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _('Add text in the footer, place where to write disclaimers. Don\'t write things like "All Rights Reserved©", especially if what you upload is not yours. If you\'re releasing your own work, consider using <a href="http://creativecommons.org/">Creative Commons licenses</a> to protect it. Remember that in 2011 sharing means power!')
 			)
 		);
 
@@ -197,7 +220,8 @@ class Preferences extends Admin_Controller
 				'type' => 'textarea',
 				'name' => 'fs_theme_header_code',
 				'placeholder' => '',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _("This allows you to add code inside the HEAD of the HTML.")
 			)
 		);
 
@@ -207,7 +231,8 @@ class Preferences extends Admin_Controller
 				'type' => 'textarea',
 				'name' => 'fs_theme_footer_code',
 				'placeholder' => '',
-				'preferences' => 'fs_gen'
+				'preferences' => 'fs_gen',
+				'help' => _("This allows you to add code after the BODY.")
 			)
 		);
 

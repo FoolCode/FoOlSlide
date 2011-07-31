@@ -5,8 +5,7 @@
 		<title><?php echo $template['title']; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<?php echo $template['metadata']; ?>
-		<?php echo link_tag('content/themes/'.(get_setting('fs_theme_dir')?get_setting('fs_theme_dir'):'default').'/style.css') ?>
-
+		<?php echo link_tag('content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/style.css') ?>
 
 		<script type="text/javascript">
 			(function() {
@@ -53,41 +52,69 @@
 				window.__twitterIntentHandler = true;
 			}());
 			
+			function toggleNight() {
+				jQuery("body").toggleClass("night");
+				if(jQuery("body.night").length == 1) createCookie("night_mode", 1, 30);
+				else createCookie("night_mode", 0, 30);
+			}
+			
+			function createCookie(name,value,days) {
+				if (days) {
+					var date = new Date();
+					date.setTime(date.getTime()+(days*24*60*60*1000));
+					var expires = "; expires="+date.toGMTString();
+				}
+				else var expires = "";
+				document.cookie = name+"="+value+expires+"; path=/";
+			}
+			
 			jQuery(document).ready(function(){
-<?php if ($this->agent->is_browser('MSIE')) { ?>
+<?php if ($this->agent->is_browser('MSIE'))
+{ ?>
 
-							// Let's make placeholders work on IE and old browsers too
-							jQuery('[placeholder]').focus(function() {
-								var input = jQuery(this);
-								if (input.val() == input.attr('placeholder')) {
-									input.val('');
-									input.removeClass('placeholder');
-								}
-							}).blur(function() {
-								var input = jQuery(this);
-								if (input.val() == '' || input.val() == input.attr('placeholder')) {
-									input.addClass('placeholder');
-									input.val(input.attr('placeholder'));
-								}
-							}).blur().parents('form').submit(function() {
-								jQuery(this).find('[placeholder]').each(function() {
-									var input =jQuery(this);
-									if (input.val() == input.attr('placeholder')) {
-										input.val('');
-									}
-								})
-							}); <?php } ?>
-					});
+			// Let's make placeholders work on IE and old browsers too
+			jQuery('[placeholder]').focus(function() {
+				var input = jQuery(this);
+				if (input.val() == input.attr('placeholder')) {
+					input.val('');
+					input.removeClass('placeholder');
+				}
+			}).blur(function() {
+				var input = jQuery(this);
+				if (input.val() == '' || input.val() == input.attr('placeholder')) {
+					input.addClass('placeholder');
+					input.val(input.attr('placeholder'));
+				}
+			}).blur().parents('form').submit(function() {
+				jQuery(this).find('[placeholder]').each(function() {
+					var input =jQuery(this);
+					if (input.val() == input.attr('placeholder')) {
+						input.val('');
+					}
+				})
+			}); <?php } ?>
+	});
 			
 		</script>
-	<?php echo get_setting('fs_theme_header_code'); ?>
-	</head>
-	<body>
-		<div id="wrapper">
-			<div id="header">
+		<?php echo get_setting('fs_theme_header_code'); ?>
 
-				<div id="navig">
+	</head>
+	<body class="<?php if (isset($_COOKIE["night_mode"]) && $_COOKIE["night_mode"] == 1)
+			echo 'night '; ?>">
+		<div id="wrapper">
+			<?php echo get_setting('fs_theme_preheader_text'); ?>
+			<div id="header">
+				<?php echo get_setting('fs_theme_header_text'); ?>
+				<div role="navigation" id="navig">
 					<ul>
+						<li class="icon_wrapper night_mode" onClick="toggleNight()">
+							<img class="icon off" src="<?php echo glyphish(181); ?>" />
+							<img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" />
+						</li>
+						<li class="icon_wrapper day_mode" onClick="toggleNight()">
+							<img class="icon off" style="position:relative; top:-7px;" src="<?php echo glyphish(136); ?>" />
+							<img class="icon on" style="position:relative; top:-7px;" src="<?php echo glyphish(136, TRUE); ?>" />
+						</li>
 						<li>
 							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Latest releases'); ?></a>
 						</li>
@@ -107,16 +134,17 @@
 
 				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
 				<?php if (get_setting('fs_gen_back_url'))
-					echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">Go back to site &crarr;</a></div>'; ?>
+					echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">' . _("Go back to site") . ' &crarr;</a></div>'; ?>
 				<div class="clearer"></div>	
 			</div>
 
 
 
 
-			<div id="content">
+			<article id="content">
 				<?php
-				if (!isset($is_reader) || !$is_reader) {
+				if (!isset($is_reader) || !$is_reader)
+				{
 					echo '<div class="panel">' . get_sidebar();
 					if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'))
 						echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
@@ -136,22 +164,18 @@
 					echo '</div>';
 				?>
 
-			</div>
+			</article>
 
 		</div>
 		<div id="footer">
 			<div class="text">
-                            <div>
-				<?php echo get_setting('fs_gen_footer_text'); ?>
-                            </div>
-                            <div class="cp_link">
-                                <?php 
-                                    if(get_setting('fs_reg_disabled') || $this->tank_auth->is_logged_in()) { 
-                                        echo '<a href="'.site_url('admin').'">'._('Control panel').'</a>'; 
-                                    }
-                                ?>
-                                <img src="<?php echo site_url().'content/themes/default/images/logo_footer.png'?>" />
-                            </div>
+				<div>
+					<?php echo get_setting('fs_gen_footer_text'); ?>
+				</div>
+				<div class="cp_link">
+
+					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
+				</div>
 			</div>
 		</div>
 	</body>

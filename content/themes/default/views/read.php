@@ -21,54 +21,58 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 
 <div class="panel">
 	<div class="topbar">
-            <div>
-                <div class="topbar_left">
-                    <h1 class="tbtitle dnone"><?php echo $comic->url() ?> :: <?php echo $chapter->url() ?></h1>
-                    <div class="tbtitle dropdown_parent"><div class="text"><?php echo $comic->url() ?> ⤵</div>
-                            <?php
-                            echo '<ul class="dropdown">';
-                            foreach ($comics->all as $co) {
-                                    echo '<li>' . $co->url() . '</li>';
-                            }
-                            echo '</ul>'
-                            ?>
-                    </div>	
-                    <div class="tbtitle dropdown_parent"><div class="text"><?php echo '<a href="'.$chapter->href().'">'. ((strlen($chapter->title()) > 58)?(substr($chapter->title(), 0, 50).'...'):$chapter->title()) . '</a>' ?> ⤵</div>
-                            <?php
-                            echo '<ul class="dropdown">';
-                            foreach ($chapters->all as $ch) {
-                                    echo '<li>' . $ch->url() . '</li>';
-                            }
-                            echo '</ul>'
-                            ?>
-                    </div>
-                    <div class="tbtitle icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
-                    <?php echo $chapter->download_url(NULL, "fleft"); ?>
-                </div>
-                <div class="topbar_right">
-                    <div class="tbtitle dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
-                            <?php
-                            $url = $chapter->href();
-                            echo '<ul class="dropdown" style="width:90px;">';
-                            for ($i = 1; $i <= count($pages); $i++) {
-                                    echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . ($i - 1) . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
-                            }
-                            echo '</ul>'
-                            ?>
-                    </div>		
+		<div>
+			<div class="topbar_left">
+				<h1 class="tbtitle dnone"><?php echo $comic->url() ?> :: <?php echo $chapter->url() ?></h1>
+				<div class="tbtitle dropdown_parent"><div class="text"><?php echo $comic->url() ?> ⤵</div>
+					<?php
+					echo '<ul class="dropdown">';
+					foreach ($comics->all as $co)
+					{
+						echo '<li>' . $co->url() . '</li>';
+					}
+					echo '</ul>'
+					?>
+				</div>	
+				<div class="tbtitle dropdown_parent"><div class="text"><?php echo '<a href="' . $chapter->href() . '">' . ((strlen($chapter->title()) > 58) ? (substr($chapter->title(), 0, 50) . '...') : $chapter->title()) . '</a>' ?> ⤵</div>
+					<?php
+					echo '<ul class="dropdown">';
+					foreach ($chapters->all as $ch)
+					{
+						echo '<li>' . $ch->url() . '</li>';
+					}
+					echo '</ul>'
+					?>
+				</div>
+				<div class="tbtitle icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
+<?php echo $chapter->download_url(NULL, "fleft"); ?>
+			</div>
+			<div class="topbar_right">
+				<div class="tbtitle dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
+					<?php
+					$url = $chapter->href();
+					echo '<ul class="dropdown" style="width:90px;">';
+					for ($i = 1; $i <= count($pages); $i++)
+					{
+						echo '<li><a href="' . $url . 'page/' . $i . '" onClick="changePage(' . ($i - 1) . '); return false;">' . _("Page") . ' ' . $i . '</a></li>';
+					}
+					echo '</ul>'
+					?>
+				</div>		
 
-                    <div class="divider"></div>
-                    <span class="numbers">
-                        <?php
-                            //for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
-                            for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--) {
-                                    $current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
-                                    echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
-                            }
-                        ?>
-                    </span>
-                </div>
-            </div>
+				<div class="divider"></div>
+				<span class="numbers">
+					<?php
+					//for ($i = (($val = $current_page - 3) <= 0)?(1):$val; $i <= count($pages) && $i < $current_page + 3; $i++) {
+					for ($i = (($val = $current_page + 2) >= count($pages)) ? (count($pages)) : $val; $i > 0 && $i > $current_page - 3; $i--)
+					{
+						$current = ((count($pages) / 100 > 1 && $i / 100 < 1) ? '0' : '') . ((count($pages) / 10 > 1 && $i / 10 < 1) ? '0' : '') . $i;
+						echo '<div class="number number_' . $i . ' ' . (($i == $current_page) ? 'current_page' : '') . '"><a href="' . $chapter->href . 'page/' . $i . '">' . $current . '</a></div>';
+					}
+					?>
+				</span>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -109,7 +113,8 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 	#page{margin: 10px auto 0px;}
 	#ads_iframe_top_banner, #ads_static_top_banner, #ads_iframe_bottom_banner, #ads_static_bottom_banner {margin:10px auto;}
 	<?php
-	if (get_setting('fs_ads_left_banner_active')) {
+	if (get_setting('fs_ads_left_banner_active'))
+	{
 		echo '.panel,#ads_iframe_top_banner, #ads_static_bottom_banner,#ads_iframe_bottom_banner, #ads_static_top_banner  {position:relative; left:95px;}';
 	}
 	?>
@@ -126,11 +131,19 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
         <div class="tweet">
             <a href="http://twitter.com/share" class="twitter-share-button" data-url="<?php echo $chapter->href() ?>" data-count="horizontal" data-via="<?php echo get_setting_twitter(); ?>" data-related="<?php echo get_setting_twitter(); ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
         </div>
+		<div class="facebook">
+			<iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode($chapter->href()) ?>&amp;layout=button_count&amp;show_faces=false&amp;width=90&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:95px; height:21px;" allowTransparency="true"></iframe>
+		</div>
+		<div class="googleplus">
+			<g:plusone size="medium" href="<?php echo $chapter->href() ?>"></g:plusone>
+		</div>
     </div>
 </div>
 
 <script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
 <script type="text/javascript">
+	
+	
 
 	var title = document.title;
 	
@@ -341,7 +354,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('.number_'+i).removeClass('dnone');
 		}
                 
-                jQuery('.pagenumber').html('-' + (current_page+1) + '-');
+		jQuery('.pagenumber').html('-' + (current_page+1) + '-');
 	}
 	
 	function chapters_dropdown()
@@ -472,12 +485,20 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		current_page = url-1;
 		History.pushState(null, null, baseurl+'page/' + (current_page+1));
 		changePage(current_page, false, true);
-                create_numberPanel();
-                update_numberPanel();
+		create_numberPanel();
+		update_numberPanel();
 		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;	
 		
 		jQuery(window).resize(function() {
 			resizePage(current_page);
 		});
 	});
+</script>
+
+<script type="text/javascript">
+	(function() {
+		var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+		po.src = 'https://apis.google.com/js/plusone.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	})();
 </script>

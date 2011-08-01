@@ -3,71 +3,14 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<?php echo $template['metadata']; ?>
-		<?php echo link_tag('content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/style.css') ?>
-
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<?php echo link_tag('content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/style.css') ?> 
+		<link rel="alternate" type="application/rss+xml" title="<?php echo get_setting('fs_gen_site_title') . ' RSS' ?>" href="<?php echo site_url('reader/feeds/rss') ?>" /> 
+		<link rel='index' title='<?php echo get_setting('fs_gen_site_title') ?>' href='<?php echo site_url() ?>' />
+		<meta name="generator" content="FoOlSlide <?php echo get_setting('fs_priv_version') ?>" />
+		<script src="<?php echo site_url() . 'assets/js/jquery.js' ?>"></script>
+		<script src="<?php echo site_url() . 'assets/js/jquery.plugins.js' ?>"></script>
 		<script type="text/javascript">
-			(function() {
-				if (window.__twitterIntentHandler) return;
-				var intentRegex = /twitter\.com(\:\d{2,4})?\/intent\/(\w+)/,
-				windowOptions = 'scrollbars=yes,resizable=yes,toolbar=no,location=yes',
-				width = 550,
-				height = 420,
-				winHeight = screen.height,
-				winWidth = screen.width;
-
-				function handleIntent(e) {
-					e = e || window.event;
-					var target = e.target || e.srcElement,
-					m, left, top;
-
-					while (target && target.nodeName.toLowerCase() !== 'a') {
-						target = target.parentNode;
-					}
-
-					if (target && target.nodeName.toLowerCase() === 'a' && target.href) {
-						m = target.href.match(intentRegex);
-						if (m) {
-							left = Math.round((winWidth / 2) - (width / 2));
-							top = 0;
-
-							if (winHeight > height) {
-								top = Math.round((winHeight / 2) - (height / 2));
-							}
-
-							window.open(target.href, 'intent', windowOptions + ',width=' + width +
-								',height=' + height + ',left=' + left + ',top=' + top);
-							e.returnValue = false;
-							e.preventDefault && e.preventDefault();
-						}
-					}
-				}
-
-				if (document.addEventListener) {
-					document.addEventListener('click', handleIntent, false);
-				} else if (document.attachEvent) {
-					document.attachEvent('onclick', handleIntent);
-				}
-				window.__twitterIntentHandler = true;
-			}());
-			
-			function toggleNight() {
-				jQuery("body").toggleClass("night");
-				if(jQuery("body.night").length == 1) createCookie("night_mode", 1, 30);
-				else createCookie("night_mode", 0, 30);
-			}
-			
-			function createCookie(name,value,days) {
-				if (days) {
-					var date = new Date();
-					date.setTime(date.getTime()+(days*24*60*60*1000));
-					var expires = "; expires="+date.toGMTString();
-				}
-				else var expires = "";
-				document.cookie = name+"="+value+expires+"; path=/";
-			}
-			
 			jQuery(document).ready(function(){
 <?php if ($this->agent->is_browser('MSIE'))
 { ?>
@@ -107,14 +50,6 @@
 				<?php echo get_setting('fs_theme_header_text'); ?>
 				<div role="navigation" id="navig">
 					<ul>
-						<li class="icon_wrapper night_mode" onClick="toggleNight()">
-							<img class="icon off" src="<?php echo glyphish(181); ?>" />
-							<img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" />
-						</li>
-						<li class="icon_wrapper day_mode" onClick="toggleNight()">
-							<img class="icon off" style="position:relative; top:-7px;" src="<?php echo glyphish(136); ?>" />
-							<img class="icon on" style="position:relative; top:-7px;" src="<?php echo glyphish(136, TRUE); ?>" />
-						</li>
 						<li>
 							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Latest releases'); ?></a>
 						</li>
@@ -128,6 +63,18 @@
 							echo form_close();
 							?>
 						</li>
+						<li class="icon_wrapper night_mode" onClick="toggleNight()">
+							<img class="icon off" src="<?php echo glyphish(181); ?>" />
+							<img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" />
+						</li>
+						<li class="icon_wrapper day_mode" onClick="toggleNight()">
+							<img class="icon off" style="position:relative; top:-7px;" src="<?php echo glyphish(136); ?>" />
+							<img class="icon on" style="position:relative; top:-7px;" src="<?php echo glyphish(136, TRUE); ?>" />
+						</li>
+						<li>
+							<a style="padding:0;" href="<?php echo site_url('reader/feeds/rss') ?>"><img height="28" width="28" style="position:relative; top:1px;" src="<?php echo site_url() . 'content/themes/default/images/feed-icon-28x28.png' ?>" /></a>
+						</li>
+
 						<div class="clearer"></div>
 					</ul>
 				</div>

@@ -16,6 +16,51 @@ class Reader extends Public_Controller {
 	public function index() {
 		$this->latest();
 	}
+	
+	function feeds($format = NULL)
+	{
+		if(is_null($format))
+			redirect('reader/feeds/rss');
+		$this->load->helper('xml');
+		$chapters = new Chapter();
+
+		// filter with orderby
+		$chapters->order_by('created', 'DESC');
+
+		// get the generic chapters and the comic coming with them
+		$chapters->get();
+		$chapters->get_comic();
+
+		if ($chapters->result_count() > 0)
+		{
+			// let's create a pretty array of chapters [comic][chapter][teams]
+			$result['chapters'] = array();
+			foreach ($chapters->all as $key => $chapter)
+			{
+				$result['chapters'][$key]['title'] = $chapter->comic->title().' '.$chapter->title();
+				$result['chapters'][$key]['thumb'] = $chapter->comic->get_thumb();
+				$result['chapters'][$key]['href'] = $chapter->href();
+				$result['chapters'][$key]['created'] = $chapter->created;
+				$chapter->get_teams();
+				foreach ($chapter->teams as $item)
+				{
+					$result['chapters'][$key]['teams'] = implode(' | ', $item->to_array());
+				}
+			}
+		}
+		else
+			show_404();
+		
+		$data['encoding'] = 'utf-8';
+		$data['feed_name'] = get_setting('fs_gen_site_title');
+		$data['feed_url'] = site_url('feeds/rss');
+		$data['page_description'] = get_setting('fs_gen_site_title') . ' RSS feed';
+		$data['page_language'] = get_setting('fs_gen_lang')?get_setting('fs_gen_lang'):'en_EN';
+		//$data['creator_email'] = 'Derek Allard is at derek at derekallard dot com';
+		$data['posts'] = $result;
+		header("Content-Type: application/rss+xml");
+		$this->load->view('rss', $data);
+	}
 
 	public function team($stub = NULL) {
 		if (is_null($stub))
@@ -47,7 +92,7 @@ class Reader extends Public_Controller {
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
 		}
 
-		$this->template->title(_('Series'));
+		$this->template->title(_('Series list'), get_setting('fs_gen_site_title'));
 		$this->template->set('comics', $comics);
 		$this->template->build('list');
 	}
@@ -66,7 +111,7 @@ class Reader extends Public_Controller {
 		//$chapters->get_comic();
 
 		$this->template->set('chapters', $chapters);
-		$this->template->title(_('Latest'));
+		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
 	}
 
@@ -144,7 +189,7 @@ class Reader extends Public_Controller {
 		$this->template->set('current_page', $current_page);
 		$this->template->set('pages', $pages);
 		$this->template->set('next_chapter', $next_chapter);
-		$this->template->title($comice->name . ' :: ' . _('Chapter') . ' ' . $chaptere->chapter);
+		$this->template->title($comice->name, _('Chapter') . ' ' . $chaptere->chapter, get_setting('fs_gen_site_title'));
 		$this->template->build('read');
 	}
 	
@@ -228,13 +273,13 @@ class Reader extends Public_Controller {
 
 		$this->template->set('comic', $comic);
 		$this->template->set('chapters', $chapters);
-		$this->template->title($comic->name);
+		$this->template->title($comic->name, get_setting('fs_gen_site_title'));
 		$this->template->build('comic');
 	}
 
 	public function search() {
 		if (!$this->input->post('search')) {
-			$this->template->title(_('Search'));
+			$this->template->title(_('Search'), get_setting('fs_gen_site_title'));
 			$this->template->build('search_pre');
 			return TRUE;
 		}

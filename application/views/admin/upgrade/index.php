@@ -20,6 +20,16 @@ if ($new_versions) {
 		);
 }
 
+if (!$new_versions) {
+	if ($can_upgrade) {
+		$CI->buttoner[] = array(
+			'text' => _('Repair FoOlSlide files'),
+			'href' => site_url('admin/upgrade/do_upgrade'),
+			'plug' => _('Do you really want to reinstall FoOlSlide?')
+		);
+	}
+}
+
 echo buttoner();
 echo '<br/><br/>
 	Current version: '.$current_version.'<br/>

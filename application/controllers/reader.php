@@ -28,7 +28,7 @@ class Reader extends Public_Controller {
 		$chapters->order_by('created', 'DESC');
 
 		// get the generic chapters and the comic coming with them
-		$chapters->get();
+		$chapters->limit(25)->get();
 		$chapters->get_comic();
 
 		if ($chapters->result_count() > 0)

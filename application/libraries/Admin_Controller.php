@@ -69,6 +69,16 @@ class Admin_Controller extends MY_Controller {
 			"advertising" => array("level" => "admin", "name" => _("Advertising")),
 		)
 	),
+	"balancer" => array(
+		"name" => _("Load balancer"),
+		"level" => "admin",
+		"default" => "balancers",
+		"icon" => 27,
+		"content" => array(
+			"balancers" => array("level" => "admin", "name" => _("Master")),
+			"client" => array("level" => "admin", "name" => _("Client")),
+		)
+	),
 	"upgrade" => array(
 		"name" => _("Upgrade"),
 		"level" => "admin",

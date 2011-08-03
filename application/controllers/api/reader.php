@@ -326,5 +326,5 @@ class Reader extends REST_Controller
 		}
 	}
 
-
+	
 }

@@ -119,9 +119,12 @@
 				<div>
 					<?php echo get_setting('fs_gen_footer_text'); ?>
 				</div>
-				<div class="cp_link">
-
+				<div class="cp_link day_mode">
 					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
+				</div>
+				<div class="cp_link night_mode">
+
+					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer_night.png' ?>" /></a>
 				</div>
 			</div>
 		</div>

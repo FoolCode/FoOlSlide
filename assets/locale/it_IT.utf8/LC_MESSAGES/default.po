@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
-"POT-Creation-Date: 2011-07-31 20:37+0100\n"
-"PO-Revision-Date: 2011-07-31 20:50+0100\n"
+"POT-Creation-Date: 2011-08-01 15:47+0100\n"
+"PO-Revision-Date: 2011-08-04 11:34+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -146,29 +146,26 @@ msgstr "Se non puoi fare ciò, dopo l'installazione ti verrà dato un file di te
 msgid "If you made any changes, just refresh this page to recheck the directory permissions."
 msgstr "Se hai fatto alcun cambiamento, ricarica la pagina per ricontrollare i permessi sulla directory."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:31
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:76
 msgid "Team"
 msgstr "Gruppo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:38
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:56
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:83
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:95
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:101
 msgid "Series list"
 msgstr "Lista delle serie"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:50
-msgid "Series"
-msgstr "Serie"
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:114
+msgid "Latest releases"
+msgstr "Ultime pubblicazioni"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:69
-msgid "Latest"
-msgstr "Ultimo"
-
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:147
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:192
 msgid "Chapter"
 msgstr "Capitolo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:237
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:243
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:282
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:288
 msgid "Search"
 msgstr "Ricerca"
 
@@ -554,6 +551,10 @@ msgstr "Cache massima per i download diretti in Megabyte"
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:469
 msgid "Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely."
 msgstr "Oltre a questa dimensione, i ZIP che sono stati scaricati più tempo addietro verranno rimossi. Se inserisci un numero molto grande, i ZIP saranno mantenuti in cache per un tempo indefinito."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:15
+msgid "Series"
+msgstr "Serie"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:27
 msgid "manage"
@@ -1377,10 +1378,18 @@ msgid "Download latest version"
 msgstr "Scarica l'ultima versione"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:26
+msgid "Repair FoOlSlide files"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:28
+msgid "Do you really want to reinstall FoOlSlide?"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:36
 msgid "Your FoOlSlide is up to date."
 msgstr "Il tuo FoOlSlide è aggiornato all'ultima versione disponibile."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:28
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:38
 #, php-format
 msgid "Please, check the <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">transifex translation project</a> in case you're using a non-English language for FoOlSlide. Make sure the % on your language isn't under 90% before upgrading. Contribute to the translation to get your language updated in the next localization update of FoOlSlide (normally within 48 hours)."
 msgstr "Per favore, controlla il <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">progetto di traduzione transifex</a> se stai usano una versione tradotta di FoOlSlide. Accertati che la percentuale della lingua non sia sotto il 90% prima di aggiornare. Contribuisci alla traduzione per ottenere la traduzione nella prossima release di FoOlSlide (di solito entro 48 ore)."
@@ -1445,7 +1454,7 @@ msgid "Search series"
 msgstr "Ricerca serie"
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search_pre.php:10
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:127
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:62
 msgid "To search series, type and hit enter"
 msgstr "Per cercare una serie, scrivi e premi invio"
 
@@ -1487,11 +1496,7 @@ msgstr "Nessun leader in questo gruppo"
 msgid "No members in this team"
 msgstr "Nessun membro in questo gruppo"
 
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:119
-msgid "Latest releases"
-msgstr "Ultime pubblicazioni"
-
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:137
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:84
 msgid "Go back to site"
 msgstr "Torna al sito"
 

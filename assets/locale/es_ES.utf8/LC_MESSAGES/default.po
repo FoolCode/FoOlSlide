@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
-"POT-Creation-Date: 2011-07-31 20:37+0100\n"
-"PO-Revision-Date: 2011-07-31 20:51+0100\n"
+"POT-Creation-Date: 2011-08-01 15:47+0100\n"
+"PO-Revision-Date: 2011-08-04 11:33+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -147,29 +147,26 @@ msgstr "Si no puedes hacer lo de arriba, después de la instalación se te propo
 msgid "If you made any changes, just refresh this page to recheck the directory permissions."
 msgstr "Si has realizado algún cambio, carga de nuevo esta página para volver a comprobar los permisos de directorio."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:31
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:76
 msgid "Team"
 msgstr "Equipo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:38
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:56
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:83
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:95
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:101
 msgid "Series list"
 msgstr "Lista de series"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:50
-msgid "Series"
-msgstr "Series"
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:114
+msgid "Latest releases"
+msgstr "Últimas publicaciones"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:69
-msgid "Latest"
-msgstr "Últimos"
-
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:147
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:192
 msgid "Chapter"
 msgstr "Capítulo"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:237
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:243
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:282
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:288
 msgid "Search"
 msgstr "Búsqueda"
 
@@ -426,19 +423,19 @@ msgstr "Seleccionar tema"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:185
 msgid "Pre-header text"
-msgstr ""
+msgstr "Texto pre-encabezamiento"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:191
 msgid "This allows adding HTML code before the header navigation block."
-msgstr ""
+msgstr "Esto permite agregar codigo HTML antes del bloque de navegacion del encabezamiento"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:196
 msgid "Header text"
-msgstr ""
+msgstr "Texto del encabezamiento"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:202
 msgid "You can use this area to add text, a banner or any HTML in the header, where the navigation links are"
-msgstr ""
+msgstr "Puedes usar esta area para agregar texto,un banner o cualquier HTML en el encabezamiento,donde los links de navegacion estan"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:207
 msgid "Footer text"
@@ -446,7 +443,7 @@ msgstr "Texto del pie de página"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:213
 msgid "Add text in the footer, place where to write disclaimers. Don't write things like \"All Rights Reserved©\", especially if what you upload is not yours. If you're releasing your own work, consider using <a href=\"http://creativecommons.org/\">Creative Commons licenses</a> to protect it. Remember that in 2011 sharing means power!"
-msgstr ""
+msgstr "Agrega texto en el pie de página,lugar donde escribir avisos legales. No escriba cosas como \"todos los derechos reservados©\", especialmente si lo que sube no es suyo. Si esta publicando su propio trabajo, considere utilizar <a href=\"http://creativecommons.org/\">Licensias Creative Commons </a> para protegerlo. Recuerde que en 2011 compartir significa poder!"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:218
 msgid "Header code"
@@ -454,7 +451,7 @@ msgstr "Código de la cabecera"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:224
 msgid "This allows you to add code inside the HEAD of the HTML."
-msgstr ""
+msgstr "Esto te permite agregar codigo dentro del encabezamiento del HTML"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:229
 msgid "Footer code"
@@ -462,7 +459,7 @@ msgstr "Código del pie de página"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:235
 msgid "This allows you to add code after the BODY."
-msgstr ""
+msgstr "Esto te permite agregar codigo luego del CUERPO"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:261
 msgid "Advertising"
@@ -555,6 +552,10 @@ msgstr "Tamaño máximo de cache para las descargas directas en Megabytes"
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:469
 msgid "Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely."
 msgstr "Por encima de este tamaño, los ZIPs que hayan sido descargados más allá de ese tiempo serán eliminados. Si pones un número muy grande, los ZIP seguirán ahí indefinidamente."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:15
+msgid "Series"
+msgstr "Series"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:27
 msgid "manage"
@@ -1378,13 +1379,21 @@ msgid "Download latest version"
 msgstr "Descargar última versión"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:26
+msgid "Repair FoOlSlide files"
+msgstr "Reparar Archivos de FoOlSlide"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:28
+msgid "Do you really want to reinstall FoOlSlide?"
+msgstr "¿Verdaderamente desea reinstalar FoOlSlide?"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:36
 msgid "Your FoOlSlide is up to date."
 msgstr "FoOlSlide está actualizado."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:28
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:38
 #, php-format
 msgid "Please, check the <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">transifex translation project</a> in case you're using a non-English language for FoOlSlide. Make sure the % on your language isn't under 90% before upgrading. Contribute to the translation to get your language updated in the next localization update of FoOlSlide (normally within 48 hours)."
-msgstr ""
+msgstr "Por favor revise el <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">Projecto de traduccion transifex </a> en caso de usar un lenguaje no ingles para FoOlSlide. Asegurese de que el % de su lenguaje no sea menor al 90% antes de Actualizar. Contribuye a la traduccion para que tu lenguaje se actualize en la siguiente actualizacion de localizacion de FoOlSlide (Normalmente dentro de las 48 horas)"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/install/index.php:6
 msgid "This is all the needed information to install and run FoOlSlide. Don't worry: you can change this information later in case you need it changed."
@@ -1446,7 +1455,7 @@ msgid "Search series"
 msgstr "Buscar series"
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search_pre.php:10
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:127
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:62
 msgid "To search series, type and hit enter"
 msgstr "Para buscar series, escribe y pulsa enter"
 
@@ -1488,13 +1497,9 @@ msgstr "No hay líderes en el equipo"
 msgid "No members in this team"
 msgstr "No hay miembros en este equipo"
 
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:119
-msgid "Latest releases"
-msgstr "Últimas publicaciones"
-
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:137
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:84
 msgid "Go back to site"
-msgstr ""
+msgstr "Volver al sitio"
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/mobile/views/latest.php:3
 msgid "Go to series list"

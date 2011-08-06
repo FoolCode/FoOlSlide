@@ -17,7 +17,9 @@ class MY_Controller extends CI_Controller {
 			$this->load->library('datamapper');
 			$this->load->library('tank_auth');
 
-			if (!$this->session->userdata('nation') && $_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+			$ignored_ips = @unserialize(get_setting('fs_balancer_ips'));
+			$ignored_ips = $ignored_ips?$ignored_ips:array();
+			if (!$this->session->userdata('nation') && $_SERVER['REMOTE_ADDR'] != '127.0.0.1' && !in_array($_SERVER['REMOTE_ADDR'], $ignored_ips)) {
 				// If the user doesn't have a nation set, let's grab it
 				//
 				require_once("assets/geolite/GeoIP.php");

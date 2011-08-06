@@ -67,82 +67,82 @@ class Balancer extends Admin_Controller
 	 * 
 	 * @author Woxxy
 	 */
-	function balancers($id = NULL)
+	function balancers()
 	{
-		if (is_null($id))
-		{
-			$this->viewdata["function_title"] = _("Master");
-
-			// create a form
-			$balancers = new Loadbalancer();
-			$balancers->get();
-			$data["balancers"] = $balancers;
-
-			// print out
-			$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/balancers_list.php", $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
-		}
-		else
-		{
-			$balancer = new Loadbalancer($id);
-			if($balancer->result_count() != 1)
-			{
-				show_404();
-			}
-			$data["balancer"] = $balancer;
-			$table = ormer($balancer);
-			$data["table"] = tabler($table, FALSE, TRUE, TRUE);
-
-			
-			$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/balancer.php", $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
-		}
-	}
-
-
-	function balancer_add()
-	{
-		$this->viewdata["function_title"] = _("Add new");
-
 		if ($this->input->post())
 		{
-			$loadbalancer = new Loadbalancer();
-			if (!$loadbalancer->from_array($this->input->post(), array('url', 'ip', 'key'), TRUE))
+			$result = array();
+			if ($urls = $this->input->post('url'))
 			{
-				if (!$loadbalancer->valid)
+				$priorities = $this->input->post('priority');
+				if (is_array($urls))
 				{
-					set_notice('error', _("The values you submitted aren't matching the requested. Check the fields."));
+					foreach ($urls as $key => $item)
+					{
+						if (!$item)
+						{
+							unset($urls[$key]);
+							break;
+						}
+						if ($priorities[$key] >= 0 && $priorities[$key] <= 100)
+						{
+							$result[] = array('url' => $item, 'priority' => $priorities[$key]);
+						}
+					}
 				}
-				set_notice('error', _("Couldn't create the new entry"));
+				$result = serialize($result);
+
+				$this->db->from('preferences');
+				$this->db->where(array('name' => 'fs_balancer_clients'));
+				if ($this->db->count_all_results() == 1)
+				{
+					$this->db->update('preferences', array('value' => $result), array('name' => 'fs_balancer_clients'));
+				}
+				else
+				{
+					$this->db->insert('preferences', array('name' => 'fs_balancer_clients', 'value' => $result));
+				}
 			}
-			else
+			if ($this->input->post('fs_balancer_ips'))
 			{
-				redirect('/admin/loadbalancer/balancers/' . $loadbalancer->id);
+				$result = serialize($this->input->post('fs_balancer_ips'));
+
+				$this->db->from('preferences');
+				$this->db->where(array('name' => 'fs_balancer_ips'));
+				if ($this->db->count_all_results() == 1)
+				{
+					$this->db->update('preferences', array('value' => $result), array('name' => 'fs_balancer_ips'));
+				}
+				else
+				{
+					$this->db->insert('preferences', array('name' => 'fs_balancer_ips', 'value' => $result));
+				}
 			}
+
+			load_settings();
 		}
 
-		$loadbalancer = new Loadbalancer();
-		$table = ormer($loadbalancer);
-		$data["table"] = tabler($table, FALSE, TRUE, TRUE);
-
-		$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/add_new.php", $data, TRUE);
+		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));
+		$data["ips"] = unserialize(get_setting('fs_balancer_ips'));
+		$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/balancers_list.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	
-	function balancer_remove($id)
+
+
+	function _check_client($url)
 	{
-		if(!isAjax())
+		$result = @file_get_contents($url . '/api/status/status/format/json');
+		if (is_null($result))
 		{
-			show_404();
+			return array('error' => _("Unavailable"));
 		}
-		$balancer = new Loadbalancer($id);
-		if ($balancer->result_count() != 1)
+
+		$result = json_decode($result, TRUE);
+
+		if (isset($result["error"]))
 		{
-			show_404();
+			
 		}
-		$balancer->delete();
-		echo json_encode(array('href' => site_url('/admin/balancer/balancers/')));
 	}
 
 
@@ -171,50 +171,10 @@ class Balancer extends Admin_Controller
 			)
 		);
 
-		$form[] = array(
-			_('Security key'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_balancer_master_key_on_client',
-				'id' => 'site_title',
-				'placeholder' => _('required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Used to pair client with master')
-			)
-		);
-
-		$form[] = array(
-			_('Allow autoupdating'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_balancer_master_key',
-				'id' => 'site_title',
-				'placeholder' => _('required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Updates itself to the same version as the master FoOlSlide.')
-			)
-		);
-
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
 		}
-
-		if (!get_setting('fs_balancer_client_key'))
-		{
-			$security_key = md5(time() . uniqid());
-			$this->_submit(array('fs_balancer_client_key' => $security_key), array(array("", array('name' => 'fs_balancer_client_key'))));
-		}
-
-		if ($post = $this->input->post())
-		{
-			$this->_submit($post, $form);
-		}
-
-		$form[] = array(
-			_('Security key'),
-			get_setting('fs_balancer_client_key')
-		);
 
 		// create a form
 		$table = tabler($form, FALSE);

@@ -9,7 +9,12 @@ class Series extends Admin_Controller
 	{
 		parent::__construct();
 		if (!($this->tank_auth->is_allowed()))
-			redirect('admin');
+			redirect('account');
+
+		// if this is a load balancer, let's not allow people in the series tab
+		if (get_setting('fs_balancer_master_url'))
+			redirect('/admin/members');
+
 		$this->load->model('files_model');
 		$this->load->library('pagination');
 		$this->viewdata['controller_title'] = _("Series");
@@ -264,13 +269,14 @@ class Series extends Admin_Controller
 	function upload()
 	{
 		$info = array();
-		
+
 		// compatibility for flash uploader and browser not supporting multiple upload
-		if(is_array($_FILES['Filedata']) && !is_array($_FILES['Filedata']['tmp_name'])) {
+		if (is_array($_FILES['Filedata']) && !is_array($_FILES['Filedata']['tmp_name']))
+		{
 			$_FILES['Filedata']['tmp_name'] = array($_FILES['Filedata']['tmp_name']);
 			$_FILES['Filedata']['name'] = array($_FILES['Filedata']['name']);
 		}
-		
+
 		for ($file = 0; $file < count($_FILES['Filedata']['tmp_name']); $file++)
 		{
 			$valid = explode('|', 'png|zip|rar|gif|jpg|jpeg');

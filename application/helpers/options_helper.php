@@ -152,6 +152,27 @@ function random_string($length = 20) {
  * @return string the base url for the image server
  */
 function balance_url($string = '') {
+	$balancers = unserialize(get_setting('fs_balancer_clients'));
+	
+	if(is_array($balancers))
+	{
+		$urls = array();
+		foreach($balancers as $balancer)
+		{
+			for($i = 0; $i < $balancer["priority"]; $i++)
+			{
+				$urls[] = $balancer["url"];
+			}
+		}
+		while(count($urls) < 100)
+		{
+			$urls[] = site_url();
+		}
+		$urlkey = array_rand($urls);
+		
+		return $urls[$urlkey];
+	}
+	
 	return site_url($string);
 }
 

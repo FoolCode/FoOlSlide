@@ -33,6 +33,12 @@ class REST_Controller extends MY_Controller
 	{
 		parent::__construct();
 
+		// if this is a load balancer FoOlSlide, disable the public interface
+		if (get_setting('fs_balancer_master_url'))
+		{
+			show_404();
+		}
+		
 		// Lets grab the config and get ready to party
 		$this->load->config('rest');
 

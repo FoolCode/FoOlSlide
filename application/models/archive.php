@@ -49,7 +49,7 @@ class Archive extends DataMapper {
 		if ($this->result_count() == 0) {
 			$this->remove_old();
 			$CI = & get_instance();
-			
+
 			require_once(FCPATH.'assets/pclzip/pclzip.lib.php');
 			$filename = $this->filename_compressed($chapter);
 			$archive = new PclZip("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename.'.zip');

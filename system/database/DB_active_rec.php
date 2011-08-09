@@ -60,7 +60,7 @@ class CI_DB_active_record extends CI_DB_driver {
 	var $ar_cache_set			= array();
 
 	var $ar_no_escape 			= array();
-	var $ar_cache_no_escape     = array();
+
 
 	// --------------------------------------------------------------------
 
@@ -93,7 +93,6 @@ class CI_DB_active_record extends CI_DB_driver {
 				{
 					$this->ar_cache_select[] = $val;
 					$this->ar_cache_exists[] = 'select';
-					$this->ar_cache_no_escape[] = $escape;
 				}
 			}
 		}
@@ -205,6 +204,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		$sql = $type.'('.$this->_protect_identifiers(trim($select)).') AS '.$alias;
 
 		$this->ar_select[] = $sql;
+		$this->ar_no_escape[] = NULL;
 
 		if ($this->ar_caching === TRUE)
 		{
@@ -1934,17 +1934,16 @@ class CI_DB_active_record extends CI_DB_driver {
 	{
 		$this->_reset_run(
 							array(
-									'ar_cache_select'		=> array(),
-									'ar_cache_from'			=> array(),
-									'ar_cache_join'			=> array(),
-									'ar_cache_where'		=> array(),
-									'ar_cache_like'			=> array(),
-									'ar_cache_groupby'		=> array(),
-									'ar_cache_having'		=> array(),
-									'ar_cache_orderby'		=> array(),
-									'ar_cache_set'			=> array(),
-									'ar_cache_exists'		=> array(),
-									'ar_cache_no_escape'	=> array()
+									'ar_cache_select'	=> array(),
+									'ar_cache_from'		=> array(),
+									'ar_cache_join'		=> array(),
+									'ar_cache_where'	=> array(),
+									'ar_cache_like'		=> array(),
+									'ar_cache_groupby'	=> array(),
+									'ar_cache_having'	=> array(),
+									'ar_cache_orderby'	=> array(),
+									'ar_cache_set'		=> array(),
+									'ar_cache_exists'	=> array()
 								)
 							);
 	}
@@ -1986,8 +1985,6 @@ class CI_DB_active_record extends CI_DB_driver {
 		{
 			$this->_track_aliases($this->ar_from);
 		}
-
-		$this->ar_no_escape = $this->ar_cache_no_escape;
 	}
 
 	// --------------------------------------------------------------------

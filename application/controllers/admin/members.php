@@ -19,7 +19,7 @@ class Members extends Admin_Controller
 	 */
 	function index()
 	{
-		redirect('/admin/members/you');
+		redirect('/admin/members/members');
 	}
 
 

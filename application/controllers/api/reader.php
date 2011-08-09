@@ -26,7 +26,8 @@ class Reader extends REST_Controller
 		if ($comics->result_count() > 0)
 		{
 			$result = array();
-			foreach ($comics->all as $key => $comic) {
+			foreach ($comics->all as $key => $comic)
+			{
 				$result['comics'][$key] = $comic->to_array();
 				$result['comics'][$key]["thumb_url"] = $comic->get_thumb();
 			}
@@ -49,12 +50,24 @@ class Reader extends REST_Controller
 	 */
 	function comic_get()
 	{
-		// check that the id is at least a valid number
-		$this->_check_id();
+		if ($this->get('id'))
+		{
+			//// check that the id is at least a valid number
+			$this->_check_id();
 
-		// get the comic
-		$comic = new Comic();
-		$comic->where('id', $this->get('id'))->limit(1)->get();
+			// get the comic
+			$comic = new Comic();
+			$comic->where('id', $this->get('id'))->limit(1)->get();
+		}
+		else if ($this->get('uniqid') && $this->get('stub'))
+		{ // mostly used for load balancer
+			$comic = new Comic();
+			$comic->where('stub', $this->get('stub'))->where('uniqid', $this->get('uniqid'))->limit(1)->get();
+		}
+		else
+		{
+			$this->response(array('error' => _('You didn\'t use the necessary parameters')), 404);
+		}
 
 		if ($comic->result_count() == 1)
 		{
@@ -62,7 +75,7 @@ class Reader extends REST_Controller
 			$chapters->where('comic_id', $comic->id)->get();
 			$chapters->get_teams();
 			$result = array();
-			
+
 			$result["comic"] = $comic->to_array();
 			$result["comic"]["thumb_url"] = $comic->get_thumb();
 
@@ -73,6 +86,17 @@ class Reader extends REST_Controller
 				$result['chapters'][$key]['comic'] = $comic->to_array();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				
+				// if it's requested, throw in also the pages (for load balancer)
+				if ($this->get('chapter_stub') == $chapter->stub
+						&& $this->get('chapter_uniqid') == $chapter->uniqid)
+				{
+					$pages = new Page();
+					$pages->where('chapter_id', $chapter->id)->get();
+					$result["chapters"][$key]["chapter"]["pages"] = $pages->all_to_array();
+				}
+				
+				
+
 				// teams is a normal array, can't use $team->all_to_array()
 				foreach ($chapter->teams as $team)
 				{
@@ -128,7 +152,7 @@ class Reader extends REST_Controller
 					$result['chapters'][$key]['teams'][] = $item->to_array();
 				}
 			}
-			
+
 			// all good
 			$this->response($result, 200); // 200 being the HTTP response code
 		}
@@ -171,7 +195,7 @@ class Reader extends REST_Controller
 			{
 				$result['teams'][] = $team->to_array();
 			}
-			
+
 			// this time we get the pages
 			$result['pages'] = $chapter->get_pages();
 
@@ -224,7 +248,7 @@ class Reader extends REST_Controller
 				// get also all chapters with the joints by the team
 				$chapters->or_where('joint_id', $joint->joint_id);
 			}
-			
+
 			// filter for the page and the order
 			$this->_orderby($chapters);
 			$this->_page_to_offset($chapters);
@@ -299,7 +323,7 @@ class Reader extends REST_Controller
 			// grab all the chapters from the same joint
 			$chapters = new Chapter();
 			$chapters->where('joint_id', $joint->joint_id);
-			
+
 			// apply the limit and orderby filters
 			$this->_orderby($chapters);
 			$this->_page_to_offset($chapters);

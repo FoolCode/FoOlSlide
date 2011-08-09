@@ -88,7 +88,7 @@ if (!function_exists('tabler')) {
 		if ($edit) {
 			$echo .= '<div class="edit" ' . (($list && $edit) ? 'style="display:none;"' : '') . '><table class="form">';
 			foreach ($result as $rowk => $row) {
-				if ($row[1]['type'] == 'hidden') {
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
 					$echo .= $row[1]['form'];
 				}
 				else {
@@ -118,6 +118,9 @@ if (!function_exists('formize')) {
 		if (isset($column['preferences']))
 			$column['value'] = get_setting($column['name']);
 
+		if (isset($column['serialized']) && $column['serialized'])
+			$column['value'] = unserialize($column["value"]);
+		
 		//if($column['type'] == 'input' || $column['type'] == 'nation') $column['value'] = set_value($column['name']);
 
 		if ($column['type'] == 'checkbox') {
@@ -126,8 +129,9 @@ if (!function_exists('formize')) {
 			$column['value'] = 1;
 		}
 
-
 		$formize = 'form_' . $column['type'];
+		if(!isset($column['type']))
+			$formize = "";
 		$type = $column['type'];
 		if (isset($column['help']))
 			$help = $column['help'];

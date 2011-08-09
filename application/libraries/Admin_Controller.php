@@ -52,6 +52,15 @@ class Admin_Controller extends MY_Controller
 					"members" => array("level" => "mod", "name" => _("Member list")),
 				)
 			);
+			$sidebar["preferences"] = array(
+				"name" => _("Preferences"),
+				"level" => "admin",
+				"default" => "general",
+				"icon" => 116,
+				"content" => array(
+					"registration" => array("level" => "admin", "name" => _("Registration")),
+				)
+			);
 			$sidebar["balancer"] = array("name" => _("Load balancer"),
 				"level" => "admin",
 				"default" => "balancers",
@@ -60,7 +69,7 @@ class Admin_Controller extends MY_Controller
 					"client" => array("level" => "admin", "name" => _("Client")),
 				)
 			);
-			
+
 			return $sidebar;
 		}
 

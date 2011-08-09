@@ -688,7 +688,7 @@ class Comic extends DataMapper
 	public function get_thumb($full = FALSE)
 	{
 		if ($this->thumbnail != "")
-			return balance_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
+			return site_url() . "content/comics/" . $this->stub . "_" . $this->uniqid . "/" . ($full ? "" : "thumb_") . $this->thumbnail;
 		return false;
 	}
 

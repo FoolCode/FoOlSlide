@@ -8,6 +8,8 @@ class Content extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
+		
+		// If the balancer master URL is not set, this is not a balancer
 		if (!get_setting('fs_balancer_master_url'))
 		{
 			show_404();
@@ -15,6 +17,13 @@ class Content extends MY_Controller
 	}
 
 
+	/**
+	 * PHP implementation of lastIndexOf
+	 * 
+	 * @param string $string
+	 * @param string $item
+	 * @return string 
+	 */
 	public function _lastIndexOf($string, $item)
 	{
 		$index = strpos(strrev($string), strrev($item));
@@ -61,15 +70,6 @@ class Content extends MY_Controller
 			show_404();
 		}
 
-		// flag to tell if it's a thumbnail
-		$this->thumbnail = FALSE;
-		if (strpos($this->filename, "thumb_") !== FALSE)
-		{
-			// it's a thumbnail
-			$thumbnail = TRUE;
-			$this->filename = substr($this->filename, 6);
-		}
-
 		// separate stub and uniqid from both folders
 		$this->comic_stub = substr($this->comic_dir, 0, $comic_split);
 		$this->comic_uniqid = substr($this->comic_dir, $comic_split + 1);
@@ -103,7 +103,6 @@ class Content extends MY_Controller
 					// we got its pagedata! let's grab the image
 					if ($this->_grab_page())
 					{
-						// we got the image, let's output it and goodbye
 						$this->output
 								->set_content_type($this->page->mime)
 								->set_output($this->file);
@@ -125,13 +124,15 @@ class Content extends MY_Controller
 			$this->url = $this->url . '/';
 		}
 
+		$this->load->library('curl');
+
 		// first of all, does the image even exist? Since we're going to grab
 		// the image anyway if it exists, lets get ahead and grab it first
 		// uri_string starts with a slash, so we have to remove it
-		$this->file = @file_get_contents($url . 'content/comics/' . $this->comic_stub . '_' . $this->comic_uniqid . '/' . $this->chapter_stub . '_' . $this->chapter_uniqid . '/' . $this->filename);
+		echo $this->file = $this->curl->simple_get($this->url . 'content/comics/' . $this->comic_stub . '_' . $this->comic_uniqid . '/' . $this->chapter_stub . '_' . $this->chapter_uniqid . '/' . $this->filename);
 
 		// if the file doesn't exist, let's not go through the rest of the mess
-		if (is_null($this->file))
+		if (!$this->file)
 		{
 			show_404();
 		}
@@ -141,7 +142,7 @@ class Content extends MY_Controller
 		// form the get request and decode the result
 		// if the master server works it should be trustable
 		$request_url = $this->url . 'api/reader/comic/stub/' . $this->comic_stub . '/uniqid/' . $this->comic_uniqid . '/chapter_stub/' . $this->chapter_stub . '/chapter_uniqid/' . $this->chapter_uniqid . '/format/json';
-		$result = @file_get_contents($request_url);
+		$result = $this->curl->simple_get($request_url);
 		$result = json_decode($result, TRUE);
 
 		// if there's PHP errors in the $result, the json_decode might fail
@@ -199,45 +200,16 @@ class Content extends MY_Controller
 			log_message('error', 'content:comics() chapter was not in the json array');
 			show_404();
 		}
-
-		// check that the comic exists in the database
-		$comic = new Comic();
-		$comic->where('stub', $this->comic_stub)->where('uniqid', $this->comic_uniqid)->limit(1)->get();
-
-
-		// if there's a result, let's check if there's the chapter available
-		if ($this->comic->result_count() == 1)
-		{
-			// we got the comic! let's see if we got the chapter
-			$this->chapter = new Chapter();
-			$this->chapter->where('stub', $this->chapter_stub)->where('uniqid', $this->chapter_uniqid)->limit(1)->get();
-
-			if ($this->chapter->result_count() == 1)
-			{
-				// we got the chapter! let's see if we're lucky and we already have its page data
-				$this->page = new Page();
-				$this->page->where('chapter_id', $this->chapter->id)->where('filename', $this->filename)->get();
-				if ($this->page->result_count() == 1)
-				{
-					// we got its pagedata! let's grab the image
-					if ($this->_grab_page())
-					{
-						// we got the image, let's output it and goodbye
-						$this->output
-								->set_content_type($this->page->mime)
-								->set_output($this->file);
-
-						// good end
-						return TRUE;
-					}
-				}
-			}
-		}
-
-		show_404();
+		
+		$this->_grab_page();
 	}
 
 
+	/**
+	 * Saves the image, when found. Ignorant of thumb_, it will do those too.
+	 * 
+	 * @return String file
+	 */
 	public function _grab_page()
 	{
 		// we will need the url to the master Slide anyway
@@ -249,36 +221,35 @@ class Content extends MY_Controller
 			$url = $url . '/';
 		}
 
+		$this->load->library('curl');
 		// maybe we already have the file, in that case just use it
 		if (!isset($this->file))
-			$this->file = @file_get_contents($url . 'content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory() . '/' . $this->filename);
-
-		// we still need the thumbnail
-		$this->file_thumb = @file_get_contents($url . 'content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory() . '/' . 'thumb_' . $this->filename);
+			$this->file = $this->curl->simple_get($url . 'content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory() . '/' . $this->filename);
 
 		if (!$this->file)
 		{
+			log_message('error', '_grab_page(): file not found');
 			return FALSE;
 		}
 
 		// make sure
-		@mkdir('content/comics/' . $this->comic->directory());
-		@mkdir('content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory());
+		if(!is_dir('content/comics/' . $this->comic->directory()))
+			@mkdir('content/comics/' . $this->comic->directory());
+		if(!is_dir('content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory()))
+			@mkdir('content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory());
 
 		file_put_contents('content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory() . '/' . $this->filename, $this->file);
-		file_put_contents('content/comics/' . $this->comic->directory() . '/' . $this->chapter->directory() . '/' . 'thumb_' . $this->filename, $this->file_thumb);
 
-		// return the thumbnail if requested
-		if ($this->thumbnail)
-		{
-			return $this->file_thumb;
-		}
-
-		// return the image, normally for output
-		return $this->file;
+		return TRUE;
 	}
 
 
+	/**
+	 * When missing chapters are found, this cleans up and adds new chapters
+	 *
+	 * @param int $comic_id
+	 * @param array $new_chapters_array 
+	 */
 	public function _clean_comic($comic_id, $new_chapters_array)
 	{
 		// found, let's get all chapters for this comic
@@ -321,6 +292,12 @@ class Content extends MY_Controller
 	}
 
 
+	/**
+	 * When you pages are added, this cleans up the chapter and adds new pages
+	 * 
+	 * @param int $chapter_id
+	 * @param array $new_pages_array 
+	 */
 	public function _clean_chapter($chapter_id, $new_pages_array)
 	{
 		// found, let's get all chapters for this comic

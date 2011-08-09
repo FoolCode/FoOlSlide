@@ -103,19 +103,28 @@ class Balancer extends Admin_Controller
 					$this->db->insert('preferences', array('name' => 'fs_balancer_clients', 'value' => $result));
 				}
 			}
-			if ($this->input->post('fs_balancer_ips'))
+			
+			if ($value = $this->input->post('fs_balancer_ips'))
 			{
-				$result = serialize($this->input->post('fs_balancer_ips'));
+				if (is_array($value))
+				{
+					foreach ($value as $key => $val)
+					{
+						if ($value[$key] == "")
+							unset($value[$key]);
+					}
+					$value = serialize($value);
+				}
 
 				$this->db->from('preferences');
 				$this->db->where(array('name' => 'fs_balancer_ips'));
 				if ($this->db->count_all_results() == 1)
 				{
-					$this->db->update('preferences', array('value' => $result), array('name' => 'fs_balancer_ips'));
+					$this->db->update('preferences', array('value' => $value), array('name' => 'fs_balancer_ips'));
 				}
 				else
 				{
-					$this->db->insert('preferences', array('name' => 'fs_balancer_ips', 'value' => $result));
+					$this->db->insert('preferences', array('name' => 'fs_balancer_ips', 'value' => $value));
 				}
 			}
 
@@ -124,6 +133,7 @@ class Balancer extends Admin_Controller
 
 		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));
 		$data["ips"] = unserialize(get_setting('fs_balancer_ips'));
+		$this->viewdata['function_title'] = _('Balancers');
 		$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/balancers_list.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
@@ -181,6 +191,7 @@ class Balancer extends Admin_Controller
 		$data['table'] = $table;
 
 		// print out
+		$this->viewdata['function_title'] = _('Client');
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}

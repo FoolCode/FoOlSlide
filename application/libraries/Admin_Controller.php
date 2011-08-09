@@ -118,7 +118,7 @@ class Admin_Controller extends MY_Controller
 				"client" => array("level" => "admin", "name" => _("Client")),
 			)
 		);
-		$sidebar["sidebar"] = array("name" => _("Upgrade"),
+		$sidebar["upgrade"] = array("name" => _("Upgrade"),
 			"level" => "admin",
 			"default" => "upgrade",
 			"icon" => 37,

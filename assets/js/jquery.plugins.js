@@ -63,7 +63,8 @@ function create_message(code, timeout, message, image) {
 }
 
 function delete_message(code) {
-	clearTimeout(messages[code].timeout);
+	if(messages[code] != undefined)
+		clearTimeout(messages[code].timeout);
 	jQuery("#messages ."+code).fadeOut(500, function(){
 		jQuery("#messages ."+code).remove();
 	});

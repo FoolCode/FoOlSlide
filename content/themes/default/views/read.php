@@ -116,11 +116,20 @@ if (!defined('BASEPATH'))
 	
 	var gt_page = '<?php echo addslashes(_("Page")) ?>';
 	
+	var gt_key_suggestion = '<?php echo addslashes(_("Use W-A-S-D or the arrow keys to navigate")) ?>';
+
+	var gt_key_tap = '<?php echo addslashes(_("Double-tap to change page")) ?>';
+
 	function changePage(id, noscroll, nohash)
 	{
 		id = parseInt(id);
 		if (initialized && id == current_page)
 			return false;
+		
+		if(!initialized) {
+			create_message('key_suggestion', 4000, gt_key_suggestion);
+		}
+		
 		initialized = true;
 		if(id > pages.length-1) 
 		{

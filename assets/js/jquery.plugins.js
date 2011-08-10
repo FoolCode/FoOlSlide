@@ -42,14 +42,6 @@
 	window.__twitterIntentHandler = true;
 }());
 			
-			
-			
-function toggleNight() {
-	jQuery("body").toggleClass("night");
-	if(jQuery("body.night").length == 1) createCookie("night_mode", 1, 30);
-	else createCookie("night_mode", 0, 30);
-}
-			
 function createCookie(name,value,days) {
 	if (days) {
 		var date = new Date();
@@ -60,6 +52,23 @@ function createCookie(name,value,days) {
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 
+var messages = [];
+function create_message(code, timeout, message, image) {
+	messages[code] = {};
+	jQuery("#messages").append("<div onClick='delete_message(\""+code+"\")' class='message "+code+"' style='display:none'>"+message+"</div>");
+	jQuery("#messages ."+code).fadeIn(500);
+	if(timeout != 0)
+		messages[code].timeout = setTimeout('delete_message("'+code+'")', timeout);
+	return false;
+}
+
+function delete_message(code) {
+	clearTimeout(messages[code].timeout);
+	jQuery("#messages ."+code).fadeOut(500, function(){
+		jQuery("#messages ."+code).remove();
+	});
+	return false;
+}
 			
 /**
  * jQuery.Preload - Multifunctional preloader

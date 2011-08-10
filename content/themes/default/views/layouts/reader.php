@@ -123,6 +123,9 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="messages">
+		</div>
 	</body>
 	<?php echo get_setting('fs_theme_footer_code'); ?>
 </html>

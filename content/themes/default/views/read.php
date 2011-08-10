@@ -116,8 +116,6 @@ if (!defined('BASEPATH'))
 	
 	var gt_page = '<?php echo addslashes(_("Page")) ?>';
 	
-	var button_down = false;
-	
 	function changePage(id, noscroll, nohash)
 	{
 		id = parseInt(id);
@@ -206,10 +204,12 @@ if (!defined('BASEPATH'))
 			jQuery('#page .inner img.open').attr({width:width, height:height});
 			if(jQuery("#page").width() < jQuery("#page .inner img.open").width()) {
 				isSpread = true;
+				create_message('is_spread', 3000, 'Tap the arrows twice to change page');
 			}
 			else {
 				jQuery("#page").css({'max-width': width+10, 'overflow':'hidden'});
 				isSpread = false;
+				delete_message('is_spread');
 			}
 		}
 		else{
@@ -227,6 +227,7 @@ if (!defined('BASEPATH'))
 			jQuery("#page").css({'max-width':(width + 10) + 'px','overflow':'hidden'});
 			jQuery("#page .inner img.open").css({'max-width':'100%'});
 			isSpread = false;
+			delete_message('is_spread');
 		}
 	}
 
@@ -314,17 +315,10 @@ if (!defined('BASEPATH'))
 	}
 	
 	
-	isSpread = false;
-	function leftMove(e) {
-		if (!isSpread) prevPage();
-		else jQuery('#page').scrollTo("-=60",100,{axis:"x",easing:'linear'});
-	}
-	
-	function rightMove(e) {
-		jQuery('#page').scrollTo("+=60",100,{axis:"x",easing:'linear'});
-	}
-
+	var isSpread = false;
+	var button_down = false;
 	var button_down_code;
+	
 	jQuery(document).ready(function() {
 		jQuery(document).keydown(function(e){
 			

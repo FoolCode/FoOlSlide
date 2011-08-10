@@ -328,7 +328,7 @@ if (!defined('BASEPATH'))
 	jQuery(document).ready(function() {
 		jQuery(document).keydown(function(e){
 			
-			if(!button_down)
+			if(!button_down && !jQuery("input").is(":focus"))
 			{
 				button_down = true;
 				code = e.keyCode || e.which;

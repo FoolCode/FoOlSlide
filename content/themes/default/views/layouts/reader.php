@@ -63,14 +63,6 @@
 							echo form_close();
 							?>
 						</li>
-						<li class="icon_wrapper night_mode" onClick="toggleNight()">
-							<img class="icon off" src="<?php echo glyphish(181); ?>" />
-							<img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" />
-						</li>
-						<li class="icon_wrapper day_mode" onClick="toggleNight()">
-							<img class="icon off" style="position:relative; top:-7px;" src="<?php echo glyphish(136); ?>" />
-							<img class="icon on" style="position:relative; top:-7px;" src="<?php echo glyphish(136, TRUE); ?>" />
-						</li>
 						<li>
 							<a style="padding:0;" href="<?php echo site_url('reader/feeds/rss') ?>"><img height="28" width="28" style="position:relative; top:1px;" src="<?php echo site_url() . 'content/themes/default/images/feed-icon-28x28.png' ?>" /></a>
 						</li>
@@ -91,22 +83,29 @@
 			<article id="content">
 				<?php
 				if (!isset($is_reader) || !$is_reader)
-				{
-					echo '<div class="panel">' . get_sidebar();
-					if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'))
-						echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
-					else
-						echo '<style type="text/css">
-								.panel {width:1000px; margin: 0 auto;}
-							</style>';
-					if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active'))
-						echo '<div class="ads static banner" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
-				}
+					echo '<div class="panel">';
+
+				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && !get_setting('fs_ads_top_banner_reload'))
+					echo '<div class="ads banner" id="ads_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
+
+				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
+					echo '<div class="ads iframe banner" id="ads_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
+
+
+				if (!isset($is_reader) || !$is_reader)
+					echo get_sidebar();
+
+
+				// here we output the body of the page
 				echo $template['body'];
+				
 
-				if ((!isset($is_reader) || !$is_reader) && get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active'))
-					echo '<div class="ads static banner" id="ads_static_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
+				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && !get_setting('fs_ads_bottom_banner_reload'))
+					echo '<div class="ads banner" id="ads_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
 
+				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
+					echo '<div class="ads iframe banner" id="ads_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
+				
 				if (!isset($is_reader) || !$is_reader)
 					echo '</div>';
 				?>
@@ -119,12 +118,8 @@
 				<div>
 					<?php echo get_setting('fs_gen_footer_text'); ?>
 				</div>
-				<div class="cp_link day_mode">
+				<div class="cp_link">
 					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
-				</div>
-				<div class="cp_link night_mode">
-
-					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer_night.png' ?>" /></a>
 				</div>
 			</div>
 		</div>

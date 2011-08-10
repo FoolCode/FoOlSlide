@@ -3,22 +3,6 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 ?>
 
-<?php
-if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
-	echo '<div class="ads iframe banner" id="ads_iframe_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
-?>
-
-<?php
-if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && !get_setting('fs_ads_top_banner_reload'))
-	echo '<div class="ads static banner ftop" id="ads_static_top_banner">' . get_setting('fs_ads_top_banner') . '</div>';
-?>
-
-
-<style type="text/css">
-	.panel {max-width:1000px; margin: 0 auto;} 
-	.ads.banner{max-width:980px !important; max-width:none; text-align:center;}
-</style>
-
 <div class="panel">
 	<div class="topbar">
 		<div>
@@ -45,7 +29,7 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 					?>
 				</div>
 				<div class="tbtitle icon_wrapper dnone" ><img class="icon off" src="<?php echo glyphish(181); ?>" /><img class="icon on" src="<?php echo glyphish(181, TRUE); ?>" /></div>
-<?php echo $chapter->download_url(NULL, "fleft"); ?>
+				<?php echo $chapter->download_url(NULL, "fleft"); ?>
 			</div>
 			<div class="topbar_right">
 				<div class="tbtitle dropdown_parent dropdown_right"><div class="text"><?php echo count($pages); ?> ⤵</div>
@@ -73,21 +57,10 @@ if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') 
 				</span>
 			</div>
 		</div>
+		<div class="clearer"></div>
 	</div>
 </div>
 
-
-
-
-<?php
-if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && !get_setting('fs_ads_left_banner_reload'))
-	echo '<div class="ads static vertical fleft" id="ads_static_left_banner">' . get_setting('fs_ads_left_banner') . '</div>';
-?>
-
-<?php
-if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && get_setting('fs_ads_left_banner_reload'))
-	echo '<div class="ads iframe vertical fleft" id="ads_iframe_left_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_left.html' . '"></iframe></div>';
-?>
 
 <div id="page">
 
@@ -99,33 +72,11 @@ if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active'
 	</div>
 </div>
 
-<?php
-if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
-	echo '<div class="ads iframe banner" id="ads_iframe_bottom_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
-?>
-
-<?php
-if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && !get_setting('fs_ads_bottom_banner_reload'))
-	echo '<div class="ads static banner fbottom" id="ads_static_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
-?>
-
-<style type="text/css">
-	#page{margin: 10px auto 0px;}
-	#ads_iframe_top_banner, #ads_static_top_banner, #ads_iframe_bottom_banner, #ads_static_bottom_banner {margin:10px auto;}
-	<?php
-	if (get_setting('fs_ads_left_banner_active'))
-	{
-		echo '.panel,#ads_iframe_top_banner, #ads_static_bottom_banner,#ads_iframe_bottom_banner, #ads_static_top_banner  {position:relative; left:95px;}';
-	}
-	?>
-</style>
-
-
 <div class="clearer"></div>
 
 <div id="bottombar">
     <div class="pagenumber">
-        -<?php echo $current_page ?>-
+		<?php echo _('Page') . ' ' . $current_page ?>
     </div>
     <div class="socialbuttons">
         <div class="tweet">
@@ -161,7 +112,11 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 	
 	var baseurl = '<?php echo $chapter->href() ?>';
 	
+	var site_url = '<?php echo site_url() ?>';
+	
 	var gt_page = '<?php echo addslashes(_("Page")) ?>';
+	
+	var button_down = false;
 	
 	function changePage(id, noscroll, nohash)
 	{
@@ -186,8 +141,6 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		if(!noscroll) jQuery.scrollTo('.panel', 430, {'offset':{'top':-6}});
 		
 		
-		//jQuery("#page").stop(true);
-
 		if(pages[id].loaded !== true) {
 			jQuery('#page .inner img.open').css({'opacity':'0'});
 			jQuery('#page .inner .preview img').attr('src', pages[id].thumb_url);
@@ -208,18 +161,9 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		jQuery('#pagelist .current').removeClass('current');
 		jQuery('#thumb_' + id).addClass('current');
 		
-<?php
-if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
-	echo 'jQuery("#ads_iframe_top_banner iframe").attr("src","' . site_url() . 'content/ads/ads_top.html");';
-?>
-<?php
-if (get_setting('fs_ads_left_banner') && get_setting('fs_ads_left_banner_active') && get_setting('fs_ads_left_banner_reload'))
-	echo 'jQuery("#ads_iframe_left_banner iframe").attr("src","' . site_url() . 'content/ads/ads_left.html");';
-?>
-<?php
-if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
-	echo 'jQuery("#ads_iframe_bottom_banner iframe").attr("src","' . site_url() . 'content/ads/ads_bottom.html");';
-?>
+		jQuery("#ads_top_banner iframe").attr("src", site_url + "content/ads/ads_top.html");
+		jQuery("#ads_bottom_banner iframe").attr("src", site_url + "content/ads/ads_bottom.html");
+		
 		return false;
 	}
 
@@ -354,7 +298,7 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 			jQuery('.number_'+i).removeClass('dnone');
 		}
                 
-		jQuery('.pagenumber').html('-' + (current_page+1) + '-');
+		jQuery('.pagenumber').html(gt_page + ' ' + (current_page+1));
 	}
 	
 	function chapters_dropdown()
@@ -380,91 +324,73 @@ if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_act
 		jQuery('#page').scrollTo("+=60",100,{axis:"x",easing:'linear'});
 	}
 
-
+	var button_down_code;
 	jQuery(document).ready(function() {
-		
-		if(!jQuery.browser.webkit && !jQuery.browser.msie){
+		jQuery(document).keydown(function(e){
 			
-			jQuery(document).keypress(function(e){
-				if(isSpread) {
-					jQuery("html, body").stop(true,true);		
-					jQuery("#page").stop(true,true);		
-					if(e.keyCode==37 || e.which==97)
-					{
-						leftMove(e);
-					}
-					if(e.keyCode==39 || e.which==100) 
-					{
-						rightMove(e);
-					}
+			if(!button_down)
+			{
+				button_down = true;
+				code = e.keyCode || e.which;
+				
+				if(e.keyCode==37 || e.keyCode==65)
+				{
+					if(!isSpread) prevPage();
+					else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
+					timeStamp37 = e.timeStamp;
+				
+					button_down = true;
+					e.preventDefault();
+					button_down_code = setInterval(function() { 
+						if (button_down) {
+							jQuery('#page').scrollTo("-=13",{axis:"x"});
+						} 
+					}, 20);
+				}
+				if(e.keyCode==39 || e.keyCode==68) 
+				{
+					if(!isSpread) nextPage();
+					else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
+					timeStamp39 = e.timeStamp;
+					
+					button_down = true;
+					e.preventDefault();
+					button_down_code = setInterval(function() { 
+						if (button_down) {
+							jQuery('#page').scrollTo("+=13",{axis:"x"});
+						} 
+					}, 20);
 				}
 				
-				if(e.which==115) jQuery.scrollTo("+=60",100,{axis:"y",easing:'linear'});
-				if(e.which==119) jQuery.scrollTo("-=60",100,{axis:"y",easing:'linear'});
-				if(e.keyCode==40) {
-					e.preventDefault()
-					jQuery.scrollTo("+=60",100,{easing:'linear'});
-				}
-				if(e.keyCode==38) {
+			
+				if(code == 40 || code == 83) 
+				{
 					e.preventDefault();
-					jQuery.scrollTo("-=60",100,{easing:'linear'});
+					button_down_code = setInterval(function() { 
+						if (button_down) {
+							jQuery.scrollTo("+=13"); 
+						} 
+					}, 20);
 				}
-			});
-			jQuery(document).keyup(function(e){
-				if(e.keyCode==37 || e.which==65)
+			
+				if(code == 38 || code == 87) 
 				{
-					if(!isSpread) prevPage();
-					else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
-					timeStamp37 = e.timeStamp;
-				}
-				if(e.keyCode==39 || e.which==68) 
-				{
-					if(!isSpread) nextPage();
-					else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
-					timeStamp39 = e.timeStamp;
-				}
-			});
-		}
-		else {
-			jQuery(document).keydown(function(e){
-				if(isSpread) {
-					jQuery("html, body").stop(true,true);		
-					jQuery("#page").stop(true,true);
-					if(e.keyCode==37 || e.keyCode==65)
-					{
-						leftMove(e);
-					}
-					if(e.keyCode==39 || e.keyCode==68) 
-					{
-						rightMove(e);
-					}
-				}
-				if(e.which==83) jQuery.scrollTo("+=60",100,{axis:"y",easing:'linear'});
-				if(e.which==87) jQuery.scrollTo("-=60",100,{axis:"y",easing:'linear'});
-				if(e.which==40) {
-					e.preventDefault()
-					jQuery.scrollTo("+=60",100,{easing:'linear'});
-				}
-				if(e.which==38) {
 					e.preventDefault();
-					jQuery.scrollTo("-=60",100,{easing:'linear'});
+					button_down_code = setInterval(function() {
+						if (button_down) {
+							jQuery.scrollTo("-=13"); 
+						} 
+					}, 20);
+					
 				}
-			});
-			jQuery(document).keyup(function(e){
-				if(e.keyCode==37 || e.which==65)
-				{
-					if(!isSpread) prevPage();
-					else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
-					timeStamp37 = e.timeStamp;
-				}
-				if(e.keyCode==39 || e.which==68) 
-				{
-					if(!isSpread) nextPage();
-					else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
-					timeStamp39 = e.timeStamp;
-				}
-			});
-		}
+			}
+
+		});
+		
+		jQuery(document).keyup(function(e){
+			button_down_code = window.clearInterval(button_down_code);
+			button_down = false;
+		});
 		
 		timeStamp37 = 0;
 		timeStamp39 = 0;

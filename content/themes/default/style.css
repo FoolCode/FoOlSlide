@@ -265,11 +265,12 @@ input[type="text"]
 .panel
 {
 	margin:0px 10px 5px 10px;
-	color:#000;
+	color:#333;
 	text-shadow:1px 1px 0px #ccc;
 	text-shadow:0px 1px 0px rgba(255,255,255,0.3);
 	width:1000px;
 	margin: 0 auto;
+	font-size:14px;
 }
 
 .panel a
@@ -292,8 +293,12 @@ input[type="text"]
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     z-index:-1;
-
-    padding:5px 0px 15px 0px;
+	background:#f7f7f7;
+	background-image:url("images/background_noise_light.png");
+	box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-webkit-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-moz-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+    padding:6px 5px;
 
 }
 
@@ -305,9 +310,9 @@ input[type="text"]
 	padding: 6px 8px;
     color:#ddd;
 	background:#333;
-	box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
-	-webkit-box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
-	-moz-box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
+	box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
+	-webkit-box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
+	-moz-box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
     border-radius:5px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
@@ -324,9 +329,8 @@ input[type="text"]
 
 .list .group
 {
-	border-bottom:1px solid #888;
 	margin-top:8px;
-	padding-bottom:8px;
+	padding:0 2px 5px 5px;
 	position:relative;
 	overflow:hidden;
 }
@@ -334,6 +338,8 @@ input[type="text"]
 .list .group > .title
 {
 	font-weight:bold;
+	font-size:16px;
+	border-bottom:1px solid #666;
 }
 
 .list .group > .title > .meta
@@ -396,11 +402,15 @@ input[type="text"]
 
 .large
 {
-    padding:5px;
-    padding-top:6px;
-    padding-bottom:3px;
+    padding:6px 5px;
     margin:0 0 10px;
 
+	background:#f7f7f7;
+	background-image:url("images/background_noise_light.png");
+	box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-webkit-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-moz-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	
     overflow:hidden;
 
     border-radius:5px;
@@ -451,10 +461,9 @@ input[type="text"]
 .sidebar
 {
 	float:right;
-	overflow:hidden;
-	margin:0 0 0 10px;
+	margin:0 0 10px 10px;
 	padding:0;
-	width:240px;
+	width:300px;
 	z-index:-1;
 	list-style: none;
 }
@@ -463,13 +472,20 @@ input[type="text"]
 .sidebar li
 {
 	margin: 0 0 10px;
-	padding:10px 8px 10px 8px;
+	padding:6px 5px 10px;
+	background-image:url("images/background_noise_light.png");
+	box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-webkit-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	-moz-box-shadow: 0px 0px 1px #fff, inset 0px 0px 8px #777;
+	border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
 }
 
 .sidebar li h3 
 {
 	color:#ddd;
-	padding:2px 10px 2px 10px;
+	padding:3px 10px 3px 10px;
 	line-height:normal;
 	position:relative;
 	text-shadow:none;
@@ -477,17 +493,15 @@ input[type="text"]
 	font-size:14px;
     color:#ddd;
 	background:#333;
-	box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
-	-webkit-box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
-	-moz-box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
+	box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
+	-webkit-box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
+	-moz-box-shadow: 0px 0px 1px #ddd, 0px 0px 3px #888, inset 0px 0px 8px #222;
 	
 	border-radius:5px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
 	margin: 0 0 7px;
 }
-
-
 
 #page
 {
@@ -851,12 +865,9 @@ ul.dropdown li a
 .topbar_right .number
 {
     text-shadow:none;
-
-
     border-radius:4px;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
-
     text-align:center;
     font-size:14px;
     font-family: Cambria, Georgia, Times, Times New Roman, serif;

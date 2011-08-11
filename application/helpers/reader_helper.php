@@ -126,7 +126,7 @@ if(!function_exists('get_facebook_widget'))
 	{
 		$facebook = get_setting_facebook($team);
 		
-		$echo = "<iframe src='http://www.facebook.com/plugins/likebox.php?href=".urlencode($facebook)."&amp;width=222&amp;colorscheme=light&amp;show_faces=false&amp;stream=true&amp;header=true&amp;height=387' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:222px; height:387px; background:#fff; background:rgba(255,255,255,1.0)' allowTransparency='true'></iframe>";
+		$echo = "<iframe src='http://www.facebook.com/plugins/likebox.php?href=".urlencode($facebook)."&amp;width=290&amp;colorscheme=light&amp;show_faces=false&amp;stream=true&amp;header=true&amp;height=387' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:290px; height:387px; background:#fff; background:rgba(255,255,255,.5)' allowTransparency='true'></iframe>";
 		return $echo;
 	}
 }

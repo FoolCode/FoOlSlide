@@ -303,7 +303,7 @@ class Series extends Admin_Controller
 		}
 
 		// return a json array
-		echo json_encode($info);
+		$this->output->set_output(json_encode($info));
 		return true;
 	}
 
@@ -333,7 +333,7 @@ class Series extends Admin_Controller
 			);
 		}
 
-		echo json_encode($info);
+		$this->output->set_output(json_encode($info));
 		return true;
 	}
 

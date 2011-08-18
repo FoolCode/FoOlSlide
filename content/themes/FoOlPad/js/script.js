@@ -47,6 +47,7 @@
 		
 		var loadedComics = {};
 		var loadedChapters = {};
+		var loadedPages = {};
 		var loadedTeams = {};
 		var loadedJoints = {};
 		var loadedUsers = {};
@@ -55,6 +56,7 @@
 		plugin.cleanCache = function() {
 			loadedComics = {};
 			loadedChapters = {};
+			loadedPages = {};
 			loadedTeams = {};
 			loadedJoints = {};
 			loadedUsers = {};
@@ -115,6 +117,26 @@
 					if(typeof v.chapter != "undefined" && (typeof loadedChapters[v.chapter.id + "_" + index] == "undefined" || dateTimeToDate(v.chapter.updated) > dateTimeToDate(loadedChapters[v.chapter.id + "_" + index].updated))) {
 						loadedChapters[v.chapter.id + "_" + index] = v.chapter;
 						loadedChapters[v.chapter.id + "_" + index].slideUrl = index;
+					}
+					
+					// does the chapter comes with the array of pages? load them
+					if(typeof v.pages != "undefined") {
+						// if we have no pages for this chapter, set zeroPages to true, otherwise to false
+						if(v.pages.length == 0)
+						{
+							loadedChapters[v.chapter.id + "_" + index].zeroPages == true;
+						}
+						else
+						{
+							loadedChapters[v.chapter.id + "_" + index].zeroPages == false;
+						}
+						$.each(v.pages, function(j, p){
+							if (typeof loadedTeams[t.id + "_" + index] == "undefined" ||  (typeof loadedTeams[t.id + "_" + index] != "undefined" && dateTimeToDate(t.updated) > dateTimeToDate(loadedTeams[t.id + "_" + index].updated))) {
+								loadedPages[p.id + "_" + index] = p;
+								loadedPages[p.id + "_" + index].slideUrl = index;
+							}
+						});
+						
 					}
 				});
 			});
@@ -207,6 +229,7 @@
 		
 		plugin.readerChapter = function(opt) {
 			var def = {
+				// if ID used, the rest of search values is ignored
 				id: 0,
 				comic_id: "",
 				volume: "",
@@ -214,13 +237,30 @@
 				subchapter: "",
 				team_id: "",
 				joint_id: "",
+				forcePages: false,
+				forceCache: false,
 				slideUrl: plugin.settings.slideUrls[0]
-			}
+			};
+			
 			var opt = $.extend({}, def, opt);
 
 			var parameters = "";
 			if(opt.id > 0)
 			{
+				// let's see if we have it in cache
+				var check = checkChapter(opt)
+				if(check !== false)
+				{
+					return check;
+				}
+
+				// from this point and on is via ajax. did we ask for cache forcing?
+				if(opt.forceCache)
+				{
+					// ah, but we already tried to get from cache, so here we say the requested resource doesn't exist
+					// there can't be chapters without team or comic, so this is safe
+					return false;
+				}
 				parameters += "/id/" + opt.id;
 			}
 			else
@@ -242,12 +282,111 @@
 			// adapt for processChapters()
 			var result = get("/reader/chapter" + parameters, def.slideUrl);
 			result[opt.slideUrl].chapters = [{
-					comic: result[opt.slideUrl].comic,
-					chapter: result[opt.slideUrl].chapter,
-					teams: result[opt.slideUrl].teams
+				comic: result[opt.slideUrl].comic,
+				chapter: result[opt.slideUrl].chapter,
+				teams: result[opt.slideUrl].teams,
+				pages: result[opt.slideUrl].pages
 			}];
-			
+
 			processChapters(result);
+			opt.id = result[opt.slideUrl].chapter.id;
+			opt.forceCache = true;
+			// now just use the caching function to retrieve the value
+			return plugin.readerChapter(opt);
+			
+		}
+		
+		/**
+		 * Check if the chapter and its components are cached and return the complete array
+		 */
+		var checkChapter = function(opt){
+			/*
+			 * opt = {id, slideUrl, forcePages, forceCache}
+			 */
+			if(typeof loadedChapters[opt.id + "_" + opt.slideUrl] != "undefined")
+			{
+				var missing = false;
+					
+				// check if we have the comic
+				if (typeof loadedComics[loadedChapters[opt.id + "_" + opt.slideUrl].comic_id + "_" + opt.slideUrl] == "undefined")
+				{
+					missing = true;
+				}
+					
+				// check if we have the teams
+				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].team_id > 0 && typeof loadedTeams[loadedChapters[opt.id + "_" + opt.slideUrl].team_id + "_" + opt.slideUrl] == "undefined")
+				{console.log(loadedTeams);
+					missing = true;								
+				}
+				
+				// if we have teams, put it in a teams array
+				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].team_id > 0)
+				{
+					var teams = [loadedTeams[loadedChapters[opt.id + "_" + opt.slideUrl].team_id + "_" + opt.slideUrl]];
+				}
+					
+				// check if we have the joint
+				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].joint_id > 0 && typeof loadedJoints[loadedChapters[opt.id + "_" + opt.slideUrl].joint_id + "_" + opt.slideUrl] == "undefined")
+				{
+					missing = true;								
+				}
+				
+				// let's grab the teams in the joint, if it's a joint at all
+				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].joint_id > 0)
+				{
+					var teams = [];
+					$.each(loadedJoints, function(index, value){
+						if(typeof loadedTeams[value + "_" + opt.slideUrl] == "undefined")
+						{
+							// not found one of the teams, we need to reload this chapter
+							missing = true;
+							return false;
+						}
+						else
+						{
+							// found the team
+							teams.push(loadedTeams[value + "_" + opt.slideUrl]);
+						}
+					});
+				}
+				
+				// time to grab the pages, if there's any
+				if(!missing)
+				{
+					// if forcePages is true, set missing false unless we find pages
+					// if we already know there's no pages, then don't bother making ajax requests
+					if((loadedChapters[opt.id + "_" + opt.slideUrl].zeroPages !== true) && opt.forcePages) {
+						missing = true;
+					}
+					var pages = [];
+					$.each(loadedPages, function(index, value){
+						if(value.id == opt.id && value.slideUrl == opt.slideUrl) 
+						{
+							missing = false;
+							pages.push(value);
+						}
+					});
+				}
+				
+				// we've found all the needed! make the array now
+				if(!missing)
+				{
+					var result = {
+						comics: [loadedComics[loadedChapters[opt.id + "_" + opt.slideUrl].comic_id + "_" + opt.slideUrl]],
+						chapters: [loadedChapters[opt.id + "_" + opt.slideUrl]],
+						teams: teams
+					};
+					if(opt.forcePages)
+					{
+						result.pages = pages;
+					}
+					return result;
+				}
+				
+			}
+			
+			// if we didn't return yet, it means mission failed
+			return false;
 		}
 		
 		

@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reader extends REST_Controller
 {
-	/*
+	/**
 	 * Returns 100 comics from selected page
 	 * 
 	 * Available filters: page, per_page (default:30, max:100), orderby
@@ -42,7 +42,7 @@ class Reader extends REST_Controller
 	}
 
 
-	/*
+	/**
 	 * Returns the comic
 	 * 
 	 * Available filters: id (required)
@@ -65,7 +65,7 @@ class Reader extends REST_Controller
 			$comic = new Comic();
 			$comic->where('stub', $this->get('stub'));
 			// back compatibility with version 0.7.6, though stub is already an unique key
-			if($this->get('uniqid'))
+			if ($this->get('uniqid'))
 				$comic->where('uniqid', $this->get('uniqid'));
 			$comic->limit(1)->get();
 		}
@@ -91,7 +91,7 @@ class Reader extends REST_Controller
 				$result['chapters'][$key]['comic'] = $result["comic"]["thumb_url"];
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
-				
+
 				// if it's requested, throw in also the pages (for load balancer)
 				if ($this->get('chapter_stub') == $chapter->stub
 						&& $this->get('chapter_uniqid') == $chapter->uniqid)
@@ -100,8 +100,8 @@ class Reader extends REST_Controller
 					$pages->where('chapter_id', $chapter->id)->get();
 					$result["chapters"][$key]["chapter"]["pages"] = $pages->all_to_array();
 				}
-				
-				
+
+
 
 				// teams is a normal array, can't use $team->all_to_array()
 				foreach ($chapter->teams as $team)
@@ -121,7 +121,7 @@ class Reader extends REST_Controller
 	}
 
 
-	/*
+	/**
 	 * Returns chapters from selected page
 	 * 
 	 * Available filters: page, per_page (default:30, max:100), orderby
@@ -172,7 +172,7 @@ class Reader extends REST_Controller
 	}
 
 
-	/*
+	/**
 	 * Returns the chapter
 	 * 
 	 * Available filters: id (required)
@@ -181,12 +181,43 @@ class Reader extends REST_Controller
 	 */
 	function chapter_get()
 	{
-		// check that the id is at least a valid number
-		$this->_check_id();
+		if (is_numeric($this->get('comic_id')) 
+				|| is_numeric($this->get('volume')) 
+				|| is_numeric($this->get('chapter')) 
+				|| is_numeric($this->get('subchapter'))
+				|| is_numeric($this->get('team_id'))
+				|| is_numeric($this->get('joint_id'))
+		)
+		{
+			$chapter = new Chapter();
 
-		// get the single chapter by id
-		$chapter = new Chapter();
-		$chapter->where('id', $this->get('id'))->limit(1)->get();
+			// this mess is a complete search system through integers!
+			if (is_numeric($this->get('comic_id')))
+				$chapter->where('comic_id', $this->get('comic_id'));
+			if (is_numeric($this->get('volume')))
+				$chapter->where('volume', $this->get('volume'));
+			if (is_numeric($this->get('chapter')))
+				$chapter->where('chapter', $this->get('chapter'));
+			if (is_numeric($this->get('subchapter')))
+				$chapter->where('subchapter', $this->get('subchapter'));
+			if (is_numeric($this->get('team_id')))
+				$chapter->where('team_id', $this->get('team_id'));
+			if (is_numeric($this->get('joint_id')))
+				$chapter->where('joint_id', $this->get('joint_id'));
+			
+			// and we'll still give only one result
+			$chapter->limit(1)->get();
+		}
+		else
+		{
+			// check that the id is at least a valid number
+			$this->_check_id();
+
+			$chapter = new Chapter();
+			// get the single chapter by id
+			$chapter->where('id', $this->get('id'))->limit(1)->get();
+		}
+
 
 		if ($chapter->result_count() == 1)
 		{
@@ -199,7 +230,7 @@ class Reader extends REST_Controller
 			$result['comic']["thumb_url"] = $chapter->comic->get_thumb();
 			$result['comic']["href"] = $chapter->comic->href();
 			$result['chapter'] = $chapter->to_array();
-			$result['chapter'] = $chapter->href();
+			$result['chapter']["href"] = $chapter->href();
 			$result['teams'] = array();
 			foreach ($chapter->teams as $team)
 			{
@@ -220,7 +251,7 @@ class Reader extends REST_Controller
 	}
 
 
-	/*
+	/**
 	 * Returns chapters per page from team ID
 	 * Includes releases from joints too
 	 * 
@@ -232,22 +263,20 @@ class Reader extends REST_Controller
 	 */
 	function team_get()
 	{
-		
-		
-
-		// get the single team by id
-		$team = new Team();
-		if($this->get('stub'))
+		// get the single team by id or stub
+		if ($this->get('stub'))
 		{
+			$team = new Team();
 			$team->where('stub', $this->get('stub'))->limit(1)->get();
 		}
-		else 
+		else
 		{
 			// check that the id is at least a valid number
 			$this->_check_id();
+			$team = new Team();
 			$team->where('id', $this->get('id'))->limit(1)->get();
 		}
-		
+
 		// team found?
 		if ($team->result_count() == 1)
 		{
@@ -309,7 +338,7 @@ class Reader extends REST_Controller
 	}
 
 
-	/*
+	/**
 	 * Returns chapters per page by joint ID
 	 * Also returns the teams
 	 * 

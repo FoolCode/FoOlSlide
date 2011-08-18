@@ -30,6 +30,7 @@ class Reader extends REST_Controller
 			{
 				$result['comics'][$key] = $comic->to_array();
 				$result['comics'][$key]["thumb_url"] = $comic->get_thumb();
+				$result['comics'][$key]["href"] = $comic->href();
 			}
 			$this->response($result, 200); // 200 being the HTTP response code
 		}
@@ -59,10 +60,14 @@ class Reader extends REST_Controller
 			$comic = new Comic();
 			$comic->where('id', $this->get('id'))->limit(1)->get();
 		}
-		else if ($this->get('uniqid') && $this->get('stub'))
+		else if ($this->get('stub'))
 		{ // mostly used for load balancer
 			$comic = new Comic();
-			$comic->where('stub', $this->get('stub'))->where('uniqid', $this->get('uniqid'))->limit(1)->get();
+			$comic->where('stub', $this->get('stub'));
+			// back compatibility with version 0.7.6, though stub is already an unique key
+			if($this->get('uniqid'))
+				$comic->where('uniqid', $this->get('uniqid'));
+			$comic->limit(1)->get();
 		}
 		else
 		{
@@ -83,8 +88,9 @@ class Reader extends REST_Controller
 			$result["chapters"] = array();
 			foreach ($chapters->all as $key => $chapter)
 			{
-				$result['chapters'][$key]['comic'] = $comic->to_array();
+				$result['chapters'][$key]['comic'] = $result["comic"]["thumb_url"];
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
 				
 				// if it's requested, throw in also the pages (for load balancer)
 				if ($this->get('chapter_stub') == $chapter->stub
@@ -145,7 +151,9 @@ class Reader extends REST_Controller
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
+				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
 				$chapter->get_teams();
 				foreach ($chapter->teams as $item)
 				{
@@ -189,7 +197,9 @@ class Reader extends REST_Controller
 			$result = array();
 			$result['comic'] = $chapter->comic->to_array();
 			$result['comic']["thumb_url"] = $chapter->comic->get_thumb();
+			$result['comic']["href"] = $chapter->comic->href();
 			$result['chapter'] = $chapter->to_array();
+			$result['chapter'] = $chapter->href();
 			$result['teams'] = array();
 			foreach ($chapter->teams as $team)
 			{
@@ -222,13 +232,22 @@ class Reader extends REST_Controller
 	 */
 	function team_get()
 	{
-		// check that the id is at least a valid number
-		$this->_check_id();
+		
+		
 
 		// get the single team by id
 		$team = new Team();
-		$team->where('id', $this->get('id'))->limit(1)->get();
-
+		if($this->get('stub'))
+		{
+			$team->where('stub', $this->get('stub'))->limit(1)->get();
+		}
+		else 
+		{
+			// check that the id is at least a valid number
+			$this->_check_id();
+			$team->where('id', $this->get('id'))->limit(1)->get();
+		}
+		
 		// team found?
 		if ($team->result_count() == 1)
 		{
@@ -274,7 +293,9 @@ class Reader extends REST_Controller
 				}
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
+				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
 			}
 
 			// all good
@@ -336,7 +357,9 @@ class Reader extends REST_Controller
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
+				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
 				$result['chapters'][$key]['teams'] = $result['teams'];
 			}
 

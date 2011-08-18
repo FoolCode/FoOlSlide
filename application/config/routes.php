@@ -39,6 +39,9 @@
 */
 
 $route['default_controller'] = "reader";
+$route['sitemap.xml'] = "reader/sitemap";
+$route['rss.xml'] = "reader/feeds";
+$route['atom.xml'] = "reader/feeds/atom";
 $route['admin'] = "admin/series";
 $route['account'] = "account/index/profile";
 $route['account/profile'] = "account/index/profile";

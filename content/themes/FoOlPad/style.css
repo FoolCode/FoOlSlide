@@ -418,6 +418,7 @@ a, a:hover {
 
 #splash .latest ol {
 	padding-left:16px;
+	list-style:none;
 }
 
 #splash .latest ol li {
@@ -428,7 +429,22 @@ a, a:hover {
 
 #splash .latest ol li .meta {
 	font-size:70%;
-	margin-left: 8px;
+	margin-left: 0px;
+}
+
+#splash .suggestion {
+	font-family:Georgia;
+	margin-top:5%;
+	font-size:120%;
+	color:#999;
+	font-style:italic;
+}
+
+#splash .suggestion .bracket {
+	font-size:180%;
+	position:relative;
+	top:4px;
+	margin: 0 16px;
 }
 
 

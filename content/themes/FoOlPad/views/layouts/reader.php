@@ -124,6 +124,9 @@
 							<li>Kannagi - Vol.7 Chapter 37 <span class="meta">FoOlRulez</span></li>
 						</ol>
 					</div>
+					<div class="suggestion">
+						<span class="bracket">{</span> we'd suggest to activate your browser's fullscreen mode <span class="bracket">}</span>
+					</div>
 					
 				</div>
 			</div>

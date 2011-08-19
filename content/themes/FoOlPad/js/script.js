@@ -1,44 +1,25 @@
-// jQuery Plugin Boilerplate
-// A boilerplate for jumpstarting jQuery plugins development
-// version 1.1, May 14th, 2011
-// by Stefan Gabos
-
-// remember to change every instance of "pluginName" to the name of your plugin!
 (function($) {
 
 	// here we go!
 	$.foolslide = function(element, options) {
 
-		// plugin's default options
-		// this is private property and is  accessible only from inside the plugin
 		var defaults = {
 
 			slideUrls: ["http://localhost/slide"]
-
-		// if your plugin is event-driven, you may provide callback capabilities for its events.
-		// execute these functions before or after events of your plugin, so that users may customize
-		// those particular events without changing the plugin's code
 		//onFoo: function() {}
 
 		}
 
-		// to avoid confusions, use "plugin" to reference the current instance of the object
 		var plugin = this;
 
-		// this will hold the merged default, and user-provided options
-		// plugin's properties will be available through this object like:
-		// plugin.settings.propertyName from inside the plugin or
-		// element.data('pluginName').settings.propertyName from outside the plugin, where "element" is the
-		// element the plugin is attached to;
+
 		plugin.settings = {}
 
-		var $element = $(element),  // reference to the jQuery version of DOM element the plugin is attached to
-		element = element;        // reference to the actual DOM element
+		var $element = $(element),
+		element = element;
 
 		// the "constructor" method that gets called when the object is created
 		plugin.init = function() {
-
-			// the plugin's final properties are the merged default and user-provided options (if any)
 			plugin.settings = $.extend({}, defaults, options);
 
 		// code goes here
@@ -63,10 +44,6 @@
 			loadedMembers = {};
 		}
 
-		
-		
-		
-		
 		var processComics = function(obj) {
 			$.each(obj, function(index, value){
 				$.each(value.comics, function(i, v){
@@ -131,7 +108,7 @@
 							loadedChapters[v.chapter.id + "_" + index].zeroPages == false;
 						}
 						$.each(v.pages, function(j, p){
-							if (typeof loadedTeams[t.id + "_" + index] == "undefined" ||  (typeof loadedTeams[t.id + "_" + index] != "undefined" && dateTimeToDate(t.updated) > dateTimeToDate(loadedTeams[t.id + "_" + index].updated))) {
+							if (typeof loadedPages[p.id + "_" + index] == "undefined" ||  (typeof loadedPages[p.id + "_" + index] != "undefined" && dateTimeToDate(p.updated) > dateTimeToDate(loadedPages[p.id + "_" + index].updated))) {
 								loadedPages[p.id + "_" + index] = p;
 								loadedPages[p.id + "_" + index].slideUrl = index;
 							}
@@ -199,32 +176,54 @@
 				stub: "",
 				uniqid: "",
 				direction: "asc",
-				slideUrl: plugin.settings.slideUrls[0]
+				slideUrl: plugin.settings.slideUrls[0],
+				forceChapters: false,
+				forceCache: false
 			}
 			var opt = $.extend({}, def, opt);
-			if(def.id != 0)
+			if(def.id > 0)
+			{
+				var check = checkComic(opt);
+				if(check !== false)
+				{
+					return check;
+				}
+				
 				var parameters = "/id/" + opt.id + "/";
+			}
 			if(def.stub != "") {
 				var parameters = "/stub/" + opt.id + "/";
 				if(def.uniqid != "") {
-					// compatibility for FoOlSlide 0.7.6 may God help this function
+					// compatibility up to FoOlSlide 0.7.6 - may God help this function
 					parameters += "uniqid/" + opt.uniqid;
 				}
 			}
-			var result = processChapters(get("/reader/comic" + parameters, slideUrl));
 			
+			var result = get("/reader/comic" + parameters, opt.slideUrl);
 			// one comic to insert, especially if there was no chapter available
-			$.each(result, function(index, value){
-				if(typeof loadedComics[value.comic.id + "_" + index] == "undefined" || dateTimeToDate(value.comic.updated) > dateTimeToDate(loadedComics[value.comic.id + "_" + index].updated)) {
-					loadedComics[value.comic.id + "_" + index] = value.comic;
-					loadedComics[value.comic.id + "_" + index].slideUrl = index;
-				}
-			});
+			if(typeof loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl] == "undefined" || dateTimeToDate(result[opt.slideUrl].comic.updated) > dateTimeToDate(loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].updated)) {
+				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl] = result[opt.slideUrl].comic;
+				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].slideUrl = opt.slideUrl;
+			}
+
+			if (result[opt.slideUrl]) {
+    
+			}
+			processChapters(result);
+
+
 			var arrChapters = orderbyChapter(loadedComics, (opt.direction == "desc"));
 			return {
 				comics: [], 
 				chapters: arrChapters
 			}
+		}
+		
+		var checkComic = function(opt) {
+			if(typeof loadedComics[opt.id + "_" + opt.slideUrl] != "undefined")
+			{
+				
+		}
 		}
 		
 		plugin.readerChapter = function(opt) {
@@ -265,6 +264,29 @@
 			}
 			else
 			{
+				
+				// scary search function
+				// if the user just didn't define enough data and this outputs, it's same as server as in coherence
+				$.each(loadedChapters, function(index,value){
+					if(
+						(isNaN(parseInt(opt.comic_id)) || value.comic_id == parseInt(opt.comic_id)) &&
+						(isNaN(parseInt(opt.volume)) || value.volume == parseInt(opt.volume)) &&
+						(isNaN(parseInt(opt.chapter)) || value.chapter == parseInt(opt.chapter)) &&
+						(isNaN(parseInt(opt.subchapter)) || value.subchapter == parseInt(opt.subchapter)) &&
+						(isNaN(parseInt(opt.team_id)) || value.team_id == parseInt(opt.team_id)) &&
+						(isNaN(parseInt(opt.joint_id)) || value.joint_id == parseInt(opt.joint_id)) &&
+						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
+						)
+						{
+						opt.id = value.id;
+						return false;
+					}
+				});
+				if(opt.id > 0) 
+				{
+					return plugin.readerChapter(opt);
+				}
+						
 				if(!isNaN(parseInt(opt.comic_id)))
 					parameters += "/comic_id/" + opt.comic_id;
 				if(!isNaN(parseInt(opt.volume)))
@@ -315,7 +337,8 @@
 					
 				// check if we have the teams
 				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].team_id > 0 && typeof loadedTeams[loadedChapters[opt.id + "_" + opt.slideUrl].team_id + "_" + opt.slideUrl] == "undefined")
-				{console.log(loadedTeams);
+				{
+					console.log(loadedTeams);
 					missing = true;								
 				}
 				
@@ -579,7 +602,9 @@ jQuery(document).ready(function(){
 	console.log(latest);
 	
 	var chapter = foolslide.readerChapter({
-		id:10
+		comic_id:1,
+		chapter:23,
+		subchapter:0
 	});
 	console.log(chapter);
 });

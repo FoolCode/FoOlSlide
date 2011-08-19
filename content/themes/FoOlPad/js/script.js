@@ -44,6 +44,10 @@
 			loadedMembers = {};
 		}
 
+
+		/**
+		 * Put an array of slideUrls/comics in the cache
+		 */
 		var processComics = function(obj) {
 			$.each(obj, function(index, value){
 				$.each(value.comics, function(i, v){
@@ -55,6 +59,9 @@
 			});
 		}
 		
+		/**
+		 * Put an array of slideUrls/chapters in the cache
+		 */
 		var processChapters = function(obj) {
 			// cycle through the slideUrls
 			$.each(obj, function(index, value){
@@ -80,13 +87,13 @@
 					
 					// store those joints
 					if(v.teams.length > 1) {
-						loadedJoints[v.joint_id + "_" + index] = {
+						loadedJoints[v.chapter.joint_id + "_" + index] = {
 							id: v.joint_id, 
 							slideUrl: index, 
 							teams:[]
 						};
 						$.each(v.teams, function(j,t){
-							loadedJoints[v.joint_id + "_" + index].teams.push(t.id);
+							loadedJoints[v.chapter.joint_id + "_" + index].teams.push(t.id);
 						});
 					}
 					
@@ -122,6 +129,12 @@
 			return obj;
 		}
 		
+		
+		/**
+		 * Get the comics
+		 * 
+		 * @return object {comics:[]}
+		 */
 		plugin.readerComics = function(opt) {
 			var def = {
 				direction: "asc",
@@ -146,6 +159,11 @@
 		}
 		
 		
+		/**
+		 *	Returns an array of chapters
+		 *	
+		 *	@return array {chapters:[]}
+		 */
 		plugin.readerChapters = function(opt) {
 			var def = {
 				direction: "asc",
@@ -166,7 +184,7 @@
 			if(opt.orderby == "created")
 				var arr = orderbyCreated(loadedChapters, (opt.direction == "desc"));
 			arr = arrayPage(arr, def.page, opt.per_page);
-			return arr;
+			return {chapters: arr};
 		}
 		
 		
@@ -181,12 +199,20 @@
 				forceCache: false
 			}
 			var opt = $.extend({}, def, opt);
-			if(def.id > 0)
+			if(opt.id > 0)
 			{
 				var check = checkComic(opt);
 				if(check !== false)
 				{
 					return check;
+				}
+				
+				// from this point and on is via ajax. did we ask for cache forcing?
+				if(opt.forceCache)
+				{
+					// ah, but we already tried to get from cache, so here we say the requested resource doesn't exist
+					// there can't be chapters without team or comic, so this is safe
+					return false;
 				}
 				
 				var parameters = "/id/" + opt.id + "/";
@@ -206,24 +232,61 @@
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].slideUrl = opt.slideUrl;
 			}
 
-			if (result[opt.slideUrl]) {
-    
+			if (result[opt.slideUrl].chapters.length == 0) {
+				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = true;
 			}
-			processChapters(result);
-
-
-			var arrChapters = orderbyChapter(loadedComics, (opt.direction == "desc"));
-			return {
-				comics: [], 
-				chapters: arrChapters
+			else
+			{
+				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = false;
+				processChapters(result);
 			}
+
+			//var arrChapters = orderbyChapter(loadedComics, (opt.direction == "desc"));
+			opt.id = result[opt.slideUrl].comic.id;
+			opt.forceCache = true;
+			return plugin.readerComic(opt);
 		}
 		
 		var checkComic = function(opt) {
+			// variable to check if something is in fact missing
+			var missing = false;
+			
+			// suppose the comic is loaded
 			if(typeof loadedComics[opt.id + "_" + opt.slideUrl] != "undefined")
 			{
 				
-		}
+				var chapters = [];
+				var result = {comics:[loadedComics[opt.id + "_" + opt.slideUrl]], chapters:[]};
+				
+				// loop through each chapter to check they all have the team and comic
+				$.each(loadedChapters, function(index, value){
+					if(value.slideUrl == opt.slideUrl && value.comic_id == opt.id)
+					{
+						var currentChapter = checkChapter({
+							id: value.id,
+							slideUrl: opt.slideUrl,
+							forcePages: false
+						});
+						if(currentChapter === false)
+						{
+							missing = true;
+							return false;
+						}
+						else
+						{
+							$.merge(result.chapters, currentChapter.chapters);
+						}
+					}
+				});
+				
+				if(!missing)
+				{
+					result.chapters = chapters;
+					return result;
+				}
+			}
+			
+			return false;
 		}
 		
 		plugin.readerChapter = function(opt) {
@@ -338,7 +401,6 @@
 				// check if we have the teams
 				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].team_id > 0 && typeof loadedTeams[loadedChapters[opt.id + "_" + opt.slideUrl].team_id + "_" + opt.slideUrl] == "undefined")
 				{
-					console.log(loadedTeams);
 					missing = true;								
 				}
 				
@@ -357,8 +419,8 @@
 				// let's grab the teams in the joint, if it's a joint at all
 				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].joint_id > 0)
 				{
-					var teams = [];
-					$.each(loadedJoints, function(index, value){
+					var teams = []; console.log(loadedJoints);
+					$.each(loadedJoints[loadedChapters[opt.id + "_" + opt.slideUrl].joint_id + "_" + opt.slideUrl].teams, function(index, value){
 						if(typeof loadedTeams[value + "_" + opt.slideUrl] == "undefined")
 						{
 							// not found one of the teams, we need to reload this chapter
@@ -595,7 +657,7 @@
 
 jQuery(document).ready(function(){
 	var foolslide = new $.foolslide();
-	var comics = foolslide.readerComics();
+	/*var comics = foolslide.readerComics();
 	console.log(comics);
 	
 	var latest = foolslide.readerChapters();
@@ -605,6 +667,11 @@ jQuery(document).ready(function(){
 		comic_id:1,
 		chapter:23,
 		subchapter:0
+	});
+	console.log(chapter);*/
+	
+	var chapter = foolslide.readerComic({
+		id:2
 	});
 	console.log(chapter);
 });

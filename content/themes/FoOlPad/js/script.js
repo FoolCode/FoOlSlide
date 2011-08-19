@@ -184,7 +184,9 @@
 			if(opt.orderby == "created")
 				var arr = orderbyCreated(loadedChapters, (opt.direction == "desc"));
 			arr = arrayPage(arr, def.page, opt.per_page);
-			return {chapters: arr};
+			return {
+				chapters: arr
+			};
 		}
 		
 		
@@ -217,8 +219,24 @@
 				
 				var parameters = "/id/" + opt.id + "/";
 			}
-			if(def.stub != "") {
-				var parameters = "/stub/" + opt.id + "/";
+			if(opt.stub != "") {
+				
+				$.each(loadedComics, function(index,value){
+					if(
+						(isNaN(parseInt(opt.stub)) || value.stub == parseInt(opt.stub)) &&
+						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
+						)
+						{ alert(value.id);
+						opt.id = value.id;
+						return false;
+					}
+				});
+				if(opt.id > 0)
+				{
+					return plugin.readerComic(opt);
+				}
+				
+				var parameters = "/stub/" + opt.stub + "/";
 				if(def.uniqid != "") {
 					// compatibility up to FoOlSlide 0.7.6 - may God help this function
 					parameters += "uniqid/" + opt.uniqid;
@@ -256,7 +274,10 @@
 			{
 				
 				var chapters = [];
-				var result = {comics:[loadedComics[opt.id + "_" + opt.slideUrl]], chapters:[]};
+				var result = {
+					comics:[loadedComics[opt.id + "_" + opt.slideUrl]], 
+					chapters:[]
+				};
 				
 				// loop through each chapter to check they all have the team and comic
 				$.each(loadedChapters, function(index, value){
@@ -419,7 +440,8 @@
 				// let's grab the teams in the joint, if it's a joint at all
 				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].joint_id > 0)
 				{
-					var teams = []; console.log(loadedJoints);
+					var teams = [];
+					console.log(loadedJoints);
 					$.each(loadedJoints[loadedChapters[opt.id + "_" + opt.slideUrl].joint_id + "_" + opt.slideUrl].teams, function(index, value){
 						if(typeof loadedTeams[value + "_" + opt.slideUrl] == "undefined")
 						{
@@ -671,7 +693,7 @@ jQuery(document).ready(function(){
 	console.log(chapter);*/
 	
 	var chapter = foolslide.readerComic({
-		id:2
+		stub:"erst"
 	});
 	console.log(chapter);
 });

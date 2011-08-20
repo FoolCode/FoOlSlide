@@ -206,7 +206,10 @@
 				var check = checkComic(opt);
 				if(check !== false)
 				{
-					return check;
+					var toReturn = check;
+					var arrChapters = orderbyChapter(toReturn.chapters, (opt.direction == "desc"));
+					toReturn.chapters = arrChapters;
+					return toReturn;
 				}
 				
 				// from this point and on is via ajax. did we ask for cache forcing?
@@ -259,7 +262,6 @@
 				processChapters(result);
 			}
 
-			//var arrChapters = orderbyChapter(loadedComics, (opt.direction == "desc"));
 			opt.id = result[opt.slideUrl].comic.id;
 			opt.forceCache = true;
 			return plugin.readerComic(opt);

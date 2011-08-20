@@ -61,8 +61,8 @@
 ';
 		?>
 		<script src="<?php echo get_theme_dir() ?>js/libs/modernizr-2.0.6.min.js"></script>
-		
-		
+
+
 		<link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
 	</head>
 
@@ -73,47 +73,47 @@
 
 			</header>
 			<aside id="sidebar">
+				<div class="layer1">
+				</div>
+				<div class="drag">
+				</div>
 				<div class="items">
-					<div class="layer1">
-					</div>
-					<div class="drag">
-					</div>
 					<div id="dynamic_sidebar">
-					<ul>
-						<li class="group">
-							<div class="plus"><a href="#" onClick="sidebarToggleInfo()" title="Show info on Seto no Hanayome">+</a></div>
-							<div class="text">Seto no Hanayome</div>
-						</li>
-						<li class="info">
-							<div class="image">
-								<img src="http://foolrulez.org/slide/content/comics/seto_no_hanayome_4dea85f996dfa/thumb_thumb.png"/>
-							</div>
-							A young boy gets saved from drowning by a mermaid but according to mermaid law, if a human sees a mermaid’s true form, both are to be executed. The only solution to the problem is for him to marry her and become part of the mermaid family.
-						</li>
-						<li class="element">
-							Vol.7 Chapter 32
-						</li>
-						<li class="element">
-							Vol.7 Chapter 31
-						</li>
-					</ul>
+						<ul>
+							<li class="group">
+								<div class="plus"><a href="#" onClick="sidebarToggleInfo()" title="Show info on Seto no Hanayome">+</a></div>
+								<div class="text">Seto no Hanayome</div>
+							</li>
+							<li class="info">
+								<div class="image">
+									<img src="http://foolrulez.org/slide/content/comics/seto_no_hanayome_4dea85f996dfa/thumb_thumb.png"/>
+								</div>
+								A young boy gets saved from drowning by a mermaid but according to mermaid law, if a human sees a mermaid’s true form, both are to be executed. The only solution to the problem is for him to marry her and become part of the mermaid family.
+							</li>
+							<li class="element">
+								Vol.7 Chapter 32
+							</li>
+							<li class="element">
+								Vol.7 Chapter 31
+							</li>
+						</ul>
 
-					<ul>
-						<li class="group">
-							<div class="plus">+</div>
-							<div class="text">Sora no Otoshimono</div>
-						</li>
-						<li class="element">
-							test
-						</li>
-					</ul>
+						<ul>
+							<li class="group">
+								<div class="plus">+</div>
+								<div class="text">Sora no Otoshimono</div>
+							</li>
+							<li class="element">
+								test
+							</li>
+						</ul>
 					</div>
 				</div>
 			</aside>
 			<div id="main" role="main">
 				<div class="layer1">
 				</div>
-				
+
 				<div id="splash">
 					<h1>Welcome to our FoOlSlide.</h1>
 					<div class="latest">
@@ -127,7 +127,7 @@
 					<div class="suggestion">
 						<span class="bracket">{</span> we'd suggest to activate your browser's fullscreen mode <span class="bracket">}</span>
 					</div>
-					
+
 				</div>
 			</div>
 			<footer>
@@ -159,6 +159,9 @@
 		  <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
 		<![endif]-->
 
+		<script type="text/javascript">
+			var slideUrl = "<?php echo addslashes(site_url()); ?>";
+		</script>
 
 	</body>
 </html>

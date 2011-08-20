@@ -17,7 +17,46 @@ class Reader extends Public_Controller
 
 	public function index()
 	{
-		$this->latest();
+		//$this->latest();
+		$comics = new Comic();
+		$comics->limit(100)->get();
+		$comics_all_loaded = FALSE;
+		if ($comics->result_count() < 100)
+		{
+			$comics_all_loaded = TRUE;
+		}
+		$this->template->set('preload_comics_all_loaded', $comics_all_loaded);
+
+		$result = array();
+		foreach ($comics->all as $key => $comic)
+		{
+			$result['comics'][$key] = $comic->to_array();
+			$result['comics'][$key]["thumb_url"] = $comic->get_thumb();
+			$result['comics'][$key]["href"] = $comic->href();
+		}
+		$this->template->set('preload_comics', $result);
+
+		$chapters = new Chapter();
+		$chapters->order_by('created', 'DESC')->limit(40)->get();
+		$chapters->get_comic();
+		
+		// let's create a pretty array of chapters [comic][chapter][teams]
+		$result = array();
+		foreach ($chapters->all as $key => $chapter)
+		{
+			$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
+			$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
+			$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
+			$result['chapters'][$key]['chapter'] = $chapter->to_array();
+			$result['chapters'][$key]['chapter']["href"] = $chapter->href();
+			$chapter->get_teams();
+			foreach ($chapter->teams as $item)
+			{
+				$result['chapters'][$key]['teams'][] = $item->to_array();
+			}
+		}
+		$this->template->set('preload_latest', $result);
+		$this->template->build('team');
 	}
 
 

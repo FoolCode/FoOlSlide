@@ -256,7 +256,7 @@ a, a:hover {
 	background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.35) 100%); /* IE10+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
 	background: linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.35) 100%); /* W3C */
-	z-index:-1;
+	z-index:0;
 }
 
 
@@ -273,7 +273,11 @@ a, a:hover {
 	background:#777;
 	border-bottom:1px solid #444;
 	box-shadow: 0px 0px 8px #000;
+	-webkit-box-shadow: 0px 0px 8px #000;
+	-moz-box-shadow: 0px 0px 8px #000;
 	margin-right:3px;
+	position:relative;
+	z-index:10;
 }
 
 #dynamic_sidebar {
@@ -293,9 +297,9 @@ a, a:hover {
 	margin-top:1px;
 	border-left:5px solid #970000;
 	background: url('images/background2.png') #666;
-	-webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 #dynamic_sidebar > ul > li:first-child {
@@ -307,9 +311,9 @@ a, a:hover {
 
 #dynamic_sidebar ul > li:hover {
 	border-left:5px solid #D84545;
-	-webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 #dynamic_sidebar ul > li:first-child:hover {

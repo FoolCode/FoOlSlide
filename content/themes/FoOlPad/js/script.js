@@ -5,8 +5,8 @@
 
 		var defaults = {
 
-			slideUrls: ["http://localhost/slide"]
-			//onFoo: function() {}
+			slideUrls: []
+		//onFoo: function() {}
 
 		}
 
@@ -22,7 +22,7 @@
 		plugin.init = function() {
 			plugin.settings = $.extend({}, defaults, options);
 
-			// code goes here
+		// code goes here
 
 		}
 		
@@ -162,7 +162,7 @@
 		plugin.readerChapters = function(opt) {
 			var def = {
 				direction: "asc",
-				orderby: "name",
+				orderby: "created",
 				per_page: 40,
 				page: 1	
 			}
@@ -172,12 +172,7 @@
 			
 			processChapters(get("/reader/chapters" + parameters));
 			
-			if(opt.orderby == "name")
-				var arr = orderbyName(loadedChapters, (opt.direction == "desc"));
-			if(opt.orderby == "edited")
-				var arr = orderbyEdited(loadedChapters, (opt.direction == "desc"));
-			if(opt.orderby == "created")
-				var arr = orderbyCreated(loadedChapters, (opt.direction == "desc"));
+			var arr = orderBy(loadedChapters, opt.orderby, (options.direction == "desc"))
 			arr = arrayPage(arr, def.page, opt.per_page);
 			return {
 				chapters: arr
@@ -203,7 +198,7 @@
 				if(check !== false)
 				{
 					var toReturn = check;
-					var arrChapters = orderby(toReturn.chapters, opt.orderby, (opt.direction == "desc"));
+					var arrChapters = orderBy(toReturn.chapters, opt.orderby, (opt.direction == "desc"));
 					toReturn.chapters = arrChapters;
 					return toReturn;
 				}
@@ -222,10 +217,10 @@
 				
 				$.each(loadedComics, function(index,value){
 					if(
-					(isNaN(parseInt(opt.stub)) || value.stub == parseInt(opt.stub)) &&
+						(isNaN(parseInt(opt.stub)) || value.stub == parseInt(opt.stub)) &&
 						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
-				)
-					{
+						)
+						{
 						alert(value.id);
 						opt.id = value.id;
 						return false;
@@ -254,7 +249,7 @@
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = true;
 			}
 			else
-			{
+			{					
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = false;
 				processChapters(result);
 			}
@@ -293,7 +288,7 @@
 							return false;
 						}
 						else
-						{
+						{			
 							$.merge(result.chapters, currentChapter.chapters);
 						}
 					}
@@ -301,7 +296,6 @@
 				
 				if(!missing)
 				{
-					result.chapters = chapters;
 					return result;
 				}
 			}
@@ -352,15 +346,15 @@
 				// if the user just didn't define enough data and this outputs, it's same as server as in coherence
 				$.each(loadedChapters, function(index,value){
 					if(
-					(isNaN(parseInt(opt.comic_id)) || value.comic_id == parseInt(opt.comic_id)) &&
+						(isNaN(parseInt(opt.comic_id)) || value.comic_id == parseInt(opt.comic_id)) &&
 						(isNaN(parseInt(opt.volume)) || value.volume == parseInt(opt.volume)) &&
 						(isNaN(parseInt(opt.chapter)) || value.chapter == parseInt(opt.chapter)) &&
 						(isNaN(parseInt(opt.subchapter)) || value.subchapter == parseInt(opt.subchapter)) &&
 						(isNaN(parseInt(opt.team_id)) || value.team_id == parseInt(opt.team_id)) &&
 						(isNaN(parseInt(opt.joint_id)) || value.joint_id == parseInt(opt.joint_id)) &&
 						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
-				)
-					{
+						)
+						{
 						opt.id = value.id;
 						return false;
 					}
@@ -387,11 +381,11 @@
 			// adapt for processChapters()
 			var result = get("/reader/chapter" + parameters, def.slideUrl);
 			result[opt.slideUrl].chapters = [{
-					comic: result[opt.slideUrl].comic,
-					chapter: result[opt.slideUrl].chapter,
-					teams: result[opt.slideUrl].teams,
-					pages: result[opt.slideUrl].pages
-				}];
+				comic: result[opt.slideUrl].comic,
+				chapter: result[opt.slideUrl].chapter,
+				teams: result[opt.slideUrl].teams,
+				pages: result[opt.slideUrl].pages
+			}];
 
 			processChapters(result);
 			opt.id = result[opt.slideUrl].chapter.id;
@@ -553,7 +547,7 @@
 					var arr = orderbyCreated(array, inverted);
 					break;
 				case "chapter":
-					var arr = orderbyCreated(array, inverted);
+					var arr = orderbyChapter(array, inverted);
 					break;
 				default:
 					return false;
@@ -561,144 +555,146 @@
 			return arr;
 		}
 		
-/**
-* Returns the right slice of the array by knowing page and per_page
-*/
-var arrayPage = function(arr, page, per_page) {
-var result = [];
-var pagemin = (page * per_page) - per_page;
-var pagemax = (page * per_page);
-var j = 0;
-for(var i = pagemin; i < pagemax && i < arr.length; i++) {
-	result.push(arr[i]);
-}
-return result;
-}
-		
-var orderbyEdited = function(obj, desc) {
-var arr = makeArray(obj);
-arr.sort(byEdited);
-if(desc) arr.reverse();
-return arr;
-}
-		
-var orderbyCreated = function(obj, desc) {
-var arr = makeArray(obj);
-arr.sort(byCreated);
-if(desc) arr.reverse();
-return arr;
-}
-		
-var orderbyName = function(obj, desc) {
-var arr = makeArray(obj);
-arr.sort(byName);
-if(desc) arr.reverse();
-return arr;
-}
-		
-var orderbyChapter = function(obj, desc) {
-var arr = makeArray(obj);
-arr.sort(byChapter);
-if(desc) arr.reverse();
-return arr;
-}
-		
-/**
-* Some specific comparison functions follow
-*/
-		
-var byEdited = function(a,b)
-{
-return dateTimeToDate(a.updated) < dateTimeToDate(b.updated)
-}
-		
-var byCreated = function(a,b)
-{
-return dateTimeToDate(a.created) < dateTimeToDate(b.created)
-}
-		
-var byName = function(a,b)
-{
-return a.name < b.name;
-}
-		
-var byChapter = function(a,b)
-{
-return a.volume < b.volume && a.chapter < b.chapter && a.subchapter < b.subchapter;
-}
-/**
-* End of functions to reorder objects
-*/
-		
-
-/**
-* Loop over each selected FoOlSlide and return them in an object indexed
-* by the URL of the site
-*/
-var get = function(apiRequest, slideUrl) {
-var result = {};
-if(typeof slideUrl != "undefined") {
-	var def = {
-		slideUrls : [slideUrl]
-	}
-}
-else
-{
-	var def = {
-		slideUrls : plugin.settings.slideUrls
-	}
-}
-$.each(def.slideUrls, function(index, value){
-	$.ajax({
-		url: value + "/api" + apiRequest,
-		async: false,
-		dataType: "json",
-		success: function(data){
-			result[value] = data;
+		/**
+		* Returns the right slice of the array by knowing page and per_page
+		*/
+		var arrayPage = function(arr, page, per_page) {
+			var result = [];
+			var pagemin = (page * per_page) - per_page;
+			var pagemax = (page * per_page);
+			var j = 0;
+			for(var i = pagemin; i < pagemax && i < arr.length; i++) {
+				result.push(arr[i]);
+			}
+			return result;
 		}
-	});
-});
-return result;
-}
+		
+		var orderbyEdited = function(obj, desc) {
+			var arr = makeArray(obj);
+			arr.sort(function (a,b) {
+				return dateTimeToDate(a.updated) - dateTimeToDate(b.updated)
+			});
+			if(desc) arr.reverse();
+			return arr;
+		}
+		
+		var orderbyCreated = function(obj, desc) {
+			var arr = makeArray(obj);
+			arr.sort(function (a,b) {
+				return dateTimeToDate(a.created) - dateTimeToDate(b.created)
+			});
+			if(desc) arr.reverse();
+			return arr;
+		}
+		
+		var orderbyName = function(obj, desc) {
+			var arr = makeArray(obj);
+			arr.sort(function (a,b) {
+				return a.name < b.name
+			});
+			if(desc) arr.reverse();
+			return arr;
+		}
+		
+		var orderbyChapter = function(arr, desc) {
+			arr.sort(function(a,b){
+				function addNumbers(val) {
+					if (val < 10)
+						return "0000" + val;
+					if (val < 100)
+						return "000" + val;
+					if (val < 1000)
+						return "000" + val;
+					if (val < 10000)
+						return "0" + val;
+				}
+				var aa = {};
+				var bb = {};
+				aa.volume = addNumbers(parseInt(a.volume));
+				bb.volume = addNumbers(parseInt(b.volume));
+				aa.chapter = addNumbers(parseInt(a.chapter));
+				bb.chapter = addNumbers(parseInt(b.chapter));
+				aa.subchapter = addNumbers(parseInt(a.subchapter));
+				bb.subchapter = addNumbers(parseInt(b.subchapter));
+				if(aa.volume + "/" + aa.chapter + "/" + aa.subchapter < bb.volume + "/" + bb.chapter + "/" + bb.subchapter)
+					return -1;
+				if(aa.volume + "/" + aa.chapter + "/" + aa.subchapter > bb.volume + "/" + bb.chapter + "/" + bb.subchapter)
+					return 1;
+				return 0;
+			});
+			if(desc) arr.reverse();
+			return arr;
+		}
+		
 
-// fire up the plugin!
-// call the "constructor" method
-plugin.init();
+		/**
+		 * Loop over each selected FoOlSlide and return them in an object indexed
+		 * by the URL of the site
+		 */
+		var get = function(apiRequest, slideUrl) {
+			var result = {};
+			if(typeof slideUrl != "undefined") {
+				var def = {
+					slideUrls : [slideUrl]
+				}
+			}
+			else
+			{
+				var def = {
+					slideUrls : plugin.settings.slideUrls
+				}
+			}
+			$.each(def.slideUrls, function(index, value){
+				$.ajax({
+					url: value + "/api" + apiRequest,
+					async: false,
+					dataType: "json",
+					success: function(data){
+						result[value] = data;
+					}
+				});
+			});
+			return result;
+		}
 
-}
+		// fire up the plugin!
+		// call the "constructor" method
+		plugin.init();
 
-// add the plugin to the jQuery.fn object
-$.fn.foolslide = function(options) {
+	}
 
-// iterate through the DOM elements we are attaching the plugin to
-return this.each(function() {
+	// add the plugin to the jQuery.fn object
+	$.fn.foolslide = function(options) {
 
-// if plugin has not already been attached to the element
-if (undefined == $(this).data('foolslide')) {
+		// iterate through the DOM elements we are attaching the plugin to
+		return this.each(function() {
 
-	// create a new instance of the plugin
-	// pass the DOM element and the user-provided options as arguments
-	var plugin = new $.foolslide(this, options);
+			// if plugin has not already been attached to the element
+			if (undefined == $(this).data('foolslide')) {
 
-	// in the jQuery version of the element
-	// store a reference to the plugin object
-	// you can later access the plugin and its methods and properties like
-	// element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
-	// element.data('pluginName').settings.propertyName
-	$(this).data('foolslide', plugin);
+				// create a new instance of the plugin
+				// pass the DOM element and the user-provided options as arguments
+				var plugin = new $.foolslide(this, options);
 
-}
+				// in the jQuery version of the element
+				// store a reference to the plugin object
+				// you can later access the plugin and its methods and properties like
+				// element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
+				// element.data('pluginName').settings.propertyName
+				$(this).data('foolslide', plugin);
 
-});
+			}
 
-}
+		});
+
+	}
 
 })(jQuery);
 
 
 jQuery(document).ready(function(){
-var foolslide = new $.foolslide();
-/*var comics = foolslide.readerComics();
+	var foolslide = new $.foolslide();
+	/*var comics = foolslide.readerComics();
 	console.log(comics);
 	
 	var latest = foolslide.readerChapters();
@@ -711,8 +707,10 @@ var foolslide = new $.foolslide();
 	});
 	console.log(chapter);*/
 	
-var chapter = foolslide.readerComic({
-stub:"erst"
-});
-console.log(chapter);
+	var chapter = foolslide.readerComic({
+		stub:"sora_no_otoshimono",
+		orderby: "chapter",
+		direction:"desc"
+	});
+	console.log(chapter);
 });

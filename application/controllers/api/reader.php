@@ -88,7 +88,7 @@ class Reader extends REST_Controller
 			$result["chapters"] = array();
 			foreach ($chapters->all as $key => $chapter)
 			{
-				$result['chapters'][$key]['comic'] = $result["comic"]["thumb_url"];
+				$result['chapters'][$key]['comic'] = $result["comic"];
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
 				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
 

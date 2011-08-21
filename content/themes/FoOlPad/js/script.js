@@ -736,7 +736,7 @@
 					{
 						echo += '<ul>';
 						echo += '	<li class="group">';
-						if(typeof value.info.image != "undefined") {
+						if(typeof value.group.plus != "undefined") {
 							echo += '		<div class="plus">';
 							echo += '			<a href="' + value.group.plus.href + '" onClick="' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
 							echo += '		</div>';

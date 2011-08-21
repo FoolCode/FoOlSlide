@@ -21,7 +21,7 @@
 		// the "constructor" method that gets called when the object is created
 		plugin.init = function() {
 			plugin.settings = $.extend({}, defaults, options);
-
+			console.log(plugin.settings.slideUrls);
 		// code goes here
 
 		}
@@ -119,7 +119,7 @@
 							{
 								var comicStub = plugin.readerComic({
 									id: v.chapter.comic_id
-								}).comics[0].stub;
+									}).comics[0].stub;
 								if(typeof comicStub == "undefined")
 								{
 									console.log("Impossible to fetch comic stub when creating href to chapter. Chapter was ID:" + v.chapter.id + " and comic was ID:" + v.chapter.comic_id);
@@ -216,8 +216,7 @@
 			var parameters = "/orderby/" + opt.direction + "_" + opt.orderby + "/per_page/" + opt.per_page + "/page/" + opt.page;
 			
 			processChapters(get("/reader/chapters" + parameters));
-			
-			var arr = orderBy(loadedChapters, opt.orderby, (options.direction == "desc"))
+			var arr = orderBy(loadedChapters, opt.orderby, (opt.direction == "desc"))
 			arr = arrayPage(arr, def.page, opt.per_page);
 			return {
 				chapters: arr
@@ -690,6 +689,7 @@
 				}
 			}
 			$.each(def.slideUrls, function(index, value){
+				console.log(value + "/api" + apiRequest);
 				$.ajax({
 					url: value + "/api" + apiRequest,
 					async: false,
@@ -752,7 +752,7 @@
 		}
 
 		var plugin = this;
-
+		var foolslide;
 
 		plugin.settings = {}
 
@@ -762,18 +762,60 @@
 		// the "constructor" method that gets called when the object is created
 		plugin.init = function() {
 			plugin.settings = $.extend({}, defaults, options);
-			plugin.foolslide = new $.foolslide({
+			foolslide = new $.foolslide(null, {
 				slideUrls: plugin.settings.slideUrls
 			});
 			
-			updateSidebar();
+			plugin.getLatest();
+		}
+		
+		plugin.getLatest= function(){
+			var latest = foolslide.readerChapters({});
+			console.log(latest);
+			var current_comic_id = 0;
+			var current_comic = {};
+			var result = [];
+			var preresult = {};
+			$.each(latest.chapters, function(index, value){
+				
+				if(value.comic_id != current_comic_id)
+				{
+					current_comic_id = value.comic_id
+					preresult = {};
+					preresult.elements = [];
+					current_comic = foolslide.readerComic({
+						id: value.comic_id
+					}).comics[0];
+					preresult.group = {
+						href: current_comic.href,
+						onClick: "foolslideui.displayComic()",
+						text: current_comic.name
+					};
+					
+					preresult.group.plus = {
+						href: current_comic.href,
+						onClick: "foolslideui.infoComic()"
+					};
+				}
+				
+				preresult.elements.push({
+					text: value.title,
+					href: value.href
+				});
+				
+				result.push(preresult);
+			});
+			
+			result.push(preresult)
+			
+			updateSidebar(result);
 		}
 		
 		var updateSidebar = function(arr) {
 			$("#sidebar .items").animate({
 				position: "relative",
 				top: "130%"
-			}, 1500, 
+			}, 1000, 
 			function(){
 				var echo = '';
 				$.each(arr, function(index, value){
@@ -816,21 +858,25 @@
 							echo +=	'	</li>';
 						});
 					}
+					echo += '</ul>';
 				});
 				
-				echo += '</ul>';
+				
+				console.log(echo);
+				$(this).find("#dynamic_sidebar").html(echo);
 				
 				$(this).css({
-					top:-$(this).height()
+					top:"0",
+					right:-$(this).width()
 				});
 				$(this).animate({
-					top:"0"
+					right:"0"
 				});
 			});
 			
 
 			// event
-			afterSidebarUpdate();
+			plugin.settings.afterSidebarUpdate();
 		}
 
 		// fire up the plugin!
@@ -870,8 +916,8 @@
 
 jQuery(document).ready(function(){
 	var foolslide = new $.foolslideui(null, {
-		slideUrls:[slideUrl]
+		slideUrls:['http://localhost/slide']
 	});
 	
-	var latest = foolslide.readerChapters();
+//var latest = foolslide.readerChapters();
 });

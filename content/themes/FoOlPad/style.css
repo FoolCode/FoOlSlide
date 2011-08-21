@@ -215,7 +215,7 @@ body {
 	background: url('images/background2.png') #666;
 }
 
-a, a:hover {
+a, a:hover, a:visited {
 	text-decoration:none;
 	color:inherit;
 }
@@ -278,6 +278,9 @@ a, a:hover {
 	margin-right:3px;
 	position:relative;
 	z-index:10;
+	max-height:100%;
+	width:266px;
+	overflow:auto;
 }
 
 #dynamic_sidebar {
@@ -300,6 +303,7 @@ a, a:hover {
 	-webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
+	font-size:110%;
 }
 
 #dynamic_sidebar > ul > li:first-child {
@@ -307,6 +311,7 @@ a, a:hover {
 	padding: 10px 6px 8px 6px;
 	font-weight:500;
 	border-left:0px solid #D84545;
+	font-weight:bold;
 }
 
 #dynamic_sidebar ul > li:hover {

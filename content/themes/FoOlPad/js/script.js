@@ -72,6 +72,10 @@
 					if(typeof v.comic != "undefined" || typeof loadedComics[v.comic.id + "_" + index] == "undefined" || dateTimeToDate(v.comic.updated) > dateTimeToDate(loadedComics[v.comic.id + "_" + index].updated)) {
 						loadedComics[v.comic.id + "_" + index] = v.comic;
 						loadedComics[v.comic.id + "_" + index].slideUrl = index;
+						if(typeof loadedComics[v.comic.id + "_" + index].href == "undefined")
+						{
+							loadedComics[v.comic.id + "_" + index].href = loadedComics[v.comic.id + "_" + index].slideUrl + "/reader/comic/" +  loadedComics[v.comic.id + "_" + index].stub;
+						}
 					}
 					
 					// check if there's an array of teams in this chapter and in case load if any are new
@@ -81,6 +85,10 @@
 							if (typeof loadedTeams[t.id + "_" + index] == "undefined" ||  (typeof loadedTeams[t.id + "_" + index] != "undefined" && dateTimeToDate(t.updated) > dateTimeToDate(loadedTeams[t.id + "_" + index].updated))) {
 								loadedTeams[t.id + "_" + index] = t;
 								loadedTeams[t.id + "_" + index].slideUrl = index;
+								if(typeof loadedTeams[t.id + "_" + index].href == "undefined")
+								{
+									loadedTeams[t.id + "_" + index].href = loadedTeams[t.id + "_" + index].slideUrl + "/reader/team/" + loadedTeams[t.id + "_" + index].stub;
+								}
 							}
 						});
 					}
@@ -101,6 +109,43 @@
 					if(typeof v.chapter != "undefined" && (typeof loadedChapters[v.chapter.id + "_" + index] == "undefined" || dateTimeToDate(v.chapter.updated) > dateTimeToDate(loadedChapters[v.chapter.id + "_" + index].updated))) {
 						loadedChapters[v.chapter.id + "_" + index] = v.chapter;
 						loadedChapters[v.chapter.id + "_" + index].slideUrl = index;
+						if(typeof loadedChapters[v.chapter.id + "_" + index].href == "undefined")
+						{
+							// compatibility for FoOlSlide 0.7.6 and less
+							loadedChapters[v.chapter.id + "_" + index].href = loadedChapters[v.chapter.id + "_" + index].slideUrl + "/reader/read/";
+							
+							// check that we already have the comic
+							if(typeof loadedComics[v.chapter.comic_id + "_" + index] == "undefined")
+							{
+								var comicStub = plugin.readerComic({
+									id: v.chapter.comic_id
+								}).comics[0].stub;
+								if(typeof comicStub == "undefined")
+								{
+									console.log("Impossible to fetch comic stub when creating href to chapter. Chapter was ID:" + v.chapter.id + " and comic was ID:" + v.chapter.comic_id);
+								}
+								else
+								{
+									loadedChapters[v.chapter.id + "_" + index].href += comicStub;
+								}
+							}
+							else
+							{
+								loadedChapters[v.chapter.id + "_" + index].href += loadedComics[v.chapter.comic_id + "_" + index].stub;
+							}
+							
+							loadedChapters[v.chapter.id + "_" + index].href += "/" + loadedChapters[v.chapter.id + "_" + index].language + "/" + loadedChapters[v.chapter.id + "_" + index].volume + "/" + loadedChapters[v.chapter.id + "_" + index].chapter + "/" + loadedChapters[v.chapter.id + "_" + index].subchapter + "/";
+							
+							// @todo add some check through the future membersTeam()
+							if(loadedChapters[v.chapter.id + "_" + index].team_id > 0)
+							{
+								loadedChapters[v.chapter.id + "_" + index].href += loadedTeams[loadedChapters[v.chapter.id + "_" + index].team_id + "_" + index].stub + "/";
+							}
+							else 
+							{
+								loadedChapters[v.chapter.id + "_" + index].href += "0/" + loadedChapters[v.chapter.id + "_" + index].joint_id + "/";
+							}							
+						}
 					}
 					
 					// does the chapter comes with the array of pages? load them
@@ -732,16 +777,16 @@
 			function(){
 				var echo = '';
 				$.each(arr, function(index, value){
-					if(typeof value.group != "undefined")
+					if (typeof value.group != "undefined")
 					{
 						echo += '<ul>';
 						echo += '	<li class="group">';
-						if(typeof value.group.plus != "undefined") {
+						if (typeof value.group.plus != "undefined") {
 							echo += '		<div class="plus">';
 							echo += '			<a href="' + value.group.plus.href + '" onClick="' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
 							echo += '		</div>';
 						}
-						echo += '		<div class="text"><a href="" onClick="" title="">' + value.group.text + '</div>';
+						echo += '		<div class="text"><a href="' + value.group.href + '" onClick="' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
 						echo +=	'	</li>';
 					}
 					
@@ -761,11 +806,13 @@
 					if(typeof value.elements != "undefined") 
 					{
 						$.each(value.elements, function(i, v){
-							echo += '	<li class="group">';
-							echo += '		<div class="plus">';
-							echo += '			<a href="' + vlusHref + '" onClick="' + value.group.plusOnClick + '" title="' + value.group.plusTitle +'">+</a>';
-							echo += '		</div>';
-							echo += '		<div class="text"><a href="" onClick="" title="">' + value.group.text + '</div>';
+							echo += '	<li class="element">';
+							if (typeof v.plus != "undefined") {
+								echo += '		<div class="plus">';
+								echo += '			<a href="' + v.plus.href + '" onClick="' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
+								echo += '		</div>';
+							}
+							echo += '		<div class="text"><a href="' + v.href + '" onClick="' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
 							echo +=	'	</li>';
 						});
 					}

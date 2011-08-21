@@ -21,13 +21,13 @@
  * @package		DMZ-Included-Extensions
  */
 class DMZ_Array {
-	
+
 	/**
 	 * Convert a DataMapper model into an associative array.
 	 * If the specified fields includes a related object, the ids from the
 	 * objects are collected into an array and stored on that key.
 	 * This method does not recursively add objects.
-	 * 
+	 *
 	 * @param	DataMapper $object The DataMapper Object to convert
 	 * @param	array $fields Array of fields to include.  If empty, includes all database columns.
 	 * @return	array An associative array of the requested fields and related object ids.
@@ -39,9 +39,13 @@ class DMZ_Array {
 		{
 			$fields = $object->fields;
 		}
-		
+		else
+		{
+			$fields = (array) $fields;
+		}
+
 		$result = array();
-		
+
 		foreach($fields as $f)
 		{
 			// handle related fields
@@ -62,10 +66,10 @@ class DMZ_Array {
 				$result[$f] = $object->{$f};
 			}
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Convert the entire $object->all array result set into an array of
 	 * associative arrays.
@@ -86,12 +90,12 @@ class DMZ_Array {
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * Convert an associative array back into a DataMapper model.
-	 * 
+	 *
 	 * If $fields is provided, missing fields are assumed to be empty checkboxes.
-	 * 
+	 *
 	 * @param	DataMapper $object The DataMapper Object to save to.
 	 * @param	array $data A an associative array of fields to convert.
 	 * @param	array $fields Array of 'safe' fields.  If empty, only includes the database columns.
@@ -102,7 +106,7 @@ class DMZ_Array {
 	{
 		// keep track of newly related objects
 		$new_related_objects = array();
-		
+
 		// Assume all database columns.
 		// In this case, simply store $fields that are in the $data array.
 		if(empty($fields))
@@ -172,7 +176,7 @@ class DMZ_Array {
 						// Or assume it was an unchecked checkbox, and clear it.
 						$v = FALSE;
 					}
-					$object->{$f} = $v; 
+					$object->{$f} = $v;
 				}
 			}
 		}
@@ -187,7 +191,7 @@ class DMZ_Array {
 			return $new_related_objects;
 		}
 	}
-	
+
 }
 
 /* End of file array.php */

@@ -23,14 +23,14 @@
  * @package		DMZ-Included-Extensions
  */
 class DMZ_HTMLForm {
-	
-	// this is the default template (view) to use for the overall form 
+
+	// this is the default template (view) to use for the overall form
 	var $form_template = 'dmz_htmlform/form';
 	// this is the default template (view) to use for the individual rows
 	var $row_template = 'dmz_htmlform/row';
 	// this is the default template (view) to use for the individual rows
 	var $section_template = 'dmz_htmlform/section';
-	
+
 	var $auto_rule_classes = array(
 		'integer' => 'integer',
 		'numeric' => 'numeric',
@@ -47,8 +47,8 @@ class DMZ_HTMLForm {
 		'alpha_dash' => 'alpha_dash',
 		'required' => 'required'
 	);
-	
-	function __construct($options = array()) {
+
+	function __construct($options = array(), $object = NULL) {
 		foreach($options as $k => $v)
 		{
 			$this->{$k} = $v;
@@ -56,12 +56,12 @@ class DMZ_HTMLForm {
 		$this->CI =& get_instance();
 		$this->load = $this->CI->load;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Render a single field.  Can be used to chain together multiple fields in a column.
-	 * 
+	 *
 	 * @param object $object The DataMapper Object to use.
 	 * @param string $field The field to render.
 	 * @param string $type  The type of field to render.
@@ -71,12 +71,12 @@ class DMZ_HTMLForm {
 	function render_field($object, $field, $type = NULL, $options = NULL)
 	{
 		$value = '';
-		
+
 		if(array_key_exists($field, $object->has_one) || array_key_exists($field, $object->has_many))
 		{
 			// Create a relationship field
 			$one = array_key_exists($field, $object->has_one);
-			
+
 			// attempt to look up the current value(s)
 			if( ! isset($options['value']))
 			{
@@ -103,7 +103,7 @@ class DMZ_HTMLForm {
 						}
 					}
 				}
-				
+
 			}
 			else
 			{
@@ -111,8 +111,8 @@ class DMZ_HTMLForm {
 				$value = $options['value'];
 				unset($options['value']);
 			}
-			
-			// Attempt to get a list of possible values 
+
+			// Attempt to get a list of possible values
 			if( ! isset($options['list']) || is_object($options['list']))
 			{
 				if( ! isset($options['list']))
@@ -145,9 +145,9 @@ class DMZ_HTMLForm {
 				}
 				$options['list'] = $list;
 			}
-			
+
 			// By if there can be multiple items, use a dropdown for large lists,
-			// and a set of checkboxes for a small one. 
+			// and a set of checkboxes for a small one.
 			if($one || count($options['list']) > 6)
 			{
 				$default_type = 'dropdown';
@@ -186,7 +186,7 @@ class DMZ_HTMLForm {
 						$value = $object->{$field};
 					}
 				}
-				
+
 			}
 			else
 			{
@@ -196,7 +196,7 @@ class DMZ_HTMLForm {
 			}
 			// default to text
 			$default_type = ($field == 'id') ? 'hidden' : 'text';
-			
+
 			// determine default attributes
 			$a = array();
 			// such as the size of the field.
@@ -217,7 +217,7 @@ class DMZ_HTMLForm {
 			}
 			$options = $options + $a;
 			$extra_class = array();
-			
+
 			// Add any of the known rules as classes (for JS processing)
 			foreach($this->auto_rule_classes as $rule => $c)
 			{
@@ -226,7 +226,7 @@ class DMZ_HTMLForm {
 					$extra_class[] = $c;
 				}
 			}
-			
+
 			// add or set the class on the field.
 			if( ! empty($extra_class))
 			{
@@ -241,14 +241,14 @@ class DMZ_HTMLForm {
 				}
 			}
 		}
-		
+
 		// determine the renderer type
 		$type = $this->_get_type($object, $field, $type);
 		if(empty($type))
 		{
 			$type = $default_type;
 		}
-		
+
 		// attempt to find the renderer function
 		if(method_exists($this, '_input_' . $type))
 		{
@@ -263,15 +263,15 @@ class DMZ_HTMLForm {
 			log_message('error', 'FormMaker: Unable to find a renderer for '.$type);
 			return '<span style="color: Maroon; background-color: White; font-weight: bold">FormMaker: UNABLE TO FIND A RENDERER FOR '.$type.'</span>';
 		}
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Render a row with a single field.  If $field does not exist on
 	 * $object->validation, then $field is output as-is.
-	 * 
+	 *
 	 * @param object $object The DataMapper Object to use.
 	 * @param string $field The field to render (or content)
 	 * @param string $type  The type of field to render.
@@ -283,7 +283,7 @@ class DMZ_HTMLForm {
 	{
 		// try to determine type automatically
 		$type = $this->_get_type($object, $field, $type);
-		
+
 		if( ! isset($object->validation[$field]) && (empty($type) || $type == 'section' || $type == 'none'))
 		{
 			// this could be a multiple-field row, or just some text.
@@ -315,9 +315,9 @@ class DMZ_HTMLForm {
 			// the field IS the id
 			$id = $field;
 		}
-		
+
 		$required = $this->_get_validation_rule($object, $field, 'required');
-		
+
 		// Append these items.  Values in $options have priority
 		$view_data = $options + array(
 			'object' => $object,
@@ -328,7 +328,7 @@ class DMZ_HTMLForm {
 			'id' => $id,
 			'required' => $required
 		);
-		
+
 		if(is_null($row_template))
 		{
 			if(empty($type))
@@ -344,22 +344,22 @@ class DMZ_HTMLForm {
 				$row_template = $this->row_template;
 			}
 		}
-		
+
 		if($row_template == 'none')
 		{
-			return $content; 
+			return $content;
 		}
 		else
 		{
 			return $this->load->view($row_template, $view_data, TRUE);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Renders an entire form.
-	 * 
+	 *
 	 * @param object $object The DataMapper Object to use.
 	 * @param string $fields An associative array that defines the form.
 	 * @param string $template  The template to use.
@@ -374,32 +374,32 @@ class DMZ_HTMLForm {
 			// set url to current url
 			$url =$this->CI->uri->uri_string();
 		}
-		
+
 		if(is_null($template))
 		{
 			$template = $this->form_template;
 		}
-		
+
 		$rows = '';
 		foreach($fields as $field => $field_options)
 		{
 			$rows .= $this->_render_row_from_form($object, $field, $field_options, $row_template);
 		}
-		
+
 		$view_data = $options + array(
 			'object' => $object,
 			'fields' => $fields,
 			'url' => $url,
 			'rows' => $rows
 		);
-		
+
 		return $this->load->view($template, $view_data, TRUE);
 	}
-	
+
 	// --------------------------------------------------------------------------
 	// Private Methods
 	// --------------------------------------------------------------------------
-	
+
 	// Converts information from render_form into a row of objects.
 	function _render_row_from_form($object, $field, $options, $row_template, $row = TRUE)
 	{
@@ -414,7 +414,7 @@ class DMZ_HTMLForm {
 			// always have an array for options
 			$options = array();
 		}
-		
+
 		$type = '';
 		if( ! is_array($options))
 		{
@@ -422,14 +422,14 @@ class DMZ_HTMLForm {
 			$type = $options;
 			$options = array();
 		}
-		
+
 		if(isset($options['type']))
 		{
 			// type was set in options
 			$type = $options['type'];
 			unset($options['type']);
 		}
-		
+
 		// see if a different row_template was in the options
 		$rt = $row_template;
 		if(isset($options['template']))
@@ -437,7 +437,7 @@ class DMZ_HTMLForm {
 			$rt = $options['template'];
 			unset($options['template']);
 		}
-		
+
 		// Multiple fields, render them all as one.
 		if(is_array($field))
 		{
@@ -445,7 +445,7 @@ class DMZ_HTMLForm {
 			{
 				$options = $field['row_options'];
 				unset($field['row_options']);
-			} 
+			}
 			$ret = '';
 			$sep = ' ';
 			if(isset($field['input_separator']))
@@ -462,7 +462,7 @@ class DMZ_HTMLForm {
 				}
 				$ret .= $this->_render_row_from_form($object, $f, $fo, $row_template, FALSE);
 			}
-			
+
 			// renders into a row or field below.
 			$field = $ret;
 		}
@@ -477,9 +477,9 @@ class DMZ_HTMLForm {
 			return $this->render_field($object, $field, $type, $options);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	// Attempts to look up the field's type
 	function _get_type($object, $field, $type)
 	{
@@ -489,9 +489,9 @@ class DMZ_HTMLForm {
 		}
 		return $type;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	// Returns a field from the validation array
 	function _get_validation_info($object, $field, $val, $default = '')
 	{
@@ -501,9 +501,9 @@ class DMZ_HTMLForm {
 		}
 		return $default;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	// Returns the value (or TRUE) of the validation rule, or FALSE if it does not exist.
 	function _get_validation_rule($object, $field, $rule)
 	{
@@ -521,23 +521,23 @@ class DMZ_HTMLForm {
 		}
 		return FALSE;
 	}
-	
+
 	// --------------------------------------------------------------------------
 	// Input Types
 	// --------------------------------------------------------------------------
-	
+
 	// Render a hidden input
 	function _input_hidden($object, $id, $value, $options)
 	{
 		return $this->_render_simple_input('hidden', $id, $value, $options);
 	}
-	
+
 	// render a single-line text input
 	function _input_text($object, $id, $value, $options)
 	{
 		return $this->_render_simple_input('text', $id, $value, $options);
 	}
-	
+
 	// render a password input
 	function _input_password($object, $id, $value, $options)
 	{
@@ -551,7 +551,7 @@ class DMZ_HTMLForm {
 		}
 		return $this->_render_simple_input('password', $id, $value, $options);
 	}
-	
+
 	// render a multiline text input
 	function _input_textarea($object, $id, $value, $options)
 	{
@@ -566,7 +566,7 @@ class DMZ_HTMLForm {
 		);
 		return $this->_render_node('textarea', $a, htmlspecialchars($value));
 	}
-	
+
 	// render a dropdown
 	function _input_dropdown($object, $id, $value, $options)
 	{
@@ -588,7 +588,7 @@ class DMZ_HTMLForm {
 			$options['multiple'] = 'multiple';
 		}
 		$l = $this->_options($list, $selected);
-		
+
 		$name = $id;
 		if(isset($options['multiple']))
 		{
@@ -600,7 +600,7 @@ class DMZ_HTMLForm {
 		);
 		return $this->_render_node('select', $a, $l);
 	}
-	
+
 	// used to render an options list.
 	function _options($list, $sel)
 	{
@@ -625,19 +625,19 @@ class DMZ_HTMLForm {
 		}
 		return $l;
 	}
-	
+
 	// render a checkbox or series of checkboxes
 	function _input_checkbox($object, $id, $value, $options)
 	{
 		return $this->_checkbox('checkbox', $id, $value, $options);
 	}
-	
+
 	// render a series of radio buttons
 	function _input_radio($object, $id, $value, $options)
 	{
 		return $this->_checkbox('radio', $id, $value, $options);
 	}
-	
+
 	// renders one or more checkboxes or radio buttons
 	function _checkbox($type, $id, $value, $options, $sub_id = '', $label = '')
 	{
@@ -731,7 +731,7 @@ class DMZ_HTMLForm {
 			return $ret;
 		}
 	}
-	
+
 	// render a file upload input
     function _input_file($object, $id, $value, $options)
     {
@@ -742,7 +742,7 @@ class DMZ_HTMLForm {
 		);
 		return $this->_render_node('input', $a);
     }
-	
+
 	// Utility method to render a normal <input>
 	function _render_simple_input($type, $id, $value, $options)
 	{
@@ -754,7 +754,7 @@ class DMZ_HTMLForm {
 		);
 		return $this->_render_node('input', $a);
 	}
-	
+
 	// Utility method to render a node.
 	function _render_node($type, $attributes, $content = FALSE)
 	{
@@ -786,7 +786,7 @@ class DMZ_HTMLForm {
 		}
 		return $res;
 	}
-	
+
 }
 
 /* End of file htmlform.php */

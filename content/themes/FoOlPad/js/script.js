@@ -556,8 +556,8 @@
 		}
 		
 		/**
-		* Returns the right slice of the array by knowing page and per_page
-		*/
+		 * Returns the right slice of the array by knowing page and per_page
+		 */
 		var arrayPage = function(arr, page, per_page) {
 			var result = [];
 			var pagemin = (page * per_page) - per_page;
@@ -691,26 +691,140 @@
 
 })(jQuery);
 
+(function($) {
+
+	// here we go!
+	$.foolslideui = function(element, options) {
+
+		var defaults = {
+
+			slideUrls: [],
+			activateSidebar: true,
+			activateCenter: true,
+			standAlone: false,
+			
+			afterSidebarUpdate: function() {}
+		}
+
+		var plugin = this;
+
+
+		plugin.settings = {}
+
+		var $element = $(element),
+		element = element;
+
+		// the "constructor" method that gets called when the object is created
+		plugin.init = function() {
+			plugin.settings = $.extend({}, defaults, options);
+			plugin.foolslide = new $.foolslide({
+				slideUrls: plugin.settings.slideUrls
+			});
+			
+			updateSidebar();
+		}
+		
+		var updateSidebar = function(arr) {
+			$("#sidebar .items").animate({
+				position: "relative",
+				top: "130%"
+			}, 1500, 
+			function(){
+				var echo = '';
+				$.each(arr, function(index, value){
+					if(typeof value.group != "undefined")
+					{
+						echo += '<ul>';
+						echo += '	<li class="group">';
+						if(typeof value.info.image != "undefined") {
+							echo += '		<div class="plus">';
+							echo += '			<a href="' + value.group.plus.href + '" onClick="' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
+							echo += '		</div>';
+						}
+						echo += '		<div class="text"><a href="" onClick="" title="">' + value.group.text + '</div>';
+						echo +=	'	</li>';
+					}
+					
+					if(typeof value.info != "undefined")
+					{
+						echo += '	<li class="info">';
+						if(typeof value.info.image != "undefined")
+						{
+							echo += '		<div class="image">';
+							echo += '			<a href="' + value.info.image.href + '" onClick="' + value.info.image.onClick + '" title="' + value.info.image.title +'">+</a>';
+							echo += '		</div>';
+						}
+						echo += '		<div class="text">' + value.info.text + '</div>';
+						echo +=	'	</li>';
+					}
+				
+					if(typeof value.elements != "undefined") 
+					{
+						$.each(value.elements, function(i, v){
+							echo += '	<li class="group">';
+							echo += '		<div class="plus">';
+							echo += '			<a href="' + vlusHref + '" onClick="' + value.group.plusOnClick + '" title="' + value.group.plusTitle +'">+</a>';
+							echo += '		</div>';
+							echo += '		<div class="text"><a href="" onClick="" title="">' + value.group.text + '</div>';
+							echo +=	'	</li>';
+						});
+					}
+				});
+				
+				echo += '</ul>';
+				
+				$(this).css({
+					top:-$(this).height()
+				});
+				$(this).animate({
+					top:"0"
+				});
+			});
+			
+
+			// event
+			afterSidebarUpdate();
+		}
+
+		// fire up the plugin!
+		// call the "constructor" method
+		plugin.init();
+
+	}
+
+	// add the plugin to the jQuery.fn object
+	$.fn.foolslideui = function(options) {
+
+		// iterate through the DOM elements we are attaching the plugin to
+		return this.each(function() {
+
+			// if plugin has not already been attached to the element
+			if (undefined == $(this).data('foolslideui')) {
+
+				// create a new instance of the plugin
+				// pass the DOM element and the user-provided options as arguments
+				var plugin = new $.foolslideui(this, options);
+
+				// in the jQuery version of the element
+				// store a reference to the plugin object
+				// you can later access the plugin and its methods and properties like
+				// element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
+				// element.data('pluginName').settings.propertyName
+				$(this).data('foolslideui', plugin);
+
+			}
+
+		});
+
+	}
+
+})(jQuery);
+
 
 jQuery(document).ready(function(){
-	var foolslide = new $.foolslide();
-	/*var comics = foolslide.readerComics();
-	console.log(comics);
+	var foolslide = new $.foolslideui(null, {
+		slideUrls:[slideUrl]
+	});
 	
 	var latest = foolslide.readerChapters();
-	console.log(latest);
-	
-	var chapter = foolslide.readerChapter({
-		comic_id:1,
-		chapter:23,
-		subchapter:0
-	});
-	console.log(chapter);*/
-	
-	var chapter = foolslide.readerComic({
-		stub:"sora_no_otoshimono",
-		orderby: "chapter",
-		direction:"desc"
-	});
-	console.log(chapter);
 });

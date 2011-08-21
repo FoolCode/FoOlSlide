@@ -8,10 +8,11 @@
  * @license 	MIT License
  * @package		DataMapper ORM
  * @category	DataMapper ORM
- * @author  	Harro "WanWizard" Verton, James Wardlaw
- * @author  	Phil DeJarnett (up to v1.7.1.)
- * @link		http://datamapper.exitecms.org/
- * @version 	1.8.dev
+ * @author  	Harro Verton, James Wardlaw
+ * @author  	Phil DeJarnett (up to v1.7.1)
+ * @author  	Simon Stenhouse (up to v1.6.0)
+ * @link		http://datamapper.wanwizard.eu/
+ * @version 	1.8.1-dev
  */
 
 /**
@@ -22,7 +23,7 @@ define('DMZ_CLASSNAMES_KEY', '_dmz_classnames');
 /**
  * DMZ version
  */
-define('DMZ_VERSION', '1.8.0');
+define('DMZ_VERSION', '1.8.1');
 
 /**
  * Data Mapper Class
@@ -53,6 +54,7 @@ define('DMZ_VERSION', '1.8.0');
  *
  * Related:
  * @method DataMapper where_related() where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field.
+ * @method DataMapper where_between_related() where_related(mixed $related, string $field = NULL, string $value1 = NULL, string $value2 = NULL) Limits results based on a related field, via BETWEEN.
  * @method DataMapper or_where_related() or_where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field, via OR.
  * @method DataMapper where_in_related() where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.
  * @method DataMapper or_where_in_related() or_where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.
@@ -74,6 +76,7 @@ define('DMZ_VERSION', '1.8.0');
  *
  * Join Fields:
  * @method DataMapper where_join_field() where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field.
+ * @method DataMapper where_between_join_field() where_related(mixed $related, string $field = NULL, string $value1 = NULL, string $value2 = NULL) Limits results based on a join field, via BETWEEN.
  * @method DataMapper or_where_join_field() or_where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field, via OR.
  * @method DataMapper where_in_join_field() where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.
  * @method DataMapper or_where_in_join_field() or_where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.
@@ -115,6 +118,7 @@ define('DMZ_VERSION', '1.8.0');
  *
  * Field -> SQL functions:
  * @method DataMapper where_field_field_func() where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function.
+ * @method DataMapper where_between_field_field_func() where_between_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function, via BETWEEN.
  * @method DataMapper or_where_field_field_func() or_where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function, via OR.
  * @method DataMapper where_in_field_field_func() where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.
  * @method DataMapper or_where_in_field_field_func() or_where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.
@@ -251,6 +255,12 @@ class DataMapper implements IteratorAggregate {
 	 */
 	public $model = '';
 	/**
+	 * The primary key used for this models table
+	 * the classname).
+	 * @var string
+	 */
+	public $primary_key = 'id';
+	/**
 	 * Can be used to override the default database behavior.
 	 * @var mixed
 	 */
@@ -323,6 +333,12 @@ class DataMapper implements IteratorAggregate {
 	 * @var string
 	 */
 	public $timestamp_format = '';
+	/**
+	 * delete relations on delete of an object. Defaults to TRUE.
+	 * set to FALSE if you RDBMS takes care of this using constraints
+	 * @var bool
+	 */
+	public $cascade_delete = TRUE;
 	/**
 	 * Contains the database fields for this object.
 	 * ** Automatically configured **
@@ -404,6 +420,8 @@ class DataMapper implements IteratorAggregate {
 
 	// tracks whether or not the object has already been validated
 	protected $_validated = FALSE;
+	// tracks whether validation needs to be forced before save
+	protected $_force_validation = FALSE;
 	// Tracks the columns that need to be instantiated after a GET
 	protected $_instantiations = NULL;
 	// Tracks get_rules, matches, and intval rules, to spped up _to_object
@@ -416,6 +434,11 @@ class DataMapper implements IteratorAggregate {
 	protected $_force_save_as_new = FALSE;
 	// If true, the next where statement will not be prefixed with an AND or OR.
 	protected $_where_group_started = FALSE;
+	// Tracks total number of groups created
+	protected $_group_count = 0;
+
+	// storage for additional model paths for the autoloader
+	protected static $model_paths = array();
 
 	/**
 	 * Constructors (both PHP4 and PHP5 style, to stay compatible)
@@ -749,10 +772,10 @@ class DataMapper implements IteratorAggregate {
 		$class = strtolower($class);
 
 		// Prepare path
-		if (isset($CI->load->_ci_model_paths) && is_array($CI->load->_ci_model_paths))
+		if (method_exists($CI->load, 'get_package_paths'))
 		{
 			// use CI 2.0 loader's model paths
-			$paths = $CI->load->_ci_model_paths;
+			$paths = $CI->load->get_package_paths(false);
 		}
 		else
 		{
@@ -760,7 +783,7 @@ class DataMapper implements IteratorAggregate {
 			$paths[] = APPPATH;
 		}
 
-		foreach ($paths as $path)
+		foreach (array_merge($paths, self::$model_paths) as $path)
 		{
 			// Prepare file
 			$file = $path . 'models/' . $class . EXT;
@@ -783,6 +806,32 @@ class DataMapper implements IteratorAggregate {
 				{
 					break;
 				}
+			}
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Add Model Path
+	 *
+	 * Manually add paths for the model autoloader
+	 *
+	 * @param	mixed $paths path or array of paths to search
+	 */
+	protected static function add_model_path($paths)
+	{
+		if ( ! is_array($paths) )
+		{
+			$paths = array($paths);
+		}
+
+		foreach($paths as $path)
+		{
+			$path = rtrim($path, '/') . '/';
+			if ( is_dir($path.'models') && ! in_array($path, self::$model_paths))
+			{
+				self::$model_paths[] = $path;
 			}
 		}
 	}
@@ -914,11 +963,11 @@ class DataMapper implements IteratorAggregate {
 			// create class
 			if(is_null($options))
 			{
-				$o = new $ext();
+				$o = new $ext(NULL, isset($this) ? $this : NULL);
 			}
 			else
 			{
-				$o = new $ext($options);
+				$o = new $ext($options, isset($this) ? $this : NULL);
 			}
 			$extensions[$name] = $o;
 
@@ -1030,12 +1079,20 @@ class DataMapper implements IteratorAggregate {
 			$CI =& get_instance();
 			if($this->db_params === FALSE)
 			{
+				if ( ! isset($CI->db) || ! is_object($CI->db) || ! isset($CI->db->dbdriver) )
+				{
+					show_error('DataMapper Error: CodeIgniter database library not loaded.');
+				}
 				$this->db =& $CI->db;
 			}
 			else
 			{
 				if($this->db_params == '' || $this->db_params === TRUE)
 				{
+					if ( ! isset($CI->db) || ! is_object($CI->db) || ! isset($CI->db->dbdriver) )
+					{
+						show_error('DataMapper Error: CodeIgniter database library not loaded.');
+					}
 					// ensure the shared DB is disconnected, even if the app exits uncleanly
 					if(!isset($CI->db->_has_shutdown_hook))
 					{
@@ -1053,7 +1110,7 @@ class DataMapper implements IteratorAggregate {
 					$this->db = $CI->load->database($this->db_params, TRUE, TRUE);
 				}
 				// these items are shared (for debugging)
-				if(isset($CI->db))
+				if(is_object($CI->db) && isset($CI->db->dbdriver))
 				{
 					$this->db->queries =& $CI->db->queries;
 					$this->db->query_times =& $CI->db->query_times;
@@ -1078,7 +1135,7 @@ class DataMapper implements IteratorAggregate {
 				{
 					$CI->load->library('form_validation');
 					$this->lang->load('form_validation');
-					unset($CI->load->_ci_classes['form_validation']);
+					$this->load->unset_form_validation_class();
 				}
 				$this->form_validation = $CI->form_validation;
 			}
@@ -1102,7 +1159,7 @@ class DataMapper implements IteratorAggregate {
 			// Check if Auto Populate for "has many" or "has one" is on
 			// (but only if this object exists in the DB, and we aren't instantiating)
 			if ($this->exists() &&
-					($has_many && $this->auto_populate_has_many) || ($has_one && $this->auto_populate_has_one))
+					($has_many && ($this->auto_populate_has_many || $this->has_many[$name]['auto_populate'])) || ($has_one && ($this->auto_populate_has_one || $this->has_one[$name]['auto_populate'])))
 			{
 				$this->{$name}->get();
 			}
@@ -1922,39 +1979,43 @@ class DataMapper implements IteratorAggregate {
 				{
 					foreach ($this->{$type} as $model => $properties)
 					{
-						// Prepare model
-						$class = $properties['class'];
-						$object = new $class();
-
-						$this_model = $properties['join_self_as'];
-						$other_model = $properties['join_other_as'];
-
-						// Determine relationship table name
-						$relationship_table = $this->_get_relationship_table($object, $model);
-
-						// We have to just set NULL for in-table foreign keys that
-						// are pointing at this object
-						if($relationship_table == $object->table  && // ITFK
-								 // NOT ITFKs that point at the other object
-								 ! ($object->table == $this->table && // self-referencing has_one join
-								 	in_array($other_model . '_id', $this->fields)) // where the ITFK is for the other object
-								)
+						// do we want cascading delete's?
+						if ($properties['cascade_delete'])
 						{
-							$data = array($this_model . '_id' => NULL);
+							// Prepare model
+							$class = $properties['class'];
+							$object = new $class();
 
-							// Update table to remove relationships
-							$this->db->where($this_model . '_id', $this->id);
-							$this->db->update($object->table, $data);
+							$this_model = $properties['join_self_as'];
+							$other_model = $properties['join_other_as'];
+
+							// Determine relationship table name
+							$relationship_table = $this->_get_relationship_table($object, $model);
+
+							// We have to just set NULL for in-table foreign keys that
+							// are pointing at this object
+							if($relationship_table == $object->table  && // ITFK
+									 // NOT ITFKs that point at the other object
+									 ! ($object->table == $this->table && // self-referencing has_one join
+										in_array($other_model . '_id', $this->fields)) // where the ITFK is for the other object
+									)
+							{
+								$data = array($this_model . '_id' => NULL);
+
+								// Update table to remove relationships
+								$this->db->where($this_model . '_id', $this->id);
+								$this->db->update($object->table, $data);
+							}
+							else if ($relationship_table != $this->table)
+							{
+
+								$data = array($this_model . '_id' => $this->id);
+
+								// Delete relation
+								$this->db->delete($relationship_table, $data);
+							}
+							// Else, no reason to delete the relationships on this table
 						}
-						else if ($relationship_table != $this->table)
-						{
-
-							$data = array($this_model . '_id' => $this->id);
-
-							// Delete relation
-							$this->db->delete($relationship_table, $data);
-						}
-						// Else, no reason to delete the relationships on this table
 					}
 				}
 
@@ -2072,6 +2133,73 @@ class DataMapper implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Truncate
+	 *
+	 * Deletes all records in this objects table.
+	 *
+	 * @return	bool Success or Failure of the truncate
+	 */
+	public function truncate()
+	{
+		// Begin auto transaction
+		$this->_auto_trans_begin();
+
+		// Delete all "has many" and "has one" relations for this object first
+		foreach (array('has_many', 'has_one') as $type)
+		{
+			foreach ($this->{$type} as $model => $properties)
+			{
+				// do we want cascading delete's?
+				if ($properties['cascade_delete'])
+				{
+					// Prepare model
+					$class = $properties['class'];
+					$object = new $class();
+
+					$this_model = $properties['join_self_as'];
+					$other_model = $properties['join_other_as'];
+
+					// Determine relationship table name
+					$relationship_table = $this->_get_relationship_table($object, $model);
+
+					// We have to just set NULL for in-table foreign keys that
+					// are pointing at this object
+					if($relationship_table == $object->table  && // ITFK
+							 // NOT ITFKs that point at the other object
+							 ! ($object->table == $this->table && // self-referencing has_one join
+								in_array($other_model . '_id', $this->fields)) // where the ITFK is for the other object
+							)
+					{
+						$data = array($this_model . '_id' => NULL);
+
+						// Update table to remove all ITFK relations
+						$this->db->update($object->table, $data);
+					}
+					else if ($relationship_table != $this->table)
+					{
+						// Delete all relationship records
+						$this->db->truncate($relationship_table);
+					}
+					// Else, no reason to delete the relationships on this table
+				}
+			}
+		}
+
+		// Delete all records
+		$this->db->truncate($this->table);
+
+		// Complete auto transaction
+		$this->_auto_trans_complete('truncate');
+
+		// Clear this object
+		$this->clear();
+
+		return TRUE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Refresh All
 	 *
 	 * Removes any empty objects in this objects all list.
@@ -2143,7 +2271,7 @@ class DataMapper implements IteratorAggregate {
 			$related = (isset($this->has_many[$field]) || isset($this->has_one[$field]));
 
 			// Check if property has changed since validate last ran
-			if ($related || ! isset($this->stored->{$field}) || $this->{$field} !== $this->stored->{$field})
+			if ($related || $this->_force_validation || ! isset($this->stored->{$field}) || $this->{$field} !== $this->stored->{$field})
 			{
 				// Only validate if field is related or required or has a value
 				if ( ! $related && ! in_array('required', $rules) && ! in_array('always_validate', $rules))
@@ -2275,6 +2403,21 @@ class DataMapper implements IteratorAggregate {
 	{
 		$this->_validated = $skip;
 		$this->valid = $skip;
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Force revalidation for the next call to save.
+	 * This allows you to run validation rules on fields that haven't been modified
+	 *
+	 * @param	object $force If TRUE, forces validation on all fields.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function force_validation($force = TRUE)
+	{
+		$this->_force_validation = $force;
 		return $this;
 	}
 
@@ -2997,7 +3140,7 @@ class DataMapper implements IteratorAggregate {
 
 		// Table Name pattern should be
 		$tablename = $this->db->_escape_identifiers($this->table);
-		$table_pattern = '(?:' . preg_quote($this->table) . '|' . preg_quote($tablename) . ')';
+		$table_pattern = '(?:' . preg_quote($this->table) . '|' . preg_quote($tablename) . '|\(' . preg_quote($tablename) . '\))';
 
 		$fieldname = $this->db->_escape_identifiers('__field__');
 		$field_pattern = '([-\w]+|' . str_replace('__field__', '[-\w]+', preg_quote($fieldname)) . ')';
@@ -3020,7 +3163,6 @@ class DataMapper implements IteratorAggregate {
 		$pattern = "/FROM $table_pattern([,\\s])/i";
 		$replacement = "FROM $tablename " . $this->db->_escape_identifiers($this->table . '_subquery') . '$1';
 		$sql = preg_replace($pattern, $replacement, $sql);
-
 		$sql = str_replace("\n", "\n\t", $sql);
 
 		return str_replace('${parent}', $this->table, $sql);
@@ -3042,8 +3184,8 @@ class DataMapper implements IteratorAggregate {
 
 		if ($this->db->ar_caching === TRUE)
 		{
-			$this->ar_cache_select[] = $value;
-			$this->ar_cache_exists[] = 'select';
+			$this->db->ar_cache_select[] = $value;
+			$this->db->ar_cache_exists[] = 'select';
 		}
 	}
 
@@ -3247,12 +3389,20 @@ class DataMapper implements IteratorAggregate {
 	 */
 	public function group_start($not = '', $type = 'AND ')
 	{
+		// Increment group count number to make them unique
+		$this->_group_count++;
+
 		// in case groups are being nested
 		$type = $this->_get_prepend_type($type);
 
-		$prefix = (count($this->db->ar_where) == 0 AND count($this->db->ar_cache_where) == 0) ? '' : $type;
-		$this->db->ar_where[] = $prefix . $not .  ' (';
 		$this->_where_group_started = TRUE;
+
+		$prefix = (count($this->db->ar_where) == 0 AND count($this->db->ar_cache_where) == 0) ? '' : $type;
+
+		$value =  $prefix . $not . str_repeat(' ', $this->_group_count) . ' (';
+		$this->db->ar_where[] = $value;
+		if($this->db->ar_caching) $this->db->ar_cache_where[] = $value;
+
 		return $this;
 	}
 
@@ -3297,8 +3447,12 @@ class DataMapper implements IteratorAggregate {
 	 */
 	public function group_end()
 	{
-		$this->db->ar_where[] = ')';
+		$value = str_repeat(' ', $this->_group_count) . ')';
+		$this->db->ar_where[] = $value;
+		if($this->db->ar_caching) $this->db->ar_cache_where[] = $value;
+
 		$this->_where_group_started = FALSE;
+
 		return $this;
 	}
 
@@ -3383,19 +3537,83 @@ class DataMapper implements IteratorAggregate {
 		foreach ($key as $k => $v)
 		{
 			$new_k = $this->add_table_name($k);
-			if ($new_k != $k)
-			{
-				$key[$new_k] = $v;
-				unset($key[$k]);
-			}
+			$this->db->_where($new_k, $v, $this->_get_prepend_type($type), $escape);
 		}
-
-		$type = $this->_get_prepend_type($type);
-
-		$this->db->_where($key, $value, $type, $escape);
 
 		// For method chaining
 		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Where Between
+	 *
+	 * Sets the WHERE field BETWEEN 'value1' AND 'value2' SQL query joined with
+	 * AND if appropriate.
+	 *
+	 * @param	string $key A field to check.
+	 * @param	mixed $value value to start with
+	 * @param	mixed $value value to end with
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function where_between($key = NULL, $value1 = NULL, $value2 = NULL)
+	{
+	 	return $this->_where_between($key, $value1, $value2);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Where Between
+	 *
+	 * Sets the WHERE field BETWEEN 'value1' AND 'value2' SQL query joined with
+	 * AND if appropriate.
+	 *
+	 * @param	string $key A field to check.
+	 * @param	mixed $value value to start with
+	 * @param	mixed $value value to end with
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function where_not_between($key = NULL, $value1 = NULL, $value2 = NULL)
+	{
+	 	return $this->_where_between($key, $value1, $value2, TRUE);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Where Between
+	 *
+	 * Sets the WHERE field BETWEEN 'value1' AND 'value2' SQL query joined with
+	 * AND if appropriate.
+	 *
+	 * @param	string $key A field to check.
+	 * @param	mixed $value value to start with
+	 * @param	mixed $value value to end with
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function or_where_between($key = NULL, $value1 = NULL, $value2 = NULL)
+	{
+	 	return $this->_where_between($key, $value1, $value2, FALSE, 'OR ');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Where Between
+	 *
+	 * Sets the WHERE field BETWEEN 'value1' AND 'value2' SQL query joined with
+	 * AND if appropriate.
+	 *
+	 * @param	string $key A field to check.
+	 * @param	mixed $value value to start with
+	 * @param	mixed $value value to end with
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function or_where_not_between($key = NULL, $value1 = NULL, $value2 = NULL)
+	{
+	 	return $this->_where_between($key, $value1, $value2, TRUE, 'OR ');
 	}
 
 	// --------------------------------------------------------------------
@@ -3494,6 +3712,31 @@ class DataMapper implements IteratorAggregate {
 			$values = $arr;
 		}
 	 	$this->db->_where_in($this->add_table_name($key), $values, $not, $type);
+
+		// For method chaining
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Where Between
+	 *
+	 * Called by where_between(), or_where_between(), where_not_between(), or or_where_not_between().
+	 *
+	 * @ignore
+	 * @param	string $key A field to check.
+	 * @param	mixed $value value to start with
+	 * @param	mixed $value value to end with
+	 * @param	bool $not If TRUE, use NOT IN instead of IN.
+	 * @param	string $type The type of connection (AND or OR)
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	protected function _where_between($key = NULL, $value1 = NULL, $value2 = NULL, $not = FALSE, $type = 'AND ')
+	{
+		$type = $this->_get_prepend_type($type);
+
+	 	$this->db->_where("`$key` ".($not?"NOT ":"")."BETWEEN ".$value1." AND ".$value2, NULL, $type, NULL);
 
 		// For method chaining
 		return $this;
@@ -3686,7 +3929,7 @@ class DataMapper implements IteratorAggregate {
 				$k = 'UPPER(' . $this->db->protect_identifiers($k) .')';
 				$v = strtoupper($v);
 			}
-			$f = "$k $not LIKE";
+			$f = "$k $not LIKE ";
 
 			if ($side == 'before')
 			{
@@ -3701,7 +3944,7 @@ class DataMapper implements IteratorAggregate {
 				$m = "%{$v}%";
 			}
 
-			$this->_where($f, $m, $type);
+			$this->_where($f, $m, $type, TRUE);
 		}
 
 		// For method chaining
@@ -4276,7 +4519,7 @@ class DataMapper implements IteratorAggregate {
 		else
 		{
 			$object_as = $name_prepend . $related_field . '_' . $object->table;
-			$relationship_as = $name_prepend . $related_field . '_' . $relationship_table;
+			$relationship_as = str_replace('.', '_', $name_prepend . $related_field . '_' . $relationship_table);
 		}
 
 		$other_column = $other_model . '_id';
@@ -4435,7 +4678,7 @@ class DataMapper implements IteratorAggregate {
 				}
 			}
 
-			if($field == 'id')
+			if(preg_replace('/[!=<> ]/ ', '', $field) == 'id')
 			{
 				// special case to prevent joining unecessary tables
 				$field = $this->_add_related_table($object, $related_field, TRUE);
@@ -4613,10 +4856,6 @@ class DataMapper implements IteratorAggregate {
 		$last = $this;
 		foreach($rfs as $rf)
 		{
-			if ( ! isset($last->has_one[$rf]) )
-			{
-				show_error("Invalid request to include_related: $rf is not a has_one relationship to {$last->model}.");
-			}
 			// prevent populating the related items.
 			$last =& $last->_get_without_auto_populating($rf);
 		}
@@ -5974,6 +6213,14 @@ class DataMapper implements IteratorAggregate {
 			// by default, automagically determine the join table name
 			$definition['join_table'] = '';
 		}
+		if( isset($definition['model_path']))
+		{
+			$definition['model_path'] = rtrim($definition['model_path'], '/') . '/';
+			if ( is_dir($definition['model_path'].'models') && ! in_array($definition['model_path'], self::$model_paths))
+			{
+				self::$model_paths[] = $definition['model_path'];
+			}
+		}
 		if(isset($definition['reciprocal']))
 		{
 			// only allow a reciprocal relationship to be defined if this is a has_many self relationship
@@ -5983,6 +6230,15 @@ class DataMapper implements IteratorAggregate {
 		{
 			$definition['reciprocal'] = FALSE;
 		}
+		if(!isset($definition['auto_populate']) OR ! is_bool($definition['auto_populate']))
+		{
+			$definition['auto_populate'] = NULL;
+		}
+		if(!isset($definition['cascade_delete']) OR ! is_bool($definition['cascade_delete']))
+		{
+			$definition['cascade_delete'] = $this->cascade_delete;
+		}
+
 		$new[$name] = $definition;
 
 		// load in labels for each not-already-set field
@@ -6288,11 +6544,21 @@ class DataMapper implements IteratorAggregate {
 	 */
 	protected function _dmz_assign_libraries()
 	{
-		$CI =& get_instance();
-		if ($CI)
+		static $CI;
+		if ($CI || $CI =& get_instance())
 		{
-			$this->lang = $CI->lang;
-			$this->load = $CI->load;
+			if ( ! isset($CI->dm_lang))
+			{
+				$CI->dm_lang = new DM_Lang();
+			}
+
+			$this->lang = $CI->dm_lang;
+			if ( ! isset($CI->dm_load))
+			{
+				$CI->dm_load = new DM_Load();
+			}
+			$this->load = $CI->dm_load;
+
 			$this->config = $CI->config;
 		}
 	}
@@ -6473,6 +6739,40 @@ class DM_DatasetIterator implements Iterator, Countable
 	}
 }
 
+
+/**
+ * Hack into the Lang core class
+ *
+ * @package DMZ
+ */
+class DM_Lang extends CI_Lang
+{
+	/**
+	 * Fetch a single line of text from the language array
+	 *
+	 * @access	public
+	 * @param	string	$line	the language line
+	 * @return	string
+	 */
+	function line($line = '')
+	{
+		$value = ($line == '' OR ! isset($this->language[$line])) ? FALSE : $this->language[$line];
+		return $value !== FALSE ? $value : $line;
+	}
+}
+
+/**
+ * Hack into the Loader core class
+ *
+ * @package DMZ
+ */
+class DM_Load extends CI_Loader
+{
+	public function unset_form_validation_class()
+	{
+		unset($this->_ci_classes['form_validation']);
+	}
+}
 
 // --------------------------------------------------------------------------
 

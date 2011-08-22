@@ -758,6 +758,23 @@
 			});
 		}
 		
+		plugin.infoComic = function(elem, id){
+			var el = jQuery(elem).parent().parent().parent().find("li.info");
+			if(el.height() > 0) {
+				el.animate({
+					height: 0 + "px"
+				},100);
+				return false;
+			}
+			var height = el.find(".inside").height();
+			el.animate({
+				height: height + 10 + "px"
+			},100);
+			
+			
+			return false;
+		};
+		
 		plugin.getLatest = function(){
 			var latest = foolslide.readerChapters({
 				direction:"desc"
@@ -787,6 +804,15 @@
 						onClick: "displayComic(this, " + current_comic.id + ")"
 					};
 					
+					preresult.info = {
+						text: current_comic.description
+					};
+					
+					if(current_comic.thumb_url != "") {
+						preresult.info.image = {};
+						preresult.info.image.src = current_comic.thumb_url;
+					}
+					
 					preresult.group.plus = {
 						href: current_comic.href,
 						title: current_comic.name,
@@ -804,11 +830,11 @@
 					
 					if(current_teams.length == 1)
 					{
-					preresult.meta = {
-						text: current_teams[0].name,
-						href: current_teams[0].href,
-						title: current_teams[0].name
-					};
+						preresult.meta = {
+							text: current_teams[0].name,
+							href: current_teams[0].href,
+							title: current_teams[0].name
+						};
 					}
 					else
 					{
@@ -854,13 +880,26 @@
 							echo += '	<li class="group">';
 							if (typeof value.group.plus != "undefined") {
 								echo += '		<div class="plus">';
-								echo += '			<a href="' + value.group.plus.href + '" onClick="$.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
+								echo += '			<a href="' + value.group.plus.href + '" onClick="return $.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
 								echo += '		</div>';
 							}
-							echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + ';return false;" title="' + value.group.title + '">' + value.group.text + '</a></div>';
+							echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
 							echo +=	'	</li>';
 						}
-					
+										
+						if(typeof value.info != "undefined")
+						{
+							echo += '	<li class="info clearfix"><div class="inside">';
+							if(typeof value.info.image != "undefined")
+							{
+								echo += '		<div class="image">';
+								echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'"><img src="' + value.info.image.src + '" alt="' + value.info.image.alt + '"></a>';
+								echo += '		</div>';
+							}
+							echo += '		<div class="text">' + value.info.text + '</div>';
+							echo +=	'	</div></li>';
+						}
+						
 						if(typeof value.meta != "undefined")
 						{
 							echo += '	<li class="meta">';
@@ -872,19 +911,6 @@
 							{
 								echo += '			<div class="text a_fill">' + value.meta.text + '<div>';
 							}
-							echo +=	'	</li>';
-						}
-					
-						if(typeof value.info != "undefined")
-						{
-							echo += '	<li class="info">';
-							if(typeof value.info.image != "undefined")
-							{
-								echo += '		<div class="image">';
-								echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'">+</a>';
-								echo += '		</div>';
-							}
-							echo += '		<div class="text">' + value.info.text + '</div>';
 							echo +=	'	</li>';
 						}
 				

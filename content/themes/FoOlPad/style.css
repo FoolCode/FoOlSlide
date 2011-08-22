@@ -300,7 +300,8 @@ a, a:hover, a:visited {
 	
 	list-style: none;
 	padding: 0px;
-	margin:0 0 3px;
+	margin:0;
+	border-bottom: 3px solid #444;
 }
 
 #dynamic_sidebar ul > li {
@@ -332,7 +333,7 @@ a, a:hover, a:visited {
 	padding: 10px 6px 8px 6px;
 }
 
-#dynamic_sidebar ul > li:hover {
+#dynamic_sidebar ul > li:hover, #dynamic_sidebar ul > li.active {
 	border-left:5px solid #D84545;
 	-webkit-transition: all 0.05s ease-in-out;
     -moz-transition: all 0.05s ease-in-out;
@@ -344,7 +345,7 @@ a, a:hover, a:visited {
 
 #dynamic_sidebar ul > li.info:hover {
 	border-bottom:none;
-	padding: 5px;
+	padding: 0px;
 }
 
 #dynamic_sidebar > ul > li .plus {
@@ -366,18 +367,28 @@ a, a:hover, a:visited {
     -o-transition: all 0.3s ease-in-out;
 }
 
-#dynamic_sidebar .info {
-	padding:5px;
-	background:rgba(0,0,0,0.3);
+#dynamic_sidebar > ul > li.info {
 	overflow:hidden;
-	text-shadow:1px 1px 0px #444, -1px -1px 0px #222;
+	background:transparent;
+	height:0;
+}
+
+#dynamic_sidebar > ul > li.info .inside {
+	padding:5px;
 	color:#ddd;
+	text-shadow:none;
+	font-size:85%;
 }
 
 #dynamic_sidebar .info .image {
 	float:left;
 	margin:0 5px 0px 0;
 	
+}
+
+#dynamic_sidebar .info .image a {
+	display:inline;
+	padding:0;
 }
 
 #dynamic_sidebar .info .image img {

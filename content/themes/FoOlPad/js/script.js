@@ -25,7 +25,7 @@
 			// remove the trailing slashes
 			$.each(plugin.settings.slideUrls, function(index, value){
 				if(value.substr(-1) == "/")
-				value = value.substr(0, value.length-1);
+					value = value.substr(0, value.length-1);
 			})
 		}
 		
@@ -772,31 +772,39 @@
 			'		<div class="title">Latest releases:</div>' +
 			'			<ol>';
 		
-			var latest = foolslide.readerChapters({direction: "desc"});
+			var latest = foolslide.readerChapters({
+				direction: "desc"
+			});
 			var count = 0;
 			$.each(latest.chapters, function(index, value){
 				if(count++ == 3) 
 				{
 					return false;
 				}
-				var current_comic = foolslide.readerComic({id:value.comic_id}).comics[0];
+				var current_comic = foolslide.readerComic({
+					id:value.comic_id
+					}).comics[0];
 				var current_teams = foolslide.readerChapter({
-						id: value.id
-					}).teams;
+					id: value.id
+				}).teams;
 				echo += '<li><a href="' + current_comic.href + '" title="' + current_comic.name + '" >' + current_comic.name + '</a> - <a href="' + value.href + '" title="' + value.title + '">' + value.title + '</a>';
 				echo += '<span class="meta">';
 				$.each(current_teams, function(i,v){
 					echo += '<a href="' + v.href + '" title="' + v.name + '">' + v.name + '</a>';
+					if (i < current_teams.length-1)
+					{
+						echo += ", ";
+					}
 				});
 				echo += '</span>';
 			});
 							
 			echo += '		</ol>' +
-					'	</div>' +
-					'<div class="suggestion">' +
-					'	<span class="bracket">{</span> we\'d suggest to activate your browser\'s fullscreen mode <span class="bracket">}</span>' +
-					'</div>' +
-				'</div>';
+			'	</div>' +
+			'<div class="suggestion">' +
+			'	<span class="bracket">{</span> we\'d suggest to activate your browser\'s fullscreen mode <span class="bracket">}</span>' +
+			'</div>' +
+			'</div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).html(echo);
@@ -921,76 +929,76 @@
 				position: "relative",
 				right: "-130%"
 			}, 1000, 
-				function(){
-					var echo = '';
-					$.each(arr, function(index, value){
-						if (typeof value.group != "undefined")
-						{
-							echo += '<ul>';
-							echo += '	<li class="group">';
-							if (typeof value.group.plus != "undefined") {
-								echo += '		<div class="plus">';
-								echo += '			<a href="' + value.group.plus.href + '" onClick="return $.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
-								echo += '		</div>';
-							}
-							echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
-							echo +=	'	</li>';
+			function(){
+				var echo = '';
+				$.each(arr, function(index, value){
+					if (typeof value.group != "undefined")
+					{
+						echo += '<ul>';
+						echo += '	<li class="group">';
+						if (typeof value.group.plus != "undefined") {
+							echo += '		<div class="plus">';
+							echo += '			<a href="' + value.group.plus.href + '" onClick="return $.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
+							echo += '		</div>';
 						}
+						echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
+						echo +=	'	</li>';
+					}
 										
-						if(typeof value.info != "undefined")
+					if(typeof value.info != "undefined")
+					{
+						echo += '	<li class="info clearfix"><div class="inside">';
+						if(typeof value.info.image != "undefined")
 						{
-							echo += '	<li class="info clearfix"><div class="inside">';
-							if(typeof value.info.image != "undefined")
-							{
-								echo += '		<div class="image">';
-								echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'"><img src="' + value.info.image.src + '" alt="' + value.info.image.alt + '"></a>';
+							echo += '		<div class="image">';
+							echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'"><img src="' + value.info.image.src + '" alt="' + value.info.image.alt + '"></a>';
+							echo += '		</div>';
+						}
+						echo += '		<div class="text">' + value.info.text + '</div>';
+						echo +=	'	</div></li>';
+					}
+						
+					if(typeof value.meta != "undefined")
+					{
+						echo += '	<li class="meta">';
+						if(typeof value.meta.href != "undefined")
+						{
+							echo += '			<div class="text"><a href="' + value.meta.href + '" title="' + value.meta.title + '">' + value.meta.text + '</a></div>';
+						}
+						else 
+						{
+							echo += '			<div class="text a_fill">' + value.meta.text + '<div>';
+						}
+						echo +=	'	</li>';
+					}
+				
+					if(typeof value.elements != "undefined") 
+					{
+						$.each(value.elements, function(i, v){
+							echo += '	<li class="element">';
+							if (typeof v.plus != "undefined") {
+								echo += '		<div class="plus">';
+								echo += '			<a href="' + v.plus.href + '" onClick="$.foolslideui.' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
 								echo += '		</div>';
 							}
-							echo += '		<div class="text">' + value.info.text + '</div>';
-							echo +=	'	</div></li>';
-						}
-						
-						if(typeof value.meta != "undefined")
-						{
-							echo += '	<li class="meta">';
-							if(typeof value.meta.href != "undefined")
-							{
-								echo += '			<div class="text"><a href="' + value.meta.href + '" title="' + value.meta.title + '">' + value.meta.text + '</a></div>';
-							}
-							else 
-							{
-								echo += '			<div class="text a_fill">' + value.meta.text + '<div>';
-							}
+							echo += '		<div class="text"><a href="' + v.href + '" onClick="$.foolslideui.' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
 							echo +=	'	</li>';
-						}
-				
-						if(typeof value.elements != "undefined") 
-						{
-							$.each(value.elements, function(i, v){
-								echo += '	<li class="element">';
-								if (typeof v.plus != "undefined") {
-									echo += '		<div class="plus">';
-									echo += '			<a href="' + v.plus.href + '" onClick="$.foolslideui.' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
-									echo += '		</div>';
-								}
-								echo += '		<div class="text"><a href="' + v.href + '" onClick="$.foolslideui.' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
-								echo +=	'	</li>';
-							});
-						}
-						echo += '</ul>';
-					});
-				
-				
-					$(this).find("#dynamic_sidebar").html(echo);
-				
-					$(this).css({
-						top:"0",
-						right:-$(this).width()
-					});
-					$(this).animate({
-						right:"0"
-					});
+						});
+					}
+					echo += '</ul>';
 				});
+				
+				
+				$(this).find("#dynamic_sidebar").html(echo);
+				
+				$(this).css({
+					top:"0",
+					right:-$(this).width()
+				});
+				$(this).animate({
+					right:"0"
+				});
+			});
 				
 			// inject and returns the sidebar components
 			var buildSidebar = function(elem) {
@@ -1037,9 +1045,7 @@ jQuery(document).ready(function(){
 	$('#container').foolslideui({
 		slideUrls:[slideUrl]
 	});
-	
-	var foolslideui = jQuery('#container').data('foolslideui');
-	
+		
 	$.foolslideui.getLatest();
 	$.foolslideui.displayHome('#dynamic_content');
 });

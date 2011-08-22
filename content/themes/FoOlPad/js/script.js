@@ -149,6 +149,13 @@
 								loadedChapters[v.chapter.id + "_" + index].href += "0/" + loadedChapters[v.chapter.id + "_" + index].joint_id + "/";
 							}							
 						}
+						
+						if(typeof loadedChapters[v.chapter.id + "_" + index].title == "undefined")
+						{
+							loadedChapters[v.chapter.id + "_" + index].title = (loadedChapters[v.chapter.id + "_" + index].volume > 0?"Vol."+loadedChapters[v.chapter.id + "_" + index].volume + " ":"") +
+							 "Chapter " + loadedChapters[v.chapter.id + "_" + index].volume + (loadedChapters[v.chapter.id + "_" + index].subchapter > 0?"."+loadedChapters[v.chapter.id + "_" + index].subchapter:"") +
+							 (loadedChapters[v.chapter.id + "_" + index].name != ""?": " + loadedChapters[v.chapter.id + "_" + index].name:"");
+						}
 					}
 					
 					// does the chapter comes with the array of pages? load them
@@ -188,12 +195,13 @@
 				direction: "asc",
 				orderby: "name",
 				per_page: 40,
-				page: 1
+				page: 1,
+				cache: true
 			};
 			var options = $.extend({}, def, options);
 			
 			var parameters = "/orderby/" + options.direction + "_" + options.orderby + "/per_page/" + options.per_page + "/page/" + options.page;
-			processComics(get("/reader/comics" + parameters));
+			processComics(get("/reader/comics" + parameters), '', opt.cache);
 			var arr = orderBy(loadedComics, opt.orderby, (options.direction == "desc"))
 			arr = arrayPage(arr, def.page, options.per_page);
 			return {
@@ -212,13 +220,14 @@
 				direction: "asc",
 				orderby: "created",
 				per_page: 40,
-				page: 1	
+				page: 1,
+				cache:true
 			}
 			var opt = $.extend({}, def, opt);
 			
 			var parameters = "/orderby/" + opt.direction + "_" + opt.orderby + "/per_page/" + opt.per_page + "/page/" + opt.page;
 			
-			processChapters(get("/reader/chapters" + parameters));
+			processChapters(get("/reader/chapters" + parameters), '', opt.cache);
 			var arr = orderBy(loadedChapters, opt.orderby, (opt.direction == "desc"))
 			arr = arrayPage(arr, def.page, opt.per_page);
 			return {
@@ -236,7 +245,8 @@
 				direction: "asc",
 				slideUrl: plugin.settings.slideUrls[0],
 				forceChapters: false,
-				forceCache: false
+				forceCache: false,
+				cache: true
 			}
 			var opt = $.extend({}, def, opt);
 			if(opt.id > 0)
@@ -285,7 +295,8 @@
 				}
 			}
 			
-			var result = get("/reader/comic" + parameters, opt.slideUrl);
+			var result = get("/reader/comic" + parameters, opt.slideUrl, opt.cache);
+
 			// one comic to insert, especially if there was no chapter available
 			if(typeof loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl] == "undefined" || dateTimeToDate(result[opt.slideUrl].comic.updated) > dateTimeToDate(loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].updated)) {
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl] = result[opt.slideUrl].comic;
@@ -362,7 +373,8 @@
 				joint_id: "",
 				forcePages: false,
 				forceCache: false,
-				slideUrl: plugin.settings.slideUrls[0]
+				slideUrl: plugin.settings.slideUrls[0],
+				cache: true
 			};
 			
 			var opt = $.extend({}, def, opt);
@@ -426,7 +438,7 @@
 			}
 			
 			// adapt for processChapters()
-			var result = get("/reader/chapter" + parameters, def.slideUrl);
+			var result = get("/reader/chapter" + parameters, def.slideUrl, opt.cache);
 			result[opt.slideUrl].chapters = [{
 				comic: result[opt.slideUrl].comic,
 				chapter: result[opt.slideUrl].chapter,
@@ -677,9 +689,9 @@
 		 * Loop over each selected FoOlSlide and return them in an object indexed
 		 * by the URL of the site
 		 */
-		var get = function(apiRequest, slideUrl) {
+		var get = function(apiRequest, slideUrl, cache) {
 			var result = {};
-			if(typeof slideUrl != "undefined") {
+			if(typeof slideUrl != "undefined" && slideUrl != "") {
 				var def = {
 					slideUrls : [slideUrl]
 				}
@@ -690,10 +702,16 @@
 					slideUrls : plugin.settings.slideUrls
 				}
 			}
+			if(typeof cache != "undefined")
+			{
+				cache = true;
+			}
+			
 			$.each(def.slideUrls, function(index, value){
 				$.ajax({
 					url: value + "/api" + apiRequest,
 					async: false,
+					cache: cache,
 					dataType: "json",
 					success: function(data){
 						result[value] = data;
@@ -744,7 +762,8 @@
 			slideUrls: [],
 			activateSidebar: true,
 			activateCenter: true,
-			standAlone: false,
+			sidebarElement: "",
+			contentElement: "",
 			afterSidebarUpdate: function() {}
 		}
 
@@ -762,6 +781,14 @@
 			foolslide = new $.foolslide(null, {
 				slideUrls: plugin.settings.slideUrls
 			});
+			if(plugin.settings.sidebarElement != "")
+			{
+				plugin.buildSidebar(plugin.settings.sidebarElement);
+			}
+			if(plugin.settings.contentElement != "")
+			{
+				plugin.buildContent(plugin.settings.contentElement);
+			}
 		}
 		
 		plugin.displayHome = function(elem) {
@@ -833,9 +860,10 @@
 			return false;
 		};
 		
-		plugin.getLatest = function(){
+		plugin.getLatest = function(fromCache){
 			var latest = foolslide.readerChapters({
-				direction:"desc"
+				direction:"desc",
+				cache: (fromCache !== false)
 			});
 			var current_comic_id = 0;
 			var current_comic = {};
@@ -853,7 +881,8 @@
 					preresult = {};
 					preresult.elements = [];
 					current_comic = foolslide.readerComic({
-						id: value.comic_id
+						id: value.comic_id,
+						slideUrl: value.slideUrl
 					}).comics[0];
 					preresult.group = {
 						href: current_comic.href,
@@ -883,7 +912,8 @@
 					current_team_id = value.team_id;
 					current_joint_id = value.joint_id;
 					current_teams = foolslide.readerChapter({
-						id: value.id
+						id: value.id,
+						slideUrl: value.slideUrl
 					}).teams;
 					
 					if(current_teams.length == 1)
@@ -1010,7 +1040,7 @@
 			var echo = '';
 			echo += '<div class="layer1">';
 			echo += '</div>';
-			echo += '<div class="items">';
+			echo += '<div class	="items">';
 			echo += '	<div id="dynamic_sidebar">';
 			echo += '	</div>';
 			echo += '</div>';
@@ -1022,7 +1052,17 @@
 			return echo;
 		}
 			
-		var buildContent = function(elem) {
+		plugin.buildContent = function(elem) {
+			var echo = '';
+			echo += '<div class="layer1">' +
+					'</div>' +
+					'<div id="dynamic_content">' +
+					'</div>';
+			if(typeof elem != "undefined")
+			{
+				$(elem).addClass("foolslideui_content");
+				$(elem).html(echo);
+			}
 		}
 
 		// fire up the plugin!
@@ -1047,10 +1087,12 @@
 
 jQuery(document).ready(function(){
 	$('#container').foolslideui({
-		slideUrls:[slideUrl]
+		slideUrls:[slideUrl],
+		sidebarElement: "#sidebar",
+		contentElement: "#main"
+		
 	});
 		
-	$.foolslideui.buildSidebar("#sidebar");
 	$.foolslideui.getLatest();
 	$.foolslideui.displayHome('#dynamic_content');
 });

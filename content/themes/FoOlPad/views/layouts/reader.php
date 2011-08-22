@@ -68,20 +68,14 @@
 
 	<body>
 
-		<div id="container" class="foolslideUI">
+		<div id="container">
 			<header>
-
 			</header>
 			<aside id="sidebar">
 			</aside>
 			<div id="main" role="main">
-				<div class="layer1">
-				</div>
-				<div id="dynamic_content">
-				</div>
 			</div>
 			<footer>
-
 			</footer>
 		</div> <!--! end of #container -->
 

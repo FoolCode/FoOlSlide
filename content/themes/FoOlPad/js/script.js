@@ -783,7 +783,7 @@
 				}
 				var current_comic = foolslide.readerComic({
 					id:value.comic_id
-					}).comics[0];
+				}).comics[0];
 				var current_teams = foolslide.readerChapter({
 					id: value.id
 				}).teams;
@@ -925,7 +925,8 @@
 		}
 		
 		var updateSidebar = function(arr) {
-			$("#sidebar .items").animate({
+			console.log($(".foolslideui_sidebar"));
+			$(".foolslideui_sidebar .items").animate({
 				position: "relative",
 				right: "-130%"
 			}, 1000, 
@@ -999,26 +1000,29 @@
 					right:"0"
 				});
 			});
-				
-			// inject and returns the sidebar components
-			var buildSidebar = function(elem) {
-				var echo = '';
-				echo += '<div class="layer1">';
-				echo += '</div>';
-				echo += '<div class="items">';
-				echo += '	<div id="dynamic_sidebar">';
-				echo += '	</div>';
-				echo += '</div>';
-				if(typeof elem != "undefined")
-					$(elem).html(echo);
-				return echo;
-			}
-			
-			var buildContent = function(elem) {
-			}
 
 			// event
 			plugin.settings.afterSidebarUpdate();
+		}
+
+		// inject and returns the sidebar components
+		plugin.buildSidebar = function(elem) {
+			var echo = '';
+			echo += '<div class="layer1">';
+			echo += '</div>';
+			echo += '<div class="items">';
+			echo += '	<div id="dynamic_sidebar">';
+			echo += '	</div>';
+			echo += '</div>';
+			if(typeof elem != "undefined")
+			{
+				$(elem).addClass("foolslideui_sidebar");
+				$(elem).html(echo);
+			}
+			return echo;
+		}
+			
+		var buildContent = function(elem) {
 		}
 
 		// fire up the plugin!
@@ -1046,6 +1050,7 @@ jQuery(document).ready(function(){
 		slideUrls:[slideUrl]
 	});
 		
+	$.foolslideui.buildSidebar("#sidebar");
 	$.foolslideui.getLatest();
 	$.foolslideui.displayHome('#dynamic_content');
 });

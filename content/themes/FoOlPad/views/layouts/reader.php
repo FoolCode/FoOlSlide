@@ -73,12 +73,6 @@
 
 			</header>
 			<aside id="sidebar">
-				<div class="layer1">
-				</div>
-				<div class="items">
-					<div id="dynamic_sidebar">
-					</div>
-				</div>
 			</aside>
 			<div id="main" role="main">
 				<div class="layer1">

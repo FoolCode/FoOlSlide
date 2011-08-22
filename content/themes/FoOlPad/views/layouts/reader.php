@@ -68,7 +68,7 @@
 
 	<body>
 
-		<div id="container">
+		<div id="container" class="foolslideUI">
 			<header>
 
 			</header>
@@ -79,34 +79,6 @@
 				</div>
 				<div class="items">
 					<div id="dynamic_sidebar">
-						<ul>
-							<li class="group">
-								<div class="plus"><a href="#" onClick="sidebarToggleInfo()" title="Show info on Seto no Hanayome">+</a></div>
-								<div class="text">Seto no Hanayome</div>
-							</li>
-							<li class="info">
-								<div class="image">
-									<img src="http://foolrulez.org/slide/content/comics/seto_no_hanayome_4dea85f996dfa/thumb_thumb.png"/>
-								</div>
-								A young boy gets saved from drowning by a mermaid but according to mermaid law, if a human sees a mermaid’s true form, both are to be executed. The only solution to the problem is for him to marry her and become part of the mermaid family.
-							</li>
-							<li class="element">
-								Vol.7 Chapter 32
-							</li>
-							<li class="element">
-								Vol.7 Chapter 31
-							</li>
-						</ul>
-
-						<ul>
-							<li class="group">
-								<div class="plus">+</div>
-								<div class="text">Sora no Otoshimono</div>
-							</li>
-							<li class="element">
-								test
-							</li>
-						</ul>
 					</div>
 				</div>
 			</aside>
@@ -123,7 +95,7 @@
 							<li>Seto no Hanayome - Vol.7 Chapter 34 <span class="meta">FoOlRulez</span></li>
 							<li>Kannagi - Vol.7 Chapter 37 <span class="meta">FoOlRulez</span></li>
 						</ol>
-					</div>
+					</div>	
 					<div class="suggestion">
 						<span class="bracket">{</span> we'd suggest to activate your browser's fullscreen mode <span class="bracket">}</span>
 					</div>

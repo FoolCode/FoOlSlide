@@ -21,9 +21,6 @@
 		// the "constructor" method that gets called when the object is created
 		plugin.init = function() {
 			plugin.settings = $.extend({}, defaults, options);
-			console.log(plugin.settings.slideUrls);
-		// code goes here
-
 		}
 		
 		var loadedComics = {};
@@ -478,7 +475,6 @@
 				if(!missing && loadedChapters[opt.id + "_" + opt.slideUrl].joint_id > 0)
 				{
 					var teams = [];
-					console.log(loadedJoints);
 					$.each(loadedJoints[loadedChapters[opt.id + "_" + opt.slideUrl].joint_id + "_" + opt.slideUrl].teams, function(index, value){
 						if(typeof loadedTeams[value + "_" + opt.slideUrl] == "undefined")
 						{
@@ -689,7 +685,6 @@
 				}
 			}
 			$.each(def.slideUrls, function(index, value){
-				console.log(value + "/api" + apiRequest);
 				$.ajax({
 					url: value + "/api" + apiRequest,
 					async: false,
@@ -737,17 +732,13 @@
 })(jQuery);
 
 (function($) {
-
-	// here we go!
 	$.foolslideui = function(element, options) {
 
 		var defaults = {
-
 			slideUrls: [],
 			activateSidebar: true,
 			activateCenter: true,
 			standAlone: false,
-			
 			afterSidebarUpdate: function() {}
 		}
 
@@ -765,13 +756,12 @@
 			foolslide = new $.foolslide(null, {
 				slideUrls: plugin.settings.slideUrls
 			});
-			
-			plugin.getLatest();
 		}
 		
-		plugin.getLatest= function(){
-			var latest = foolslide.readerChapters({});
-			console.log(latest);
+		plugin.getLatest = function(){
+			var latest = foolslide.readerChapters({
+				direction:"desc"
+			});
 			var current_comic_id = 0;
 			var current_comic = {};
 			var result = [];
@@ -781,6 +771,7 @@
 				if(value.comic_id != current_comic_id)
 				{
 					current_comic_id = value.comic_id
+					result.push(preresult);
 					preresult = {};
 					preresult.elements = [];
 					current_comic = foolslide.readerComic({
@@ -788,91 +779,95 @@
 					}).comics[0];
 					preresult.group = {
 						href: current_comic.href,
-						onClick: "foolslideui.displayComic()",
-						text: current_comic.name
+						text: current_comic.name,
+						title: current_comic.name,
+						onClick: "displayComic(this, " + current_comic.id + ")"
 					};
 					
 					preresult.group.plus = {
 						href: current_comic.href,
-						onClick: "foolslideui.infoComic()"
+						title: current_comic.name,
+						onClick: "infoComic(this, " + current_comic.id + ")"
 					};
 				}
 				
 				preresult.elements.push({
 					text: value.title,
-					href: value.href
-				});
-				
-				result.push(preresult);
+					href: value.href,
+					title: value.title,
+					onClick: "displayChapter(this, " + value.id + ")"
+				});				
 			});
 			
 			result.push(preresult)
 			
 			updateSidebar(result);
+			return false;
 		}
 		
 		var updateSidebar = function(arr) {
 			$("#sidebar .items").animate({
 				position: "relative",
 				top: "130%"
-			}, 1000, 
-			function(){
-				var echo = '';
-				$.each(arr, function(index, value){
-					if (typeof value.group != "undefined")
-					{
-						echo += '<ul>';
-						echo += '	<li class="group">';
-						if (typeof value.group.plus != "undefined") {
-							echo += '		<div class="plus">';
-							echo += '			<a href="' + value.group.plus.href + '" onClick="' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
-							echo += '		</div>';
-						}
-						echo += '		<div class="text"><a href="' + value.group.href + '" onClick="' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
-						echo +=	'	</li>';
-					}
-					
-					if(typeof value.info != "undefined")
-					{
-						echo += '	<li class="info">';
-						if(typeof value.info.image != "undefined")
+			}, ($("#dynamic_sidebar").html().length > 8?1000:0), 
+				function(){
+					var echo = '';
+					$.each(arr, function(index, value){
+						if (typeof value.group != "undefined")
 						{
-							echo += '		<div class="image">';
-							echo += '			<a href="' + value.info.image.href + '" onClick="' + value.info.image.onClick + '" title="' + value.info.image.title +'">+</a>';
-							echo += '		</div>';
-						}
-						echo += '		<div class="text">' + value.info.text + '</div>';
-						echo +=	'	</li>';
-					}
-				
-					if(typeof value.elements != "undefined") 
-					{
-						$.each(value.elements, function(i, v){
-							echo += '	<li class="element">';
-							if (typeof v.plus != "undefined") {
+							echo += '<ul>';
+							echo += '	<li class="group">';
+							if (typeof value.group.plus != "undefined") {
 								echo += '		<div class="plus">';
-								echo += '			<a href="' + v.plus.href + '" onClick="' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
+								echo += '			<a href="' + value.group.plus.href + '" onClick="$.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
 								echo += '		</div>';
 							}
-							echo += '		<div class="text"><a href="' + v.href + '" onClick="' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
+							echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + ';return false;" title="' + value.group.title + '">' + value.group.text + '</a></div>';
 							echo +=	'	</li>';
-						});
-					}
-					echo += '</ul>';
-				});
+						}
+					
+						if(typeof value.info != "undefined")
+						{
+							echo += '	<li class="info">';
+							if(typeof value.info.image != "undefined")
+							{
+								echo += '		<div class="image">';
+								echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'">+</a>';
+								echo += '		</div>';
+							}
+							echo += '		<div class="text">' + value.info.text + '</div>';
+							echo +=	'	</li>';
+						}
+				
+						if(typeof value.elements != "undefined") 
+						{
+							$.each(value.elements, function(i, v){
+								echo += '	<li class="element">';
+								if (typeof v.plus != "undefined") {
+									echo += '		<div class="plus">';
+									echo += '			<a href="' + v.plus.href + '" onClick="$.foolslideui.' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
+									echo += '		</div>';
+								}
+								echo += '		<div class="text"><a href="' + v.href + '" onClick="$.foolslideui.' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
+								echo +=	'	</li>';
+							});
+						}
+						echo += '</ul>';
+					});
 				
 				
-				console.log(echo);
-				$(this).find("#dynamic_sidebar").html(echo);
+					$(this).find("#dynamic_sidebar").html(echo);
 				
-				$(this).css({
-					top:"0",
-					right:-$(this).width()
+					$(this).css({
+						top:"0",
+						right:-$(this).width()
+					});
+					$(this).animate({
+						right:"0"
+					});
 				});
-				$(this).animate({
-					right:"0"
-				});
-			});
+				
+			
 			
 
 			// event
@@ -887,37 +882,24 @@
 
 	// add the plugin to the jQuery.fn object
 	$.fn.foolslideui = function(options) {
-
-		// iterate through the DOM elements we are attaching the plugin to
 		return this.each(function() {
-
-			// if plugin has not already been attached to the element
 			if (undefined == $(this).data('foolslideui')) {
-
-				// create a new instance of the plugin
-				// pass the DOM element and the user-provided options as arguments
 				var plugin = new $.foolslideui(this, options);
-
-				// in the jQuery version of the element
-				// store a reference to the plugin object
-				// you can later access the plugin and its methods and properties like
-				// element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
-				// element.data('pluginName').settings.propertyName
 				$(this).data('foolslideui', plugin);
-
+				$.foolslideui = plugin;
 			}
-
 		});
-
 	}
 
 })(jQuery);
 
 
 jQuery(document).ready(function(){
-	var foolslide = new $.foolslideui(null, {
-		slideUrls:['http://localhost/slide']
+	$('#container').foolslideui({
+		slideUrls:[slideUrl]
 	});
 	
-//var latest = foolslide.readerChapters();
+	var foolslideui = jQuery('#container').data('foolslideui');
+	
+	$.foolslideui.getLatest();
 });

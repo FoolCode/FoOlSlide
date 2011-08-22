@@ -281,6 +281,7 @@ a, a:hover, a:visited {
 	max-height:100%;
 	width:266px;
 	overflow:auto;
+	overflow-x:hidden;
 }
 
 #dynamic_sidebar {
@@ -291,12 +292,12 @@ a, a:hover, a:visited {
 	
 	list-style: none;
 	padding: 0px;
-	margin:0;
+	margin:0 0 3px;
 }
 
 #dynamic_sidebar ul > li {
 	background:rgba(255,255,255,0.15);
-	padding: 6px 3px 6px 12px;
+	
 	margin-top:1px;
 	border-left:5px solid #970000;
 	background: url('images/background2.png') #666;
@@ -306,12 +307,22 @@ a, a:hover, a:visited {
 	font-size:110%;
 }
 
-#dynamic_sidebar > ul > li:first-child {
+#dynamic_sidebar ul > li > div > a {
+	display:block;
+	height:100%;
+	width:100%;
+	padding: 6px 3px 6px 12px;
+}
+
+#dynamic_sidebar ul > li:first-child {
 	font-size:120%;
-	padding: 10px 6px 8px 6px;
 	font-weight:500;
 	border-left:0px solid #D84545;
 	font-weight:bold;
+}
+
+#dynamic_sidebar ul > li:first-child > div > a {
+	padding: 10px 6px 8px 6px;
 }
 
 #dynamic_sidebar ul > li:hover {
@@ -336,10 +347,16 @@ a, a:hover, a:visited {
 	position:relative;
 	top:-3px;
 	right:0;
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 #dynamic_sidebar > ul > li .plus:hover {
 	color:#EE5959;
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 #dynamic_sidebar .info {

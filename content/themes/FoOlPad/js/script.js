@@ -21,6 +21,12 @@
 		// the "constructor" method that gets called when the object is created
 		plugin.init = function() {
 			plugin.settings = $.extend({}, defaults, options);
+			
+			// remove the trailing slashes
+			$.each(plugin.settings.slideUrls, function(index, value){
+				if(value.substr(-1) == "/")
+				value = value.substr(0, value.length-1);
+			})
 		}
 		
 		var loadedComics = {};
@@ -84,7 +90,7 @@
 								loadedTeams[t.id + "_" + index].slideUrl = index;
 								if(typeof loadedTeams[t.id + "_" + index].href == "undefined")
 								{
-									loadedTeams[t.id + "_" + index].href = loadedTeams[t.id + "_" + index].slideUrl + "/reader/team/" + loadedTeams[t.id + "_" + index].stub;
+									loadedTeams[t.id + "_" + index].href = loadedTeams[t.id + "_" + index].slideUrl + "reader/team/" + loadedTeams[t.id + "_" + index].stub;
 								}
 							}
 						});
@@ -758,6 +764,50 @@
 			});
 		}
 		
+		plugin.displayHome = function(elem) {
+			var echo = '' +
+			'<div id="splash">' +
+			'	<h1>Welcome to our FoOlSlide.</h1>' +
+			'	<div class="latest">' +
+			'		<div class="title">Latest releases:</div>' +
+			'			<ol>';
+		
+			var latest = foolslide.readerChapters({direction: "desc"});
+			var count = 0;
+			$.each(latest.chapters, function(index, value){
+				if(count++ == 3) 
+				{
+					return false;
+				}
+				var current_comic = foolslide.readerComic({id:value.comic_id}).comics[0];
+				var current_teams = foolslide.readerChapter({
+						id: value.id
+					}).teams;
+				echo += '<li><a href="' + current_comic.href + '" title="' + current_comic.name + '" >' + current_comic.name + '</a> - <a href="' + value.href + '" title="' + value.title + '">' + value.title + '</a>';
+				echo += '<span class="meta">';
+				$.each(current_teams, function(i,v){
+					echo += '<a href="' + v.href + '" title="' + v.name + '">' + v.name + '</a>';
+				});
+				echo += '</span>';
+			});
+							
+			echo += '		</ol>' +
+					'	</div>' +
+					'<div class="suggestion">' +
+					'	<span class="bracket">{</span> we\'d suggest to activate your browser\'s fullscreen mode <span class="bracket">}</span>' +
+					'</div>' +
+				'</div>';
+			if(typeof elem != "undefined")
+			{
+				$(elem).html(echo);
+			}
+			else
+			{
+				return echo;
+			}
+			
+		}
+		
 		plugin.infoComic = function(elem, id){
 			var el = jQuery(elem).parent().parent().parent().find("li.info");
 			if(el.height() > 0) {
@@ -869,8 +919,8 @@
 		var updateSidebar = function(arr) {
 			$("#sidebar .items").animate({
 				position: "relative",
-				top: "130%"
-			}, ($("#dynamic_sidebar").html().length > 8?1000:0), 
+				right: "-130%"
+			}, 1000, 
 				function(){
 					var echo = '';
 					$.each(arr, function(index, value){
@@ -942,21 +992,22 @@
 					});
 				});
 				
+			// inject and returns the sidebar components
 			var buildSidebar = function(elem) {
 				var echo = '';
 				echo += '<div class="layer1">';
-				echo += '</div>';
-				echo += '<div class="drag">';
 				echo += '</div>';
 				echo += '<div class="items">';
 				echo += '	<div id="dynamic_sidebar">';
 				echo += '	</div>';
 				echo += '</div>';
-				if(typeof elem == "undefined")
-					return echo;
-				elem.html();
+				if(typeof elem != "undefined")
+					$(elem).html(echo);
+				return echo;
 			}
 			
+			var buildContent = function(elem) {
+			}
 
 			// event
 			plugin.settings.afterSidebarUpdate();
@@ -990,4 +1041,5 @@ jQuery(document).ready(function(){
 	var foolslideui = jQuery('#container').data('foolslideui');
 	
 	$.foolslideui.getLatest();
+	$.foolslideui.displayHome('#dynamic_content');
 });

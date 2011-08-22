@@ -259,16 +259,6 @@ a, a:hover, a:visited {
 	z-index:0;
 }
 
-
-#sidebar .drag {
-	width:3px;
-	height:100%;
-	position:absolute;
-	top:0;
-	right:0;
-	background:#333;
-}
-
 #sidebar .items {
 	background:#888;
 	border-bottom:1px solid #444;
@@ -458,12 +448,12 @@ a, a:hover, a:visited {
 
 ***/
 
-#splash {
+#dynamic_content #splash {
 	text-align:center;
 	margin-top:20%;
 }
 
-#splash h1 {
+#dynamic_content #splash h1 {
 	font-size:280%;
 	color:#9e3b3b;
 	margin:0;
@@ -473,32 +463,32 @@ a, a:hover, a:visited {
 	font-family:Damion;
 }
 
-#splash .latest {
+#dynamic_content #splash .latest {
 	font-family:Georgia;
 }
 
-#splash .latest .title {
+#dynamic_content #splash .latest .title {
 	font-size:120%;
 	margin-top: 10px;
 }
 
-#splash .latest ol {
+#dynamic_content #splash .latest ol {
 	padding-left:16px;
 	list-style:none;
 }
 
-#splash .latest ol li {
+#dynamic_content #splash .latest ol li {
 	margin-top:3px;
 	font-size:90%;
 	font-style: italic;
 }
 
-#splash .latest ol li .meta {
+#dynamic_content #splash .latest ol li .meta {
 	font-size:70%;
-	margin-left: 0px;
+	margin-left: 10px;
 }
 
-#splash .suggestion {
+#dynamic_content #splash .suggestion {
 	font-family:Georgia;
 	margin-top:5%;
 	font-size:120%;
@@ -506,7 +496,7 @@ a, a:hover, a:visited {
 	font-style:italic;
 }
 
-#splash .suggestion .bracket {
+#dynamic_content #splash .suggestion .bracket {
 	font-size:180%;
 	position:relative;
 	top:4px;

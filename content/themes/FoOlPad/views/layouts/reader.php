@@ -75,8 +75,6 @@
 			<aside id="sidebar">
 				<div class="layer1">
 				</div>
-				<div class="drag">
-				</div>
 				<div class="items">
 					<div id="dynamic_sidebar">
 					</div>
@@ -85,21 +83,7 @@
 			<div id="main" role="main">
 				<div class="layer1">
 				</div>
-
-				<div id="splash">
-					<h1>Welcome to our FoOlSlide.</h1>
-					<div class="latest">
-						<div class="title">Latest releases:</div>
-						<ol>
-							<li>Sora no Otoshimono - Chapter 54 <span class="meta">FoOlRulez</span></li>
-							<li>Seto no Hanayome - Vol.7 Chapter 34 <span class="meta">FoOlRulez</span></li>
-							<li>Kannagi - Vol.7 Chapter 37 <span class="meta">FoOlRulez</span></li>
-						</ol>
-					</div>	
-					<div class="suggestion">
-						<span class="bracket">{</span> we'd suggest to activate your browser's fullscreen mode <span class="bracket">}</span>
-					</div>
-
+				<div id="dynamic_content">
 				</div>
 			</div>
 			<footer>

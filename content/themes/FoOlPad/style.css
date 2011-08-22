@@ -227,7 +227,7 @@ a, a:hover, a:visited {
 ***/
 
 #sidebar {
-	width:250px;
+	width:300px;
 	height:100%;
 	background:#D84545;
 	background:rgba(255, 0, 0, 0.55); 
@@ -270,7 +270,7 @@ a, a:hover, a:visited {
 }
 
 #sidebar .items {
-	background:#777;
+	background:#888;
 	border-bottom:1px solid #444;
 	box-shadow: 0px 0px 8px #000;
 	-webkit-box-shadow: 0px 0px 8px #000;
@@ -279,13 +279,21 @@ a, a:hover, a:visited {
 	position:relative;
 	z-index:10;
 	max-height:100%;
-	width:266px;
+	width:316px;
 	overflow:auto;
 	overflow-x:hidden;
+	box-shadow:inset -15px 0px 8px #000;
+	-webkit-box-shadow:inset -15px 0px 8px #000;
+	-moz-box-shadow:inset -15px 0px 8px #000;
 }
 
 #dynamic_sidebar {
-	width:247px;
+	width:293px;
+	background:#D84545;
+	background:rgba(125, 0, 0, 0.55);
+	box-shadow: 0px 0px 3px #000;
+	-moz-box-shadow: 0px 0px 3px #000;
+	-webkit-box-shadow: 0px 0px 3px #000;
 }
 
 #dynamic_sidebar ul{
@@ -297,13 +305,12 @@ a, a:hover, a:visited {
 
 #dynamic_sidebar ul > li {
 	background:rgba(255,255,255,0.15);
-	
 	margin-top:1px;
 	border-left:5px solid #970000;
 	background: url('images/background2.png') #666;
-	-webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
+	-webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
 	font-size:110%;
 }
 
@@ -327,9 +334,9 @@ a, a:hover, a:visited {
 
 #dynamic_sidebar ul > li:hover {
 	border-left:5px solid #D84545;
-	-webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.05s ease-in-out;
+    -moz-transition: all 0.05s ease-in-out;
+    -o-transition: all 0.05s ease-in-out;
 }
 
 #dynamic_sidebar ul > li:first-child:hover {
@@ -379,6 +386,27 @@ a, a:hover, a:visited {
 	padding:0;
 }
 
+#dynamic_sidebar .meta {
+	background: #222;
+	color:#ddd;
+	text-shadow:none;
+	font-size:85%;
+	padding:0;
+}
+
+#dynamic_sidebar .meta .text a{
+	padding: 1px 4px;
+}
+
+#dynamic_sidebar .meta .text.a_fill{
+	padding: 1px 4px;
+}
+
+#dynamic_sidebar .meta .text.a_fill a{
+	display:inline;
+	padding:0;
+}
+
 
 /***
 
@@ -387,7 +415,7 @@ a, a:hover, a:visited {
 ***/
 
 #main {
-	margin-left:250px;
+	margin-left:300px;
 	position:relative;
 	padding:10px;
 	text-shadow: 0px 1px 0px #bbb;
@@ -409,6 +437,7 @@ a, a:hover, a:visited {
 	background: -ms-linear-gradient(top, rgba(0,0,0,0.15) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
 	background: linear-gradient(top, rgba(0,0,0,0.15) 0%,rgba(0,0,0,0) 100%); /* W3C */
+	z-index:0;
 }
 
 

@@ -764,13 +764,16 @@
 			});
 			var current_comic_id = 0;
 			var current_comic = {};
+			var current_team_id = 0;
+			var current_joint_id = 0;
+			var current_teams = [];
 			var result = [];
 			var preresult = {};
 			$.each(latest.chapters, function(index, value){
 				
 				if(value.comic_id != current_comic_id)
 				{
-					current_comic_id = value.comic_id
+					current_comic_id = value.comic_id;
 					result.push(preresult);
 					preresult = {};
 					preresult.elements = [];
@@ -789,6 +792,38 @@
 						title: current_comic.name,
 						onClick: "infoComic(this, " + current_comic.id + ")"
 					};
+				}
+				
+				if(value.team_id != current_team_id || value.joint_id != current_joint_id)
+				{
+					current_team_id = value.team_id;
+					current_joint_id = value.joint_id;
+					current_teams = foolslide.readerChapter({
+						id: value.id
+					}).teams;
+					
+					if(current_teams.length == 1)
+					{
+					preresult.meta = {
+						text: current_teams[0].name,
+						href: current_teams[0].href,
+						title: current_teams[0].name
+					};
+					}
+					else
+					{
+						preresult.meta = {
+							text: ""
+						};
+						$.each(current_teams, function(i,v){
+							preresult.meta.text += '<a href="' + v.href + '" title="' + v.title + '">' + v.name + '</a>';
+							
+							if (i < current_teams.length-1)
+							{
+								preresult.meta.text += ", ";
+							}
+						});
+					}
 				}
 				
 				preresult.elements.push({
@@ -823,6 +858,20 @@
 								echo += '		</div>';
 							}
 							echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + ';return false;" title="' + value.group.title + '">' + value.group.text + '</a></div>';
+							echo +=	'	</li>';
+						}
+					
+						if(typeof value.meta != "undefined")
+						{
+							echo += '	<li class="meta">';
+							if(typeof value.meta.href != "undefined")
+							{
+								echo += '			<div class="text"><a href="' + value.meta.href + '" title="' + value.meta.title + '">' + value.meta.text + '</a></div>';
+							}
+							else 
+							{
+								echo += '			<div class="text a_fill">' + value.meta.text + '<div>';
+							}
 							echo +=	'	</li>';
 						}
 					
@@ -867,7 +916,20 @@
 					});
 				});
 				
-			
+			var buildSidebar = function(elem) {
+				var echo = '';
+				echo += '<div class="layer1">';
+				echo += '</div>';
+				echo += '<div class="drag">';
+				echo += '</div>';
+				echo += '<div class="items">';
+				echo += '	<div id="dynamic_sidebar">';
+				echo += '	</div>';
+				echo += '</div>';
+				if(typeof elem == "undefined")
+					return echo;
+				elem.html();
+			}
 			
 
 			// event

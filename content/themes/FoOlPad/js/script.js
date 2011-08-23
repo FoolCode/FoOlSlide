@@ -822,7 +822,6 @@
 			}
 			
 			var segments = url.split('/');			
-			console.log(segments);
 			if(segments.length > 3) {
 
 				switch(segments[2]) {
@@ -837,9 +836,16 @@
 						});
 						break;
 					case "read":
-						plugin.displayReader({
-							segments: segments
-						});
+						var readerSettings = {
+							stub: segments[3],
+							language: segments[4],
+							volume: segments[5],
+							chapter: segments[6],
+							subchapter: segments[7],
+							team: segments[8],
+							joint: segments[9]
+						};
+						plugin.displayReader(readerSettings);
 						break;
 				}
 			}
@@ -961,6 +967,52 @@
 			if(opt.returnString) {
 				return echo;
 			}
+		}
+		
+		plugin.displayReader = function(opt) {
+			var def = {
+				comic_id: 0,
+				stub: "",
+				language: "",
+				volume: 0,
+				chapter: 0,
+				subchapter: 0,
+				team: "",
+				joint: 0,
+				forcePages: true
+			}
+			var opt = $.extend({}, def, opt);
+
+			if(opt.comic_id == 0) {
+				var comicArr = foolslide.readerComic(opt);
+				opt.comic_id = comicArr.comics[0].id;
+			}
+
+			setTimeout(plugin.displaySidebarComic, 0, opt);
+		/*
+			var echo =	'' +
+			'<div id="comic">' +
+			'	<h1 class="title">' +  $.encoder.encodeForHTML(comic.name) + '</h1>';
+			if(comic.thumb_url != "") {
+				echo += '' +
+				'	<div class="image"><img src="' +  $.encoder.encodeForHTML(comic.thumb_url) + '" title="' +  $.encoder.encodeForHTML(comic.name) + '"/></div>';
+			}
+			echo += '' +
+			'	<div class="description">' +  $.encoder.encodeForHTML(comic.description) + '</div>' +
+			'</div>';
+			
+			
+			if(opt.element != "") {
+				$(opt.element).fadeOut(800, function(){
+					$(this).html(echo).fadeIn(800);
+				});
+			}
+			plugin.settings.afterDisplayComic();
+			plugin.settings.afterContentUpdate();
+			if(opt.returnString) {
+				return echo;
+			}
+			*/
 		}
 		
 		

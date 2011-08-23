@@ -445,6 +445,10 @@ a, a:hover, a:visited {
 	z-index:0;
 }
 
+#main a:hover {
+	color:#444;
+}
+
 
 /***
 
@@ -477,7 +481,7 @@ a, a:hover, a:visited {
 }
 
 #dynamic_content #splash .latest ol {
-	padding-left:16px;
+	padding-left:8px;
 	list-style:none;
 }
 

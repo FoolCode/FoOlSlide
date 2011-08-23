@@ -385,16 +385,16 @@ class Reader extends Public_Controller
 	/**
 	 * Replacing comic with serie, for deprecated "comic"...
 	 * 
-	 * @deprecated 0.7 30/07/2011
+	 * @deprecated 0.7.6 30/07/2011
 	 * @author Woxxy
 	 */
-	public function comic($stub = NULL)
+	public function serie($stub = NULL)
 	{
-		redirect('/reader/serie/' . $stub);
+		redirect('/reader/comic/' . $stub);
 	}
 
 
-	public function serie($stub = NULL)
+	public function comic($stub = NULL)
 	{
 		if (is_null($stub))
 			show_404();

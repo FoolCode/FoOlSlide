@@ -25,8 +25,8 @@
 			// remove the trailing slashes
 			$.each(plugin.settings.slideUrls, function(index, value){
 				if(value.substr(-1) == "/")
-					value = value.substr(0, value.length-1);
-			})
+					plugin.settings.slideUrls[index] = value.substr(0, value.length-1);
+			});
 		}
 		
 		var loadedComics = {};
@@ -153,8 +153,8 @@
 						if(typeof loadedChapters[v.chapter.id + "_" + index].title == "undefined")
 						{
 							loadedChapters[v.chapter.id + "_" + index].title = (loadedChapters[v.chapter.id + "_" + index].volume > 0?"Vol."+loadedChapters[v.chapter.id + "_" + index].volume + " ":"") +
-							 "Chapter " + loadedChapters[v.chapter.id + "_" + index].volume + (loadedChapters[v.chapter.id + "_" + index].subchapter > 0?"."+loadedChapters[v.chapter.id + "_" + index].subchapter:"") +
-							 (loadedChapters[v.chapter.id + "_" + index].name != ""?": " + loadedChapters[v.chapter.id + "_" + index].name:"");
+							"Chapter " + loadedChapters[v.chapter.id + "_" + index].chapter + (loadedChapters[v.chapter.id + "_" + index].subchapter > 0?"."+loadedChapters[v.chapter.id + "_" + index].subchapter:"") +
+							(loadedChapters[v.chapter.id + "_" + index].name != ""?": " + loadedChapters[v.chapter.id + "_" + index].name:"");
 						}
 					}
 					
@@ -221,13 +221,15 @@
 				orderby: "created",
 				per_page: 40,
 				page: 1,
+				fromCache: false,
 				cache:true
 			}
 			var opt = $.extend({}, def, opt);
 			
 			var parameters = "/orderby/" + opt.direction + "_" + opt.orderby + "/per_page/" + opt.per_page + "/page/" + opt.page;
 			
-			processChapters(get("/reader/chapters" + parameters), '', opt.cache);
+			if(!opt.fromCache)
+				processChapters(get("/reader/chapters" + parameters), '', opt.cache);
 			var arr = orderBy(loadedChapters, opt.orderby, (opt.direction == "desc"))
 			arr = arrayPage(arr, def.page, opt.per_page);
 			return {
@@ -274,11 +276,10 @@
 				
 				$.each(loadedComics, function(index,value){
 					if(
-						(isNaN(parseInt(opt.stub)) || value.stub == parseInt(opt.stub)) &&
-						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
+						(value.stub == opt.stub) &&
+						(value.slideUrl == opt.slideUrl)
 						)
 						{
-						alert(value.id);
 						opt.id = value.id;
 						return false;
 					}
@@ -411,7 +412,7 @@
 						(isNaN(parseInt(opt.subchapter)) || value.subchapter == parseInt(opt.subchapter)) &&
 						(isNaN(parseInt(opt.team_id)) || value.team_id == parseInt(opt.team_id)) &&
 						(isNaN(parseInt(opt.joint_id)) || value.joint_id == parseInt(opt.joint_id)) &&
-						(isNaN(parseInt(opt.slideUrl)) || value.slideUrl == parseInt(opt.slideUrl))
+						(value.slideUrl == opt.slideUrl)
 						)
 						{
 						opt.id = value.id;
@@ -760,11 +761,14 @@
 
 		var defaults = {
 			slideUrls: [],
-			activateSidebar: true,
-			activateCenter: true,
 			sidebarElement: "",
 			contentElement: "",
-			afterSidebarUpdate: function() {}
+			history: false, // needs History.js loaded!
+			googleAnalyticsCode: "",
+			afterSidebarUpdate: function() {},
+			afterContentUpdate: function() {},
+			afterDisplayHome: function() {},
+			afterDisplayComic: function() {}
 		}
 
 		var plugin = this;
@@ -781,6 +785,13 @@
 			foolslide = new $.foolslide(null, {
 				slideUrls: plugin.settings.slideUrls
 			});
+			
+			// remove the trailing slashes
+			$.each(plugin.settings.slideUrls, function(index, value){
+				if(value.substr(-1) == "/")
+					plugin.settings.slideUrls[index] = value.substr(0, value.length-1);
+			});
+			
 			if(plugin.settings.sidebarElement != "")
 			{
 				plugin.buildSidebar(plugin.settings.sidebarElement);
@@ -789,9 +800,75 @@
 			{
 				plugin.buildContent(plugin.settings.contentElement);
 			}
+			plugin.settings.url = plugin.settings.slideUrls[0];
+			
+			if(plugin.settings.history) {
+				jQuery(window).bind('statechange',function(){
+					urlDecoder();
+				});
+				urlDecoder();
+			}
 		}
 		
-		plugin.displayHome = function(elem) {
+		var urlDecoder = function() {
+			var state = History.getState();
+			var url = state.url;
+			url = url.substr(plugin.settings.url.length);
+			if(url == "")
+			{
+				// no segments, add one
+				History.pushState({}, "Home", plugin.settings.url + "reader");
+				return
+			}
+			
+			var segments = url.split('/');			
+			console.log(segments);
+			if(segments.length > 3) {
+
+				switch(segments[2]) {
+					case "comic":
+						plugin.displayComic({
+							stub: segments[3]
+						});
+						break;
+					case "team":
+						plugin.displayTeam({
+							stub: segments[1]
+						});
+						break;
+					case "read":
+						plugin.displayReader({
+							segments: segments
+						});
+						break;
+				}
+			}
+			else
+			{
+				plugin.displayHome();
+			//plugin.display404();
+			}
+			
+			if(segments.length > 0 && plugin.settings.googleAnalyticsCode)
+			{
+				window._gaq.push(['_setAccount', plugin.settings.googleAnalyticsCode]);
+				window._gaq.push(['_trackPageview', state.url]);
+			}
+		}
+		
+		plugin.urlUpdate = function(thisElem) {
+			var url = $(thisElem).attr('href');
+			History.pushState({}, "", url);
+			return false;
+		}
+		
+		plugin.displayHome = function(opt) {
+			var def = {
+				returnString: false,
+				element: "#dynamic_content"
+			}
+			var opt = $.extend({}, def, opt);
+			
 			var echo = '' +
 			'<div id="splash">' +
 			'	<h1>Welcome to our FoOlSlide.</h1>' +
@@ -802,6 +879,7 @@
 			var latest = foolslide.readerChapters({
 				direction: "desc"
 			});
+			setTimeout(plugin.displaySidebarLatest, 0, opt);
 			var count = 0;
 			$.each(latest.chapters, function(index, value){
 				if(count++ == 3) 
@@ -832,16 +910,59 @@
 			'	<span class="bracket">{</span> we\'d suggest to activate your browser\'s fullscreen mode <span class="bracket">}</span>' +
 			'</div>' +
 			'</div>';
-			if(typeof elem != "undefined")
-			{
-				$(elem).html(echo);
+			
+			if(opt.element != "") {
+				$(opt.element).fadeOut(800, function(){
+					$(this).html(echo).fadeIn(800);
+				});
 			}
-			else
-			{
+			plugin.settings.afterDisplayHome();
+			plugin.settings.afterContentUpdate();
+			if(opt.returnString) {
 				return echo;
 			}
-			
 		}
+		
+		
+		plugin.displayComic = function(opt) {
+			var def = {
+				returnString: false,
+				element: "#dynamic_content",
+				id: 0,
+				stub: "",
+				slideUrl: plugin.settings.url
+			}
+			var opt = $.extend({}, def, opt);
+
+			var comicArr = foolslide.readerComic(opt);
+			setTimeout(plugin.displaySidebarComic, 0, opt);
+			var comic = comicArr.comics[0];
+			var chapters = comic.chapters;
+			
+			var echo =	'' +
+			'<div id="comic">' +
+			'	<h1 class="title">' +  $.encoder.encodeForHTML(comic.name) + '</h1>';
+			if(comic.thumb_url != "") {
+				echo += '' +
+				'	<div class="image"><img src="' +  $.encoder.encodeForHTML(comic.thumb_url) + '" title="' +  $.encoder.encodeForHTML(comic.name) + '"/></div>';
+			}
+			echo += '' +
+			'	<div class="description">' +  $.encoder.encodeForHTML(comic.description) + '</div>' +
+			'</div>';
+			
+			
+			if(opt.element != "") {
+				$(opt.element).fadeOut(800, function(){
+					$(this).html(echo).fadeIn(800);
+				});
+			}
+			plugin.settings.afterDisplayComic();
+			plugin.settings.afterContentUpdate();
+			if(opt.returnString) {
+				return echo;
+			}
+		}
+		
 		
 		plugin.infoComic = function(elem, id){
 			var el = jQuery(elem).parent().parent().parent().find("li.info");
@@ -855,16 +976,10 @@
 			el.animate({
 				height: height + 10 + "px"
 			},100);
-			
-			
 			return false;
 		};
 		
-		plugin.getLatest = function(fromCache){
-			var latest = foolslide.readerChapters({
-				direction:"desc",
-				cache: (fromCache !== false)
-			});
+		var sidebarChapters = function(arr) {
 			var current_comic_id = 0;
 			var current_comic = {};
 			var current_team_id = 0;
@@ -872,7 +987,7 @@
 			var current_teams = [];
 			var result = [];
 			var preresult = {};
-			$.each(latest.chapters, function(index, value){
+			$.each(arr.chapters, function(index, value){
 				
 				if(value.comic_id != current_comic_id)
 				{
@@ -888,7 +1003,7 @@
 						href: current_comic.href,
 						text: current_comic.name,
 						title: current_comic.name,
-						onClick: "displayComic(this, " + current_comic.id + ")"
+						onClick: "urlUpdate(this)"
 					};
 					
 					preresult.info = {
@@ -930,7 +1045,7 @@
 							text: ""
 						};
 						$.each(current_teams, function(i,v){
-							preresult.meta.text += '<a href="' + v.href + '" title="' + v.title + '">' + v.name + '</a>';
+							preresult.meta.text += '<a href="' + v.href + '" onClick="return urlUpdate(this)" title="' + v.title + '">' + v.name + '</a>';
 							
 							if (i < current_teams.length-1)
 							{
@@ -944,18 +1059,43 @@
 					text: value.title,
 					href: value.href,
 					title: value.title,
-					onClick: "displayChapter(this, " + value.id + ")"
+					onClick: "urlUpdate(this)"
 				});				
 			});
 			
-			result.push(preresult)
-			
-			updateSidebar(result);
+			result.push(preresult);
+			return result;
+		}
+		
+		plugin.displaySidebarLatest = function(opt){
+			var def = {
+				direction: "desc",
+				orderby: "created",
+				per_page: 40,
+				page: 1,
+				cache:true
+			}
+			var opt = $.extend({}, def, opt);
+			var latest = foolslide.readerChapters(opt);
+			updateSidebar(sidebarChapters(latest));
+			return false;
+		}
+		
+		plugin.displaySidebarComic = function(opt){
+			var def = {
+				direction: "desc",
+				orderby: "created",
+				per_page: 40,
+				page: 1,
+				cache:true
+			}
+			var opt = $.extend({}, def, opt);
+			var latest = foolslide.readerComic(opt);
+			updateSidebar(sidebarChapters(latest));
 			return false;
 		}
 		
 		var updateSidebar = function(arr) {
-			console.log($(".foolslideui_sidebar"));
 			$(".foolslideui_sidebar .items").animate({
 				position: "relative",
 				right: "-130%"
@@ -972,7 +1112,7 @@
 							echo += '			<a href="' + value.group.plus.href + '" onClick="return $.foolslideui.' + value.group.plus.onClick + '" title="' + value.group.plus.title +'">+</a>';
 							echo += '		</div>';
 						}
-						echo += '		<div class="text"><a href="' + value.group.href + '" onClick="$.foolslideui.' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
+						echo += '		<div class="text"><a href="' + value.group.href + '" onClick="return $.foolslideui.' + value.group.onClick + '" title="' + value.group.title + '">' + value.group.text + '</a></div>';
 						echo +=	'	</li>';
 					}
 										
@@ -982,7 +1122,7 @@
 						if(typeof value.info.image != "undefined")
 						{
 							echo += '		<div class="image">';
-							echo += '			<a href="' + value.info.image.href + '" onClick="$.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'"><img src="' + value.info.image.src + '" alt="' + value.info.image.alt + '"></a>';
+							echo += '			<a href="' + value.info.image.href + '" onClick="return $.foolslideui.' + value.info.image.onClick + '" title="' + value.info.image.title +'"><img src="' + value.info.image.src + '" alt="' + value.info.image.alt + '"></a>';
 							echo += '		</div>';
 						}
 						echo += '		<div class="text">' + value.info.text + '</div>';
@@ -1009,10 +1149,10 @@
 							echo += '	<li class="element">';
 							if (typeof v.plus != "undefined") {
 								echo += '		<div class="plus">';
-								echo += '			<a href="' + v.plus.href + '" onClick="$.foolslideui.' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
+								echo += '			<a href="' + v.plus.href + '" onClick="return $.foolslideui.' + v.plus.onClick + '" title="' + v.plus.title +'">+</a>';
 								echo += '		</div>';
 							}
-							echo += '		<div class="text"><a href="' + v.href + '" onClick="$.foolslideui.' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
+							echo += '		<div class="text"><a href="' + v.href + '" onClick="return $.foolslideui.' + v.onClick + '" title="' + v.title + '">' + v.text + '</a></div>';
 							echo +=	'	</li>';
 						});
 					}
@@ -1055,9 +1195,9 @@
 		plugin.buildContent = function(elem) {
 			var echo = '';
 			echo += '<div class="layer1">' +
-					'</div>' +
-					'<div id="dynamic_content">' +
-					'</div>';
+			'</div>' +
+			'<div id="dynamic_content">' +
+			'</div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_content");
@@ -1086,13 +1226,17 @@
 
 
 jQuery(document).ready(function(){
-	$('#container').foolslideui({
+	var settings = {
 		slideUrls:[slideUrl],
 		sidebarElement: "#sidebar",
-		contentElement: "#main"
-		
-	});
-		
-	$.foolslideui.getLatest();
-	$.foolslideui.displayHome('#dynamic_content');
+		contentElement: "#main",
+		history: true,
+		fromUrl: true
+	}
+	if(typeof googleAnalyticsCode != "undefined" && googleAnalyticsCode != "")
+	{
+		settings.googleAnalyticsCode = googleAnalyticsCode;
+	}
+	
+	$('#container').foolslideui(settings);
 });

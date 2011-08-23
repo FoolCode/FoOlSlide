@@ -231,7 +231,6 @@ a, a:hover, a:visited {
 	height:100%;
 	background:#D84545;
 	background:rgba(255, 0, 0, 0.55); 
-	/* background:rgba(90,0,173,0.44); */
 	position:fixed;
 	top:0;
 	left:0;
@@ -308,8 +307,13 @@ a, a:hover, a:visited {
 #dynamic_sidebar ul > li > div > a {
 	display:block;
 	height:100%;
-	width:100%;
+	width:85%;
 	padding: 6px 3px 6px 12px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
 }
 
 #dynamic_sidebar ul > li:first-child {
@@ -503,6 +507,30 @@ a, a:hover, a:visited {
 	margin: 0 16px;
 }
 
+#dynamic_content #comic {
+	margin-top:15%;
+}
+
+
+#dynamic_content #comic h1 {
+	font-size:280%;
+	color:#9e3b3b;
+	margin:0;
+	padding:0;
+	text-shadow:1px 2px 0px #ccc, -1px -1px 0px #999;
+	text-weight:normal;
+	font-family:Damion;
+}
+
+#dynamic_content #comic .description {
+	margin:30px;
+}
+
+#dynamic_content #comic .image {
+	margin:30px;
+	float:left;
+	box-shadow:1px 2px 0px #ccc, -1px -1px 0px #999;
+}
 
 
 

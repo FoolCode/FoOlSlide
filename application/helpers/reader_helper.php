@@ -8,7 +8,7 @@ if(!function_exists('get_theme_dir'))
 {
 	function get_theme_dir()
 	{
-		return 'content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/';
+		return site_url().'content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/';
 	}
 }
 

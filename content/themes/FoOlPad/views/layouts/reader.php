@@ -89,7 +89,7 @@
 		if (get_setting('fs_theme_google_analytics')):
 			?>
 			<script>
-				window._gaq = [['_setAccount', '<?php echo get_setting('fs_theme_google_analytics') ?>'], ['_trackPageview'], ['_trackPageLoadTime']];
+				window._gaq = [];
 				Modernizr.load({
 					load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
 				});
@@ -105,6 +105,7 @@
 
 		<script type="text/javascript">
 			var slideUrl = "<?php echo addslashes(site_url()); ?>";
+			var googleAnalyticsCode = "<?php echo get_setting('fs_theme_google_analytics') ?>";
 		</script>
 
 	</body>

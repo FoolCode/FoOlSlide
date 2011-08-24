@@ -51,7 +51,7 @@
 				jQuery(window).bind('statechange',function(){
 					urlDecoder();
 				});
-				*/
+				 */
 				urlDecoder();
 			}
 		}
@@ -228,24 +228,33 @@
 			if(opt.id > 0) {
 				var chapterArr = foolslide.readerChapter({
 					id: opt.id,
-					slideUrl: opt.slideUrl
+					slideUrl: opt.slideUrl,
+					forcePages: true
 				});
+				if(opt.page < 0 || opt.page > chapterArr.pages.length)
+				{
+					opt.page = 1;
+				}
+			}
+			else
+			{
+				if(opt.subchapter == "page" && !isNaN(opt.team))
+				{
+					opt.page = opt.team;
+				}
+			
+				if(opt.team == "page" && !isNaN(opt.joint))
+				{
+					opt.page = opt.team;
+				}
+			
+				if(opt.joint == "page" && !isNaN(opt.page))
+				{
+					opt.page = opt.team;
+				}
 			}
 
-			if(opt.subchapter == "page" && !isNaN(opt.team))
-			{
-				opt.page = opt.team;
-			}
 			
-			if(opt.team == "page" && !isNaN(opt.joint))
-			{
-				opt.page = opt.team;
-			}
-			
-			if(opt.joint == "page" && !isNaN(opt.page))
-			{
-				opt.page = opt.team;
-			}
 
 			if(opt.comic_id == 0) {
 				var comicArr = foolslide.readerComic(opt);
@@ -311,17 +320,21 @@
 						text: current_comic.name,
 						title: current_comic.name,
 						comic: current_comic,
-						onClick: "displayComic({id: " + $.encoder.encodeForHTML(current_comic.id) + ", slideUrl: '" + $.encoder.encodeForHTML(current_comic.slideUrl) + "'})"
+						onClick: "displayComic({id: " + parseInt(current_comic.id) + ", slideUrl: '" + $.encoder.encodeForHTMLAttribute('', current_comic.slideUrl, true) + "'})"
 					};
 					
 					preresult.info = {
 						text: current_comic.description,
-						comic: current_comic
+						comic: current_comic,
 					};
 					
 					if(current_comic.thumb_url != "") {
 						preresult.info.image = {
-							comic: current_comic
+							comic: current_comic,
+							href: current_comic.href,
+							alt: current_comic.name,
+							onClick: "displayComic({id: " + parseInt(current_comic.id) + ", slideUrl: '" + $.encoder.encodeForHTMLAttribute('', current_comic.slideUrl, true) + "'})"
+							
 						};
 						preresult.info.image.src = current_comic.thumb_url;
 					}
@@ -358,7 +371,7 @@
 							teams: current_teams
 						};
 						$.each(current_teams, function(i,v){
-							preresult.meta.text += '<a href="' + $.encoder.encodeForHTML(v.href) + '" onClick="return displayTeam(this)" title="' + $.encoder.encodeForHTML(v.title) + '">' + $.encoder.encodeForHTML(v.name) + '</a>';
+							preresult.meta.text += '<a href="' + $.encoder.encodeForHTMLAttribute('', v.href, true) + '" onClick="return displayTeam(this)" ' + $.encoder.encodeForHTMLAttribute('title', v.title) + '">' + $.encoder.encodeForHTML(v.name) + '</a>';
 							
 							if (i < current_teams.length-1)
 							{
@@ -373,7 +386,7 @@
 					text: value.title,
 					href: value.href,
 					title: value.title,
-					onClick: "displayReader({id:" + $.encoder.encodeForHTML(value.id) + ", slideUrl: '" + $.encoder.encodeForHTML(value.slideUrl) + "'})"
+					onClick: "displayReader({id:" + parseInt(value.id) + ", slideUrl: '" + $.encoder.encodeForHTMLAttribute('', value.slideUrl, true) + "'})"
 				});				
 			});
 			
@@ -423,10 +436,10 @@
 						echo += '	<li class="group">';
 						if (typeof value.group.plus != "undefined") {
 							echo += '		<div class="plus">';
-							echo += '			<a href="' + $.encoder.encodeForHTML(value.group.plus.href) + '" onClick="return $.foolslideui.' + $.encoder.encodeForHTML(value.group.plus.onClick) + '" title="' + $.encoder.encodeForHTML(value.group.plus.title) +'">+</a>';
+							echo += '			<a href="' + $.encoder.encodeForHTMLAttribute('', value.group.plus.href, true) + '" onClick="return $.foolslideui.' + value.group.plus.onClick + '" ' + $.encoder.encodeForHTMLAttribute('title', value.group.plus.title) +'>+</a>';
 							echo += '		</div>';
 						}
-						echo += '		<div class="text"><a href="' + $.encoder.encodeForHTML(value.group.href) + '" onClick="return $.foolslideui.' + $.encoder.encodeForHTML(value.group.onClick) + '" title="' + $.encoder.encodeForHTML(value.group.title) + '">' + $.encoder.encodeForHTML(value.group.text) + '</a></div>';
+						echo += '		<div class="text"><a href="' + $.encoder.encodeForHTMLAttribute('', value.group.href, true) + '" onClick="return $.foolslideui.' + value.group.onClick + '" ' + $.encoder.encodeForHTMLAttribute('title', value.group.title) + '>' + $.encoder.encodeForHTML(value.group.text) + '</a></div>';
 						echo +=	'	</li>';
 					}
 										
@@ -436,7 +449,7 @@
 						if(typeof value.info.image != "undefined")
 						{
 							echo += '		<div class="image">';
-							echo += '			<a href="' + $.encoder.encodeForHTML(value.info.image.href) + '" onClick="return $.foolslideui.' + $.encoder.encodeForHTML(value.info.image.onClick) + '" title="' + $.encoder.encodeForHTML(value.info.image.title) +'"><img src="' + $.encoder.encodeForHTML(value.info.image.src) + '" alt="' + $.encoder.encodeForHTML(value.info.image.alt) + '"></a>';
+							echo += '			<a href="' + $.encoder.encodeForHTMLAttribute('alt', value.info.image.href, true) + '" onClick="return $.foolslideui.' + value.info.image.onClick + '" ' + $.encoder.encodeForHTMLAttribute('title', value.info.image.title) + '><img src="' + $.encoder.encodeForHTMLAttribute('', value.info.image.src, true) + '" ' + $.encoder.encodeForHTMLAttribute('alt', value.info.image.alt) + '></a>';
 							echo += '		</div>';
 						}
 						echo += '		<div class="text">' + $.encoder.encodeForHTML(value.info.text) + '</div>';
@@ -448,11 +461,12 @@
 						echo += '	<li class="meta">';
 						if(typeof value.meta.href != "undefined")
 						{
-							echo += '			<div class="text"><a href="' + $.encoder.encodeForHTML(value.meta.href) + '" title="' + $.encoder.encodeForHTML(value.meta.title) + '">' + $.encoder.encodeForHTML(value.meta.text) + '</a></div>';
+							echo += '			<div class="text"><a href="' + $.encoder.encodeForHTMLAttribute('',value.meta.href, true) + '" ' + $.encoder.encodeForHTMLAttribute('title', value.meta.title) + '">' + $.encoder.encodeForHTML(value.meta.text) + '</a></div>';
 						}
 						else 
 						{
-							echo += '			<div class="text a_fill">' + $.encoder.encodeForHTML(value.meta.text) + '<div>';
+							//already sanitized in array creation function
+							echo += '			<div class="text a_fill">' + value.meta.text + '<div>';
 						}
 						echo +=	'	</li>';
 					}
@@ -463,10 +477,10 @@
 							echo += '	<li class="element">';
 							if (typeof v.plus != "undefined") {
 								echo += '		<div class="plus">';
-								echo += '			<a href="' + $.encoder.encodeForHTML(v.plus.href) + '" onClick="return $.foolslideui.' + $.encoder.encodeForHTML(v.plus.onClick) + '" title="' + $.encoder.encodeForHTML(v.plus.title) +'">+</a>';
+								echo += '			<a href="' + $.encoder.encodeForHTMLAttribute('', v.plus.href, true) + '" onClick="return $.foolslideui.' + v.plus.onClick + '" ' + $.encoder.encodeForHTMLAttribute('title', v.plus.title) +'>+</a>';
 								echo += '		</div>';
 							}
-							echo += '		<div class="text"><a href="' + $.encoder.encodeForHTML(v.href) + '" onClick="return $.foolslideui.' + $.encoder.encodeForHTML(v.onClick) + '" title="' + $.encoder.encodeForHTML(v.title) + '">' + $.encoder.encodeForHTML(v.text) + '</a></div>';
+							echo += '		<div class="text"><a href="' + $.encoder.encodeForHTMLAttribute('', v.href, true) + '" onClick="return $.foolslideui.' + v.onClick + '" ' + $.encoder.encodeForHTMLAttribute('title', v.title) + '>' + $.encoder.encodeForHTML(v.text) + '</a></div>';
 							echo +=	'	</li>';
 						});
 					}

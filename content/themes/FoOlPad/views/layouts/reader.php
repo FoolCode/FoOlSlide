@@ -83,6 +83,7 @@
 		<script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script>
 
 		<script defer src="<?php echo get_theme_dir() ?>js/plugins.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+		<script defer src="<?php echo get_theme_dir() ?>js/foolslide.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
 		<script defer src="<?php echo get_theme_dir() ?>js/script.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
 
 		<?php

@@ -138,10 +138,10 @@
 				var current_teams = foolslide.readerChapter({
 					id: value.id
 				}).teams;
-				echo += '<li><a href="' + $.encoder.encodeForHTML(current_comic.href) + '" title="' + $.encoder.encodeForHTML(current_comic.name) + '" >' + $.encoder.encodeForHTML(current_comic.name) + '</a> - <a href="' + $.encoder.encodeForHTML(value.href) + '" title="' + $.encoder.encodeForHTML(value.title) + '">' + $.encoder.encodeForHTML(value.title) + '</a>';
+				echo += '<li><a href="' + $.encoder.encodeForHTMLAttribute('', current_comic.href, true) + '" ' + $.encoder.encodeForHTMLAttribute('title', current_comic.name) + ' >' + $.encoder.encodeForHTML(current_comic.name) + '</a> - <a href="' + $.encoder.encodeForHTMLAttribute('', value.href, true) + '" ' + $.encoder.encodeForHTML('title', value.title) + '>' + $.encoder.encodeForHTML(value.title) + '</a>';
 				echo += '<span class="meta">';
 				$.each(current_teams, function(i,v){
-					echo += '<a href="' + $.encoder.encodeForHTML(v.href) + '" title="' + $.encoder.encodeForHTML(v.name) + '">' + $.encoder.encodeForHTML(v.name) + '</a>';
+					echo += '<a href="' + $.encoder.encodeForHTMLAttribute('', v.href, true) + '" ' + $.encoder.encodeForHTML('title', v.name) + '>' + $.encoder.encodeForHTML(v.name) + '</a>';
 					if (i < current_teams.length-1)
 					{
 						echo += ", ";
@@ -190,7 +190,7 @@
 			'	<h1 class="title">' +  $.encoder.encodeForHTML(comic.name) + '</h1>';
 			if(comic.thumb_url != "") {
 				echo += '' +
-				'	<div class="image"><img src="' +  $.encoder.encodeForHTML(comic.thumb_url) + '" title="' +  $.encoder.encodeForHTML(comic.name) + '"/></div>';
+				'	<div class="image"><img src="' +  $.encoder.encodeForHTMLAttribute('', comic.thumb_url, true) + '" ' +  $.encoder.encodeForHTMLAttribute('title', comic.name) + '/></div>';
 			}
 			echo += '' +
 			'	<div class="description">' +  $.encoder.encodeForHTML(comic.description) + '</div>' +

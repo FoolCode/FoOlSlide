@@ -1,5 +1,3 @@
-
-
 (function($) {
 	$.foolslideui = function(element, options) {
 
@@ -12,7 +10,8 @@
 			afterSidebarUpdate: function() {},
 			afterContentUpdate: function() {},
 			afterDisplayHome: function() {},
-			afterDisplayComic: function() {}
+			afterDisplayComic: function() {},
+			afterDisplayReader: function() {}
 		}
 
 		var plugin = this;
@@ -83,7 +82,7 @@
 						break;
 					case "read":
 						var readerSettings = {
-							stub: segments[3],
+							comic_stub: segments[3],
 							language: segments[4],
 							volume: segments[5],
 							chapter: segments[6],
@@ -108,6 +107,16 @@
 			}
 		}
 		
+		
+		var mode = {mode:"none"};
+		plugin.modeGet = function() {
+			return mode;
+		}
+		
+		var modeSet = function(obj){
+			mode = obj;
+		}
+		
 		plugin.displayHome = function(opt) {
 			var def = {
 				returnString: false,
@@ -125,7 +134,7 @@
 			var latest = foolslide.readerChapters({
 				direction: "desc"
 			});
-			setTimeout(plugin.displaySidebarLatest, 0, opt);
+			setTimeout(plugin.sidebar.displayLatest, 0, opt);
 			var count = 0;
 			$.each(latest.chapters, function(index, value){
 				if(count++ == 3) 
@@ -159,7 +168,12 @@
 			
 			if(opt.element != "") {
 				$(opt.element).fadeOut(800, function(){
-					$(this).html(echo).fadeIn(800);
+					mode = {
+						mode: "home"
+					};
+					$(this).html(echo).fadeIn(800, function(){
+						plugin.sidebar.autoHide(false);
+					});
 				});
 			}
 			plugin.settings.afterDisplayHome();
@@ -181,7 +195,7 @@
 			var opt = $.extend({}, def, opt);
 
 			var comicArr = foolslide.readerComic(opt);
-			setTimeout(plugin.displaySidebarComic, 0, opt);
+			setTimeout(plugin.sidebar.displayComic, 0, opt);
 			var comic = comicArr.comics[0];
 			var chapters = comic.chapters;
 			
@@ -198,8 +212,10 @@
 			
 			
 			if(opt.element != "") {
+				plugin.sidebar.autoHide(false);
 				$(opt.element).fadeOut(800, function(){
-					$(this).html(echo).fadeIn(800);
+					$(this).html(echo).fadeIn(800, function(){
+					});
 				});
 			}
 			History.pushState(null, null, comic.href);
@@ -210,9 +226,10 @@
 		
 		plugin.displayReader = function(opt) {
 			var def = {
+				element: "#dynamic_content",
 				comic_id: 0,
 				id: 0,
-				stub: "",
+				comic_stub: "",
 				language: "",
 				volume: 0,
 				chapter: 0,
@@ -224,20 +241,24 @@
 				forcePages: true
 			}
 			var opt = $.extend({}, def, opt);
-
 			if(opt.id > 0) {
 				var chapterArr = foolslide.readerChapter({
 					id: opt.id,
 					slideUrl: opt.slideUrl,
 					forcePages: true
 				});
+
+				opt.id = chapterArr.comics[0].id;
 				if(opt.page < 0 || opt.page > chapterArr.pages.length)
 				{
 					opt.page = 1;
 				}
 			}
 			else
-			{
+			{	
+				var chapterArr = foolslide.readerChapter(opt);
+				opt.id = chapterArr.comics[0].id;
+
 				if(opt.subchapter == "page" && !isNaN(opt.team))
 				{
 					opt.page = opt.team;
@@ -253,24 +274,32 @@
 					opt.page = opt.team;
 				}
 			}
-
 			
-
-			if(opt.comic_id == 0) {
-				var comicArr = foolslide.readerComic(opt);
-				opt.comic_id = comicArr.comics[0].id;
+			if(mode.mode != "reader" || chapterArr.chapters[0].comic_id != mode.comic_id) {
+				setTimeout(plugin.sidebar.displayComic, 0, opt);
 			}
-			setTimeout(plugin.displaySidebarComic, 0, opt);
 		
 			var echo =	'' +
 			'<div id="reader">' +
-			'	<div id="">here</div>' +
+			'	<div class="previews"></div>' +
+			'	<div class="topbar"></div>' +
+			'	<div class="page"></div>' +
+			'	<div class="bottombar"></div>' +
 			'</div>';
 			
 			
 			if(opt.element != "") {
 				$(opt.element).fadeOut(800, function(){
-					$(this).html(echo).fadeIn(800);
+					modeSet({
+						mode: "reader",
+						comic_id: chapterArr.chapters[0].comic_id,
+						chapter_id: chapterArr.chapters[0].id,
+						slideUrl: chapterArr.chapters[0].slideUrl
+					});
+					History.pushState(null, null, chapterArr.chapters[0].href)
+					$(this).html(echo).fadeIn(800, function(){
+						plugin.sidebar.autoHide(true);
+					});
 				});
 			}
 			plugin.settings.afterDisplayComic();
@@ -279,6 +308,64 @@
 			return false;
 		}
 		
+		
+		plugin.reader = {};
+		
+		plugin.reader.changePage = function() {
+			if (mode.mode != "reader")
+				return false;
+			
+			
+		}
+		
+		 
+		plugin.sidebar = {};
+		
+		plugin.sidebar.autoHide = function(bool) {
+			if(bool)
+			{
+				plugin.sidebar.toggleSidebar(false);
+				$(".foolslideui_content").css({
+					marginLeft:"25px"
+				}, 1000);
+				$(".foolslideui_sidebar").hover(function(){plugin.sidebar.toggleSidebar(true)}, function(){plugin.sidebar.toggleSidebar(false)});
+			}
+			else
+			{
+				$(".foolslideui_sidebar").unbind('mouseenter mouseleave');
+				plugin.sidebar.toggleSidebar(true);
+				$(".foolslideui_content").animate({
+					marginLeft: $(".foolslideui_sidebar").data('width')
+				}, 1000);
+			}
+		}
+		
+		plugin.sidebar.toggleSidebar = function(open) {
+
+			var sidebarElem = $(".foolslideui_sidebar");
+			if(typeof sidebarElem.data('width') == "undefined")
+			{
+				sidebarElem.data('width', sidebarElem.css('width'));
+			}
+
+			// stop all animations
+			sidebarElem.stop(true);
+			if(open)
+			{
+				sidebarElem.animate({
+					left:"0px"
+				}, 1000);
+				sidebarElem.find(".handle").fadeOut(800);
+			}
+			
+			if(!open)
+			{					
+				sidebarElem.animate({
+					left: -parseInt(sidebarElem.data('width').replace('px', '')) + 25 + "px"
+				}, 1000);
+				sidebarElem.find(".handle").fadeIn(800);
+			}
+		}
 		
 		plugin.infoComic = function(elem, id){
 			var el = jQuery(elem).parent().parent().parent().find("li.info");
@@ -325,7 +412,7 @@
 					
 					preresult.info = {
 						text: current_comic.description,
-						comic: current_comic,
+						comic: current_comic
 					};
 					
 					if(current_comic.thumb_url != "") {
@@ -394,7 +481,7 @@
 			return result;
 		}
 		
-		plugin.displaySidebarLatest = function(opt){
+		plugin.sidebar.displayLatest = function(opt){
 			var def = {
 				direction: "desc",
 				orderby: "created",
@@ -408,13 +495,14 @@
 			return false;
 		}
 		
-		plugin.displaySidebarComic = function(opt){
+		plugin.sidebar.displayComic = function(opt){
 			var def = {
 				direction: "desc",
 				orderby: "created",
 				per_page: 40,
 				page: 1,
-				cache:true
+				cache:true,
+				forceChapters: true
 			}
 			var opt = $.extend({}, def, opt);
 			var latest = foolslide.readerComic(opt);
@@ -505,13 +593,13 @@
 
 		// inject and returns the sidebar components
 		plugin.buildSidebar = function(elem) {
-			var echo = '';
-			echo += '<div class="layer1">';
-			echo += '</div>';
-			echo += '<div class	="items">';
-			echo += '	<div id="dynamic_sidebar">';
-			echo += '	</div>';
-			echo += '</div>';
+			var echo = '' +
+			'<div class="layer1"></div>' +
+			'<div class	="items">' +
+			'	<div id="dynamic_sidebar">' +
+			'	</div>' +
+			'<div class="handle" onClick="$.foolslideui.sidebar.toggleSidebar()"></div>' +
+			'</div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_sidebar");

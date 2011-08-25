@@ -183,7 +183,8 @@ class Reader extends REST_Controller
 	 */
 	function chapter_get()
 	{
-		if (is_numeric($this->get('comic_id')) 
+		if (	($this->get('comic_stub'))
+				|| is_numeric($this->get('comic_id')) 
 				|| is_numeric($this->get('volume')) 
 				|| is_numeric($this->get('chapter')) 
 				|| is_numeric($this->get('subchapter'))
@@ -193,6 +194,11 @@ class Reader extends REST_Controller
 		{
 			$chapter = new Chapter();
 
+			if(($this->get('comic_stub')))
+			{
+				$chapter->where_related('comic', 'stub', $this->get('comic_stub'));
+			}
+			
 			// this mess is a complete search system through integers!
 			if (is_numeric($this->get('comic_id')))
 				$chapter->where('comic_id', $this->get('comic_id'));

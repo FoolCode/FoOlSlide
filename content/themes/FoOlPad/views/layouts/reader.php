@@ -71,10 +71,10 @@
 		<div id="container">
 			<header>
 			</header>
-			<aside id="sidebar">
-			</aside>
 			<div id="main" role="main">
 			</div>
+			<aside id="sidebar">
+			</aside>
 			<footer>
 			</footer>
 		</div> <!--! end of #container -->

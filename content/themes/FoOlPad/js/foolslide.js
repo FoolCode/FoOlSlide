@@ -72,7 +72,7 @@
 				$.each(value.chapters, function(i, v){
 					
 					// check if there's the comic entry in this chapter and in case load if new
-					if(typeof v.comic != "undefined" || typeof loadedComics[v.comic.id + "_" + index] == "undefined" || dateTimeToDate(v.comic.updated) > dateTimeToDate(loadedComics[v.comic.id + "_" + index].updated)) {
+					if(typeof v.comic != "undefined" && (typeof loadedComics[v.comic.id + "_" + index] == "undefined" || dateTimeToDate(v.comic.updated) > dateTimeToDate(loadedComics[v.comic.id + "_" + index].updated))) {
 						loadedComics[v.comic.id + "_" + index] = v.comic;
 						loadedComics[v.comic.id + "_" + index].slideUrl = index;
 						if(typeof loadedComics[v.comic.id + "_" + index].href == "undefined")
@@ -174,8 +174,7 @@
 								loadedPages[p.id + "_" + index] = p;
 								loadedPages[p.id + "_" + index].slideUrl = index;
 							}
-						});
-						
+						});						
 					}
 				});
 			});
@@ -251,6 +250,7 @@
 				cache: true
 			}
 			var opt = $.extend({}, def, opt);
+
 			if(opt.id > 0)
 			{
 				var check = checkComic(opt);
@@ -261,17 +261,17 @@
 					toReturn.chapters = arrChapters;
 					return toReturn;
 				}
-				
-				// from this point and on is via ajax. did we ask for cache forcing?
-				if(opt.forceCache)
-				{
-					// ah, but we already tried to get from cache, so here we say the requested resource doesn't exist
-					// there can't be chapters without team or comic, so this is safe
-					return false;
-				}
-				
+								
 				var parameters = "/id/" + opt.id + "/";
 			}
+			// from this point and on is via ajax. did we ask for cache forcing?
+			if(opt.forceCache)
+			{
+				// ah, but we already tried to get from cache, so here we say the requested resource doesn't exist
+				// there can't be chapters without team or comic, so this is safe
+				return false;
+			}
+			
 			if(opt.stub != "") {
 				
 				$.each(loadedComics, function(index,value){
@@ -304,11 +304,12 @@
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].slideUrl = opt.slideUrl;
 			}
 
+			
 			if (result[opt.slideUrl].chapters.length == 0) {
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = true;
 			}
 			else
-			{					
+			{
 				loadedComics[result[opt.slideUrl].comic.id + "_" + opt.slideUrl].zeroChapters = false;
 				processChapters(result);
 			}
@@ -331,27 +332,35 @@
 					comics:[loadedComics[opt.id + "_" + opt.slideUrl]], 
 					chapters:[]
 				};
+
+				if(opt.forceChapters && typeof loadedComics[opt.id + "_" + opt.slideUrl].zeroChapters == "undefined")
+				{
+					missing = true;
+				}
 				
-				// loop through each chapter to check they all have the team and comic
-				$.each(loadedChapters, function(index, value){
-					if(value.slideUrl == opt.slideUrl && value.comic_id == opt.id)
-					{
-						var currentChapter = checkChapter({
-							id: value.id,
-							slideUrl: opt.slideUrl,
-							forcePages: false
-						});
-						if(currentChapter === false)
+				if(!missing)
+				{
+					// loop through each chapter to check they all have the team and comic
+					$.each(loadedChapters, function(index, value){
+						if(value.slideUrl == opt.slideUrl && value.comic_id == opt.id)
 						{
-							missing = true;
-							return false;
+							var currentChapter = checkChapter({
+								id: value.id,
+								slideUrl: opt.slideUrl,
+								forcePages: false
+							});
+							if(currentChapter === false)
+							{
+								missing = true;
+								return false;
+							}
+							else
+							{			
+								$.merge(result.chapters, currentChapter.chapters);
+							}
 						}
-						else
-						{			
-							$.merge(result.chapters, currentChapter.chapters);
-						}
-					}
-				});
+					});
+				}
 				
 				if(!missing)
 				{
@@ -401,7 +410,6 @@
 			}
 			else
 			{
-				
 				// scary search function
 				// if the user just didn't define enough data and this outputs, it's same as server as in coherence
 				$.each(loadedChapters, function(index,value){
@@ -424,20 +432,19 @@
 					return plugin.readerChapter(opt);
 				}
 						
-				if(!isNaN(parseInt(opt.comic_id)))
+				if(opt.comic_id > 0)
 					parameters += "/comic_id/" + opt.comic_id;
-				if(!isNaN(parseInt(opt.volume)))
+				if(opt.volume > 0)
 					parameters += "/volume/" + opt.volume;
-				if(!isNaN(parseInt(opt.chapter)))
-					parameters += "/chapter/" + opt.volume;
-				if(!isNaN(parseInt(opt.subchapter)))
-					parameters += "/subchapter/" + opt.volume;
-				if(!isNaN(parseInt(opt.team_id)))
+				if(opt.chapter > 0)
+					parameters += "/chapter/" + opt.chapter;
+				if(opt.subchapter > 0)
+					parameters += "/subchapter/" + opt.subchapter;
+				if(opt.team_id > 0) // @todo check for team stub
 					parameters += "/team_id/" + opt.team_id;
-				if(!isNaN(parseInt(opt.joint_id)))
+				if(opt.joint_id > 0)
 					parameters += "/joint_id/" + opt.joint_id;
 			}
-			
 			// adapt for processChapters()
 			var result = get("/reader/chapter" + parameters, def.slideUrl, opt.cache);
 			result[opt.slideUrl].chapters = [{
@@ -514,12 +521,12 @@
 				{
 					// if forcePages is true, set missing false unless we find pages
 					// if we already know there's no pages, then don't bother making ajax requests
-					if((loadedChapters[opt.id + "_" + opt.slideUrl].zeroPages !== true) && opt.forcePages) {
+					if(opt.forcePages && (loadedChapters[opt.id + "_" + opt.slideUrl].zeroPages !== true)) {
 						missing = true;
 					}
 					var pages = [];
 					$.each(loadedPages, function(index, value){
-						if(value.id == opt.id && value.slideUrl == opt.slideUrl) 
+						if(value.chapter_id == opt.id && value.slideUrl == opt.slideUrl) 
 						{
 							missing = false;
 							pages.push(value);

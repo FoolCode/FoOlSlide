@@ -338,17 +338,11 @@ class Series extends Admin_Controller
 	}
 
 
-	function get_sess_id()
-	{
-		echo json_encode(array('session' => $this->session->get_js_session(), 'csrf' => $this->security->get_csrf_hash()));
-	}
-
-
 	function delete($type, $id = 0)
 	{
 		if (!isAjax())
 		{
-			echo _('You can\'t delete chapters from outside the admin panel through this link.');
+			$this->output->set_output(_('You can\'t delete chapters from outside the admin panel through this link.'));
 			log_message("error", "Controller: series.php/remove: failed serie removal");
 			return false;
 		}
@@ -365,7 +359,7 @@ class Series extends Admin_Controller
 					return false;
 				}
 				flash_notice('notice', 'The serie ' . $comic->name . ' has been removed');
-				echo json_encode(array('href' => site_url("admin/series/manage")));
+				$this->output->set_output(json_encode(array('href' => site_url("admin/series/manage"))));
 				break;
 			case("chapter"):
 				$chapter = new Chapter($id);
@@ -375,7 +369,7 @@ class Series extends Admin_Controller
 					return false;
 				}
 				set_notice('notice', 'Chapter deleted.');
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
+				$this->output->set_output(json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub))));
 				break;
 			case("page"):
 				$page = new Page($this->input->post('id'));
@@ -386,7 +380,7 @@ class Series extends Admin_Controller
 					log_message("error", "Controller: series.php/remove: failed page removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $page->chapter->comic->stub . "/" . $page->chapter->id)));
+				$this->output->set_output(json_encode(array('href' => site_url("admin/series/serie/" . $page->chapter->comic->stub . "/" . $page->chapter->id))));
 				break;
 			case("allpages"):
 				$chapter = new Chapter($id);
@@ -396,7 +390,7 @@ class Series extends Admin_Controller
 					log_message("error", "Controller: series.php/remove: failed all pages removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $chapter->comic->stub . "/" . $chapter->id)));
+				$this->output->set_output(json_encode(array('href' => site_url("admin/series/serie/" . $chapter->comic->stub . "/" . $chapter->id))));
 				break;
 		}
 	}
@@ -448,12 +442,12 @@ class Series extends Admin_Controller
 			$result = $this->files_model->import_compressed();
 			if (isset($result['error']) && !$result['error'])
 			{
-				echo json_encode($result);
+				$this->output->set_output(json_encode($result));
 				return FALSE;
 			}
 			else
 			{
-				echo json_encode($result);
+				$this->output->set_output(json_encode($result));
 				return true;
 			}
 		}

@@ -65,11 +65,11 @@ class Database extends Admin_Controller {
 		// migrate
 		$this->migration->latest();
 
-		// give the correct kind of output, be it JSOn via javascript or CLI request
+		// give the correct kind of output, be it JSON via javascript or CLI request
 		if ($this->input->is_cli_request())
-			echo _('Successfully updated the database.') . PHP_EOL;
+			$this->output->set_output(_('Successfully updated the database.') . PHP_EOL);
 		else
-			echo json_encode(array('href' => site_url('admin/'))); // give the url to go back to
+			$this->output->set_output(json_encode(array('href' => site_url('admin/')))); // give the url to go back to
 		return TRUE;
 	}
 

@@ -29,8 +29,6 @@ class Reader extends REST_Controller
 			foreach ($comics->all as $key => $comic)
 			{
 				$result['comics'][$key] = $comic->to_array();
-				$result['comics'][$key]["thumb_url"] = $comic->get_thumb();
-				$result['comics'][$key]["href"] = $comic->href();
 			}
 			$this->response($result, 200); // 200 being the HTTP response code
 		}
@@ -82,7 +80,6 @@ class Reader extends REST_Controller
 			$result = array();
 
 			$result["comic"] = $comic->to_array();
-			$result["comic"]["thumb_url"] = $comic->get_thumb();
 
 			// order in the beautiful [comic][chapter][teams][page]
 			$result["chapters"] = array();
@@ -90,8 +87,6 @@ class Reader extends REST_Controller
 			{
 				$result['chapters'][$key]['comic'] = $result["comic"];
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
-				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
-				$result['chapters'][$key]['chapter']["title"] = $chapter->title();
 
 				// if it's requested, throw in also the pages (for load balancer)
 				if ($this->get('chapter_stub') == $chapter->stub
@@ -151,11 +146,7 @@ class Reader extends REST_Controller
 			foreach ($chapters->all as $key => $chapter)
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
-				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
-				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
-				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
-				$result['chapters'][$key]['chapter']["title"] = $chapter->title();
 				$chapter->get_teams();
 				foreach ($chapter->teams as $item)
 				{
@@ -235,11 +226,7 @@ class Reader extends REST_Controller
 			// the pretty array gets pages too: [comic][chapter][teams][pages]
 			$result = array();
 			$result['comic'] = $chapter->comic->to_array();
-			$result['comic']["thumb_url"] = $chapter->comic->get_thumb();
-			$result['comic']["href"] = $chapter->comic->href();
 			$result['chapter'] = $chapter->to_array();
-			$result['chapter']["href"] = $chapter->href();
-			$result['chapter']["title"] = $chapter->title();
 			$result['teams'] = array();
 			foreach ($chapter->teams as $team)
 			{
@@ -330,11 +317,7 @@ class Reader extends REST_Controller
 					$result['chapters'][$key]['teams'][] = $team->to_array();
 				}
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
-				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
-				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
-				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
-				$result['chapters'][$key]['chapter']["title"] = $chapter->title();
 			}
 
 			// all good
@@ -395,11 +378,7 @@ class Reader extends REST_Controller
 			foreach ($chapters->all as $key => $chapter)
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
-				$result['chapters'][$key]['comic']["thumb_url"] = $chapter->comic->get_thumb();
-				$result['chapters'][$key]['comic']["href"] = $chapter->comic->href();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
-				$result['chapters'][$key]['chapter']["href"] = $chapter->href();
-				$result['chapters'][$key]['chapter']["title"] = $chapter->title();
 				$result['chapters'][$key]['teams'] = $result['teams'];
 			}
 

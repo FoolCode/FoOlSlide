@@ -63,7 +63,7 @@
 			{
 				// no segments, add one
 				History.pushState({}, "Home", plugin.settings.url + "reader");
-				return
+				return false;
 			}
 			
 			var segments = url.split('/');			
@@ -108,7 +108,9 @@
 		}
 		
 		
-		var mode = {mode:"none"};
+		var mode = {
+			mode:"none"
+		};
 		plugin.modeGet = function() {
 			return mode;
 		}
@@ -215,7 +217,7 @@
 				plugin.sidebar.autoHide(false);
 				$(opt.element).fadeOut(800, function(){
 					$(this).html(echo).fadeIn(800, function(){
-					});
+						});
 				});
 			}
 			History.pushState(null, null, comic.href);
@@ -283,7 +285,9 @@
 			'<div id="reader">' +
 			'	<div class="previews"></div>' +
 			'	<div class="topbar"></div>' +
-			'	<div class="page"></div>' +
+			'	<div class="page">' + 
+			'		<img class="displayed" src="" onClick="$.foolslideui.reader.nextPage()">' +
+			'	</div>' +
 			'	<div class="bottombar"></div>' +
 			'</div>';
 			
@@ -296,8 +300,16 @@
 						chapter_id: chapterArr.chapters[0].id,
 						slideUrl: chapterArr.chapters[0].slideUrl
 					});
+					plugin.reader.currentChapter = chapterArr.chapters;
+					plugin.reader.currentComic = chapterArr.comics[0];
+					plugin.reader.currentPages = chapterArr.pages;
+					plugin.reader.currentPage = opt.page;
 					History.pushState(null, null, chapterArr.chapters[0].href)
-					$(this).html(echo).fadeIn(800, function(){
+					$(this).html(echo);
+					
+					plugin.reader.changePage(opt.page);
+					
+					$(this).fadeIn(800, function(){
 						plugin.sidebar.autoHide(true);
 					});
 				});
@@ -311,13 +323,97 @@
 		
 		plugin.reader = {};
 		
-		plugin.reader.changePage = function() {
+		plugin.reader.currentPage = 0;
+		plugin.reader.isSpreadPage = 0;
+		plugin.reader.currentPages = {};
+		plugin.reader.currentChapter = {};
+		plugin.reader.currentComic = {};
+		plugin.reader.nextChapter = {};
+		
+		plugin.reader.changePage = function(pgNum) {
 			if (mode.mode != "reader")
 				return false;
-			
-			
+			var pageImgElem = $("#reader .page .displayed");
+			pageImgElem.attr('src', plugin.reader.currentPages[pgNum-1].url);
+			plugin.reader.currentPage = pgNum;
+			plugin.reader.resizePage(pgNum);
 		}
 		
+		plugin.reader.resizePage = function (pgNum) {
+			var contentElem = $("#dynamic_content")
+			var readerElem = $("#reader")
+			var pageElem = readerElem.find(".page");
+			var imgElem = pageElem.find(".displayed");
+			var id = pgNum - 1;
+			var pages = plugin.reader.currentPages;
+			var doc_width = readerElem.width();
+			var page_width = parseInt(pages[id].width);
+			var page_height = parseInt(pages[id].height);
+			var nice_width = 980;
+			var perfect_width = 980;
+		
+			if(doc_width > 1200) {
+				nice_width = 1120;
+				perfect_width = 1000;
+			}
+			if(doc_width > 1600) {
+				nice_width = 1400;
+				perfect_width = 1300;
+			}
+			if(doc_width > 1800) {
+				nice_width = 1600;
+				perfect_width = 1500;
+			}
+		
+			var width, height;
+		
+			if (page_width > nice_width && (page_width/page_height) > 1.2) {
+				if(page_height < 1610) {
+					width = page_width;
+					height = page_height;
+				}
+				else { 
+					height = 1600;
+					width = page_width;
+					width = (height*width)/(page_height);
+				}
+				
+				
+				
+				
+				
+				
+				if(pageElem.width() < imgElem.width()) {
+					plugin.reader.isSpreadPage = true;
+				}
+				else {
+					pageElem.css({
+						'max-width': width+10, 
+						'overflow':'hidden'
+					});
+					plugin.reader.isSpreadPage = false;
+				}
+			}
+			else{
+				if(page_width < nice_width && doc_width > page_width + 10) {
+					width = page_width;
+					height = page_height;
+				}
+				else { 
+					width = (doc_width > perfect_width) ? perfect_width : doc_width - 10;
+					height = page_height; 
+					height = (height*width)/page_width;
+				}
+				
+				
+				plugin.reader.isSpreadPage =  false;
+			}
+		}
+		
+		plugin.reader.nextPage = function() {
+			plugin.reader.changePage(plugin.reader.currentPage + 1);
+			return false;
+		}
 		 
 		plugin.sidebar = {};
 		
@@ -328,7 +424,11 @@
 				$(".foolslideui_content").css({
 					marginLeft:"25px"
 				}, 1000);
-				$(".foolslideui_sidebar").hover(function(){plugin.sidebar.toggleSidebar(true)}, function(){plugin.sidebar.toggleSidebar(false)});
+				$(".foolslideui_sidebar").hover(function(){
+					plugin.sidebar.toggleSidebar(true)
+				}, function(){
+					plugin.sidebar.toggleSidebar(false)
+				});
 			}
 			else
 			{

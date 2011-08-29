@@ -210,9 +210,19 @@ td { vertical-align: top; }
 /* ==|== primary styles =====================================================
    Author: 
    ========================================================================== */
+html {
+	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	height:100%;
+}
 
 body {
 	background: url('images/background2.png') #666;
+	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	height:100%;
 }
 
 a, a:hover, a:visited {
@@ -241,6 +251,7 @@ a, a:hover, a:visited {
 	text-shadow: 1px 1px 1px #ccc;
 	color:#000;
 	overflow:hidden;
+	z-index:1000;
 }
 
 .foolslideui_sidebar .layer1 {
@@ -455,6 +466,10 @@ a, a:hover, a:visited {
 	color:#444;
 }
 
+#dynamic_content {
+	position:relative;
+	z-index:100;
+}
 
 /***
 
@@ -542,9 +557,36 @@ a, a:hover, a:visited {
 	box-shadow:1px 2px 0px #ccc, -1px -1px 0px #999;
 }
 
+/***
+
+	Reader
+
+***/
+
+#container {
+	width:100%;
+	height:100%;
+	overflow:auto;
+}
+
+#dynamic_content {
+	width:100%;
+}
+
+#dynamic_content #reader {
+
+}
+
+#dynamic_content #reader .page {
+	margin: 0 auto;
+	text-align:center;
+}
 
 
-
+#dynamic_content #reader .page .displayed{
+	text-align:center;
+	margin: 0 auto;
+}
 
 
 /* ==|== non-semantic helper classes ========================================

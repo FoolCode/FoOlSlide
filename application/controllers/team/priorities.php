@@ -8,13 +8,24 @@ class Priorities extends Team_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->viewdata['controller_title'] = _("Series");
+		$this->viewdata['controller_title'] = _("Priorities");
 	}
 
 
+	/**
+	 * Priorities index. Lists all the teams if there's no team set
+	 */
 	function index()
 	{
-		echo 'This is the priorities system';
+		// if the team is not set, show all teams's priorities
+		if(!isset($this->teamc->team) || !$this->teamc->team)
+		{
+			$this->output->set_output("General");
+		}
+		else // else, show priorities of a single team
+		{
+			$this->output->set_output("Team selected: ".$this->teamc->team->name);
+		}
 	}
 
 }

@@ -15,6 +15,12 @@ class Team_Controller extends MY_Controller
 			show_404();
 		}
 		
+		// send to account system if not logged in
+		if(!$this->tank_auth->is_logged_in())
+		{
+			redirect('account');
+		}
+		
 		// if the user isn't in any team, he shouldn't be here
 		if (!($this->teamc->teams = $this->tank_auth->is_team()))
 		{
@@ -24,24 +30,41 @@ class Team_Controller extends MY_Controller
 	}
 
 
+	/**
+	 * We need to make a panel relative to the team stub, unless it's the index
+	 * that gives a priorities panel across all teams
+	 *
+	 * @autor Woxxy
+	 * @param string $method
+	 * @param array $params
+	 * @return bool 
+	 */
 	public function _remap($method, $params = array())
-	{
+	{	
 		// index means priorities page. you can be here only when uri is /team/
-		if(($uri_team = $this->uri->segment(2)) === FALSE && $method == "index")
+		if(($team_stub = $this->uri->segment(2)) === FALSE && $method == "index")
 		{
 			return call_user_func_array(array($this, $method), $params);
 		}
 		
-		// find if any team is set in $method
+		if($team_stub === FALSE)
+		{
+			show_404();
+		}
+		
+		// if you're here it means there's a /team/group_name in the uri
+		
+		// check if the group_name in the uri is one of the teams
 		foreach($this->teamc->teams as $key => $team)
 		{
-			if($uri_team == $team->stub)
+			if($team_stub == $team->stub)
 			{
-				echo 'success '.$team->stub;
+				$this->teamc->team = $team;
+				return call_user_func_array(array($this, $method), $params);
 			}
-			else
+			else // you're not part of this team
 			{
-				echo 'fail'.$uri_team;
+				show_404();
 			}
 		}
 		

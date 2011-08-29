@@ -34,7 +34,8 @@ class MY_Controller extends CI_Controller
 			}
 
 			// set the nationality where possible, and leave ignored ips without a nation
-			$ignored_ips = @unserialize(get_setting('fs_balancer_ips'));
+			if(get_setting('fs_balancer_ips'))
+				$ignored_ips = @unserialize(get_setting('fs_balancer_ips'));
 			$ignored_ips = $ignored_ips ? $ignored_ips : array();
 			$ignored_ips[] = '127.0.0.1';
 			$remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';

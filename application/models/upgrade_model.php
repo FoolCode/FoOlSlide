@@ -161,6 +161,7 @@ class Upgrade_model extends CI_Model {
 	}
 
 	function permissions_suggest() {
+		$prob = FALSE;
 		if (!is_writable('.')) {
 			$whoami = FALSE;
 			if ($this->_exec_enabled())

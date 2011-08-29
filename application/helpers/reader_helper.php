@@ -1,6 +1,18 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Returns the theme directory with trailing slash
+ * 
+ */
+if(!function_exists('get_theme_dir'))
+{
+	function get_theme_dir()
+	{
+		return site_url().'content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/';
+	}
+}
+
+/**
  * Returns the sidebar in the theme
  * 
  * @param string team name

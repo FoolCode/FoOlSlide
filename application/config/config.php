@@ -184,7 +184,7 @@ $config['directory_trigger'] = 'd'; // experimental not currently in use
   | your log files will fill up very fast.
   |
  */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 3;
 
 /*
   |--------------------------------------------------------------------------
@@ -256,7 +256,7 @@ $config['sess_use_database'] = TRUE;
 $config['sess_table_name'] = 'ci_sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_match_useragent'] = FALSE;
-$config['sess_time_to_update'] = 600;
+$config['sess_time_to_update'] = 300;
 
 /*
   |--------------------------------------------------------------------------
@@ -317,7 +317,7 @@ $config['csrf_expire'] = 7200;
   | by the output class.  Do not 'echo' any values with compression enabled.
   |
  */
-$config['compress_output'] = FALSE;
+$config['compress_output'] = TRUE;
 
 /*
   |--------------------------------------------------------------------------

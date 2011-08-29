@@ -645,6 +645,12 @@ class Chapter extends DataMapper {
 		return $return;
 	}
 
+	/**
+	 * Returns the size of all the files currently in the chapter
+	 * 
+	 * @todo remove (it has never been used) or start calculating the sizes already
+	 * @return int 
+	 */
 	function get_dirsize() {
 		$this->get_comic();
 		$filearray = get_dir_file_info("content/comics/" . $this->comic->directory() . "/" . $this->directory() . "/", FALSE);
@@ -944,6 +950,20 @@ class Chapter extends DataMapper {
 		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
 	}
 
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '') {
+		$result = parent::to_array($fields = '');
+		$result["href"] = $this->href();
+		$result["title"] = $this->title();
+		$result["download"] = $this->download_url();
+		return $result;
+	}
+	
 }
 
 /* End of file chapter.php */

@@ -59,20 +59,24 @@ class Comic extends DataMapper
 		// Set language
 		$this->help_lang();
 
-		if (!is_null($id) && $comic = $this->get_cached($id)) {
+		if (!is_null($id) && $comic = $this->get_cached($id))
+		{
 			parent::__construct();
-			foreach($comic->to_array() as $key => $c) {
+			foreach ($comic->to_array() as $key => $c)
+			{
 				$this->$key = $c;
-				
+
 				// fill also the all array so result_count() is correctly 1
 				$this->all[0]->$key = $c;
 			}
-			if(isset($comic->licenses))$this->licenses = $comic->licenses;
-			if(isset($comic->chapters))$this->chapters = $comic->chapters;
-			
+			if (isset($comic->licenses))
+				$this->licenses = $comic->licenses;
+			if (isset($comic->chapters))
+				$this->chapters = $comic->chapters;
+
 			return TRUE;
-		} 
-		
+		}
+
 		parent::__construct(NULL);
 
 		// We've overwrote the get() function so we need to look for $id from here
@@ -812,7 +816,23 @@ class Comic extends DataMapper
 		if (isset($this->href))
 			return $this->href;
 
-		return site_url('/reader/serie/' . $this->stub);
+		return site_url('/reader/comic/' . $this->stub);
+	}
+
+
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '')
+	{
+		$result = parent::to_array($fields = '');
+		$result["thumb_url"] = $this->get_thumb();
+		$result["fullsized_thumb_url"] = $this->get_thumb(true);
+		$result["href"] = $this->href();
+		return $result;
 	}
 
 

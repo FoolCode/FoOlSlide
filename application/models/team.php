@@ -159,7 +159,12 @@ class Team extends DataMapper
 		return true;
 	}
 
-
+	/**
+	 * Updates the team data
+	 *
+	 * @param array $data
+	 * @return bool Success 
+	 */
 	public function update_team($data = array())
 	{
 
@@ -416,7 +421,29 @@ class Team extends DataMapper
 		return array($team);
 	}
 
+	/**
+	 * Returns the href to the reader.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
+	public function href()
+	{
+		return site_url('/reader/team/' . $this->stub);
+	}
 
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @author Woxxy
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '') {
+		$result = parent::to_array($fields = '');
+		$result["href"] = $this->href();
+		return $result;
+	}
 }
 
 /* End of file team.php */

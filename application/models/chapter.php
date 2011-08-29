@@ -26,6 +26,14 @@ class Chapter extends DataMapper {
 			'rules' => array('is_int', 'max_length' => 256),
 			'label' => 'Joint ID'
 		),
+		'status' => array(
+			'rules' => array('is_int', 'max_length' => 256),
+			'label' => 'Status'
+		),
+		'notes' => array(
+			'rules' => array(),
+			'label' => 'Notes'
+		),
 		'stub' => array(
 			'rules' => array('stub', 'required', 'max_length' => 256),
 			'label' => 'Stub'

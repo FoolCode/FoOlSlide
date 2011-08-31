@@ -112,10 +112,8 @@ class Transproof extends DataMapper
 		{
 			$related_tp = new Transproof();
 			$related_tp->where("id", intval($data["related_transproof_id"]))
-					->where("related_transproof_id", 0)
-					->where("chapter_id", $data["chapter_id"])
-					->where("pagnum", $data["pagnum"])
-					->get(); // let's take extreme safety measures
+					->where("chapter_id", $data["chapter_id"]) // it better not be from another chapter!
+					->get(); 
 			
 			if($related_tp->result_count() != 1)
 			{
@@ -161,6 +159,8 @@ class Transproof extends DataMapper
 		if(isset($data["pagenum"]))
 		{
 			$data["pagenum"] = intval($data["pagenum"]);
+			
+			// first check if it's a number and if it's higher than 0
 			if($data["pagenum"] === FALSE || $data["pagenum"] < 1)
 			{
 				$this->error_message('error', _('The page number was not a valid number.'));
@@ -169,6 +169,12 @@ class Transproof extends DataMapper
 			}
 			// $chapter is already set for sure
 			$pages = $chapter->get_pages();
+			if($data["pagenum"] > count($pages))
+			{
+				$this->error_message('error', _('There isn\'t a page with such a high number.'));
+				log_message('error', 'Transproof: The page number was too high for the pages array.');
+				return FALSE;
+			}
 		}
 		else
 		{

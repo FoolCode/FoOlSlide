@@ -43,6 +43,7 @@ $route['sitemap.xml'] = "reader/sitemap";
 $route['rss.xml'] = "reader/feeds";
 $route['atom.xml'] = "reader/feeds/atom";
 $route['team'] = "team/priorities/index";
+$route['team/(\w+)'] = "team/priorities/index";
 $route['team/(\w+)/(:any)'] = "team/$2";
 $route['admin'] = "admin/series";
 $route['account'] = "account/index/profile";

@@ -62,10 +62,6 @@ class Team_Controller extends MY_Controller
 				$this->teamc->team = $team;
 				return call_user_func_array(array($this, $method), $params);
 			}
-			else // you're not part of this team
-			{
-				show_404();
-			}
 		}
 		
 	}

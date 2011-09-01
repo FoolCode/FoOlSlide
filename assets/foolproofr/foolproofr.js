@@ -130,8 +130,8 @@
 				position: "absolute",
 				left: relativeX + "px",
 				top: relativeY + "px",
-				width:"30px",
-				height:"30px",
+				width:"60px",
+				height:"60px",
 				border: "1px dotted red"
 			}).appendTo($element);
 			
@@ -160,8 +160,8 @@
 				else
 				{
 					tempbox.css({
-						width: "30px",
-						height: "30px",
+						width: "60px",
+						height: "60px",
 						border: "1px dashed red"
 					});
 				}

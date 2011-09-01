@@ -6,8 +6,12 @@ if (!defined('BASEPATH'))
 class Transproof extends DataMapper
 {
 
-	var $has_one = array('chapter');
-	var $has_many = array();
+	var $has_one = array(
+		'chapter' => array()
+	);
+	var $has_many = array(
+		'transproof' => array()
+	);
 	var $validation = array(
 		'chapter_id' => array(// need this to not be bound by page_id, as we can have many versions (RAW, v1, v2)
 			'rules' => array('required', 'min_size' => 1),
@@ -26,7 +30,7 @@ class Transproof extends DataMapper
 			'label' => 'Page number',
 		),
 		'order' => array(// selective order of reading of the elements on the page
-			'rules' => array('required', 'min_size' => 1),
+			'rules' => array('min_size' => 1),
 			'label' => 'Order',
 		),
 		'type' => array(// translation = 1, comment = 2. font? info?
@@ -41,6 +45,11 @@ class Transproof extends DataMapper
 		'font' => array(// font to be used, it's a serialized array
 			'rules' => array(),
 			'label' => 'Font'
+		),
+		'accepted' => array(
+			'rules' => array(),
+			'label' => 'Accepted',
+			'valid_match' => array(1, 2, 3) // 1 = white, 2 = red, 3 = green
 		),
 		'width' => array(
 			'rules' => array('min_size' => 1),
@@ -72,6 +81,8 @@ class Transproof extends DataMapper
 			'valid_match' => array(0, 1)
 		)
 	);
+	var $auto_populate_has_many = TRUE;
+	var $auto_populate_has_one = TRUE;
 	var $min_box_height = 60;
 	var $min_box_width = 60;
 
@@ -88,6 +99,89 @@ class Transproof extends DataMapper
 	}
 
 
+	/**
+	 * Override the DataMapper get to include always all the related transproofs
+	 * 
+	 * @author	Woxxy
+	 * @param	integer|NULL $limit Limit the number of results.
+	 * @param	integer|NULL $offset Offset the results when limiting.
+	 * @return	DataMapper Returns self for method chaining.
+	 */
+	public function get($limit = NULL, $offset = NULL, $upwards = FALSE)
+	{
+		$result = parent::get($limit, $offset);
+
+		// add data only if any result is found
+		if ($result->result_count() > 0)
+		{
+
+			if ($upwards === TRUE) // we're from an object that isn't root and want to retrieve root objects
+			{
+				if ($this->related_transproof_id > 0)
+				{
+					/**
+					 * @todo remake this with some joint or something
+					 */
+					// let's grab all the tree, automagically (and with some heavy database work...)
+					$this->related_transproof = new Transproof();
+					$this->related_transproof->where('id', $this->related_transproof_id)->get(NULL, NULL, TRUE);
+				}
+			}
+			else
+			{
+				// use the $upwards variable to keep count: on 1 we are on root, on 2 we are on comment/translation, on 3 we are on edit
+				// let's not fetch any further if we're at 3
+				if ($upwards === FALSE)
+				{
+					$upwards = 1;
+				}
+				else
+				{
+					$upwards++;
+				}
+				if ($upwards < 3)
+				{
+					foreach ($this->all as $key => $item)
+					{
+						$item->transproofs = new Transproof();
+						$item->transproofs->where('related_transproof_id', $this->id)->get(NULL, NULL, $upwards);
+					}
+				}
+			}
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * Comodity function to get a whole page of data
+	 * 
+	 * @param type $chapter_id
+	 * @param type $pagenum
+	 * @param String $datetime string in MySQL DateTime format
+	 */
+	function get_page($chapter_id, $pagenum, $datetime = '')
+	{
+		$this->where('chapter_id', $chapter_id)
+				->where('pagenum', $pagenum);
+
+		if ($datetime != '')
+		{
+			$this->where('created >', $datetime);
+		}
+
+		//$this->include_related('transproof', NULL, TRUE, TRUE);
+	}
+
+
+	/**
+	 * Adds the translations and comments to database after very through inspection.
+	 * It's safe to just throw a POST array into this.
+	 * 
+	 * @param array $data
+	 * @return bool success
+	 */
 	function add($data = array())
 	{
 		// variables to override
@@ -120,7 +214,7 @@ class Transproof extends DataMapper
 		{
 			$data["related_transproof_id"] = intval($data["related_transproof_id"]);
 			$related_tp = new Transproof();
-			$related_tp->where("id", $data["related_transproof_id"])->get();
+			$related_tp->where("id", $data["related_transproof_id"])->get(NULL, NULL, TRUE); // the true means to go upwards with the IDs
 
 			if ($related_tp->result_count() != 1)
 			{
@@ -314,7 +408,7 @@ class Transproof extends DataMapper
 							log_message('error', 'Transproof: Tried to delete a comment edit.');
 							return FALSE;
 						}
-						
+
 						// the user can only delete his own comments
 						if ($related_tp->user_id !== $this->CI->tank_auth->get_user_id)
 						{
@@ -347,7 +441,8 @@ class Transproof extends DataMapper
 			}
 
 			// if any size has been set, make sure we got all the needed. we can't have just one piece of sizes
-			if ($has_sizes)
+			// and, if we're creating a new box, we absolutely need the sizes
+			if ($has_sizes || !isset($data["related_transproof_id"]))
 			{
 				// make the ones that are set INT values, and fail if they aren't INT values
 				foreach ($sizes as $size)
@@ -394,6 +489,41 @@ class Transproof extends DataMapper
 			{
 				unset($data[$size]);
 			}
+		}
+		
+		// change the accepted setting on translations
+		if(isset($data["accepted"]))
+		{
+			$data["accepted"] = intval($data["accepted"]);
+			if(!in_array($data["accepted"], array(1, 2, 3)))
+			{
+				$this->error_message('error', _('You didn\'t use a proper value for accepting or rejecting.'));
+				log_message('error', 'Transproof: Tried to set a wrong value to accepted.');
+				return FALSE;
+			}
+			
+			if($data["type"] == 1 && isset($related_tp)) // a translation edit
+			{
+				// leave it alone
+			}
+			else
+			{
+				// there's no point in setting this on a comment
+				unset($data["accepted"]);
+			}
+		}
+
+		// incredibly so, we might be done
+		if (!$this->save())
+		{
+			// on error in save(), we'll just leave DataMapper errors on
+			log_message('error', 'Transproof: Tried to set too small width or height on the box.');
+			return FALSE;
+		}
+		else
+		{
+			// phew...
+			return TRUE;
 		}
 	}
 

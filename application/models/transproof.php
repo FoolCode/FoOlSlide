@@ -164,14 +164,15 @@ class Transproof extends DataMapper
 	function get_page($chapter_id, $pagenum, $datetime = '')
 	{
 		$this->where('chapter_id', $chapter_id)
+				->where('related_transproof_id', 0)
 				->where('pagenum', $pagenum);
 
 		if ($datetime != '')
 		{
 			$this->where('created >', $datetime);
 		}
-
-		//$this->include_related('transproof', NULL, TRUE, TRUE);
+		
+		$this->get();
 	}
 
 
@@ -233,6 +234,7 @@ class Transproof extends DataMapper
 		if (isset($data["chapter_id"]))
 		{
 			$data["chapter_id"] = intval($data["chapter_id"]);
+			
 			$chapter = new Chapter($data["chapter_id"]);
 
 			// check that it exists at all
@@ -243,6 +245,10 @@ class Transproof extends DataMapper
 				return FALSE;
 			}
 
+			
+			/*
+			 * If we're here, it already means the controller checked that the chapter_id is editable by the user
+			 * 
 			// check if the current user is part of a team working on this chapter
 			$chapter->get_teams(); // puts teams in $chapter->teams
 			$is_team = $this->CI->tank_auth->is_team_array($chapter->teams); // using the is_team_array simplification!
@@ -252,6 +258,8 @@ class Transproof extends DataMapper
 				log_message('error', 'Transproof: Chapter team didn\'t match any user team.');
 				return FALSE;
 			}
+			 * 
+			 */
 
 			// if the related transproof is set, we don't need chapter_id
 			if ($data["related_transproof_id"] > 0)

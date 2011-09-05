@@ -32,10 +32,10 @@ class Draft extends Team_Controller
 
 
 	/**
-	 * Translation and proofreading must be done on the same page
+	 * Shows the page with the necessary JavaScript to show the comments.
+	 * The rest is dealt by the sync_script() controller function.
 	 * 
-	 * We have this just to initialize the page: GET, PUT and POST will be from the API
-	 * 
+	 * @author Woxxy
 	 * @param int $id draft id
 	 */
 	function script($chapter_id, $page)
@@ -65,6 +65,11 @@ class Draft extends Team_Controller
 			show_404();
 		}
 
+		$data["chapter_id"] = $chapter->id;
+		$data["page_number"] = $page;
+		$data["page_url"] = $pages[$page]["url"];
+		$this->viewdata = $this->load->view('team/script', $data, TRUE);
+		$this->load->view('team/default', $this->viewdata);
 		// show just the page, the javascript will do the sync
 	}
 

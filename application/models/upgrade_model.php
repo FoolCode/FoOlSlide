@@ -145,10 +145,6 @@ class Upgrade_model extends CI_Model {
 			return FALSE;
 		}
 
-		if (!is_writable('content/themes/mobile')) {
-			return FALSE;
-		}
-
 		if (!is_writable('content/cache')) {
 			return FALSE;
 		}

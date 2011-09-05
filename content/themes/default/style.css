@@ -286,7 +286,7 @@ input[type="text"]
 
 .list
 {
-    margin:0;
+    margin:0 0 10px;
 
     overflow:hidden;
     border-radius:5px;
@@ -501,6 +501,11 @@ input[type="text"]
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
 	margin: 0 0 7px;
+}
+
+.sidebar .text
+{
+	padding: 0 5px;
 }
 
 #page

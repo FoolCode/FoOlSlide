@@ -103,7 +103,7 @@ class Reader extends Public_Controller {
 		$chapters = new Chapter();
 
 		// Select the latest 25 released chapters
-		$chapters->order_by('created', 'DESC')->limit(15);
+		$chapters->order_by('created', 'DESC')->limit(25);
 
 		// Get the chapters!
 		$chapters->get();

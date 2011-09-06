@@ -41,7 +41,6 @@ class Upgrade2_model extends CI_Model {
 		if (!is_writable('content/themes/default')) {
 			return FALSE;
 		}
-
 		if (!is_writable('content/cache')) {
 			return FALSE;
 		}

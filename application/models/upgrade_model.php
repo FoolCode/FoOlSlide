@@ -123,32 +123,11 @@ class Upgrade_model extends CI_Model {
 		if (!is_writable('.')) {
 			return FALSE;
 		}
+		
 		if (!is_writable('index.php')) {
 			return FALSE;
 		}
-		if (!is_writable('application')) {
-			return FALSE;
-		}
-		if (!is_writable('system')) {
-			return FALSE;
-		}
-		if (!is_writable('content')) {
-			return FALSE;
-		}
-		if (!is_writable('assets')) {
-			return FALSE;
-		}
-		if (!is_writable('content/themes')) {
-			return FALSE;
-		}
-		if (!is_writable('content/themes/default')) {
-			return FALSE;
-		}
-
-		if (!is_writable('content/cache')) {
-			return FALSE;
-		}
-
+		
 		if (!is_writable('application/models/upgrade2_model.php')) {
 			return FALSE;
 		}
@@ -193,12 +172,12 @@ class Upgrade_model extends CI_Model {
 	 * @return bool 
 	 */
 	function update_upgrade() {
-		if (!file_exists('content/cache/update/application/models/upgrade2_model.php')) {
+		if (!file_exists('content/cache/upgrade/application/models/upgrade2_model.php')) {
 			return FALSE;
 		}
-		unlink('application/models/upgrade2_model.php');
+			unlink('application/models/upgrade2_model.php');
 		rename('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
-
+		
 		return TRUE;
 	}
 
@@ -215,7 +194,7 @@ class Upgrade_model extends CI_Model {
 			log_message('error', 'upgrade.php:_do_upgrade() check_files() failed');
 			return false;
 		}
-
+		
 		$new_versions = $this->upgrade_model->check_latest(TRUE);
 		if ($new_versions === FALSE)
 			return FALSE;
@@ -224,8 +203,9 @@ class Upgrade_model extends CI_Model {
 		$latest = $new_versions[0];
 
 		$this->upgrade_model->get_file($latest->download, $latest->direct_download);
+		
 		$this->upgrade_model->update_upgrade();
-
+		return FALSE;
 
 		$this->load->model('upgrade2_model');
 		if (!$this->upgrade2_model->do_upgrade()) {

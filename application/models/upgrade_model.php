@@ -136,6 +136,7 @@ class Upgrade_model extends CI_Model {
 	}
 
 	function permissions_suggest() {
+		$prob = FALSE;
 		if (!is_writable('.')) {
 			$whoami = FALSE;
 			if ($this->_exec_enabled())
@@ -175,7 +176,8 @@ class Upgrade_model extends CI_Model {
 		if (!file_exists('content/cache/upgrade/application/models/upgrade2_model.php')) {
 			return FALSE;
 		}
-			unlink('application/models/upgrade2_model.php');
+		
+		unlink('application/models/upgrade2_model.php');
 		rename('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
 		
 		return TRUE;

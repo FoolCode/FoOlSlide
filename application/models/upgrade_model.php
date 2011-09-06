@@ -205,7 +205,6 @@ class Upgrade_model extends CI_Model {
 		$this->upgrade_model->get_file($latest->download, $latest->direct_download);
 		
 		$this->upgrade_model->update_upgrade();
-		return FALSE;
 
 		$this->load->model('upgrade2_model');
 		if (!$this->upgrade2_model->do_upgrade()) {

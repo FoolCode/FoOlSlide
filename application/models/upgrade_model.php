@@ -178,7 +178,7 @@ class Upgrade_model extends CI_Model {
 		}
 		
 		unlink('application/models/upgrade2_model.php');
-		rename('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
+		copy('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
 		
 		return TRUE;
 	}

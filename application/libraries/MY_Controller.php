@@ -28,14 +28,26 @@ class MY_Controller extends CI_Controller
 			{
 				$locale = get_setting('fs_gen_lang');
 				putenv("LANG=$locale");
-				setlocale(LC_ALL, $locale);
+				if ($locale != "tr_TR.utf8")
+				{
+					setlocale(LC_ALL, $locale);
+				}
+				else // workaround to make turkish work with FoOlSlide
+				{
+					setlocale(LC_COLLATE, $locale);
+					setlocale(LC_MONETARY, $locale);
+					setlocale(LC_NUMERIC, $locale);
+					setlocale(LC_TIME, $locale);
+					setlocale(LC_MESSAGES, $locale);
+					setlocale(LC_CTYPE, "sk_SK.utf8");
+				}
 				bindtextdomain("default", FCPATH . "assets/locale");
 				textdomain("default");
 			}
 
 			// set the nationality where possible, and leave ignored ips without a nation
 			$ignored_ips = array();
-			if(get_setting('fs_balancer_ips'))
+			if (get_setting('fs_balancer_ips'))
 				$ignored_ips = @unserialize(get_setting('fs_balancer_ips'));
 			$ignored_ips[] = '127.0.0.1';
 			$remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';

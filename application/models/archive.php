@@ -72,7 +72,7 @@ class Archive extends DataMapper {
 			$this->save();
 		}
 
-		return site_url() . "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename;
+		return site_url() . "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . urlencode($this->filename);
 	}
 
 	/**

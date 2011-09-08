@@ -247,7 +247,7 @@ class Reader extends Public_Controller {
 		
 		$archive = new Archive();
 		$url = $archive->compress($chaptere);
-		redirect($url);
+		redirect(urlencode($url));
 	}
 
 	/**

@@ -101,9 +101,9 @@ class Upgrade2_model extends CI_Model {
 		rename('content/cache/upgrade/content/themes/default', 'content/themes/default');
 		
 		// delete the mobile folder for a while... 05/09/2011
-		if (file_exists('content/themes/mobile')) {
-			delete_files('content/themes/mobile/', TRUE);
-		}
+		//if (file_exists('content/themes/mobile')) {
+		//	delete_files('content/themes/mobile/', TRUE);
+		//}
 		
 		return TRUE;
 	}

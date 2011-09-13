@@ -47,7 +47,7 @@ class Migration_Install extends CI_Migration {
                                                 ('fs_gen_default_team', 'Anonymous', 0),
                                                 ('fs_gen_footer_text', 'All the manga featured in this website are property of their publishers. The translations are fanmade and meant to be a preview of material unavailable for western countries.\nDo not try to profit from this material.<br/>If you liked any of the manga you obtained here, consider buying the Japanese versions, or the local translation, where available. Thanks for your support.', 0),
                                                 ('fs_gen_site_title', 'A new FoOlSlide', 0),
-                                                ('fs_priv_version', '0.7.9', 0),
+                                                ('fs_priv_version', '0.7.10', 0),
                                                 ('fs_srv_servers', '', 0);"
                         );
                 }

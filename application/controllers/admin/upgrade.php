@@ -72,7 +72,7 @@ class Upgrade extends Admin_Controller
 		}
 		
 		// return an url
-		$this->set_output(json_encode(array('href' => site_url('admin/upgrade'))));
+		$this->output->set_output(json_encode(array('href' => site_url('admin/upgrade'))));
 	}
 
 

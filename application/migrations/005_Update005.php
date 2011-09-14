@@ -21,6 +21,7 @@ class Migration_Update005 extends CI_Migration {
 		
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('archives') . "` ADD INDEX ( `size` )");
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('archives') . "` ADD INDEX ( `chapter_id` )");
+		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('archives') . "` CHANGE `edited` `updated` DATETIME NOT NULL");
 		
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD INDEX ( `comic_id` )");
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD INDEX ( `team_id` )");

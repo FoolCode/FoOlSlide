@@ -836,12 +836,26 @@ class Chapter extends DataMapper
 		$echo = "";
 		if ($this->volume > 0)
 			$echo .= _('Vol.') . $this->volume . ' ';
-		if ($this->name == "" || $this->subchapter > 0 || $this->chapter > 0) // if it's a one-shot and it has a title and no subchapter don't show chapter number
+		if ($this->chapter > 0) // if chapter == 0 it means this is a one-shot
 			$echo .= _('Chapter') . ' ' . $this->chapter;
-		if ($this->subchapter)
+		if ($this->subchapter && $this->chapter > 0) // if it's a one-shot, we still use subchapter for sorting, but don't display it
 			$echo .= '.' . $this->subchapter;
 		if ($this->name != "")
-			$echo .= ': ' . $this->name;
+		{
+			// if it's a one-shot with title, hide the : because there's no numbering
+			if ($this->chapter > 0)
+				$echo .= ': ';
+			$echo .= $this->name;
+		}
+		else
+		{
+			if ($this->chapter == 0)
+			{
+				// one-shots without a title gets the comic title
+				$this->get_comic(); // play safe and check if we have it
+				$echo .= $this->comic->name;
+			}
+		}
 
 		return $echo;
 	}

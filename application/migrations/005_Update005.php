@@ -13,7 +13,7 @@ class Migration_Update005 extends CI_Migration {
 			if(strtolower(substr($file["name"], -4) == ".zip"))
 			{
 				// remove every zip
-				unlink($file["relative_path"]);
+				unlink($file["relative_path"].$file["name"]);
 			}
 		}
 		// remove also all the database entries
@@ -21,9 +21,6 @@ class Migration_Update005 extends CI_Migration {
 		
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('archives') . "` ADD INDEX ( `size` )");
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('archives') . "` ADD INDEX ( `chapter_id` )");
-		
-		// there's this extra index in some slides
-		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` DROP INDEX ( `created_2` )");
 		
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD INDEX ( `comic_id` )");
 		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD INDEX ( `team_id` )");

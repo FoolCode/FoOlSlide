@@ -840,7 +840,7 @@ class Chapter extends DataMapper
 		{
 			if ($this->customchaptertitle()) // support for custom chapter titles
 			{
-				$echo .= $this->customchaptertitle() . ' ';
+				$echo .= $this->customchaptertitle();
 			}
 			else
 			{

@@ -40,6 +40,11 @@ class Comic extends DataMapper
 			'type' => 'upload',
 			'display' => 'image',
 		),
+		'customchapter' => array(
+			'rules' => array(),
+			'label' => 'Custom chapter',
+			'type' => 'input'
+		),
 		'lastseen' => array(
 			'rules' => array(),
 			'label' => 'Lastseen'
@@ -105,6 +110,8 @@ class Comic extends DataMapper
 		$this->validation['hidden']['help'] = _('Hide the serie from public view.');
 		$this->validation['thumbnail']['label'] = _('Thumbnail');
 		$this->validation['thumbnail']['help'] = _('Upload an image to use as thumbnail.');
+		$this->validation['customchapter']['label'] = _('Custom Chapter Title');
+		$this->validation['customchapter']['help'] = _('Replace the default chapter title with a custom format. Example: "{num}{ord} Stage" returns "2nd Stage"');
 	}
 
 
@@ -768,8 +775,7 @@ class Comic extends DataMapper
 	{
 		return $this->name;
 	}
-
-
+	
 	/**
 	 * Returns the href to the chapter editing
 	 *

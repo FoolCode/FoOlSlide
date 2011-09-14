@@ -837,7 +837,16 @@ class Chapter extends DataMapper
 		if ($this->volume > 0)
 			$echo .= _('Vol.') . $this->volume . ' ';
 		if ($this->chapter > 0) // if chapter == 0 it means this is a one-shot
-			$echo .= _('Chapter') . ' ' . $this->chapter;
+		{
+			if ($this->customchaptertitle()) // support for custom chapter titles
+			{
+				$echo .= $this->customchaptertitle() . ' ';
+			}
+			else
+			{
+				$echo .= _('Chapter') . ' ' . $this->chapter;
+			}
+		}
 		if ($this->subchapter && $this->chapter > 0) // if it's a one-shot, we still use subchapter for sorting, but don't display it
 			$echo .= '.' . $this->subchapter;
 		if ($this->name != "")
@@ -856,6 +865,37 @@ class Chapter extends DataMapper
 				$echo .= $this->comic->name;
 			}
 		}
+
+		return $echo;
+	}
+
+
+	public function customchaptertitle()
+	{
+		$this->get_comic();
+		$echo = "";
+
+		// Generate Ordinal Numbers Suffix (English)
+		$ordinal = 'th';
+		if (!in_array(($this->chapter % 100), array(11, 12, 13)))
+		{
+			switch ($this->chapter % 10)
+			{
+				case 1:
+					$ordinal = 'st';
+					break;
+				case 2:
+					$ordinal = 'nd';
+					break;
+				case 3:
+					$ordinal = 'rd';
+					break;
+			}
+		}
+
+		$echo = str_replace(
+				array('{num}', '{ord}'), array($this->chapter, $ordinal), $this->comic->customchapter
+		);
 
 		return $echo;
 	}

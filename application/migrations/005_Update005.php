@@ -71,7 +71,7 @@ class Migration_Update005 extends CI_Migration {
 		
 		
 		//create a new field in chapters for the custom chapter titles
-		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('chapters') . "` ADD `customchapter` VARCHAR( 32 ) NOT NULL AFTER `thumbnail`");
+		$this->db->query("ALTER TABLE `" . $this->db->dbprefix('comics') . "` ADD `customchapter` VARCHAR( 32 ) NOT NULL AFTER `thumbnail`");
 
 	}
 

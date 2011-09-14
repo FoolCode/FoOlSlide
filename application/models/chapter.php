@@ -836,7 +836,7 @@ class Chapter extends DataMapper
 		$echo = "";
 		if ($this->volume > 0)
 			$echo .= _('Vol.') . $this->volume . ' ';
-		if ($this->chapter > 0)
+		if ($this->name == "" || $this->subchapter > 0 || $this->chapter > 0) // if it's a one-shot and it has a title and no subchapter don't show chapter number
 			$echo .= _('Chapter') . ' ' . $this->chapter;
 		if ($this->subchapter)
 			$echo .= '.' . $this->subchapter;

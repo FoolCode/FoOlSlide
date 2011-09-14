@@ -82,8 +82,7 @@ class Archive extends DataMapper {
 	 * @returns bool 
 	 */
 	function remove() {
-		$chapter = new Chapter();
-		$chapter->where('id', $this->chapter_id)->get();
+		$chapter = new Chapter($this->chapter_id);
 		$chapter->get_comic();
 		unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename);
 		$this->delete();

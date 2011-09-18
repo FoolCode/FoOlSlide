@@ -15,6 +15,7 @@ if (!function_exists('tabler')) {
 			array(
 				'type' => 'submit',
 				'name' => 'submit',
+				'class' => 'btn primary',
 				'id' => 'submit',
 				'value' => _('Save')
 			)
@@ -371,9 +372,9 @@ if (!function_exists('buttoner')) {
 		else
 			$texturl = array($data);
 
-		$echo = '<div class="gbuttons">';
+		$echo = '<div>';
 		foreach ($texturl as $key => $item) {
-			$echo .= '<a class="gbutton" ';
+			$echo .= '<a class="btn" ';
 			if (isset($item['onclick']))
 				$echo .= 'onclick="' . ($item['onclick']) . '" ';
 			if (isset($item['href']))
@@ -381,11 +382,11 @@ if (!function_exists('buttoner')) {
 			if (isset($item['plug']))
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
 			$echo .= '>';
-			if (isset($item['plug']))
-				$echo .= '<img class="loader" src="' . site_url() . '/assets/js/images/ajax-loader.gif' . '" />';
-			$echo .= $item['text'] . '</a>';
+			//if (isset($item['plug']))
+			//	$echo .= '<img class="loader" src="' . site_url() . '/assets/js/images/ajax-loader.gif' . '" />';
+			$echo .= $item['text'] . '</a> ';
 		}
-		$echo .= '<div class="clearer_r"></div></div>';
+		$echo .= '</div><br class="clear">';
 		return $echo;
 	}
 

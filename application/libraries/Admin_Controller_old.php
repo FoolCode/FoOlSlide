@@ -163,8 +163,11 @@ class Admin_Controller extends MY_Controller
 				$active = FALSE;
 			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item))
 			{
-				$result .= '<h5><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'>' . $item["name"] . '</a></h5>';
-				$result .= '<ul>';
+				$result .= '<div class="collection">';
+				$result .= '<div class="group"><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'>
+								<img class="icon off" src="' . site_url() . '/assets/glyphish/' . ($active ? 'on' : 'off') . '/' . $item["icon"] . '.png' . '" />
+								<img class="icon on" src="' . site_url() . '/assets/glyphish/on/' . $item["icon"] . '.png' . '" />'
+						. $item["name"] . '</a></div>';
 				foreach ($item["content"] as $subkey => $subitem)
 				{
 					if ($active && $this->uri->segment(3) == $subkey)
@@ -175,10 +178,10 @@ class Admin_Controller extends MY_Controller
 					{
 						//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
 						$is_active = "";
-						$result .= '<li class="' . ($subactive ? 'active' : '') . '"><a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'>' . $subitem["name"] . '</a></li>';
+						$result .= '<a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'><div class="element ' . ($subactive ? 'active' : '') . '">' . $subitem["name"] . '</div></a>';
 					}
 				}
-				$result .= '</ul>';
+				$result .= '</div>';
 			}
 		}
 		return $result;

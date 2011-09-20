@@ -1,4 +1,4 @@
-<div class="smartsearch">
+<div style="float: right;">
 <?php
 echo form_open(site_url('/admin/series/manage/'));
 echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and hit enter')));
@@ -31,26 +31,37 @@ echo buttoner();
     }
 
 ?>
-<div class='navi'>
+
 <?php
-
-    if($comics->paged->has_previous)
-    {
-        ?>
-    <a href="<?php echo site_url('admin/series/manage/') ?>">«« <?php echo _('First') ?></a>
-    <a href="<?php echo site_url('admin/series/manage/'.$comics->paged->previous_page) ?>">« <?php echo _('Prev') ?></a>
-        <?php
-    }
-    if($comics->paged->has_next)
-    {
-        ?>
-    <a href="<?php echo site_url('admin/series/manage/'.$comics->paged->next_page) ?>"><?php echo _('Next') ?> »</a>
-    <a href="<?php echo site_url('admin/series/manage/'.$comics->paged->total_pages) ?>"><?php echo _('Last'); ?> »»</a>
-        <?php
-    }
-
+	if ($comics->paged->total_pages > 1)
+	{
 ?>
+	<div class="pagination">
+		<ul>
+		<?php
+			if ($comics->paged->has_previous)
+				echo '<li class="prev"><a href="' . site_url('admin/series/manage/'.$comics->paged->previous_page) . '">&larr; ' . _('Prev') . '</a></li>';
+			else
+				echo '<li class="prev disabled"><a href="#">&larr; ' . _('Prev') . '</a></li>';
 
-</div>
+			$page = 1;
+			while ($page <= $comics->paged->total_pages)
+			{
+				if ($comics->paged->current_page == $page)
+					echo '<li class="active"><a href="#">' . $page . '</a></li>';
+				else
+					echo '<li><a href="' . site_url('admin/series/manage/'.$page) .'">' . $page . '</a></li>';
+				$page++;
+			}
 
+			if ($comics->paged->has_next)
+				echo '<li class="next"><a href="' . site_url('admin/series/manage/'.$comics->paged->next_page) . '">' . _('Next') . ' &rarr;</a></li>';
+			else
+				echo '<li class="next disabled"><a href="#">' . _('Next') . ' &rarr;</a></li>';
+		?>
+		</ul>
+	</div>
+<?php
+	}
+?>
 </div>

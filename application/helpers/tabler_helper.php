@@ -56,7 +56,41 @@ if (!function_exists('tabler')) {
 			);
 		}
 
-		if ($list) {
+		if ($list && $edit) {
+			$echo .= '<div class="plain"><fieldset>';
+			foreach ($result as $rowk => $row) {
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
+					//$echo .= $row[1]['form'];
+				}
+				else {
+					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
+						$echo .= '<div class="clearfix">';
+						foreach ($row as $colk => $column) {
+							if ($colk == 0) {
+								$echo .= '<label>' . $column['table'] . '</label>';
+								$echo .= '<div class="input">';
+							}
+							else {
+								$echo .= '<span class="uneditable-input">';
+								if (is_array($column['table'])) {
+									foreach ($column['table'] as $mini) {
+										$echo .= '' . $mini->name . ' ';
+									}
+								}
+								else if ($column['table'] == "")
+									$echo .= 'N/A';
+								else
+									$echo .= $column['table'];
+								$echo .= '</span>';
+							}
+						}
+						$echo .= '</div></div>';
+					}
+				}
+			}
+			$echo .= '</fieldset></div>';
+		}
+		elseif ($list) {
 			$echo .= '<div class="plain"><table class="form">';
 			foreach ($result as $rowk => $row) {
 				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
@@ -85,25 +119,31 @@ if (!function_exists('tabler')) {
 			$echo .= '</table></div>';
 		}
 
-
 		if ($edit) {
-			$echo .= '<div class="edit" ' . (($list && $edit) ? 'style="display:none;"' : '') . '><table class="form">';
+			$echo .= '<div class="edit" ' . (($list && $edit) ? 'style="display:none;"' : '') . '><fieldset>';
 			foreach ($result as $rowk => $row) {
+				
 				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
 					$echo .= $row[1]['form'];
 				}
 				else {
+					$echo .= '<div class="clearfix">';
 					$echo .= '<tr>';
-					foreach ($row as $column) {
-						$echo .= '<td>';
-						$echo .= $column['form'];
-						$echo .= '</td>';
+					foreach ($row as $colk => $column) {
+						if ($colk == 0) {
+							$echo .= '<label>' . $column['form'] . '</label>';
+							$echo .= '<div class="input">';
+						}
+						else {
+							$echo .= $column['form'];
+						}
 					}
-					$echo .= '</tr>';
+					$echo .= '</div></div>';
 				}
 			}
-			$echo .= '</table></div>';
+			$echo .= '</fieldset></div>';
 		}
+		
 		return $echo;
 	}
 
@@ -177,7 +217,7 @@ if (!function_exists('formize')) {
 		}
 
 		if (isset($help))
-			$result = $result . '<div class="help">' . $help . '</div>';
+			$result = $result . '<span class="help-block">' . $help . '</span>';
 		return $result;
 	}
 
@@ -426,37 +466,6 @@ if (!function_exists('prevnext')) {
 				</div>';
 		}
 		$echo .= '<div class="clearer"></div></div>';
-
-		return $echo;
-	}
-
-}
-
-if (!function_exists('mobile_prevnext')) {
-
-	function mobile_prevnext($base_url, $item) {
-
-		/*
-
-
-		  <a href="<?php echo site_url('/reader/list/') ?>"><?php echo _("Go to series list") ?></a>
-		  <!-- /navbar -->
-		 */
-		$echo = '<div data-role="navbar" data-theme="a"><ul>';
-
-		if ($item->paged->has_previous) {
-			$echo .= '
-					<li><a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« First</a></li>
-					<li><a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a></li>
-				';
-		}
-		if ($item->paged->has_next) {
-			$echo .= '
-					<li><a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">Last »»</a></li>
-					<li><a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">Next »</a></li>
-				';
-		}
-		$echo .= '</ul></div>';
 
 		return $echo;
 	}

@@ -59,7 +59,7 @@ class Series extends Admin_Controller
 			return false;
 		}
 
-		$this->viewdata["function_title"] = '<a href="' . site_url('admin/series/serie') . '/' . $comic->stub . '">' . $comic->name . '</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url('admin/series/serie/'.$comic->stub) . '">' . $comic->name . '</a>';
 		$data["comic"] = $comic;
 
 		if ($chapter_id != "")

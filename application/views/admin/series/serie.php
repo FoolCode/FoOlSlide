@@ -4,17 +4,22 @@ $this->buttoner[] = array(
 	'href' => site_url('/admin/series/delete/serie/'.$comic->id),
 	'plug' => _('Do you really want to delete this serie and its chapters?')
 );
-
-echo buttoner();
-
-echo form_open_multipart("");
-echo $table;
-echo form_close();
 ?>
 
+<div class="form-table">
+	<h3 style="float: left"><?php echo _('Serie Information'); ?></h3>
+	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
+	<hr style="height: 0px; border-color: rgba(0,0,0,0)">
+	<?php
+		echo form_open_multipart("", array('class' => 'form-stacked'));
+		echo $table;
+		echo form_close();
+	?>
+</div>
+	
+<hr>
 
-
-<div class="section"><?php echo _("Chapters") ?>:</div>
+<h3><?php echo _("Chapters") ?>:</h3>
 <?php
 	$this->buttoner = array(
 		array(
@@ -34,11 +39,8 @@ echo form_close();
 	echo buttoner();
 ?>
 
-
 <div class="list chapters">
-
 <?php
-
     foreach ($chapters as $item)
     {
         echo '<div class="item">
@@ -63,9 +65,7 @@ echo form_close();
                 </div>';
              echo '</div>';
     }
-
-?>
-    
+?>   
 </div>
 
 

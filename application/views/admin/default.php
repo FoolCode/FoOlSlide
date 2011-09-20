@@ -147,17 +147,17 @@
 				</div>
 				
 				<?php echo $main_content_view; ?>
-				
-				<footer>
-					<p style="float: right;">FoOlSlide Version <?php
-						if (isset($this->tank_auth))
-						{
-							echo get_setting('fs_priv_version');
-							if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
-								echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
-						} ?></p>
-				</footer>
 			</div>
 		</div>
+		
+		<footer style="position: relative; bottom: 0px; width: 100%">
+			<p style="padding-left: 20px;">FoOlSlide Version <?php
+			if (isset($this->tank_auth))
+			{
+				echo get_setting('fs_priv_version');
+				if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
+					echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
+			} ?></p>
+		</footer>
 	</body>
 </html>

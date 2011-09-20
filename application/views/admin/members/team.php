@@ -1,16 +1,21 @@
 <?php
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-
-
-echo buttoner();
-
-
-echo form_open();
-echo $table;
-echo form_close();
 ?>
-<br/><br/>
+
+<div class="form-table">
+	<h3 style="float: left"><?php echo _('Team Information'); ?></h3>
+	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
+	<hr style="height: 0px; border-color: rgba(0,0,0,0)">
+	<?php
+		echo form_open("", array('class' => 'form-stacked'));
+		echo $table;
+		echo form_close();
+	?>
+</div>
+
+<hr>
+
 <?php
 // Check for admin has already been done in controller
 if ($no_leader) {

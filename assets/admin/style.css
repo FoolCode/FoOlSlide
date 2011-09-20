@@ -632,8 +632,9 @@ textarea,
 select,
 .uneditable-input {
   display: inline-block;
-  width: 210px;
-  height: 18px;
+  max-width: 500px;
+  overflow: hidden;
+  height: auto;
   padding: 4px;
   font-size: 13px;
   line-height: 18px;
@@ -669,6 +670,7 @@ input[type=button], input[type=reset], input[type=submit] {
   height: auto;
 }
 select, input[type=file] {
+  //margin: 1px 0 1px 0;
   height: 27px;
   line-height: 27px;
   *margin-top: 4px;
@@ -697,6 +699,8 @@ textarea {
   color: #bfbfbf;
 }
 input, textarea {
+  max-width: 500px;
+  //margin: 1px 0 1px 0;
   -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
@@ -2359,4 +2363,13 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
   -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+/* Custom */
+.form-table {
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding-left: 10px;
 }

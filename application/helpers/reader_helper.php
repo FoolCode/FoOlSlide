@@ -89,7 +89,7 @@ if(!function_exists('get_irc_widget'))
 	{
 		$irc = get_setting_irc($team);
 		
-		$echo = _('Come chatting with us on') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
+		$echo = _('Come chat with us on') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
 		return '<div class="text">'.$echo.'</div>';
 	}
 }

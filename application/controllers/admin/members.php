@@ -94,7 +94,7 @@ class Members extends Admin_Controller
 		// the second part of the if makes sure that if "member" method is called from "you"
 		// the user is not redirected to "you" again
 		if ($this->tank_auth->get_user_id() == $id && $this->uri->segment(3) != 'you')
-			redirect('/account/profile/edit/');
+			redirect('/account/profile/');
 
 		// give admins and mods ability to edit user profiles
 		if ($this->input->post() && $this->tank_auth->is_allowed())
@@ -142,6 +142,14 @@ class Members extends Admin_Controller
 
 			// we can use get_iterated on teams
 			$teams = new Team();
+			
+			// support filtering via search
+			if ($this->input->post())
+			{
+				$teams->ilike('name', $this->input->post('search'));
+				$this->viewdata['extra_title'][] = _('Searching') . " : " . $this->input->post('search');
+			}
+			
 			$teams->order_by('name', 'ASC')->get_iterated();
 			$rows = array();
 			// produce links for each team

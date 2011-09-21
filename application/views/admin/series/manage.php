@@ -1,4 +1,4 @@
-<div style="float: right;">
+<div class="smartsearch">
 <?php
 echo form_open(site_url('/admin/series/manage/'));
 echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and hit enter')));

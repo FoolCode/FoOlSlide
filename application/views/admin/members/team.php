@@ -3,10 +3,10 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 ?>
 
-<div class="form-table">
+<div class="table">
 	<h3 style="float: left"><?php echo _('Team Information'); ?></h3>
 	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
-	<hr style="height: 0px; border-color: rgba(0,0,0,0)">
+	<hr class="clear"/>
 	<?php
 		echo form_open("", array('class' => 'form-stacked'));
 		echo $table;
@@ -14,7 +14,7 @@ if (!defined('BASEPATH'))
 	?>
 </div>
 
-<hr>
+<hr/>
 
 <?php
 // Check for admin has already been done in controller

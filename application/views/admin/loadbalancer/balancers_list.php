@@ -52,7 +52,7 @@ $form[] = array(
 				'help' => _('Add the IPs of the servers used to balance. This will prevent them from being limited via the nationality filter.')
 			)
 		);
-echo form_open();
+echo form_open('', array('class' => 'form-stacked'));
 echo tabler($form, FALSE, TRUE);
 echo form_close();
 

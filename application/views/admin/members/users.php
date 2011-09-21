@@ -7,9 +7,9 @@ echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and
 echo form_close();
 ?>
 </div>
+
+<br/><br/>
+
 <?php
 echo buttoner();
-
 echo $table;
-?>
-

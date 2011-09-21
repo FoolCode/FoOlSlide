@@ -6,7 +6,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
- * Date: Sat Sep 17 18:25:32 PDT 2011
+ * Date: Fri Sep 16 14:07:03 PDT 2011
  */
 /* Reset.less
  * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
@@ -631,10 +631,11 @@ input,
 textarea,
 select,
 .uneditable-input {
+  margin: 0 2px 1px 0;
   display: inline-block;
+  width: 300px;
   max-width: 500px;
-  overflow: hidden;
-  height: auto;
+  height: 18px;
   padding: 4px;
   font-size: 13px;
   line-height: 18px;
@@ -643,6 +644,9 @@ select,
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+}
+.uneditable-input {
+  height: auto;
 }
 /* mini reset for non-html5 file types */
 input[type=checkbox], input[type=radio] {
@@ -670,7 +674,6 @@ input[type=button], input[type=reset], input[type=submit] {
   height: auto;
 }
 select, input[type=file] {
-  //margin: 1px 0 1px 0;
   height: 27px;
   line-height: 27px;
   *margin-top: 4px;
@@ -699,8 +702,6 @@ textarea {
   color: #bfbfbf;
 }
 input, textarea {
-  max-width: 500px;
-  //margin: 1px 0 1px 0;
   -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
@@ -994,7 +995,7 @@ textarea[readonly] {
   -moz-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
   margin-right: 0;
-  margin-left: -1px;
+  margin-left: -3px;
 }
 .inputs-list {
   margin: 0 0 5px;
@@ -2365,11 +2366,41 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
 
+
 /* Custom */
-.form-table {
+.table {
   border: 1px solid #ddd;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   padding-left: 10px;
+}
+
+.table > hr.clear {
+  height: 0px;
+  border-color: rgba(0,0,0,0);
+}
+
+.list { }
+
+.list.chapters .item, .list .item {
+  padding: 8px 8px 5px 8px;
+  margin-top: 5px;
+}
+
+.list.chapters .item .title, .list .item .title {
+
+}
+
+.list.chapters .item .smalltext, .list .item .smalltext {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.list.chapters .item .info, .list .item .info {
+  float: right;
+}
+.smartsearch {
+  float: right;
+  border: 1px;
 }

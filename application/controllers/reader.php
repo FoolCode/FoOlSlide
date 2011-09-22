@@ -246,8 +246,15 @@ class Reader extends Public_Controller {
 		}
 		
 		$archive = new Archive();
-		$url = $archive->compress($chaptere);
-		redirect($url);
+		$result = $archive->compress($chaptere);
+		if($this->input->is_cli_request())
+		{
+			echo $result["server_path"];
+		}
+		else
+		{
+			redirect($result["url"]);
+		}
 	}
 
 	/**

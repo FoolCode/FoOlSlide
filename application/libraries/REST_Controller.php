@@ -38,7 +38,7 @@ class REST_Controller extends MY_Controller
 		{
 			show_404();
 		}
-		
+
 		// Lets grab the config and get ready to party
 		$this->load->config('rest');
 
@@ -63,7 +63,11 @@ class REST_Controller extends MY_Controller
 		{
 			case 'get':
 				// Grab proper GET variables
-				parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $get);
+				/**
+				 *  @author: Woxxy
+				 */
+				if (!$this->input->is_cli_request())
+					parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $get);
 
 				// If there are any, populate $this->_get_args
 				empty($get) OR $this->_get_args = $get;
@@ -243,7 +247,11 @@ class REST_Controller extends MY_Controller
 			if (method_exists($this, '_format_' . $this->response->format))
 			{
 				// Set the correct format header
-				header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
+				/**
+				 *  @author: Woxxy
+				 */
+				if (!$this->input->is_cli_request())
+					header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
 
 				$output = $this->{'_format_' . $this->response->format}($data);
 			}
@@ -252,7 +260,11 @@ class REST_Controller extends MY_Controller
 			elseif (method_exists($this->format, 'to_' . $this->response->format))
 			{
 				// Set the correct format header
-				header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
+				/**
+				 *  @author: Woxxy
+				 */
+				if (!$this->input->is_cli_request())
+					header('Content-Type: ' . $this->_supported_formats[$this->response->format]);
 
 				$output = $this->format->factory($data)->{'to_' . $this->response->format}();
 			}
@@ -264,10 +276,15 @@ class REST_Controller extends MY_Controller
 			}
 		}
 
-		header('HTTP/1.1: ' . $http_code);
-		header('Status: ' . $http_code);
-		header('Content-Length: ' . strlen($output));
-
+		/**
+		 *  @author: Woxxy
+		 */
+		if (!$this->input->is_cli_request())
+		{
+			header('HTTP/1.1: ' . $http_code);
+			header('Status: ' . $http_code);
+			header('Content-Length: ' . strlen($output));
+		}
 		exit($output);
 	}
 
@@ -479,14 +496,14 @@ class REST_Controller extends MY_Controller
 	protected function _log_request($authorized = FALSE)
 	{
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
-			'uri' => $this->uri->uri_string(),
-			'method' => $this->request->method,
-			'params' => serialize($this->_args),
-			'api_key' => isset($this->rest->key) ? $this->rest->key : '',
-			'ip_address' => $this->input->ip_address(),
-			'time' => function_exists('now') ? now() : time(),
-			'authorized' => $authorized
-		));
+					'uri' => $this->uri->uri_string(),
+					'method' => $this->request->method,
+					'params' => serialize($this->_args),
+					'api_key' => isset($this->rest->key) ? $this->rest->key : '',
+					'ip_address' => $this->input->ip_address(),
+					'time' => function_exists('now') ? now() : time(),
+					'authorized' => $authorized
+				));
 	}
 
 

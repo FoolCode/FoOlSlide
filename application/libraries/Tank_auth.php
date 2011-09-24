@@ -82,13 +82,10 @@ class Tank_auth
 					}
 					else
 					{
-						$profile = new Profile();
-						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
 							'status' => ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
-							'group' => $profile->group_id,
 						));
 
 						if ($user->activated == 0)
@@ -170,11 +167,6 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			// use the userdata
-			if ($this->ci->session->userdata('group') === '1')
-			{
-				return TRUE;
-			}
 			return FALSE;
 		}
 
@@ -205,11 +197,6 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			// use the userdata
-			if ($this->ci->session->userdata('group') === '3')
-			{
-				return TRUE;
-			}
 			return FALSE;
 		}
 
@@ -913,13 +900,10 @@ class Tank_auth
 					{
 
 						// Login user
-						$profile = new Profile();
-						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
-							'status' => STATUS_ACTIVATED,
-							'group' => $profile->group_id
+							'status' => STATUS_ACTIVATED
 						));
 						
 

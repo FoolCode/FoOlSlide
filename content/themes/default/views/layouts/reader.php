@@ -120,10 +120,11 @@
 								<style>
 									.nivoSlider {
 										position:relative;
-										width:690px !important; /* Change this to your images width */
+										width:680px !important; /* Change this to your images width */
 										height:280px !important; /* Change this to your images height */
 										margin-bottom:10px;
 										overflow:hidden;
+										margin-left:5px;
 									}
 									.nivoSlider img {
 										position:absolute;

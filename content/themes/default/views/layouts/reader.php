@@ -107,8 +107,8 @@
 							if (!$loaded_slideshow)
 							{
 								?>
-								<link rel="stylesheet" href="<?php site_url() ?>assets/js/nivo-slider.css" type="text/css" media="screen" />
-								<link rel="stylesheet" href="<?php site_url() ?>assets/js/nivoThemes/default/default.css" type="text/css" media="screen" />
+								<link rel="stylesheet" href="<?php echo site_url() ?>assets/js/nivo-slider.css" type="text/css" media="screen" />
+								<link rel="stylesheet" href="<?php echo site_url() ?>assets/js/nivoThemes/default/default.css" type="text/css" media="screen" />
 								<script src="<?php site_url() ?>assets/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
 								<script type="text/javascript">
 									jQuery(window).load(function() {

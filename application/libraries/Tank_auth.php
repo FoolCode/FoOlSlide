@@ -167,7 +167,7 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			return FALSE;
+			$user_id = $this->ci->session->userdata('user_id');
 		}
 
 		// we're checking if another user is an admin
@@ -197,7 +197,7 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			return FALSE;
+			$user_id = $this->ci->session->userdata('user_id');
 		}
 
 		// we're checking if another user is an admin

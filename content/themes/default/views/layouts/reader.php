@@ -81,6 +81,8 @@
 
 
 			<article id="content">
+
+
 				<?php
 				if (!isset($is_reader) || !$is_reader)
 					echo '<div class="panel">';
@@ -91,21 +93,91 @@
 				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
 					echo '<div class="ads iframe banner" id="ads_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
 
-
 				if (!isset($is_reader) || !$is_reader)
 					echo get_sidebar();
 
+				if (isset($is_latest) && $is_latest)
+				{
+					$loaded_slideshow = FALSE;
+					for ($i = 0; $i < 4; $i++)
+					{
+						$slideshow_img = get_setting('fs_slsh_src_' . $i);
+						if ($slideshow_img != FALSE)
+						{
+							if (!$loaded_slideshow)
+							{
+								?>
+								<link rel="stylesheet" href="<?php site_url() ?>assets/js/nivo-slider.css" type="text/css" media="screen" />
+								<link rel="stylesheet" href="<?php site_url() ?>assets/js/nivoThemes/default/default.css" type="text/css" media="screen" />
+								<script src="<?php site_url() ?>assets/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+								<script type="text/javascript">
+									jQuery(window).load(function() {
+										jQuery('#slider').nivoSlider({
+											pauseTime: 6000
+										});
+									});
+								</script>
+								<style>
+									.nivoSlider {
+										position:relative;
+										width:690px !important; /* Change this to your images width */
+										height:280px !important; /* Change this to your images height */
+										margin-bottom:10px;
+										overflow:hidden;
+									}
+									.nivoSlider img {
+										position:absolute;
+										top:0px;
+										left:0px;
+										display:none;
+										width:690px !important;
+									}
+
+									.nivoSlider a {
+										border:0;
+										display:block;
+									}
+								</style>
+								<?php
+								echo ' <div class="slider-wrapper theme-default">
+									<div id="slider" class="nivoSlider">';
+								$loaded_slideshow = TRUE;
+							}
+
+							if (get_setting('fs_slsh_url_' . $i))
+								echo '<a href="' . get_setting('fs_slsh_url_' . $i) . '">';
+							echo '<img src="' . get_setting('fs_slsh_src_' . $i) . '" alt="" ' . ((get_setting('fs_slsh_text_' . $i) != FALSE) ? 'title="#fs_slsh_text_' . $i . '"' : '') . ' />';
+							if (get_setting('fs_slsh_url_' . $i))
+								echo '</a>';
+						}
+					}
+
+					if ($loaded_slideshow)
+					{
+						echo '</div>';
+						for ($i = 0; $i < 4; $i++)
+						{
+							if (get_setting('fs_slsh_text_' . $i))
+							{
+								echo '<div id="fs_slsh_text_' . $i . '" class="nivo-html-caption">';
+								echo get_setting('fs_slsh_text_' . $i);
+								echo '</div>';
+							}
+						}
+						echo '</div>';
+					}
+				}
 
 				// here we output the body of the page
 				echo $template['body'];
-				
+
 
 				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && !get_setting('fs_ads_bottom_banner_reload'))
 					echo '<div class="ads banner" id="ads_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';
 
 				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && get_setting('fs_ads_bottom_banner_reload'))
 					echo '<div class="ads iframe banner" id="ads_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_bottom.html' . '"></iframe></div>';
-				
+
 				if (!isset($is_reader) || !$is_reader)
 					echo '</div>';
 				?>
@@ -123,7 +195,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div id="messages">
 		</div>
 	</body>

@@ -111,6 +111,7 @@ class Reader extends Public_Controller {
 		//$chapters->get_comic();
 
 		$this->template->set('chapters', $chapters);
+		$this->template->set('is_latest', true);
 		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
 	}

@@ -14,7 +14,7 @@ if (!defined('BASEPATH'))
 	?>
 </div>
 
-<hr/>
+<br/>
 
 <?php
 // Check for admin has already been done in controller

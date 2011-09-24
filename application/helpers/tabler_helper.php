@@ -22,12 +22,13 @@ if (!function_exists('tabler')) {
 		);
 
 		$echo = "";
-
+	
 		foreach ($rows as $rowk => $row) {
 			foreach ($row as $colk => $column) {
 				if ($colk == 0) {
 					$result[$rowk][$colk]["table"] = $column;
 					$result[$rowk][$colk]["form"] = $column;
+					$result[$rowk][$colk]["field"] = $rows[$rowk][$colk + 1]['name'];
 				}
 				else {
 					if (!isset($column['value']))
@@ -46,7 +47,7 @@ if (!function_exists('tabler')) {
 				}
 			}
 		}
-
+	
 		// echo '<pre>'; print_r($result); echo '</pre>';
 		if ($list && $edit) {
 			$CI->buttoner[] = array(
@@ -67,7 +68,7 @@ if (!function_exists('tabler')) {
 						$echo .= '<div class="clearfix">';
 						foreach ($row as $colk => $column) {
 							if ($colk == 0) {
-								$echo .= '<label>' . $column['table'] . '</label>';
+								$echo .= '<label for="' . $column['field'] . '">' . $column['table'] . '</label>';
 								$echo .= '<div class="input">';
 							}
 							else {
@@ -131,7 +132,7 @@ if (!function_exists('tabler')) {
 					$echo .= '<tr>';
 					foreach ($row as $colk => $column) {
 						if ($colk == 0) {
-							$echo .= '<label>' . $column['form'] . '</label>';
+							$echo .= '<label for="' . $column['field'] . '">' . $column['form'] . '</label>';
 							$echo .= '<div class="input">';
 						}
 						else {
@@ -176,8 +177,16 @@ if (!function_exists('formize')) {
 		$type = $column['type'];
 		if (isset($column['help']))
 			$help = $column['help'];
+		if (isset($column['text']))
+			$text = $column['text'];
+		if (isset($column['field']))
+			$column['id'] = $column['field'];
+		else
+			$column['id'] = $column['name'];
+		unset($column['field']);
 		unset($column['type']);
 		unset($column['preferences']);
+		unset($column['text']);
 		unset($column['help']);
 
 		if (is_array($column['value'])) {
@@ -215,7 +224,9 @@ if (!function_exists('formize')) {
 				$result.= $resulting . '<br/>';
 			}
 		}
-
+		
+		if (isset($text))
+			$result = $result . '<span> ' . $text . '</span>';
 		if (isset($help))
 			$result = $result . '<span class="help-block">' . $help . '</span>';
 		return $result;

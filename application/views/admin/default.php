@@ -24,9 +24,7 @@
 				
 				if (plug)
 				{
-					jQuery(item).addClass('loading');
 					jQuery.post(href, function(result) {
-						jQuery(item).removeClass('loading');
 						if (location.href == result.href) window.location.reload(true);
 						location.href = result.href;
 					}, 'json');

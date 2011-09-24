@@ -633,7 +633,7 @@ select,
 .uneditable-input {
   margin: 0 2px 1px 0;
   display: inline-block;
-  width: 300px;
+  width: 500px;
   max-width: 500px;
   height: 18px;
   padding: 4px;
@@ -2403,4 +2403,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 .smartsearch {
   float: right;
   border: 1px;
+}
+.smartsearch > form > input {
+  width: 300px;
 }

@@ -30,11 +30,11 @@ echo '<table class="form">
 if (is_array($balancers))
 	foreach ($balancers as $key => $item)
 	{
-		echo '<tr><td>' . form_input('url[]', $item["url"]) . '</td><td><div class="input-append"><input style="text-align:right;" type="number" name="priority[]" min="0" max="100" value="' . form_prep($item["priority"]) . '" /><span class="add-on">%</span></div></td></tr>';
+		echo '<tr><td>' . form_input('url[]', $item["url"]) . '</td><td><div class="input-append"><input style="text-align: right; width: 100px" type="number" name="priority[]" min="0" max="100" value="' . form_prep($item["priority"]) . '" /><span class="add-on">%</span></div></td></tr>';
 	}
 $url["value"] = "";
 
-echo '<tr><td>' . form_input('url[]') . '</td><td><div class="input-append"><input style="text-align:right;" type="number" name="priority[]" min="0" max="100" value="0"/><span class="add-on">%</span></div></td></tr>';
+echo '<tr><td>' . form_input('url[]') . '</td><td><div class="input-append"><input style="text-align: right; width: 100px" type="number" name="priority[]" min="0" max="100" value="0"/><span class="add-on">%</span></div></td></tr>';
 echo '</table>';
 
 echo form_submit('submit', _("Add/Save"));

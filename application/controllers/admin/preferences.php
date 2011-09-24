@@ -383,6 +383,7 @@ class Preferences extends Admin_Controller
 				'name' => 'fs_reg_disabled',
 				'id' => 'disable_reg',
 				'preferences' => 'fs_reg',
+				'text' => _('Disable'),
 				'help' => _('Disable registration in case you\'re not expecting any')
 			)
 		);
@@ -394,6 +395,7 @@ class Preferences extends Admin_Controller
 				'name' => 'fs_reg_email_disabled',
 				'id' => 'disable_reg',
 				'preferences' => 'fs_reg',
+				'text' => _('Disable'),
 				'help' => _('Disable the necessity to proceed with an activation after registering')
 			)
 		);

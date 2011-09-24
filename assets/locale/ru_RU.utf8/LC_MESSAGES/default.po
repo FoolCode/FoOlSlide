@@ -1,12 +1,13 @@
 # 
-#   <foxsempai@gmail.com>, 2011.
+# Translators:
 #   <fmikk06@gmail.com>, 2011.
+#   <foxsempai@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
 "POT-Creation-Date: 2011-08-11 17:59+0100\n"
-"PO-Revision-Date: 2011-09-05 22:04+0100\n"
+"PO-Revision-Date: 2011-09-24 11:35+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1484,7 +1485,7 @@ msgstr "Все переведенные главы"
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/list.php:24
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search.php:23
 msgid "by"
-msgstr "переводчики"
+msgstr "от"
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/latest.php:4
 msgid "Latest released chapters"

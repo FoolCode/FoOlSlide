@@ -1,12 +1,13 @@
 # 
-#   <inadel@hotmail.es>, 2011.
+# Translators:
 #   <crash2025@gmail.com>, 2011.
+#   <inadel@hotmail.es>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
 "POT-Creation-Date: 2011-08-11 17:59+0100\n"
-"PO-Revision-Date: 2011-09-05 22:07+0100\n"
+"PO-Revision-Date: 2011-09-24 11:35+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1270,7 +1271,7 @@ msgstr "Los equilibradores de carga para el FoOlSlide son servidores que contien
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:10
 #, php-format
 msgid " Setting up a FoOlSlide balancer is really easy: just install a slide on the other server, tell it the URL to this slide (%s), and add the URL to the other slide down here. The rest is automatic."
-msgstr " Configurar un equilibrador de FoOlSLide es fácil: solo hay que instalar un slide en otro servidor, ponerle el URL a este slide (%s), y añadir el URL al otro slide aquí abajo. El resto es automático."
+msgstr " Configurar un equilibrador de FoOlSLide es fácil: solo hay que instalar un slide en otro servidor, ponerle la URL a este slide (%s), y añadir la URL al otro slide aquí abajo. El resto es automático."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:14
 msgid "The % is for ease. You can set each host to any %. If you set two balancers at 100%, they will actually work at 50% each"
@@ -1278,7 +1279,7 @@ msgstr "El % es para facilitar. Puedes poner cada host con cualquier %. Si confi
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:19
 msgid "The load balancer can't support download of compressed archives. Those will still be served by the master FoOlSlide. Don't worry: less than 20% readers downloads. Just keep this in mind while distributing the %."
-msgstr "El equilibrador de carga no soporta la descarga de archivos comprimidos. Estos los proporciona el FoOlSlide maestro. No re preocupes: menos del 20% de los lectores utiliza las descargas. Ten esto en mente para la distribución del %"
+msgstr "El equilibrador de carga no soporta la descarga de archivos comprimidos. Estos los proporciona el FoOlSlide maestro. No te preocupes: menos del 20% de los lectores utiliza las descargas. Ten esto en mente para la distribución del %"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:40
 msgid "Add/Save"
@@ -1456,7 +1457,7 @@ msgstr "FoOlSlide está actualizado."
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:38
 #, php-format
 msgid "Please, check the <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">transifex translation project</a> in case you're using a non-English language for FoOlSlide. Make sure the % on your language isn't under 90% before upgrading. Contribute to the translation to get your language updated in the next localization update of FoOlSlide (normally within 48 hours)."
-msgstr "Por favor, revisa el <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">Projecto de traduccion transifex</a> en caso de usar un idioma diferente al inglés para FoOlSlide. Asegúrese de que el % de su idioma no esté por debajo del 90% antes de actualizar. Contribuye a la traducción para que tu idioma se actualice en la siguiente actualización de FoOlSlide (Normalmente dentro de las 48 horas siguientes)."
+msgstr "Por favor, revisa el <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">Projecto de traducción transifex</a> en caso de usar un idioma diferente al inglés para FoOlSlide. Asegúrese de que el % de su idioma no esté por debajo del 90% antes de actualizar. Contribuye a la traducción para que tu idioma se actualice en la siguiente actualización de FoOlSlide (Normalmente dentro de las 48 horas siguientes)."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/install/index.php:6
 msgid "This is all the needed information to install and run FoOlSlide. Don't worry: you can change this information later in case you need it changed."

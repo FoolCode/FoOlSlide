@@ -1,13 +1,15 @@
 # 
-#   <fetch1@gmx.de>, 2011.
+# Translators:
 #   <darkevolution@online.de>, 2011.
+#   <fetch1@gmx.de>, 2011.
+#   <guorbatschow@gmail.com>, 2011.
 #   <spam_adresse@gmx.de>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
 "POT-Creation-Date: 2011-08-11 17:59+0100\n"
-"PO-Revision-Date: 2011-09-05 22:07+0100\n"
+"PO-Revision-Date: 2011-09-24 11:35+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1266,7 +1268,7 @@ msgstr "Willst du wirklich deine Datenbank aktualisieren?"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:6
 msgid "Load balancers for FoOlSlide are servers that contain the images cloned from the master server. You can use an external service to do this (like a Content Delivery Network), or use a second FoOlSlide in \"client mode\" on another server."
-msgstr "Ladeausgleicher für FoOlSlide sind Serve, welche die Bilder von dem Master-Server kopiert haben. Du kannst externe Dienste (z.B. ein Content Delivery Network) oder eine zweite FoOlSlide Installation im \"Client Modus\" auf einem anderen Server nutzen."
+msgstr "Lastausgleicher für FoOlSlide sind Server, welche die Bilder von dem Master-Server kopiert haben. Du kannst externe Dienste (z.B. ein Content Delivery Network) oder eine zweite FoOlSlide Installation im \"Client Modus\" auf einem anderen Server nutzen."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:10
 #, php-format
@@ -1275,11 +1277,11 @@ msgstr "Das Einrichten von einem FoOlSlide Ausgleicher ist wirklich einfach: Ins
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:14
 msgid "The % is for ease. You can set each host to any %. If you set two balancers at 100%, they will actually work at 50% each"
-msgstr ""
+msgstr "Der Prozentsatz (%) legt die Belastung fest. Du kannst für jeden Lastausgleicher einen Prozentsatz festlegen. Wenn du bei zwei Lastausgleicher jeweils 100% einstellst, arbeiten sie in Wirklichkeit jeder zu 50%."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:19
 msgid "The load balancer can't support download of compressed archives. Those will still be served by the master FoOlSlide. Don't worry: less than 20% readers downloads. Just keep this in mind while distributing the %."
-msgstr "Der Ladeausgleich unterstützt nicht den Download von verpackten Archiven. Sie werden weiterhin nur über den Master-Server deines FoOlSlide angeboten. Mach dir aber keine Sorgen, denn weniger als 20% der Leser Laden Kapitel herunter. Behalte dies auch für die Prozentverteilung deiner Server im Hinterkopf."
+msgstr "Der Lastausgleich unterstützt nicht den Download von verpackten Archiven. Sie werden weiterhin nur über den Master-Server deines FoOlSlide angeboten. Mach dir aber keine Sorgen, denn weniger als 20% der Leser laden Kapitel herunter. Behalte dies auch für die Prozentverteilung deiner Server im Hinterkopf."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/loadbalancer/balancers_list.php:40
 msgid "Add/Save"

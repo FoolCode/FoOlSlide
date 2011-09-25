@@ -99,7 +99,7 @@
 				if (isset($is_latest) && $is_latest)
 				{
 					$loaded_slideshow = FALSE;
-					for ($i = 0; $i < 4; $i++)
+					for ($i = 0; $i < 5; $i++)
 					{
 						$slideshow_img = get_setting('fs_slsh_src_' . $i);
 						if ($slideshow_img != FALSE)
@@ -109,7 +109,7 @@
 								?>
 								<link rel="stylesheet" href="<?php echo site_url() ?>assets/js/nivo-slider.css" type="text/css" media="screen" />
 								<link rel="stylesheet" href="<?php echo site_url() ?>assets/js/nivoThemes/default/default.css" type="text/css" media="screen" />
-								<script src="<?php site_url() ?>assets/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+								<script src="<?php echo site_url() ?>assets/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
 								<script type="text/javascript">
 									jQuery(window).load(function() {
 										jQuery('#slider').nivoSlider({
@@ -156,7 +156,7 @@
 					if ($loaded_slideshow)
 					{
 						echo '</div>';
-						for ($i = 0; $i < 4; $i++)
+						for ($i = 0; $i < 5; $i++)
 						{
 							if (get_setting('fs_slsh_text_' . $i))
 							{

@@ -177,8 +177,8 @@
 				<p id="modal-text-desc"></p>
 			</div>
 			<div class="modal-footer">
-				<a href="#" id="modal-btn-no" class="btn primary">No</a>
-				<a href="#" id="modal-btn-yes" class="btn secondary">Yes</a>
+				<a href="#" id="modal-btn-no" class="btn primary"><?php echo _('No'); ?></a>
+				<a href="#" id="modal-btn-yes" class="btn secondary"><?php echo _('Yes'); ?></a>
 			</div>
 		</div>
 	</body>

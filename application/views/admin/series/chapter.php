@@ -9,16 +9,23 @@ $this->buttoner[] = array(
 	'text' => _('Read chapter'),
 	'href' => $chapter->href()
 );
-
-echo buttoner();
-
-echo form_open();
-echo $table;
-echo form_close();
 ?>
 
-<div class="section"><?php echo _("Pages") ?>:</div>
+<div class="table">
+	<h3 style="float: left"><?php echo _('Chapter Information'); ?></h3>
+	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
+	<hr class="clear"/>
+	<?php
+		echo form_open('', array('class' => 'form-stacked'));
+		echo $table;
+		echo form_close();
+	?>
+</div>
 
+<br/>
+
+<div class="table">
+	<h3 style="float: left"><?php echo _('Pages'); ?></h3>
 
 <?php
 $session_name = $this->session->get_js_session(TRUE);
@@ -109,6 +116,7 @@ $session_data = $this->session->get_js_session();
 		<table class="files"></table>
 		<div class="fileupload-progressbar"></div>
 	</div>
+</div>
 </div>
 <script id="template-upload" type="text/x-jquery-tmpl">
     <tr class="template-upload{{if error}} ui-state-error{{/if}}">

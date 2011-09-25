@@ -31,7 +31,12 @@ if (!function_exists('tabler')) {
 					$result[$rowk][$colk]["field"] = $rows[$rowk][$colk + 1]['name'];
 				}
 				else {
-					if (!isset($column['value']))
+					if (isset($column['list']) && is_array($column['list'])) {
+						foreach ($column['list'] as $key => $item)
+							if (!isset($column['list'][$key]['value']))
+								$column['list'][$key]['value'] = "";
+					}
+					elseif (!isset($column['value']))
 						$column['value'] = "";
 					if (is_array($column)) {
 						$result[$rowk][$colk]["table"] = writize($column);
@@ -164,11 +169,13 @@ if (!function_exists('formize')) {
 			$column['value'] = unserialize($column["value"]);
 		
 		//if($column['type'] == 'input' || $column['type'] == 'nation') $column['value'] = set_value($column['name']);
-
+		
 		if ($column['type'] == 'checkbox') {
-			if ($column['value'] == 1)
-				$column['checked'] = 'checked';
-			$column['value'] = 1;
+			if (!is_array($column['value'])) {
+				if ($column['value'] == 1)
+					$column['checked'] = 'checked';
+				$column['value'] = 1;
+			}
 		}
 
 		$formize = 'form_' . $column['type'];
@@ -190,23 +197,34 @@ if (!function_exists('formize')) {
 		unset($column['help']);
 
 		if (is_array($column['value'])) {
-			$result = array();
-			$column['name'] .= '[]';
-			$minion = $column['value'];
-			foreach ($minion as $mini) {
-				if (isset($mini->name))
-					$column['value'] = $mini->name;
-				else
-					$column['value'] = $mini;
-				$result[] = $formize($column);
+			if ($type == 'checkbox') {
+				$result = array();
+				$minion = $column['value'];
+				$result[] = '<ul class="inputs-list">';
+				foreach ($minion as $mini) {
+					$mini['type'] = 'checkbox';
+					$result[] = '<li><label>'. formize($mini, FALSE) . '</label></li>';
+				}
+				$result[] = '</ul>';
 			}
-			if (empty($result)) {
+			else {
+				$column['name'] .= '[]';
+				$minion = $column['value'];
+				foreach ($minion as $mini) {
+					if (isset($mini->name))
+						$column['value'] = $mini->name;
+					else
+						$column['value'] = $mini;
+					$result[] = $formize($column);
+				}
+				if (empty($result)) {
+					$column['value'] = "";
+					$result[] = $formize($column);
+				}
 				$column['value'] = "";
+				$column['onKeyUp'] = "addField(this);";
 				$result[] = $formize($column);
 			}
-			$column['value'] = "";
-			$column['onKeyUp'] = "addField(this);";
-			$result[] = $formize($column);
 		}
 		else {
 			// echo '<pre>'; print_r($column); echo '</pre>';
@@ -221,12 +239,14 @@ if (!function_exists('formize')) {
 			$results = $result;
 			$result = "";
 			foreach ($results as $resulting) {
-				$result.= $resulting . '<br/>';
+				$result.= $resulting;
+				if ($type != 'checkbox')
+					$result .= '<br/>';
 			}
 		}
-		
-		if (isset($text))
-			$result = $result . '<span> ' . $text . '</span>';
+			
+		if (isset($text) && !is_array($column['value']))
+			$result = $result . ' <span>' . $text . '</span>';
 		if (isset($help))
 			$result = $result . '<span class="help-block">' . $help . '</span>';
 		return $result;
@@ -423,7 +443,7 @@ if (!function_exists('buttoner')) {
 		else
 			$texturl = array($data);
 
-		$echo = '<div>';
+		$echo = '';
 		foreach ($texturl as $key => $item) {
 			$echo .= '<a class="btn" ';
 			if (isset($item['onclick']))
@@ -433,11 +453,8 @@ if (!function_exists('buttoner')) {
 			if (isset($item['plug']))
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
 			$echo .= '>';
-			//if (isset($item['plug']))
-			//	$echo .= '<img class="loader" src="' . site_url() . '/assets/js/images/ajax-loader.gif' . '" />';
 			$echo .= $item['text'] . '</a> ';
 		}
-		$echo .= '</div><br class="clear">';
 		return $echo;
 	}
 

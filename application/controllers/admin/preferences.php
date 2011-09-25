@@ -37,9 +37,20 @@ class Preferences extends Admin_Controller
 	 */
 	function _submit($post, $form)
 	{
+		$former = array();
 		foreach ($form as $key => $item)
 		{
+			if (isset($item[1]['value']) && is_array($item[1]['value'])) {
+				foreach ($item[1]['value'] as $key => $item2) {
+					$former[] = array('1', $item2);
+				}
+			}
+			else
+				$former[] = $form[$key];
+		}
 
+		foreach ($former as $key => $item)
+		{
 			if (isset($post[$item[1]['name']]))
 				$value = $post[$item[1]['name']];
 			else
@@ -377,17 +388,28 @@ class Preferences extends Admin_Controller
 
 
 		$form[] = array(
-			_('Disable registration'),
+			_('Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_reg_disabled',
-				'id' => 'disable_reg',
-				'preferences' => 'fs_reg',
-				'text' => _('Disable'),
-				'help' => _('Disable registration in case you\'re not expecting any')
+				'name' => 'fs_reg_settings',
+				'value' => array(
+					array(
+						'name' => 'fs_reg_disabled',
+						'id' => 'disable_reg',
+						'preferences' => 'fs_reg',
+						'text' => _('Disable Registration')
+					),
+					array(
+						'name' => 'fs_reg_email_disabled',
+						'id' => 'disable_reg',
+						'preferences' => 'fs_reg',
+						'text' => _('Disable Email Activation')
+					)
+				),
+				'help' => 'Disable options regarding registration and activation.'
 			)
 		);
-
+/*
 		$form[] = array(
 			_('Disable activation email'),
 			array(
@@ -398,7 +420,7 @@ class Preferences extends Admin_Controller
 				'text' => _('Disable'),
 				'help' => _('Disable the necessity to proceed with an activation after registering')
 			)
-		);
+		);*/
 
 		$form[] = array(
 			_('reCaptcha public key'),

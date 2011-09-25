@@ -60,13 +60,13 @@ $this->buttoner[] = array(
 					By <a href="'.site_url("/admin/users/teams/".$item->team_stub).'">'.$item->team_name.'</a></div>
 				<div class="smalltext">
 					'._('Quick tools').': 
-						<a href="'.site_url("admin/series/delete/chapter/".$item->id).'" onclick="confirmPlug(\''.site_url("admin/series/delete/chapter/".$item->id).'\', \'Do you really want to delete this chapter and its pages?\'); return false;">Delete</a> |
+						<a href="'.site_url("admin/series/delete/chapter/".$item->id).'" onclick="confirmPlug(\''.site_url("admin/series/delete/chapter/".$item->id).'\', \'Do you really want to delete this chapter and its pages?\'); return false;">' . _('Delete') . '</a> |
 						<a href="';
 							if ($item->subchapter)
 								echo site_url("reader/read/".$item->comic->stub."/".$item->language."/".$item->volume."/".$item->chapter."/".$item->subchapter."/");
 							else
 								echo site_url("reader/read/".$item->comic->stub."/".$item->language."/".$item->volume."/".$item->chapter."/");
-			echo '">Read</a>
+			echo '">' . _('Read') . '</a>
 				</div>';
 			echo '</div>';
 		}

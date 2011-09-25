@@ -19,11 +19,20 @@
 			
 			function confirmPlug(href, text, item)
 			{
-				if (text != "") var plug = confirm(text);
-					else plug = true;
-				
-				if (plug)
-				{
+				if (text != "") {
+					var modalContainer = jQuery("#modal-container");
+					modalContainer.modal({show: true, closeOnEscape: true, backdrop: 'static', keyboard: true});
+					modalContainer.find("#modal-text-desc").html(text);
+					modalContainer.find("#modal-btn-no").click(function() {	modalContainer.modal('hide'); return false; });
+					modalContainer.find("#modal-btn-yes").attr('href', href).click(function() {
+						jQuery.post(href, function(result) {
+							if (location.href == result.href) window.location.reload(true);
+							location.href = result.href;
+						}, 'json');
+						return false;
+					});
+				}
+				else {
 					jQuery.post(href, function(result) {
 						if (location.href == result.href) window.location.reload(true);
 						location.href = result.href;
@@ -157,5 +166,20 @@
 					echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
 			} ?></p>
 		</footer>
+		
+		<!-- Modal Container for Admin Panel -->
+		<div id="modal-container" class="modal hide fade">
+			<div class="modal-header">
+				<a href="#" class="close">&times;</a>
+				<h3 id="modal-text-head">Warning!</h3>
+			</div>
+			<div class="modal-body">
+				<p id="modal-text-desc"></p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id="modal-btn-no" class="btn primary">No</a>
+				<a href="#" id="modal-btn-yes" class="btn secondary">Yes</a>
+			</div>
+		</div>
 	</body>
 </html>

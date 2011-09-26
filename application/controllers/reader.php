@@ -172,7 +172,7 @@ class Reader extends Public_Controller
 		$chapters = new Chapter();
 
 		// Select the latest 25 released chapters
-		$chapters->order_by('created', 'DESC')->limit(15);
+		$chapters->order_by('created', 'DESC')->limit(25);
 
 		// Get the chapters!
 		$chapters->get();
@@ -180,6 +180,7 @@ class Reader extends Public_Controller
 		//$chapters->get_comic();
 
 		$this->template->set('chapters', $chapters);
+		$this->template->set('is_latest', true);
 		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
 	}
@@ -338,8 +339,15 @@ class Reader extends Public_Controller
 		}
 
 		$archive = new Archive();
-		$url = $archive->compress($chaptere);
-		redirect($url);
+		$result = $archive->compress($chaptere);
+		if($this->input->is_cli_request())
+		{
+			echo $result["server_path"];
+		}
+		else
+		{
+			redirect($result["url"]);
+		}
 	}
 
 

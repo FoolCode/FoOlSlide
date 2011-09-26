@@ -137,7 +137,7 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
-				'values' => array('' => 'English', 'cs_CZ.utf8' => 'Czech', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pl_PL.utf8' => 'Polish', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)', 'ru_RU.utf8' => 'Russian', 'es_ES.utf8' => 'Spanish'),
+				'values' => array('' => 'English', 'cs_CZ.utf8' => 'Czech', 'fr_FR.utf8' => 'French', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pl_PL.utf8' => 'Polish', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)', 'ru_RU.utf8' => 'Russian', 'es_ES.utf8' => 'Spanish', 'tr_TR.utf8' => 'Turkish'),
 				'preferences' => 'fs_gen',
 				'help' => _('Changes the overall language of the FoOlSlide software. If you can\'t find your language, you can contribute by translating on <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">our transifex project</a>')
 			)
@@ -487,6 +487,163 @@ class Preferences extends Admin_Controller
 		}
 
 		// create form
+		$table = tabler($form, FALSE);
+		$data['table'] = $table;
+
+		// print out
+		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
+	
+	
+	
+	/*
+	 * Generic info influcencing all of FoOlSlide
+	 * 
+	 * @author Woxxy
+	 */
+	function slideshow()
+	{
+		$this->viewdata["function_title"] = _("Slideshow");
+
+
+		$form = array();
+
+		// build the array for the form
+		$form[] = array(
+			_('1st Image URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_src_1',
+				'placeholder' => _('Activate by inserting an URL'),
+				'preferences' => 'fs_gen',
+				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
+			)
+		);
+		
+		$form[] = array(
+			_('1st URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_url_1',
+				'placeholder' => _('Not required'),
+				'preferences' => 'fs_gen',
+				'help' => _('Link URL (don\'t forget "http://")')
+			)
+		);
+
+		$form[] = array(
+			_('1st Display text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_slsh_text_1',
+				'preferences' => 'fs_gen',
+				'help' => _('Text that appears on bottom of the image. HTML accepted')
+			)
+		);
+		
+		$form[] = array(
+			_('2nd Image URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_src_2',
+				'placeholder' => _('Activate by inserting an URL'),
+				'preferences' => 'fs_gen',
+				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
+			)
+		);
+		
+		$form[] = array(
+			_('2nd URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_url_2',
+				'placeholder' => _('Not required'),
+				'preferences' => 'fs_gen',
+				'help' => _('Link URL (don\'t forget "http://")')
+			)
+		);
+
+		$form[] = array(
+			_('2nd Display text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_slsh_text_2',
+				'preferences' => 'fs_gen',
+				'help' => _('Text that appears on bottom of the image. HTML accepted')
+			)
+		);
+		
+		$form[] = array(
+			_('3rd Image URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_src_3',
+				'placeholder' => _('Activate by inserting an URL'),
+				'preferences' => 'fs_gen',
+				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
+			)
+		);
+		
+		$form[] = array(
+			_('3rd URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_url_3',
+				'placeholder' => _('Not required'),
+				'preferences' => 'fs_gen',
+				'help' => _('Link URL (don\'t forget "http://")')
+			)
+		);
+
+		$form[] = array(
+			_('3rd Display text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_slsh_text_3',
+				'preferences' => 'fs_gen',
+				'help' => _('Text that appears on bottom of the image. HTML accepted')
+			)
+		);
+		
+		$form[] = array(
+			_('4th Image URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_src_4',
+				'placeholder' => _('Activate by inserting an URL'),
+				'preferences' => 'fs_gen',
+				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
+			)
+		);
+		
+		$form[] = array(
+			_('4th URL'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_slsh_url_4',
+				'placeholder' => _('Not required'),
+				'preferences' => 'fs_gen',
+				'help' => _('Link URL (don\'t forget "http://")')
+			)
+		);
+
+		$form[] = array(
+			_('4th Display text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_slsh_text_4',
+				'preferences' => 'fs_gen',
+				'help' => _('Text that appears on bottom of the image. HTML accepted')
+			)
+		);
+
+		if ($post = $this->input->post())
+		{
+			$this->_submit($post, $form);
+		}
+
+		// create a form
 		$table = tabler($form, FALSE);
 		$data['table'] = $table;
 

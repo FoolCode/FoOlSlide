@@ -8,7 +8,7 @@ class Public_Controller extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		// if this is a load balancer FoOlSlide, disable the public interface
 		if (get_setting('fs_balancer_master_url'))
 		{
@@ -20,6 +20,7 @@ class Public_Controller extends MY_Controller
 
 		// Set theme by using the theme variable
 		$this->template->set_theme((get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default'));
-
 	}
+
+
 }

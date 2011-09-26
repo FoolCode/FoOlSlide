@@ -28,7 +28,19 @@ class MY_Controller extends CI_Controller
 			{
 				$locale = get_setting('fs_gen_lang');
 				putenv("LANG=$locale");
-				setlocale(LC_ALL, $locale);
+				if ($locale != "tr_TR.utf8")
+				{
+					setlocale(LC_ALL, $locale);
+				}
+				else // workaround to make turkish work with FoOlSlide
+				{
+					setlocale(LC_COLLATE, $locale);
+					setlocale(LC_MONETARY, $locale);
+					setlocale(LC_NUMERIC, $locale);
+					setlocale(LC_TIME, $locale);
+					setlocale(LC_MESSAGES, $locale);
+					setlocale(LC_CTYPE, "sk_SK.utf8");
+				}
 				bindtextdomain("default", FCPATH . "assets/locale");
 				textdomain("default");
 			}

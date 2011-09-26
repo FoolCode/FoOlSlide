@@ -41,11 +41,6 @@ class Upgrade2_model extends CI_Model {
 		if (!is_writable('content/themes/default')) {
 			return FALSE;
 		}
-
-		if (!is_writable('content/themes/mobile')) {
-			return FALSE;
-		}
-
 		if (!is_writable('content/cache')) {
 			return FALSE;
 		}
@@ -93,9 +88,6 @@ class Upgrade2_model extends CI_Model {
 		if (!file_exists('content/cache/upgrade/content/themes/default')) {
 			return FALSE;
 		}
-		if (!file_exists('content/cache/upgrade/content/themes/mobile')) {
-			return FALSE;
-		}
 
 		unlink('index.php');
 		rename('content/cache/upgrade/index.php', 'index.php');
@@ -107,8 +99,11 @@ class Upgrade2_model extends CI_Model {
 		rename('content/cache/upgrade/assets', 'assets');
 		delete_files('content/themes/default/', TRUE);
 		rename('content/cache/upgrade/content/themes/default', 'content/themes/default');
-		delete_files('content/themes/mobile/', TRUE);
-		rename('content/cache/upgrade/content/themes/mobile', 'content/themes/mobile');
+		
+		// delete the mobile folder for a while... 05/09/2011
+		//if (file_exists('content/themes/mobile')) {
+		//	delete_files('content/themes/mobile/', TRUE);
+		//}
 		
 		return TRUE;
 	}

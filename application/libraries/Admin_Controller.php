@@ -126,6 +126,16 @@ class Admin_Controller extends MY_Controller
 				"upgrade" => array("level" => "admin", "name" => _("Upgrade")),
 			)
 		);
+		
+		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
+			"level" => "member",
+			"default" => "http://ask.foolrulez.com",
+			"icon" => 44,
+			"content" => array(
+				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ")),
+				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker")),
+			)
+		);
 
 		return $sidebar;
 	}
@@ -154,7 +164,7 @@ class Admin_Controller extends MY_Controller
 			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item))
 			{
 				$result .= '<div class="collection">';
-				$result .= '<div class="group"><a href="' . site_url(array("admin", $key, $item["default"])) . '">
+				$result .= '<div class="group"><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'>
 								<img class="icon off" src="' . site_url() . '/assets/glyphish/' . ($active ? 'on' : 'off') . '/' . $item["icon"] . '.png' . '" />
 								<img class="icon on" src="' . site_url() . '/assets/glyphish/on/' . $item["icon"] . '.png' . '" />'
 						. $item["name"] . '</a></div>';
@@ -168,7 +178,7 @@ class Admin_Controller extends MY_Controller
 					{
 						//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
 						$is_active = "";
-						$result .= '<a href="' . site_url(array("admin", $key, $subkey)) . '"><div class="element ' . ($subactive ? 'active' : '') . '">' . $subitem["name"] . '</div></a>';
+						$result .= '<a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'><div class="element ' . ($subactive ? 'active' : '') . '">' . $subitem["name"] . '</div></a>';
 					}
 				}
 				$result .= '</div>';

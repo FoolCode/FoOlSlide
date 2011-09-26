@@ -147,6 +147,10 @@ class Reader extends REST_Controller
 			{
 				$result['chapters'][$key]['comic'] = $chapter->comic->to_array();
 				$result['chapters'][$key]['chapter'] = $chapter->to_array();
+				if(!$this->input->is_cli_request())
+				{
+					$result['chapters'][$key]['chapter']["download_href"] = $chapter->download_href();
+				}
 				$chapter->get_teams();
 				foreach ($chapter->teams as $item)
 				{

@@ -65,7 +65,7 @@ if(!function_exists('get_twitter_widget'))
 	{
 		$twitter = get_setting_twitter($team);
 		$echo = sprintf(_('%sFollow us%s on Twitter'),'<a href="http://twitter.com/intent/user?screen_name='.urlencode($twitter).'">', '<img src="'.site_url().'assets/images/bird_16_blue.png" /></a>' );
-		return $echo;
+		return '<div class="text">'.$echo.'</div>';
 	}
 }
 
@@ -101,8 +101,8 @@ if(!function_exists('get_irc_widget'))
 	{
 		$irc = get_setting_irc($team);
 		
-		$echo = _('Come chatting with us on') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
-		return $echo;
+		$echo = _('Come chat with us on') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
+		return '<div class="text">'.$echo.'</div>';
 	}
 }
 

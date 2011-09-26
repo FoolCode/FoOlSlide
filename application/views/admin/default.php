@@ -84,6 +84,7 @@
 				jQuery("a[rel=popover-below]").popover({ offset: 10, placement: 'below' });
 				jQuery("a[rel=popover-right]").popover({ offset: 10, placement: 'right' });
 				jQuery("a[rel=popover-left]").popover({ offset: 10, placement: 'left' });
+				jQuery("a[rel=twipsy]").twipsy({ live: true });
 			});
 		</script>
 		<script type="text/javascript">jQuery().alert();</script>

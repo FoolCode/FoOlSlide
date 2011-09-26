@@ -449,25 +449,26 @@ if (!function_exists('buttoner')) {
 			$texturl = array($data);
 
 		$echo = '';
-		foreach ($texturl as $key => $item) {
+		foreach ($texturl as $item) {
 			$echo .= '<a class="btn" ';
-			if (isset($item['onclick']))
+			$text = $item['text'];
+			unset($item['text']);
+			if (isset($item['onclick'])) {
 				$echo .= 'onclick="' . ($item['onclick']) . '" ';
-			if (isset($item['href']))
+				unset($item['onclick']);
+			}
+			if (isset($item['href'])) {
 				$echo .= 'href="' . ($item['href']) . '" ';
-			if (isset($item['plug']))
+				unset($item['href']);
+			}
+			if (isset($item['plug'])) {
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
-			
-			// Pop Over Support
-			if (isset($item['rel']))
-				$echo .= 'rel="' . $item['rel'] . '" ';
-			if (isset($item['title']))
-				$echo .= 'title="' . $item['title'] . '" ';
-			if (isset($item['data-content']))
-				$echo .= 'data-content="' . $item['data-content'] . '" ';
-				
+				unset($item['plug']);
+			}		
+			foreach ($item as $key => $arg)
+				$echo .= $key . '="' . $arg . '" ';
 			$echo .= '>';
-			$echo .= $item['text'] . '</a> ';
+			$echo .= $text . '</a> ';
 		}
 		return $echo;
 	}

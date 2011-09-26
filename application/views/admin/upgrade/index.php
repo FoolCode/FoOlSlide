@@ -50,7 +50,9 @@ if (!$new_versions) {
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/chart/inc_js/"></script>
 	<div id="transifex_chart" style="text-align: center">Loading chart...<br/></div>
-	<?php echo _('Please, check the <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">transifex translation project</a> in case you\'re using a non-English language for FoOlSlide. Make sure the % on your language isn\'t under 90% before upgrading. Contribute to the translation to get your language updated in the next localization update of FoOlSlide (normally within 48 hours).'); ?>
+	<div class="help-inline"><?php echo sprintf(_('Note: If you\'re fluent in another language, please help contribute by translating our software into your language with %s. All localization updates of FoOlSlide is normally available within 48 hours.'), '<a href="https://www.transifex.net" rel="twipsy" title="A web based portal for translations.">Transifex</a>'); ?></div><br/>
+	<?php echo _('This chart provides information regarding the percentage of localized strings completed in another language. If you\'re using FoOlSlide relying on language localization, please check our <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">Transifex translation project</a> for this software and ensure that it is above 90% before proceeding with an upgrade.'); ?>
+	
 </div>
 
 <br/>

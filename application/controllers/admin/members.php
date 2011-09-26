@@ -67,7 +67,7 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
-		$data['title'] = _('Members');
+		$data['form_title'] = _('Members');
 		$data['table'] = tabler($form, TRUE, FALSE);
 
 		// print out
@@ -160,7 +160,7 @@ class Members extends Admin_Controller
 				$rows[] = array('title' => '<a href="' . site_url('admin/members/teams/' . $team->stub) . '">' . $team->name . '</a>');
 			}
 			// put in a list the teams
-			$data['title'] = _('Teams');
+			$data['form_title'] = _('Teams');
 			$data['table'] = lister($rows);
 
 			// print out
@@ -336,7 +336,7 @@ class Members extends Admin_Controller
 		// transform the Datamapper array to a form
 		$result = ormer($team);
 		$result = tabler($result, FALSE, TRUE);
-		$data['title'] = _('Add New Team');
+		$data['form_title'] = _('Add New Team');
 		$data['table'] = $result;
 
 		// print out

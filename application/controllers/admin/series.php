@@ -212,7 +212,7 @@ class Series extends Admin_Controller
 
 			$table = tabler($table, FALSE, TRUE);
 
-			$data["title"] = _('Add New') . ' ' . _('Chapter');
+			$data["form_title"] = _('Add New') . ' ' . _('Chapter');
 			$data["table"] = $table;
 
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
@@ -259,7 +259,7 @@ class Series extends Admin_Controller
 			);
 
 			$table = tabler($table, FALSE, TRUE);
-			$data["title"] = _('Add New') . ' ' . _('Serie');
+			$data["form_title"] = _('Add New') . ' ' . _('Serie');
 			$data['table'] = $table;
 
 			$this->viewdata["extra_title"][] = _("Serie");

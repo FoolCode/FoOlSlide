@@ -457,14 +457,14 @@ if (!function_exists('buttoner')) {
 				$echo .= 'onclick="' . ($item['onclick']) . '" ';
 				unset($item['onclick']);
 			}
-			if (isset($item['href'])) {
-				$echo .= 'href="' . ($item['href']) . '" ';
-				unset($item['href']);
-			}
 			if (isset($item['plug'])) {
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
 				unset($item['plug']);
-			}		
+			}	
+			if (isset($item['href'])) {
+				$echo .= 'href="' . ($item['href']) . '" ';
+				unset($item['href']);
+			}	
 			foreach ($item as $key => $arg)
 				$echo .= $key . '="' . $arg . '" ';
 			$echo .= '>';

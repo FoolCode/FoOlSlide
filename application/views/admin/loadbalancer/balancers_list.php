@@ -4,20 +4,18 @@
 	<h3><?php echo _('Balancers'); ?></h3>
 	<span class="clearfix">
 	<?php
-	echo _("Load balancers for FoOlSlide are servers that contain the images cloned from the master server. You can use an external service to do this (like a Content Delivery Network), or use a second FoOlSlide in \"client mode\" on another server.");
+	echo _('FoOlSlide load balancers are servers that serve images cloned from the master server. You can host a load balancer by either using an external service (like a Content Delivery Network), or use another FoOlSlide installation in "client mode" on another server.');
 
 	echo '<br/><br/>';
 
-	echo sprintf(_(" Setting up a FoOlSlide balancer is really easy: just install a slide on the other server, tell it the URL to this slide (%s), and add the URL to the other slide down here. The rest is automatic."), site_url());
+	echo sprintf(_('The process of setting up a FoOlSlide Balancer is very simple: you just install a slide on the other server, provide it with the URL to this slide (%s), and add the URL for the other slide below. The rest is automatic.'), site_url());
+
+	echo '<br/><br/>';
+	echo _('The percentages are for ease and you can set each host to any percentage. For example, if you set two load balancers at 100%, they will actually operate at 50% each.');
 
 	echo '<br/><br/>';
 
-	echo _("The % is for ease. You can set each host to any %. If you set two balancers at 100%, they will actually work at 50% each");
-
-	echo '<br/><br/>';
-
-
-	echo _("The load balancer can't support download of compressed archives. Those will still be served by the master FoOlSlide. Don't worry: less than 20% readers downloads. Just keep this in mind while distributing the %.");
+	echo _('Currently, the load balancer does not support serving downloadable compressed archives. These will be served by the master FoOlSlide installation instead. Please keep this in mind while you are distributing the percentages.');
 
 	echo '<br/><br/>';
 	?>
@@ -62,12 +60,12 @@
 		
 		$form = array();
 		$form[] = array(
-			_('IPs of load balancing servers'),
+			_('IPs of Load Balancing Servers'),
 			array(
 				'type' => 'input',
 				'value' => (isset($ips) && is_array($ips))?$ips:array(),
 				'name' => 'fs_balancer_ips',
-				'help' => _('Add the IPs of the servers used to balance. This will prevent them from being limited via the nationality filter.')
+				'help' => _('Add the IPs of the servers used for balancing. This will prevent them from being limited via the nationality filter.')
 			)
 		);
 		echo form_open('', array('class' => 'form-stacked'));

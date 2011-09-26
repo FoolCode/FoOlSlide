@@ -176,7 +176,7 @@ class Balancer extends Admin_Controller
 				'id' => 'site_title',
 				'placeholder' => 'http://',
 				'preferences' => 'fs_gen',
-				'help' => _('Turns this FoOlSlide in a load balancer. You can activate this only if there\'s no comics in your FoOlSlide. Every function of this FoOlSlide will be disabled and it will work silently to duplicate the data.')
+				'help' => _('Providing a URL will convert this FoOlSlide installation into a load balancer.')
 			)
 		);
 
@@ -187,7 +187,8 @@ class Balancer extends Admin_Controller
 
 		// create a form
 		$table = tabler($form, FALSE);
-		$data['title'] = _('Client');
+		$data['form_title'] = _('Client');
+		$data['form_description'] = _('These settings can only be activated if there are no comics available on this FoOlSlide. All core functions will be disabled and your data will be duplicated quietly in the background.');
 		$data['table'] = $table;
 
 		// print out

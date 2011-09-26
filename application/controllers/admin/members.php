@@ -40,7 +40,7 @@ class Members extends Admin_Controller
 			$can_edit = false;
 
 		// set the subtitle
-		$this->viewdata["function_title"] = "Members list";
+		$this->viewdata["function_title"] = _('Members');
 
 		$users = new User();
 
@@ -67,6 +67,7 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
+		$data['title'] = _('Members');
 		$data['table'] = tabler($form, TRUE, FALSE);
 
 		// print out
@@ -105,7 +106,7 @@ class Members extends Admin_Controller
 		}
 
 		// set the subtitle
-		$this->viewdata["function_title"] = _("Member");
+		$this->viewdata["function_title"] = '<a href="'.site_url("admin/members").'">'._('Members').'</a>';
 
 		// create a table with user login name and email
 		$table = ormer($user);
@@ -120,7 +121,8 @@ class Members extends Admin_Controller
 		$profile->where('user_id', $id)->get();
 		$profile_table = ormer($profile);
 		$data['profile'] = tabler($profile_table, TRUE, ($this->tank_auth->is_allowed() || $this->uri->segment(3) != 'you'));
-
+		
+		$this->viewdata["extra_title"][] = $user->username;
 		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/members/user', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
@@ -138,7 +140,7 @@ class Members extends Admin_Controller
 		if ($stub == "")
 		{
 			// set subtitle
-			$this->viewdata["function_title"] = "Team list";
+			$this->viewdata["function_title"] = _('Teams');
 
 			// we can use get_iterated on teams
 			$teams = new Team();
@@ -158,6 +160,7 @@ class Members extends Admin_Controller
 				$rows[] = array('title' => '<a href="' . site_url('admin/members/teams/' . $team->stub) . '">' . $team->name . '</a>');
 			}
 			// put in a list the teams
+			$data['title'] = _('Teams');
 			$data['table'] = lister($rows);
 
 			// print out
@@ -206,7 +209,7 @@ class Members extends Admin_Controller
 
 
 			// subtitle
-			$this->viewdata["function_title"] = "Team";
+			$this->viewdata["function_title"] = '<a href="'.site_url("admin/members/teams").'">'._('Teams').'</a>';
 			// subsubtitle!
 			$this->viewdata["extra_title"][] = $team->name;
 
@@ -252,7 +255,7 @@ class Members extends Admin_Controller
 				}
 
 				// add button to array or stay silent if there's no button
-				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
+				$users_arr[$key]['action'] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 				if (!$item->is_leader && ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed()))
 				{
 					$buttoner = array();
@@ -272,7 +275,7 @@ class Members extends Admin_Controller
 					);
 				}
 				// add button to array or stay silent if there's no button
-				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
+				$users_arr[$key]['action'] .= (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 			}
 
 			// Spawn the form for adding a team leader
@@ -327,12 +330,13 @@ class Members extends Admin_Controller
 		$team = new Team();
 
 		// set title and subtitle
-		$this->viewdata["function_title"] = "Team";
-		$this->viewdata["extra_title"][] = 'New';
+		$this->viewdata["function_title"] = '<a href="'.site_url("/admin/members/teams").'">'._('Teams').'</a>';
+		$this->viewdata["extra_title"][] = _('Add New');
 
 		// transform the Datamapper array to a form
 		$result = ormer($team);
 		$result = tabler($result, FALSE, TRUE);
+		$data['title'] = _('Add New Team');
 		$data['table'] = $result;
 
 		// print out

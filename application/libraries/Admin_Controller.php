@@ -81,7 +81,7 @@ class Admin_Controller extends MY_Controller
 			"icon" => 43,
 			"content" => array(
 				"manage" => array("level" => "mod", "name" => _("Manage")),
-				"add_new" => array("level" => "mod", "name" => _("Add new"))
+				"add_new" => array("level" => "mod", "name" => _("Add New"))
 			)
 		);
 		$sidebar["members"] = array(
@@ -109,7 +109,7 @@ class Admin_Controller extends MY_Controller
 				"advertising" => array("level" => "admin", "name" => _("Advertising")),
 			)
 		);
-		$sidebar["balancer"] = array("name" => _("Load balancer"),
+		$sidebar["balancer"] = array("name" => _("Load Balancer"),
 			"level" => "admin",
 			"default" => "balancers",
 			"icon" => 27,

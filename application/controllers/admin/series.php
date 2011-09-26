@@ -29,7 +29,7 @@ class Series extends Admin_Controller
 
 	function manage($page = 1)
 	{
-		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/series/manage/') . '">' . _('manage') . '</a>';
+		$this->viewdata["function_title"] = _('Manage');
 		$comics = new Comic();
 
 		if ($this->input->post('search'))
@@ -59,7 +59,9 @@ class Series extends Admin_Controller
 			return false;
 		}
 
-		$this->viewdata["function_title"] = '<a href="' . site_url('admin/series/serie/'.$comic->stub) . '">' . $comic->name . '</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/series/manage/') . '">' . _('Manage') . '</a>';
+		if ($chapter_id == "") $this->viewdata["extra_title"][] = $comic->name;
+
 		$data["comic"] = $comic;
 
 		if ($chapter_id != "")
@@ -92,9 +94,8 @@ class Series extends Admin_Controller
 
 			$data["table"] = $table;
 
-
+			$this->viewdata["extra_title"][] = '<a href="' . site_url('admin/series/serie/'.$comic->stub) . '">' . $comic->name . '</a>';
 			$this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter . "." . $chapter->subchapter);
-
 
 			$data["pages"] = $chapter->get_pages();
 
@@ -178,7 +179,7 @@ class Series extends Admin_Controller
 
 	function add_new($stub = "")
 	{
-		$this->viewdata["function_title"] = _("Add new");
+		$this->viewdata["function_title"] = '<a href="#">'._("Add New").'</a>';
 
 		//$stub stands for $comic, but there's already a $comic here
 		if ($stub != "")
@@ -211,6 +212,7 @@ class Series extends Admin_Controller
 
 			$table = tabler($table, FALSE, TRUE);
 
+			$data["title"] = _('Add New') . ' ' . _('Chapter');
 			$data["table"] = $table;
 
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
@@ -257,6 +259,7 @@ class Series extends Admin_Controller
 			);
 
 			$table = tabler($table, FALSE, TRUE);
+			$data["title"] = _('Add New') . ' ' . _('Serie');
 			$data['table'] = $table;
 
 			$this->viewdata["extra_title"][] = _("Serie");

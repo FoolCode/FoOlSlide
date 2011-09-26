@@ -13,7 +13,7 @@ class Balancer extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// title on top
-		$this->viewdata['controller_title'] = _("Load balancer");
+		$this->viewdata['controller_title'] = _("Load Balancer");
 	}
 
 
@@ -165,7 +165,6 @@ class Balancer extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Client");
 
-
 		$form = array();
 
 		// build the array for the form
@@ -188,6 +187,7 @@ class Balancer extends Admin_Controller
 
 		// create a form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('Client');
 		$data['table'] = $table;
 
 		// print out

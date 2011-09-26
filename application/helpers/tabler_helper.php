@@ -97,7 +97,7 @@ if (!function_exists('tabler')) {
 			$echo .= '</fieldset></div>';
 		}
 		elseif ($list) {
-			$echo .= '<div class="plain"><table class="form">';
+			$echo .= '<div class="plain"><table class="zebra-striped" rules="rows">';
 			foreach ($result as $rowk => $row) {
 				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
 					//$echo .= $row[1]['form'];
@@ -105,8 +105,11 @@ if (!function_exists('tabler')) {
 				else {
 					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
 						$echo .= '<tr>';
-						foreach ($row as $column) {
-							$echo .= '<td>';
+						foreach ($row as $key => $column) {
+							if ($key == 'action' && $key !== 0)
+								$echo .= '<td><div style="float: right">';
+							else
+								$echo .= '<td>';
 							if (is_array($column['table'])) {
 								foreach ($column['table'] as $mini) {
 									$echo .= '' . $mini->name . ' ';
@@ -116,6 +119,8 @@ if (!function_exists('tabler')) {
 								$echo .= 'N/A';
 							else
 								$echo .= $column['table'];
+							if ($key == 'action' && $key !== 0)
+								$echo .= '</div>';
 							$echo .= '</td>';
 						}
 						$echo .= '</tr>';
@@ -134,7 +139,6 @@ if (!function_exists('tabler')) {
 				}
 				else {
 					$echo .= '<div class="clearfix">';
-					$echo .= '<tr>';
 					foreach ($row as $colk => $column) {
 						if ($colk == 0) {
 							$echo .= '<label for="' . $column['field'] . '">' . $column['form'] . '</label>';

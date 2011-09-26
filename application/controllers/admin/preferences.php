@@ -37,6 +37,7 @@ class Preferences extends Admin_Controller
 	 */
 	function _submit($post, $form)
 	{
+		// Support Checkbox Listing
 		$former = array();
 		foreach ($form as $key => $item)
 		{
@@ -88,7 +89,6 @@ class Preferences extends Admin_Controller
 	function general()
 	{
 		$this->viewdata["function_title"] = _("General");
-
 
 		$form = array();
 
@@ -161,6 +161,7 @@ class Preferences extends Admin_Controller
 
 		// create a form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('General');
 		$data['table'] = $table;
 
 		// print out
@@ -178,7 +179,6 @@ class Preferences extends Admin_Controller
 	function theme()
 	{
 		$this->viewdata["function_title"] = _("Theme");
-
 
 		$form = array();
 
@@ -254,6 +254,7 @@ class Preferences extends Admin_Controller
 
 		// create the form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('Theme');
 		$data['table'] = $table;
 
 		// print out
@@ -273,7 +274,6 @@ class Preferences extends Admin_Controller
 
 		$form = array();
 
-
 		$form[] = array(
 			_('Top banner'),
 			array(
@@ -285,27 +285,29 @@ class Preferences extends Admin_Controller
 		);
 
 		$form[] = array(
-			_('Reload every pageview?'),
+			_('Top Banner Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_top_banner_reload',
-				'placeholder' => '',
-				'preferences' => 'fs_ads',
-				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
+				'name' => 'fs_ads_top_options',
+				'value' => array(
+					array(
+						'type' => 'checkbox',
+						'name' => 'fs_ads_top_banner_active',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Active')
+					),
+					array(
+						'name' => 'fs_ads_top_banner_reload',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Reload on every pageview')
+					)
+				),
+				'help' => _('')
 			)
 		);
-
-
-		$form[] = array(
-			_('Active'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_top_banner_active',
-				'placeholder' => '',
-				'preferences' => 'fs_ads'
-			)
-		);
-
+		
 		$form[] = array(
 			_('Bottom banner'),
 			array(
@@ -317,24 +319,27 @@ class Preferences extends Admin_Controller
 		);
 
 		$form[] = array(
-			_('Reload every pageview?'),
+			_('Bottom Banner Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_bottom_banner_reload',
-				'placeholder' => '',
-				'preferences' => 'fs_ads',
-				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
-			)
-		);
-
-
-		$form[] = array(
-			_('Active'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_bottom_banner_active',
-				'placeholder' => '',
-				'preferences' => 'fs_ads'
+				'name' => 'fs_ads_bottom_options',
+				'value' => array(
+					array(
+						'type' => 'checkbox',
+						'name' => 'fs_ads_bottom_banner_active',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Acive')
+					),
+					array(
+						'name' => 'fs_ads_bottom_banner_reload',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Reload on every pageview')
+					)
+					
+				),
+				'help' => _('')
 			)
 		);
 
@@ -371,6 +376,7 @@ class Preferences extends Admin_Controller
 
 		// create the form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('Advertising');
 		$data['table'] = $table;
 
 		// print out
@@ -383,15 +389,13 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Registration");
 
-
 		$form = array();
-
 
 		$form[] = array(
 			_('Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_reg_settings',
+				'name' => 'fs_reg_options',
 				'value' => array(
 					array(
 						'name' => 'fs_reg_disabled',
@@ -409,18 +413,6 @@ class Preferences extends Admin_Controller
 				'help' => 'Disable options regarding registration and activation.'
 			)
 		);
-/*
-		$form[] = array(
-			_('Disable activation email'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_reg_email_disabled',
-				'id' => 'disable_reg',
-				'preferences' => 'fs_reg',
-				'text' => _('Disable'),
-				'help' => _('Disable the necessity to proceed with an activation after registering')
-			)
-		);*/
 
 		$form[] = array(
 			_('reCaptcha public key'),
@@ -451,6 +443,7 @@ class Preferences extends Admin_Controller
 
 		// prepare form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('Registration');
 		$data['table'] = $table;
 
 		// print out
@@ -468,17 +461,16 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Reading");
 
-
 		$form = array();
 
-
 		$form[] = array(
-			_('Enable direct downloads'),
+			_('Direct Downloads'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_dl_enabled',
 				'id' => 'enable_dl',
 				'preferences' => 'fs_dl',
+				'text' => _('Enable'),
 				'help' => _('Direct downloads usually increase the bandwidth usage by one-third. The issue is wheter you have enough space to keep both images and ZIPs. FoOlSlide tries to avoid dealing with the problem by using on-the-fly ZIP compression and caching.')
 			)
 		);
@@ -501,6 +493,7 @@ class Preferences extends Admin_Controller
 
 		// create form
 		$table = tabler($form, FALSE);
+		$data['title'] = _('Reading');
 		$data['table'] = $table;
 
 		// print out

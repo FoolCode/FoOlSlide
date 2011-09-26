@@ -123,13 +123,19 @@
 			<div class="content">
 				<ul class="breadcrumb">
 					<?php
-						echo '<li>' . $controller_title . '</li>';
+						echo '<li><a href="#">' . $controller_title . '</a></li>';
 						if (isset($function_title))
 							echo ' <span class="divider">/</span> <li>' . $function_title . '</li>';
 						if (isset($extra_title) && !empty($extra_title))
 						{
-							foreach ($extra_title as $item)
-								echo ' <span class="divider">/</span> <li>' . $item . '</li>';
+							$breadcrumbs = count($extra_title); $count = 1;
+							foreach ($extra_title as $item) {
+								echo ' <span class="divider">/</span> ';
+								if ($count == $breadcrumbs)
+									echo '<li class="active">' . $item . '</li>';
+								else
+									echo '<li>' . $item . '</li>';
+							}
 						}
 					?>
 				</ul>

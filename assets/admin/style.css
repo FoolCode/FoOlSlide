@@ -998,7 +998,7 @@ textarea[readonly] {
   margin-left: -3px;
 }
 .inputs-list {
-  margin: 0 0 5px;
+  margin: -5px 0 5px;
   width: 100%;
 }
 .inputs-list li {
@@ -1111,10 +1111,10 @@ table th {
   border-bottom: 1px solid #ddd;
 }
 table td {
-  vertical-align: top;
+  vertical-align: middle;
 }
 table th + th, table td + td {
-  border-left: 1px solid #ddd;
+  //border-left: 1px solid #ddd;
 }
 table tr + tr td {
   border-top: 1px solid #ddd;
@@ -2381,9 +2381,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   border-color: rgba(0,0,0,0);
 }
 
-.list { }
-
-.list.chapters .item, .list .item {
+.list .item {
   padding: 8px 8px 5px 8px;
   margin-top: 5px;
 }
@@ -2392,9 +2390,19 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 
 }
 
-.list.chapters .item .smalltext, .list .item .smalltext {
+.list .item .smalltext {
   font-size: 10px;
   margin-top: 2px;
+}
+
+.list .item .smalltext a {
+  color: #909090;
+  text-decoration: none;
+}
+
+.list .item .smalltext a:hover {
+  color: #0069d6;
+  text-decoration: none;
 }
 
 .list.chapters .item .info, .list .item .info {

@@ -1,11 +1,3 @@
-<div class="smartsearch">
-<?php
-echo form_open(site_url('/admin/series/manage/'));
-echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and hit enter')));
-echo form_close();
-?>
-</div>
-
 <?php
 $CI =& get_instance();
 $CI->buttoner = array(
@@ -14,23 +6,41 @@ $CI->buttoner = array(
 		'text' => _('Add serie')
 	)
 );
-			
-echo buttoner();
 ?>
+
+<div class="table" style="padding-bottom: 15px">
+	<h3 style="float: left"><?php echo _('Serie Information'); ?></h3>
+	<span style="float: right; padding: 5px">
+		<div class="smartsearch">
+		<?php
+		echo form_open(site_url('/admin/series/manage/'));
+		echo form_input(array('name'=>'search', 'placeholder' => _('To search, write and hit enter')));
+		echo form_close();
+		?>
+		</div>
+	</span>
+	<hr class="clear"/>
+	<?php echo buttoner(); ?>
+
+	<div class="list comics">
+		<?php
+		foreach ($comics as $comic)
+		{
+			echo '<div class="item">
+				<div class="title"><a href="'.site_url("admin/series/serie/".$comic->stub).'">'.$comic->name.'</a></div>
+				<div class="smalltext">'._('Quick tools').': 
+					<a href="'.site_url("admin/series/add_new/".$comic->stub).'">'._('Add Chapter').'</a> |
+					<a href="'.site_url("admin/series/delete/serie/".$comic->id).'" onclick="confirmPlug(\''.site_url("admin/series/delete/serie/".$comic->id).'\', \''._('Do you really want to delete this serie and its chapters?').'\'); return false;">'._('Delete').'</a> |
+					<a href="'.site_url("reader/serie/".$comic->stub).'">'._('Read').'</a>
+				</div>';
+			echo '</div>';
+		}
+		?>
+	</div>
+		
+
+
 <div class='list comics'>
-
-<?php
-
-
-    foreach ($comics as $item)
-    {
-        echo '<div class="item">
-                <div class="title"><a href="'.site_url("admin/series/serie/".$item->stub).'">'.$item->name.'</a></div>';
-                //echo '<div class="smalltext">'._('Quick tools').'</div>';
-             echo '</div>';
-    }
-
-?>
 
 <?php
 	if ($comics->paged->total_pages > 1)
@@ -64,4 +74,6 @@ echo buttoner();
 <?php
 	}
 ?>
+</div>
+
 </div>

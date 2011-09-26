@@ -232,7 +232,7 @@ class Preferences extends Admin_Controller
 				'name' => 'fs_gen_footer_text',
 				'placeholder' => '',
 				'preferences' => 'fs_gen',
-				'help' => _('Inserts the text above in the footer such as disclaimers. (Note: If the content uploaded does not belong to you, do not write things like "All Rights Reserived&copy;" above. However, if you\'re releasing your own works, please consider using <a href="http://creativecommons.org/">Creative Commons Licenses</a> to protect them.')
+				'help' => _('Inserts the text above in the footer such as disclaimers. (Note: If the content uploaded does not belong to you, do not write things like "All Rights Reserived&copy;" above. However, if you\'re releasing your own works, please consider using <a href="http://creativecommons.org/">Creative Commons Licenses</a> to protect them.)')
 			)
 		);
 		

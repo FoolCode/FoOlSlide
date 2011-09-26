@@ -43,6 +43,16 @@
 						</td>';
 					echo '</tr>';
 				}
+				$url["value"] = "";
+					echo '<tr>
+						<td>'.form_input('url[]').'</td>
+						<td width="140px">
+							<div class="input-append">
+								<input style="text-align: right; width: 100px" type="number" name="priority[]" min="0" max="100" value="0" />
+								<span class="add-on">%</span>
+							</div>
+						</td>';
+					echo '</tr>';
 			?>
 			</tbody>
 		</table>

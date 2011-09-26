@@ -47,7 +47,7 @@ class Draft extends Team_Controller
 		}
 
 		$chapter->get_teams(); // puts teams in $chapter->teams
-		$is_team = $this->CI->tank_auth->is_team_array($chapter->teams);
+		$is_team = $this->tank_auth->is_team_array($chapter->teams);
 
 		if (!$is_team)
 		{
@@ -67,8 +67,8 @@ class Draft extends Team_Controller
 
 		$data["chapter_id"] = $chapter->id;
 		$data["page_number"] = $page;
-		$data["page_url"] = $pages[$page]["url"];
-		$this->viewdata = $this->load->view('team/script', $data, TRUE);
+		$data["page_url"] = $pages[$page-1]["url"];
+		$this->viewdata = $this->load->view('team/draft/script', $data, TRUE);
 		$this->load->view('team/default', $this->viewdata);
 		// show just the page, the javascript will do the sync
 	}
@@ -116,6 +116,10 @@ class Draft extends Team_Controller
 				$result[] = $transproof->add($item);
 			}
 		}
+		
+		$transproof = new Transproof();
+		$transproof->get_page();
+		$this->output->set_output(json_encode(array("sync" => $sync, "results" => $result)));
 	}
 
 

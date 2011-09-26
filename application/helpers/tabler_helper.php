@@ -457,6 +457,15 @@ if (!function_exists('buttoner')) {
 				$echo .= 'href="' . ($item['href']) . '" ';
 			if (isset($item['plug']))
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
+			
+			// Pop Over Support
+			if (isset($item['rel']))
+				$echo .= 'rel="' . $item['rel'] . '" ';
+			if (isset($item['title']))
+				$echo .= 'title="' . $item['title'] . '" ';
+			if (isset($item['data-content']))
+				$echo .= 'data-content="' . $item['data-content'] . '" ';
+				
 			$echo .= '>';
 			$echo .= $item['text'] . '</a> ';
 		}

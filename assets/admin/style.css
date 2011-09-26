@@ -2408,10 +2408,20 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 .list.chapters .item .info, .list .item .info {
   float: right;
 }
+
 .smartsearch {
   float: right;
   border: 1px;
 }
+
 .smartsearch > form > input {
   width: 300px;
+}
+
+.changelog .item .title {
+  font-weight: bold;
+}
+
+.changelog .item .description {
+  padding-left: 5px;
 }

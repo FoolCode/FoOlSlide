@@ -8,7 +8,7 @@ class Members extends Admin_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->viewdata['controller_title'] = "Members";
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/members").'">' . _("Members") . '</a>';
 	}
 
 

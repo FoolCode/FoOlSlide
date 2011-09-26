@@ -4,7 +4,7 @@
 		<title><?php echo get_setting('fs_gen_site_title'); ?> <?php echo _('Control panel') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/admin/style.css" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/admin/style.css?v=<?php echo get_setting('fs_priv_version') ?>" />
 		<style type="text/css">
 			body {
 				padding-top: 60px;
@@ -123,7 +123,7 @@
 			<div class="content">
 				<ul class="breadcrumb">
 					<?php
-						echo '<li><a href="#">' . $controller_title . '</a></li>';
+						echo '<li>' . $controller_title . '</li>';
 						if (isset($function_title))
 							echo ' <span class="divider">/</span> <li>' . $function_title . '</li>';
 						if (isset($extra_title) && !empty($extra_title))

@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
 <div class="table">
-	<h3><?php echo _('Banlancers'); ?></h3>
+	<h3><?php echo _('Balancers'); ?></h3>
 	<span class="clearfix">
 	<?php
 	echo _("Load balancers for FoOlSlide are servers that contain the images cloned from the master server. You can use an external service to do this (like a Content Delivery Network), or use a second FoOlSlide in \"client mode\" on another server.");

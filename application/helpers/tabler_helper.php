@@ -194,6 +194,7 @@ if (!function_exists('formize')) {
 			$column['id'] = $column['field'];
 		else
 			$column['id'] = $column['name'];
+		unset($column['rules']);
 		unset($column['field']);
 		unset($column['type']);
 		unset($column['preferences']);

@@ -13,7 +13,7 @@ class Balancer extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// title on top
-		$this->viewdata['controller_title'] = _("Load Balancer");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/balancer/balancers").'">' . _("Load Balancer") . '</a>';
 	}
 
 

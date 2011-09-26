@@ -12,7 +12,7 @@ class Install extends Install_Controller
 		// make sure people don't get here if FoOlSlide is already installed
 		if (file_exists("config.php"))
 			redirect('admin');
-		$this->viewdata["controller_title"] = "Installation";
+		$this->viewdata["controller_title"] = _("Installation");
 	}
 
 

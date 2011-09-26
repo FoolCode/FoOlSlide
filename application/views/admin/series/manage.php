@@ -36,17 +36,12 @@ $CI->buttoner = array(
 			echo '</div>';
 		}
 		?>
-	</div>
-		
-
-
-<div class='list comics'>
-
+	</div>	
 <?php
 	if ($comics->paged->total_pages > 1)
 	{
 ?>
-	<div class="pagination">
+	<div class="pagination" style="margin-bottom: -5px">
 		<ul>
 		<?php
 			if ($comics->paged->has_previous)
@@ -74,6 +69,4 @@ $CI->buttoner = array(
 <?php
 	}
 ?>
-</div>
-
 </div>

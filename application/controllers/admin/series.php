@@ -17,7 +17,7 @@ class Series extends Admin_Controller
 
 		$this->load->model('files_model');
 		$this->load->library('pagination');
-		$this->viewdata['controller_title'] = _("Series");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/series").'">' . _("Series") . '</a>';;
 	}
 
 

@@ -45,7 +45,7 @@ if ($CI->tank_auth->is_admin() && $CI->tank_auth->is_mod($user->id))
 		'text' => _('Remove moderator'),
 		'plug' => _('Are you sure you want to remove this user from the moderator group?')
 	);
-//if ($CI->tank_auth->get_user_id() == $user->id)
+if ($CI->tank_auth->get_user_id() == $user->id)
 	$CI->buttoner[] = array(
 		'text' => _('Edit'),
 		'href' => '',
@@ -60,7 +60,13 @@ echo $table;
 	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
 	<hr class="clear"/>
 	<div style="padding-right: 10px">
-		<img src="<?php echo get_gravatar($user->email, 150); ?>" class="thumbnail" style="float: left; margin: 10px 10px 0 0"/>
+		<ul class="media-grid" style="float: left; margin: 10px 10px -10px -10px">
+			<li>
+				<a href="#">
+					<img src="<?php echo get_gravatar($user->email, 150); ?>" class="thumbnail"/>
+				</a>
+			</li>
+		</ul>
 	<?php
 		echo form_open('', array('class' => 'form-stacked'));
 		echo $profile;

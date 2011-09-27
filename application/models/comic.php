@@ -293,22 +293,21 @@ class Comic extends DataMapper
 		// stub() checks for to_stub and makes a stub.
 		$this->stub = $this->stub();
 
+		// Check if the series database entry and remove dir in case it's not.
+		// GUI errors are inner to the function
+		if (!$this->update_comic_db($data))
+		{
+			log_message('error', 'add_comic: failed writing to database');
+			return false;
+		}
+
 		// Check if dir is created. GUI errors in inner function.
 		if (!$this->add_comic_dir())
 		{
 			log_message('error', 'add_comic: failed creating dir');
 			return false;
 		}
-
-		// Check if the series database entry and remove dir in case it's not.
-		// GUI errors are inner to the function
-		if (!$this->update_comic_db($data))
-		{
-			log_message('error', 'add_comic: failed writing to database');
-			$this->remove_comic_dir();
-			return false;
-		}
-
+		
 		// Good job!
 		return true;
 	}

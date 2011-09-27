@@ -324,7 +324,7 @@ class Members extends Admin_Controller
 		{
 			$team = new Team();
 			$team->update_team($this->input->post());
-			flash_notice('notice', 'Added the team' . $team->name . '.');
+			flash_notice('notice', 'Added the team ' . $team->name . '.');
 			redirect('/admin/members/teams/' . $team->stub);
 		}
 

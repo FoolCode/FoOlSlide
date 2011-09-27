@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo get_setting('fs_gen_site_title'); ?> <?php echo _('Control panel') ?></title>
+		<title><?php echo get_setting('fs_gen_site_title'); ?> <?php echo _('Control Panel') ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/bootstrap/style.css?v=<?php echo get_setting('fs_priv_version') ?>" />
@@ -31,7 +31,7 @@
 							location.href = result.href;
 						}, 'json');
 						return false;
-					});
+					}).focus();
 				}
 				else {
 					jQuery.post(href, function(result) {

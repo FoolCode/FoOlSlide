@@ -133,7 +133,7 @@ class Tank_auth
 		$this->delete_autologin();
 
 		// See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
-		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => '', 'group' => ''));
+		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => ''));
 
 		$this->ci->session->sess_destroy();
 	}
@@ -226,30 +226,12 @@ class Tank_auth
 		return FALSE;
 	}
 
-
-	/**
-	 * Returns the group ID
-	 * 
-	 * @author Woxxy
-	 * @return int
-	 */
-	function get_group_id()
-	{
-		if (!$this->is_logged_in())
-			return FALSE;
-		return $this->ci->session->userdata('group');
-		return FALSE;
-	}
-
-
 	function is_group($group_name)
 	{
 		if (!$this->is_logged_in())
 			return FALSE;
 		if ($group_name == 'member')
 			return TRUE;
-		if (!$group_id = $this->get_group_id())
-			return FALSE;
 		$group = new Group();
 		$group->where('name', $group_name)->get();
 		if ($group->id == $group_id)

@@ -77,7 +77,7 @@ class Preferences extends Admin_Controller
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
-		set_notice('notice', _('Settings changed.'));
+		set_notice('notice', _('Updated settings.'));
 	}
 
 

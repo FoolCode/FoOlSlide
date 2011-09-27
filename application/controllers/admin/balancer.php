@@ -58,7 +58,7 @@ class Balancer extends Admin_Controller
 
 		load_settings();
 
-		set_notice('notice', _('Settings changed.'));
+		set_notice('notice', _('Updated settings.'));
 	}
 
 
@@ -130,7 +130,7 @@ class Balancer extends Admin_Controller
 
 			load_settings();
 			
-			set_notice('notice', _('Settings changed.'));
+			set_notice('notice', _('Updated settings.'));
 		}
 
 		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));

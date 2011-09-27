@@ -49,7 +49,7 @@ class Admin_Controller extends MY_Controller
 				"default" => "members",
 				"icon" => 258,
 				"content" => array(
-					"members" => array("level" => "mod", "name" => _("Member list"), "icon" => 382),
+					"members" => array("level" => "mod", "name" => _("Member List"), "icon" => 382),
 				)
 			);
 			$sidebar["preferences"] = array(
@@ -89,10 +89,10 @@ class Admin_Controller extends MY_Controller
 			"default" => "members",
 			"icon" => 258,
 			"content" => array(
-				"members" => array("level" => "mod", "name" => _("Member list"), "icon" => 382),
-				"teams" => array("level" => "member", "name" => _("Team list"), "icon" => 357),
-				"home_team" => array("level" => "member", "name" => _("Home team"), "icon" => 210),
-				"add_team" => array("level" => "mod", "name" => _("Add team"), "icon" => 328)
+				"members" => array("level" => "mod", "name" => _("Member List"), "icon" => 382),
+				"teams" => array("level" => "member", "name" => _("Team List"), "icon" => 357),
+				"home_team" => array("level" => "member", "name" => _("Home Team"), "icon" => 210),
+				"add_team" => array("level" => "mod", "name" => _("Add Team"), "icon" => 328)
 			)
 		);
 		$sidebar["preferences"] = array(

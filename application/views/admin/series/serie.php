@@ -22,7 +22,7 @@ $this->buttoner[] = array(
 	$this->buttoner = array(
 		array(
 			'href' => site_url('/admin/series/add_new/'.$comic->stub),
-			'text' => _('Add chapter')
+			'text' => _('Add Chapter')
 		)
 	);
 	
@@ -30,7 +30,7 @@ $this->buttoner[] = array(
 	{
 		$this->buttoner[] = array(
 			'href' => site_url('/admin/series/import/'.$comic->stub),
-			'text' => _('Import from folder')
+			'text' => _('Import From Folder')
 		);
 	}
 ?>

@@ -102,7 +102,7 @@ class Preferences extends Admin_Controller
 				'maxlength' => '200',
 				'placeholder' => _('FoOlSlide'),
 				'preferences' => 'fs_gen',
-				'help' => _('The title of your FoOlSlide. This appears in the title of every page.')
+				'help' => _('Sets the title of your FoOlSlide. This appears in the title of every page.')
 			)
 		);
 
@@ -115,7 +115,7 @@ class Preferences extends Admin_Controller
 				'maxlength' => '200',
 				'placeholder' => 'http://',
 				'preferences' => 'fs_gen',
-				'help' => _('A small link point to another URL located at the top in public pages.')
+				'help' => _('A small URL linked to another page. This is located next to the title at the top of every page.')
 			)
 		);
 
@@ -128,7 +128,7 @@ class Preferences extends Admin_Controller
 				'maxlength' => '200',
 				'placeholder' => 'Anonymous',
 				'preferences' => 'fs_gen',
-				'help' => _('The default team used for widgets and releases.')
+				'help' => _('Sets the default team used for widgets and releases.')
 			)
 		);
 

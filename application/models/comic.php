@@ -27,8 +27,7 @@ class Comic extends DataMapper
 		'hidden' => array(
 			'rules' => array('is_int'),
 			'label' => 'Visibility',
-			'type' => 'checkbox',
-			'text' => 'Hidden'
+			'type' => 'checkbox'
 		),
 		'description' => array(
 			'rules' => array(),
@@ -109,6 +108,7 @@ class Comic extends DataMapper
 		$this->validation['description']['help'] = _('Insert a description.');
 		$this->validation['hidden']['label'] = _('Visibility');
 		$this->validation['hidden']['help'] = _('Hide the series from public view.');
+		$this->validation['hidden']['text'] = _('Hidden');
 		$this->validation['thumbnail']['label'] = _('Thumbnail');
 		$this->validation['thumbnail']['help'] = _('Upload an image to use as thumbnail.');
 		$this->validation['customchapter']['label'] = _('Custom Chapter Title');

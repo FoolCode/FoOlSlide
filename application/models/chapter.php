@@ -127,18 +127,19 @@ class Chapter extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the chapter, if available.');
-		$this->validation['chapter']['label'] = _('Chapter number');
+		$this->validation['chapter']['label'] = _('Chapter Number');
 		$this->validation['chapter']['help'] = _('Insert the chapter number.');
-		$this->validation['subchapter']['label'] = _('Subchapter number');
-		$this->validation['subchapter']['help'] = _('Insert a sub number to identify extra chapters. Zero for main chapter.');
+		$this->validation['subchapter']['label'] = _('Subchapter Number');
+		$this->validation['subchapter']['help'] = _('Insert a subchapter number to identify extra chapters. Zero for main chapter.');
 		$this->validation['volume']['label'] = _('Volume');
 		$this->validation['volume']['help'] = _('Insert the volume number.');
 		$this->validation['language']['label'] = _('Language');
-		$this->validation['language']['help'] = _('Insert the language of the chapter.');
+		$this->validation['language']['help'] = _('Select the language of the chapter.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
-		$this->validation['hidden']['label'] = _('Hidden');
+		$this->validation['hidden']['label'] = _('Visibility');
 		$this->validation['hidden']['help'] = _('Hide the chapter from public view.');
+		$this->validation['hidden']['text'] = _('Hidden');
 	}
 
 

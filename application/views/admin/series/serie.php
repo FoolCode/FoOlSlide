@@ -1,12 +1,12 @@
 <?php
 $this->buttoner[] = array(
-	'text' => _('Delete serie'),
+	'text' => _('Delete Series'),
 	'href' => site_url('/admin/series/delete/serie/'.$comic->id),
-	'plug' => _('Do you really want to delete this serie and its chapters?')
+	'plug' => _('Do you really want to delete this series and its chapters?')
 );
 ?>
 <div class="table">
-	<h3 style="float: left"><?php echo _('Serie Information'); ?></h3>
+	<h3 style="float: left"><?php echo _('Series Information'); ?></h3>
 	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
 	<hr class="clear"/>
 	<?php

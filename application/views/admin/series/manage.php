@@ -3,13 +3,13 @@ $CI =& get_instance();
 $CI->buttoner = array(
 	array(
 		'href' => site_url('/admin/series/add_new/'),
-		'text' => _('Add serie')
+		'text' => _('Add Series')
 	)
 );
 ?>
 
 <div class="table" style="padding-bottom: 15px">
-	<h3 style="float: left"><?php echo _('Serie Information'); ?></h3>
+	<h3 style="float: left"><?php echo _('Series Information'); ?></h3>
 	<span style="float: right; padding: 5px">
 		<div class="smartsearch">
 		<?php

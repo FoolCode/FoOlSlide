@@ -26,7 +26,7 @@ if ($no_leader) {
 		<div class="input">';
 	echo form_input(array('name' => 'username', 'placeholder' => 'Username', 'style' => 'float: left'));
 	echo '	</div>';
-	echo form_submit('save', 'Save');
+	echo form_submit('save', 'Add');
 	echo '</fieldset>';
 	echo form_close();
 }

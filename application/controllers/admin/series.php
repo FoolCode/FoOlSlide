@@ -165,7 +165,7 @@ class Series extends Admin_Controller
 				'name' => 'licensed',
 				'type' => 'nation',
 				'value' => $licenses->get_by_comic($comic->id),
-				'help' => _('Insert the nations where the serie is licensed in order to limit the availability.')
+				'help' => _('Insert the nations where the series is licensed in order to limit the availability.')
 			)
 		);
 
@@ -254,15 +254,15 @@ class Series extends Admin_Controller
 					'name' => 'licensed',
 					'type' => 'nation',
 					'value' => array(),
-					'help' => _('Insert the nations where the serie is licensed in order to limit the availability.')
+					'help' => _('Insert the nations where the series is licensed in order to limit the availability.')
 				)
 			);
 
 			$table = tabler($table, FALSE, TRUE);
-			$data["form_title"] = _('Add New') . ' ' . _('Serie');
+			$data["form_title"] = _('Add New') . ' ' . _('Series');
 			$data['table'] = $table;
 
-			$this->viewdata["extra_title"][] = _("Serie");
+			$this->viewdata["extra_title"][] = _("Series");
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
 		}

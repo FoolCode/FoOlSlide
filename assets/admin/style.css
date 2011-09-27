@@ -83,3 +83,16 @@ table th + th, table td + td {
 .changelog .item .description {
   padding-left: 5px;
 }
+
+.icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.icon-small {
+  margin-bottom: 5px;
+}
+
+.sidebar {
+  list-style: none;
+}

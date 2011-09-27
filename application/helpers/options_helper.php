@@ -180,6 +180,10 @@ function glyphish($num, $on = FALSE) {
 	return site_url().'assets/glyphish/'.($on?'on':'off').'/'.$num.'.png';
 }
 
+function icons($num, $size = '32', $icons = 'sweeticons2') {
+	return site_url() . 'assets/icons/' . $icons . '/' . $size . '/' . $num .'.png';
+}
+
 function relative_date($time) {
 
 	$today = strtotime(date('M j, Y'));

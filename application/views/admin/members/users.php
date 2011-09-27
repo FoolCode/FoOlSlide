@@ -2,7 +2,7 @@
 
 <div class="table" style="padding-bottom: 15px">
 <?php
-	if (isset($title)) echo '<h3 style="float: left">' . $title . '</h3>';
+	if (isset($form_title)) echo '<h3 style="float: left">' . $form_title . '</h3>';
 ?>
 	<span style="float: right; padding: 5px">
 		<div class="smartsearch">

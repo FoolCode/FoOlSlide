@@ -68,7 +68,7 @@ class Draft extends Team_Controller
 		$data["chapter_id"] = $chapter->id;
 		$data["page_number"] = $page;
 		$data["page_url"] = $pages[$page-1]["url"];
-		$this->viewdata = $this->load->view('team/draft/script', $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view('team/draft/script', $data, TRUE);
 		$this->load->view('team/default', $this->viewdata);
 		// show just the page, the javascript will do the sync
 	}
@@ -81,8 +81,9 @@ class Draft extends Team_Controller
 	 */
 	function sync_script()
 	{
+		//print_r($this->input->post());
 		// the user can sync only a chapter and page at time
-		if (!$this->input->post('chapter_id') || !$this->input->post('page'))
+		if (!$this->input->post('chapter_id') || !$this->input->post('pagenum'))
 		{
 			show_404();
 		}
@@ -96,30 +97,31 @@ class Draft extends Team_Controller
 		if ($this->session->userdata('transproof_chapter_id') != $chapter->id)
 		{
 			$chapter->get_teams(); // puts teams in $chapter->teams
-			$is_team = $this->CI->tank_auth->is_team_array($chapter->teams);
+			$is_team = $this->tank_auth->is_team_array($chapter->teams);
 		}
 
 		// if we're here, it means that we're already authenticated: let's use userdata to reduce database seeking
 		$this->session->set_userdata('transproof_chapter_id', $chapter->id);
 
+		$result = array(); // an array for success and errors
 		if ($this->input->post('update'))
 		{
-			$result = array(); // an array for success and errors
-			foreach ($this->input->post() as $key => $item)
+			foreach ($this->input->post('update') as $key => $item)
 			{
 				// override in order to send all the changes to an unique chapter and page
 				$item["chapter_id"] = $this->input->post('chapter_id');
-				$item["pagenum"] = $this->input->post('page');
+				$item["pagenum"] = $this->input->post('pagenum');
 
 				// smile: the model does the sanitization
 				$transproof = new Transproof();
-				$result[] = $transproof->add($item);
+				$transproof->add($item);
+				$result[] = $transproof->error->string;
 			}
 		}
 		
 		$transproof = new Transproof();
-		$transproof->get_page();
-		$this->output->set_output(json_encode(array("sync" => $sync, "results" => $result)));
+		$transproof->get_page($this->input->post('chapter_id'), $this->input->post('pagenum'));
+		$this->output->set_output(json_encode(array("sync" => $transproof->all_to_array(), "results" => $result)));
 	}
 
 

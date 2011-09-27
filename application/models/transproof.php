@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 class Transproof extends DataMapper
 {
 
+	var $table = 'transproofs';
 	var $has_one = array(
 		'chapter' => array()
 	);
@@ -18,7 +19,7 @@ class Transproof extends DataMapper
 			'label' => 'Chapter ID'
 		),
 		'related_transproof_id' => array(// original transproof_id to be updated with this
-			'rules' => array('required', 'min_size' => 1),
+			'rules' => array('min_size' => 1),
 			'label' => 'Related ID'
 		),
 		'user_id' => array(// recognize the user and allow him to change his text in case
@@ -83,13 +84,12 @@ class Transproof extends DataMapper
 	);
 	var $auto_populate_has_many = TRUE;
 	var $auto_populate_has_one = TRUE;
-	var $min_box_height = 60;
-	var $min_box_width = 60;
+	var $min_box_height = 40;
+	var $min_box_width = 40;
 
 	function __construct($id = NULL)
 	{
 		parent::__construct($id);
-		$this->CI &= get_instance();
 	}
 
 
@@ -109,6 +109,7 @@ class Transproof extends DataMapper
 	 */
 	public function get($limit = NULL, $offset = NULL, $upwards = FALSE)
 	{
+		$CI =& get_instance();
 		$result = parent::get($limit, $offset);
 
 		// add data only if any result is found
@@ -185,11 +186,13 @@ class Transproof extends DataMapper
 	 */
 	function add($data = array())
 	{
+		$CI =& get_instance();
+		
 		// variables to override
-		$data["user_id"] = $this->CI->tank_auth->get_user_id();
-		unset($data["created"]);
-		unset($data["edited"]);
+		$data["user_id"] = $CI->tank_auth->get_user_id();
 
+		unset($data["created"]);
+		unset($data["updated"]);
 		// prepare variables a bit, we're grabbing data from people who aren't admins or mods
 		// check for the type
 		if (isset($data["type"]))
@@ -251,7 +254,7 @@ class Transproof extends DataMapper
 			 * 
 			// check if the current user is part of a team working on this chapter
 			$chapter->get_teams(); // puts teams in $chapter->teams
-			$is_team = $this->CI->tank_auth->is_team_array($chapter->teams); // using the is_team_array simplification!
+			$is_team = $CI->tank_auth->is_team_array($chapter->teams); // using the is_team_array simplification!
 			if (!$is_team)
 			{
 				$this->error_message('error', _('You tried to post a comment on a chapter not worked on by your team.'));
@@ -262,7 +265,7 @@ class Transproof extends DataMapper
 			 */
 
 			// if the related transproof is set, we don't need chapter_id
-			if ($data["related_transproof_id"] > 0)
+			if (isset($data["related_transproof_id"]) && $data["related_transproof_id"] > 0)
 			{
 				unset($data["chapter_id"]);
 			}
@@ -349,7 +352,7 @@ class Transproof extends DataMapper
 				if ($related_tp->type === 1)
 				{
 					// it must be the user's own comment
-					if ($related_tp->user_id !== $this->CI->tank_auth->get_user_id())
+					if ($related_tp->user_id !== $CI->tank_auth->get_user_id())
 					{
 						// trying to put a translation on a comment? Impossible
 						$this->error_message('error', _('You can only edit your own comments.'));
@@ -418,7 +421,7 @@ class Transproof extends DataMapper
 						}
 
 						// the user can only delete his own comments
-						if ($related_tp->user_id !== $this->CI->tank_auth->get_user_id)
+						if ($related_tp->user_id !== $CI->tank_auth->get_user_id)
 						{
 							$this->error_message('error', _('You tried deleting something that doesn\'t belong to you.'));
 							log_message('error', 'Transproof: Tried to delete something with a different user_id.');
@@ -474,12 +477,12 @@ class Transproof extends DataMapper
 				}
 
 				// make sure the numbers don't go out of bonduaries
-				if ($data["width"] + $data["left"] <= $data["image_width"] || $data["height"] + $data["top"] <= $data["image_height"])
+				if ($data["width"] + $data["left"] > $data["image_width"] || $data["height"] + $data["top"] > $data["image_height"])
 				{
 					$this->error_message('error', _('The sizes you set on the image are incompatible with each other.'));
 					log_message('error', 'Transproof: Tried to create a box with unmatching sizes.');
 					return FALSE;
-				}
+				};
 
 				// make sure the size of a box will remain larger than default
 				if ($data["width"] < $this->min_box_width || $data["height"] < $this->min_box_height)
@@ -520,10 +523,11 @@ class Transproof extends DataMapper
 				unset($data["accepted"]);
 			}
 		}
-
+		
 		// incredibly so, we might be done
-		if (!$this->save())
+		if (!$this->from_array($data, '', TRUE))
 		{
+			echo $this->error->string;
 			// on error in save(), we'll just leave DataMapper errors on
 			log_message('error', 'Transproof: Tried to set too small width or height on the box.');
 			return FALSE;

@@ -9,50 +9,10 @@
 
 		plugin.settings = {
 			fitImage: false,
-			updateUrl: ""
+			updateUrl: "",
+			chapter_id: 0,
+			page_number: 0
 		}
-		
-		/*
-		  
-		Should have an array of things that are to be sync'd
-		Should download the updates automatically in case someone else is working on
-		The array should be intact until the server gives a successful response
-		
-		Update will actually be a sync, so there must be a single PHP function routing everything
-		Every update we're downloading 
-		 
-		 
-		addComment()
-		Add a proofreader's/translators comment
-		
-		updateTranslation()
-		A translation is just a special kind of comment, versioned just like comments, but tagged as translation
-		
-		removeBox()
-		createBox()
-		
-		Array sent:
-		{
-			timestamp: // just to retrieve the updates since the latest sync
-			comments: [
-						{
-							type: // comment/translation
-							timestamp - use server
-							user_id - use server
-							parent_id: // if 0 it means this is a new comment/translation
-							top:
-							left:
-							width:
-							height: // version the sizes in a new translation with parent_id
-							image_width // 
-							image_height // version these, because later we'll grab the %
-							
-						}
-					]
-		}
-		 
-		   
-		 */
 
 		var $element = $(element),
 		element = element;
@@ -130,8 +90,8 @@
 				position: "absolute",
 				left: relativeX + "px",
 				top: relativeY + "px",
-				width:"60px",
-				height:"60px",
+				width:"40px",
+				height:"40px",
 				border: "1px dotted red"
 			}).appendTo($element);
 			
@@ -149,7 +109,7 @@
 				{
 					urelativeY = $element.height() - 2;
 				}
-				if(urelativeX - relativeX > 60 && urelativeY - relativeY > 60 && urelativeX < $element.width() && urelativeY < $element.height())
+				if(urelativeX - relativeX > 40 && urelativeY - relativeY > 40 && urelativeX < $element.width() && urelativeY < $element.height())
 				{
 					tempbox.css({
 						width: (urelativeX - relativeX) + "px",
@@ -160,8 +120,8 @@
 				else
 				{
 					tempbox.css({
-						width: "60px",
-						height: "60px",
+						width: "40px",
+						height: "40px",
 						border: "1px dashed red"
 					});
 				}
@@ -169,9 +129,20 @@
 			$(document).mouseup(function(u){
 				toggleMousedown(true);
 				tempbox.remove();
-				if(urelativeX - relativeX > 60 && urelativeY - relativeY > 60)
+				if(urelativeX - relativeX > 40 && urelativeY - relativeY > 40)
 				{
-					createBox(relativeY, relativeX, urelativeX - relativeX, urelativeY - relativeY);
+					var sendOpt = {
+						type: 1,
+						text: '',
+						top: relativeY,
+						left: relativeX,
+						width: urelativeX - relativeX,
+						height: urelativeY - relativeY,
+						image_width: $element.find("img").width(),
+						image_height: $element.find("img").height()
+					}
+					createBox(sendOpt);
+					var result = sendBox(sendOpt);
 				}
 			});
 		}
@@ -243,14 +214,14 @@
 				var relHeight = elemBoxHeight + urelativeY - relativeY;
 				var relWidth = elemBoxWidth + urelativeX - relativeX;
 				
-				if(relWidth <= 60)
+				if(relWidth <= 40)
 				{
-					relWidth = 60;
+					relWidth = 40;
 				}
 				
-				if(relHeight <= 60)
+				if(relHeight <= 40)
 				{
-					relHeight = 60;
+					relHeight = 40;
 				}
 				
 				if(relWidth + elemBoxLeft >= $element.width())
@@ -268,9 +239,6 @@
 					height: relHeight + "px"
 				});
 				
-				elemBox.find(".foolproofr_textarea").css({
-					height: (elemBox.height() - elemBox.find(".foolproofr_dragger").height() - 8) + "px"
-				});
 			});
 			
 			$(document).mouseup(function(u){
@@ -278,25 +246,35 @@
 			});
 		}
 		
-		var createBox = function(top, left, width, height){
+		var createBox = function(opt){
+			
+			var def = {
+				send: false,
+				top: 0,
+				left: 0,
+				width: 0,
+				height: 0
+			}
+				
+			var pref = $.extend({}, def, opt);
+			
+			
 			var boxElem = $("<div />").addClass('foolproofr_box').css({
 				top: top + "px",
 				left: left + "px",
 				width: width + "px",
 				height: height + "px"
 			});
-			var remover = $("<div />").addClass("foolproofr_remover").click(function(){
-				
+			var remover = $("<div />").addClass("foolproofr_remover").click(function(e){
+				removeBox(e);
 			}).html("X");
-			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append("Necrophantasia");
+			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append("Name");
 			var resizer = $("<div />").addClass("foolproofr_resizer");
 			var textarea = $("<textarea />").addClass("foolproofr_textarea");
 			boxElem.append(dragger).append(resizer).append(textarea);
 			
 			boxElem.appendTo($element);
-			boxElem.find(".foolproofr_textarea").css({
-				height: (boxElem.height() - dragger.height() - 8) + "px"
-			});
+			
 			
 			// update all textarea focus function
 			$(".foolproofr_textarea").each(function(index, el) {
@@ -314,15 +292,42 @@
 			
 			// put the focus on the just created box
 			boxElem.find(".foolproofr_textarea").focus();
-		}
-		
-		var removeBox = function() {
 			
 		}
+		
+		var removeBox = function(e) {
+			$(e.target).parents(".foolproofr_box").remove();
+		}
+		
+		var sendBox = function(objj) {
+			var data = {
+				update: [objj],
+				chapter_id: plugin.settings.chapter_id,
+				pagenum: plugin.settings.page_number
+			};
+			
+			$.ajax({
+				type: 'POST',
+				data: data,
+				async: false,
+				dataType: 'json',
+				url: plugin.settings.updateUrl,
+				success: function(data, textStatus, jqXHR) {
+					console.log(dump(data));
+				},
+				error: function(jqXHR, textStatus, errorThrown)
+				{
+				//alert(errorThrown);
+				}
+			});
+		}
+		
 
 		plugin.init();
 
 	}
+	
+
 
 	$.fn.foolproofr = function(options) {
 

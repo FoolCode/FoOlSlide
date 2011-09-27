@@ -23,28 +23,52 @@
 		<div class="topbar" data-dropdown="dropdown">
 			<div class="fill">
 				<div class="container">
-					<a class="brand" href="#"><?php echo _('Team panel') ?></a>
+					<a class="brand" href="<?php echo site_url('team') ?>"><?php echo _('Team panel') ?></a>
+					<ul class="nav">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle"><?php echo $this->teamc->team->name; ?></a>
+							<ul class="dropdown-menu">
+								<?php foreach ($this->teamc->teams as $team)
+								{ ?>
+									<li>
+										<a href="<?php echo site_url('team/' . $team->stub); ?>">
+											<?php echo $team->name ?>
+										</a>
+									</li>
+
+								<? } ?>
+							</ul>
+						</li>
+					</ul>
 
 					<ul class="nav secondary-nav">
 						<li><a href="<?php echo site_url(); ?>">
-								<?php echo _("Reader") ?></a></li><li class="dropdown">
-								<a href="#" class="dropdown-toggle"><?php echo $this->tank_auth->get_username(); ?></a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="<?php echo site_url('account'); ?>">
-											<?php echo _("Your Profile") ?>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo site_url('/account/auth/logout'); ?>">
-											<?php echo _("Logout") ?>
-										</a>
-									</li>
-								</ul>
-							</li>
+								<?php echo _("Reader") ?></a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle"><?php echo $this->tank_auth->get_username(); ?></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="<?php echo site_url('account'); ?>">
+										<?php echo _("Your Profile") ?>
+									</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('/account/auth/logout'); ?>">
+										<?php echo _("Logout") ?>
+									</a>
+								</li>
+							</ul>
+						</li>
 					</ul>
+
 				</div>
 			</div>
+		</div>
+
+
+		<div class="container-fluid">
+			<?php echo $main_content_view; ?>
 		</div>
 
 

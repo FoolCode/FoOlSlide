@@ -1,6 +1,6 @@
 .foolproofr_box {
 	position: absolute;
-	background: rgba(255,255,255,0.5);
+	background: rgba(255,255,255,0.8);
 	border: 1px solid #aaa;
 	text-align: center;
 	text-shadow: 
@@ -23,11 +23,11 @@
 		-2px 2px 1px #fff,
 		0px -2px 1px #fff,
 		-2px 0px 1px #fff;
-	overflow:hidden;
+	border:2px solid #5BD350;
 }
 
 .foolproofr_box.focused {
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.9);
 	box-shadow: 0px 0px 4px #fff;
 	-webkit-box-shadow: 0px 0px 4px #fff, 0px 0px 12px #000;;
 	-moz-box-shadow: 0px 0px 4px #fff;
@@ -35,8 +35,11 @@
 }
 
 .foolproofr_box .foolproofr_textarea {
-	height:90%;
-	width:90%;
+	position:absolute;
+	top:1%;
+	left:1%;
+	width:98%;
+	height:98%;
 	color:#000;
 	text-align:center;
 	font-family: Arial, sans-serif;
@@ -74,6 +77,8 @@
 }
 
 .foolproofr_box .foolproofr_dragger {
+	position:absolute;
+	top: -22px;
 	margin: 2px;
 	background: #eee;
 	padding: 1px 3px;
@@ -83,6 +88,11 @@
 	text-align:left;
 	position:relative;
 	font-family: Arial, sans-serif;
+	display:none;
+}
+
+.foolproofr_box.focused .foolproofr_dragger, .foolproofr_box:hover .foolproofr_dragger{
+	display:block;
 }
 
 .foolproofr_box .foolproofr_dragger .foolproofr_remover {

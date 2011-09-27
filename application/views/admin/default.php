@@ -80,12 +80,15 @@
 						})
 					});
 				<?php } ?>
+				// Auto-Focus on First Input
+				jQuery(":input:first").focus(); // Focus on first input generated
 				
-				jQuery("a[rel=popover-above]").popover({ offset: 10, placement: 'above' });
-				jQuery("a[rel=popover-below]").popover({ offset: 10, placement: 'below' });
-				jQuery("a[rel=popover-right]").popover({ offset: 10, placement: 'right' });
-				jQuery("a[rel=popover-left]").popover({ offset: 10, placement: 'left' });
+				// Bootstrap jQuery
 				jQuery("a[rel=twipsy]").twipsy({ live: true });
+				jQuery("a[rel^='popover']").each(function() {
+					var direction = $(this).attr('rel').replace("popover-", "");
+					$(this).popover({ offset: 10, placement: direction });
+				});
 			});
 		</script>
 		<script type="text/javascript">jQuery().alert();</script>

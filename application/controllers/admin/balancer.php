@@ -129,6 +129,8 @@ class Balancer extends Admin_Controller
 			}
 
 			load_settings();
+			
+			set_notice('notice', _('Settings changed.'));
 		}
 
 		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));

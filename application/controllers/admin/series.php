@@ -54,7 +54,7 @@ class Series extends Admin_Controller
 		$comic->where("stub", $stub)->get();
 		if ($comic->result_count() == 0)
 		{
-			set_notice('warn', _('The comic you looked for doesn\'t exist.'));
+			set_notice('warn', _('Sorry, the series you are looking for does not exist.'));
 			$this->manage();
 			return false;
 		}
@@ -70,6 +70,7 @@ class Series extends Admin_Controller
 			{
 				$chapter = new Chapter();
 				$chapter->update_chapter_db($this->input->post());
+				set_notice('notice', _('Updated Chapter Information.'));
 			}
 
 			$chapter = new Chapter($chapter_id);
@@ -127,7 +128,8 @@ class Series extends Admin_Controller
 					return false;
 				}
 			}
-
+			
+			flash_notice('notice', _('Updated Series Information.'));
 			// Did we change the stub of the comic? We need to redirect to the new page then.
 			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub)
 			{
@@ -189,6 +191,8 @@ class Series extends Admin_Controller
 				$chapter = new Chapter();
 				if ($chapter->add($this->input->post()))
 				{
+					$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
+					flash_notice('notice', 'Added Chapter ' . $chapter->chapter . '.' . $subchapter . ' for ' . $chapter->comic->name . '.');
 					redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
 				}
 			}
@@ -243,6 +247,7 @@ class Series extends Admin_Controller
 							return false;
 						}
 					}
+					flash_notice('notice', 'Added series ' . $comic->name . '.');
 					redirect('/admin/series/serie/' . $comic->stub);
 				}
 			}
@@ -362,22 +367,24 @@ class Series extends Admin_Controller
 			case("serie"):
 				$comic = new Comic();
 				$comic->where('id', $id)->get();
+				$alert = $comic->name;
 				if (!$comic->remove())
 				{
 					log_message("error", "Controller: series.php/remove: failed serie removal");
 					return false;
 				}
-				flash_notice('notice', 'The serie ' . $comic->name . ' has been removed');
+				flash_notice('notice', 'The series ' . $alert . ' has been removed.');
 				echo json_encode(array('href' => site_url("admin/series/manage")));
 				break;
 			case("chapter"):
 				$chapter = new Chapter($id);
+				$alert = $chapter->chapter;
 				if (!$comic = $chapter->remove())
 				{
 					log_message("error", "Controller: series.php/remove: failed chapter removal");
 					return false;
 				}
-				set_notice('notice', 'Chapter deleted.');
+				flash_notice('notice', _('Deleted Chapter') . ' ' . $alert . '.');
 				echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
 				break;
 			case("page"):

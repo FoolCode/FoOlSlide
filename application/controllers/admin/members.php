@@ -54,7 +54,7 @@ class Members extends Admin_Controller
 		// page results
 		$users->get_paged($page, 20);
 
-		$users_arr = array();
+		$form = array();
 
 		// prepare the array to print out as a form
 		foreach ($users->all as $key => $item)
@@ -324,6 +324,7 @@ class Members extends Admin_Controller
 		{
 			$team = new Team();
 			$team->update_team($this->input->post());
+			flash_notice('notice', 'Added the team' . $team->name . '.');
 			redirect('/admin/members/teams/' . $team->stub);
 		}
 

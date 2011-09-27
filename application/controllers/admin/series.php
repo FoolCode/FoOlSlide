@@ -217,7 +217,7 @@ class Series extends Admin_Controller
 
 			$table = tabler($table, FALSE, TRUE);
 
-			$data["form_title"] = _('Add New') . ' ' . _('Chapter');
+			$data["form_title"] = _('Add New Chapter');
 			$data["table"] = $table;
 
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
@@ -274,7 +274,60 @@ class Series extends Admin_Controller
 		}
 	}
 
+	function add_new_chapter()
+	{
+		$this->viewdata["function_title"] = '<a href="#">'._("Add New").'</a>';
 
+		if ($this->input->post())
+		{
+			$chapter = new Chapter();
+			if ($chapter->add($this->input->post()))
+			{
+				$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
+				flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
+				redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
+			}
+		}
+		$this->viewdata["extra_title"][] = _("Chapter");
+		
+		// Obtain All Comics
+		$comics = new Comic();
+		$comics->order_by('name', 'ASC')->get();
+		
+		// Generate Dropdown Array
+		$dropdown = array();
+		foreach ($comics->all as $comic) {
+			$dropdown[$comic->id] = $comic->name;
+		}
+		
+		// Setup Comics Dropdown
+		$chapter = new Chapter();
+		$chapter->validation['comic_id']['label'] = _('Series');
+		$chapter->validation['comic_id']['type'] = 'dropdowner';
+		$chapter->validation['comic_id']['values'] = $dropdown;
+		$chapter->validation['comic_id']['help'] = _('Add chapter to selected series.');
+		
+		$table = ormer($chapter);
+		$table[] = array(
+			_('Teams'),
+			array(
+				'name' => 'team',
+				'type' => 'input',
+				'value' => array('value' => get_setting('fs_gen_default_team')),
+				'help' => _('Insert the names of the teams who worked on this chapter.')
+			)
+		);
+
+		$table = tabler($table, FALSE, TRUE);
+
+		$data["form_title"] = _('Add New Chapter');
+		$data["table"] = $table;
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+		return true;
+	}
+	
 	function upload()
 	{
 		$info = array();

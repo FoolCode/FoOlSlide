@@ -9,15 +9,15 @@ class Chapter extends DataMapper
 	var $has_one = array('comic', 'team', 'joint');
 	var $has_many = array('page');
 	var $validation = array(
-		'name' => array(
-			'rules' => array('max_length' => 256),
-			'label' => 'Name',
-			'type' => 'input',
-		),
 		'comic_id' => array(
 			'rules' => array('is_int', 'required', 'max_length' => 256),
 			'label' => 'Comic ID',
 			'type' => 'hidden'
+		),
+		'name' => array(
+			'rules' => array('max_length' => 256),
+			'label' => 'Name',
+			'type' => 'input',
 		),
 		'team_id' => array(
 			'rules' => array('is_int', 'max_length' => 256),

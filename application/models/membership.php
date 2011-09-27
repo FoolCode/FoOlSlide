@@ -216,7 +216,7 @@ class Membership extends DataMapper {
 	function reject_application($team_id, $user_id = NULL) {
 		$CI = & get_instance();
 
-		if (is_null($user_id) || $user_id = $CI->tank_auth->get_user_id()) {
+		if (is_null($user_id)) {
 			$user_id = $CI->tank_auth->get_user_id();
 			$this->where('team_id', $team_id)->where('user_id', $user_id)->get();
 			if ($this->result_count() != 1) {
@@ -307,7 +307,6 @@ class Membership extends DataMapper {
 			$members->or_where('id', $member->user_id);
 		}
 		$members->include_related('profile')->get();
-
 		foreach ($members->all as $key => $member) {
 			$member->is_leader = ($this->all[$key]->is_leader == 1) ? '1' : '0';
 		}

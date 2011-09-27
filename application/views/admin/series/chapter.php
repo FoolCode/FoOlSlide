@@ -9,22 +9,28 @@ $this->buttoner[] = array(
 	'text' => _('Read chapter'),
 	'href' => $chapter->href()
 );
-
-echo buttoner();
-
-echo form_open();
-echo $table;
-echo form_close();
 ?>
 
-<div class="section"><?php echo _("Pages") ?>:</div>
+<div class="table">
+	<h3 style="float: left"><?php echo _('Chapter Information'); ?></h3>
+	<span style="float: right; padding: 5px"><?php echo buttoner(); ?></span>
+	<hr class="clear"/>
+	<?php
+		echo form_open('', array('class' => 'form-stacked'));
+		echo $table;
+		echo form_close();
+	?>
+</div>
 
+<br/>
 
+<div class="table">
+	<h3 style="float: left"><?php echo _('Pages'); ?></h3>
 <?php
 $session_name = $this->session->get_js_session(TRUE);
 $session_data = $this->session->get_js_session();
 ?>
-<div class="uploadify">
+<div class="uploadify" style="float: right; padding: 48px 15px 0 0;">
 	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
 	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
 	<script type="text/javascript">
@@ -90,12 +96,12 @@ $session_data = $this->session->get_js_session();
 	</script>
 	<div id="file_upload_flash"></div>
 </div>
-
+<hr class="clear"/>
 <div id="fileupload">
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
 	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
-	<?php echo form_open_multipart(""); ?>
-	<div class="fileupload-buttonbar">
+	<div class="fileupload-buttonbar" style="margin-right: 10px; height: 32px">
+		<?php echo form_open_multipart(""); ?>
 		<label class="fileinput-button">
 			<span>Add files...</span>
 			<input type="file" name="Filedata[]" multiple>
@@ -103,16 +109,16 @@ $session_data = $this->session->get_js_session();
 		<button type="submit" class="start">Start upload</button>
 		<button type="reset" class="cancel">Cancel upload</button>
 		<button type="button" class="delete">Delete files</button>
+		<?php echo form_close(); ?>
 	</div>
-	<?php echo form_close(); ?>
-	<div class="fileupload-content">
-		<table class="files"></table>
+	<div class="fileupload-content" style="margin-right: 10px; margin-bottom: 10px">
+		<table class="files zebra-striped"></table>
 		<div class="fileupload-progressbar"></div>
 	</div>
 </div>
+</div>
 <script id="template-upload" type="text/x-jquery-tmpl">
     <tr class="template-upload{{if error}} ui-state-error{{/if}}">
-        <td class="preview"></td>
         <td class="name">${name}</td>
         <td class="size">${sizef}</td>
         {{if error}}
@@ -134,7 +140,6 @@ $session_data = $this->session->get_js_session();
 <script id="template-download" type="text/x-jquery-tmpl">
     <tr class="template-download{{if error}} ui-state-error{{/if}}">
         {{if error}}
-		<td></td>
 		<td class="name">${name}</td>
 		<td class="size">${sizef}</td>
 		<td class="error" colspan="2">Error:
@@ -155,11 +160,6 @@ $session_data = $this->session->get_js_session();
 			{{/if}}
 		</td>
         {{else}}
-		<td class="preview">
-			{{if thumbnail_url}}
-			<a href="${url}" target="_blank"><img src="${thumbnail_url}"></a>
-			{{/if}}
-		</td>
 		<td class="name">
 			<a href="${url}"{{if thumbnail_url}} target="_blank"{{/if}}>${name}</a>
 		</td>

@@ -47,93 +47,93 @@ class Admin_Controller extends MY_Controller
 				"name" => _("Members"),
 				"level" => "member",
 				"default" => "members",
-				"icon" => 122,
+				"icon" => 258,
 				"content" => array(
-					"members" => array("level" => "mod", "name" => _("Member list")),
+					"members" => array("level" => "mod", "name" => _("Member List"), "icon" => 382),
 				)
 			);
 			$sidebar["preferences"] = array(
 				"name" => _("Preferences"),
 				"level" => "admin",
 				"default" => "general",
-				"icon" => 116,
+				"icon" => 402,
 				"content" => array(
-					"registration" => array("level" => "admin", "name" => _("Registration")),
+					"registration" => array("level" => "admin", "name" => _("Registration"), "icon" => 360),
 				)
 			);
 			$sidebar["balancer"] = array("name" => _("Load balancer"),
 				"level" => "admin",
 				"default" => "balancers",
-				"icon" => 27,
+				"icon" => 255,
 				"content" => array(
-					"client" => array("level" => "admin", "name" => _("Client")),
+					"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
 				)
 			);
 
 			return $sidebar;
 		}
 
-
 		$sidebar["series"] = array(
 			"name" => _("Series"),
 			"level" => "mod",
 			"default" => "manage",
-			"icon" => 43,
+			"icon" => 146,
 			"content" => array(
-				"manage" => array("level" => "mod", "name" => _("Manage")),
-				"add_new" => array("level" => "mod", "name" => _("Add new"))
+				"manage" => array("level" => "mod", "name" => _("Manage"), "icon" => 184),
+				"add_new" => array("level" => "mod", "name" => _("Add New"), "icon" => 154),
+				"add_new_chapter" => array("level" => "mod", "name" => _("Add Chapter"), "icon" => 274)
 			)
 		);
 		$sidebar["members"] = array(
 			"name" => _("Members"),
 			"level" => "member",
 			"default" => "members",
-			"icon" => 122,
+			"icon" => 258,
 			"content" => array(
-				"members" => array("level" => "mod", "name" => _("Member list")),
-				"teams" => array("level" => "member", "name" => _("Team list")),
-				"home_team" => array("level" => "member", "name" => _("Home team")),
-				"add_team" => array("level" => "mod", "name" => _("Add team"))
+				"members" => array("level" => "mod", "name" => _("Member List"), "icon" => 382),
+				"teams" => array("level" => "member", "name" => _("Team List"), "icon" => 357),
+				"home_team" => array("level" => "member", "name" => _("Home Team"), "icon" => 210),
+				"add_team" => array("level" => "mod", "name" => _("Add Team"), "icon" => 328)
 			)
 		);
 		$sidebar["preferences"] = array(
 			"name" => _("Preferences"),
 			"level" => "admin",
 			"default" => "general",
-			"icon" => 116,
+			"icon" => 402,
 			"content" => array(
-				"general" => array("level" => "admin", "name" => _("General")),
-				"reader" => array("level" => "admin", "name" => _("Reader")),
-				"theme" => array("level" => "admin", "name" => _("Theme")),
-				"registration" => array("level" => "admin", "name" => _("Registration")),
-				"advertising" => array("level" => "admin", "name" => _("Advertising")),
+				"general" => array("level" => "admin", "name" => _("General"), "icon" => 147),
+				"reader" => array("level" => "admin", "name" => _("Reader"), "icon" => 118),
+				"theme" => array("level" => "admin", "name" => _("Theme"), "icon" => 176),
+				"registration" => array("level" => "admin", "name" => _("Registration"), "icon" => 360),
+				"advertising" => array("level" => "admin", "name" => _("Advertising"), "icon" => 285),
 			)
 		);
-		$sidebar["balancer"] = array("name" => _("Load balancer"),
+		$sidebar["balancer"] = array("name" => _("Load Balancer"),
 			"level" => "admin",
 			"default" => "balancers",
-			"icon" => 27,
+			"icon" => 255,
 			"content" => array(
-				"balancers" => array("level" => "admin", "name" => _("Master")),
-				"client" => array("level" => "admin", "name" => _("Client")),
+				"balancers" => array("level" => "admin", "name" => _("Master"), "icon" => 121),
+				"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
 			)
 		);
 		$sidebar["upgrade"] = array("name" => _("Upgrade"),
 			"level" => "admin",
 			"default" => "upgrade",
-			"icon" => 37,
+			"icon" => 248,
 			"content" => array(
-				"upgrade" => array("level" => "admin", "name" => _("Upgrade")),
+				"upgrade" => array("level" => "admin", "name" => _("Upgrade"), "icon" => 353),
 			)
 		);
 		
 		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
 			"level" => "member",
 			"default" => "http://ask.foolrulez.com",
-			"icon" => 44,
+			"icon" => 423,
 			"content" => array(
-				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ")),
-				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker")),
+				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ"), "icon" => 356),
+				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker"), "icon" => 312),
 			)
 		);
 
@@ -163,11 +163,8 @@ class Admin_Controller extends MY_Controller
 				$active = FALSE;
 			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item))
 			{
-				$result .= '<div class="collection">';
-				$result .= '<div class="group"><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'>
-								<img class="icon off" src="' . site_url() . '/assets/glyphish/' . ($active ? 'on' : 'off') . '/' . $item["icon"] . '.png' . '" />
-								<img class="icon on" src="' . site_url() . '/assets/glyphish/on/' . $item["icon"] . '.png' . '" />'
-						. $item["name"] . '</a></div>';
+				$result .= '<h5><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'><img src="' . icons($item['icon']) . '" class="icon">' . $item["name"] . '</a></h5>';
+				$result .= '<ul class="sidebar">';
 				foreach ($item["content"] as $subkey => $subitem)
 				{
 					if ($active && $this->uri->segment(3) == $subkey)
@@ -178,10 +175,10 @@ class Admin_Controller extends MY_Controller
 					{
 						//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
 						$is_active = "";
-						$result .= '<a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'><div class="element ' . ($subactive ? 'active' : '') . '">' . $subitem["name"] . '</div></a>';
+						$result .= '<li class="' . ($subactive ? 'active' : '') . '"><a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'><img src="' . icons($subitem['icon'], 16) . '" class="icon icon-small">' . $subitem["name"] . '</a></li>';
 					}
 				}
-				$result .= '</div>';
+				$result .= '</ul>';
 			}
 		}
 		return $result;

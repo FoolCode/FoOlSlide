@@ -45,7 +45,7 @@ if (!$new_versions) {
 	<hr class="clear"/>
 <?php
 	echo _('Current Version') . ': ' . $current_version . '<br/>';
-	echo _('Latest Version Available') . ': ' . ($new_versions ? ($new_versions[0]->version.'.'.$new_versions[0]->subversion.'.'.$new_versions[0]->subsubversion) : _('You have the latest version of FoOlSlide.')).'<br/><br/>';
+	echo ($new_versions ? _('Latest Version Available') . ': ' . ($new_versions[0]->version.'.'.$new_versions[0]->subversion.'.'.$new_versions[0]->subsubversion) : _('You have the latest version of FoOlSlide.')).'<br/><br/>';
 ?>
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/chart/inc_js/"></script>

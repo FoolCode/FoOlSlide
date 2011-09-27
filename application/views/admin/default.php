@@ -26,7 +26,9 @@
 					modalContainer.find("#modal-text-desc").html(text);
 					modalContainer.find("#modal-btn-no").click(function() {	modalContainer.modal('hide'); return false; });
 					modalContainer.find("#modal-btn-yes").attr('href', href).click(function() {
+						modalContainer.find("#modal-loading").show();
 						jQuery.post(href, function(result) {
+							modalContainer.find("#modal-loading").hide();
 							if (location.href == result.href) window.location.reload(true);
 							location.href = result.href;
 						}, 'json');
@@ -191,6 +193,7 @@
 			</div>
 			<div class="modal-body">
 				<p id="modal-text-desc"></p>
+				<div id="modal-loading" class="loading"><img src="<?php echo site_url() ?>assets/js/images/loader-18.gif"/></div>
 			</div>
 			<div class="modal-footer">
 				<a href="#" id="modal-btn-no" class="btn primary"><?php echo _('No'); ?></a>

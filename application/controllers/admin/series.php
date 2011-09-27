@@ -424,8 +424,9 @@ class Series extends Admin_Controller
 				$title = $comic->name;
 				if (!$comic->remove())
 				{
-					//flash_notice('error', sprintf(_('Failed to delete the series %s.'), $chapter->comic->name));
+					flash_notice('error', sprintf(_('Failed to delete the series %s.'), $title));
 					log_message("error", "Controller: series.php/remove: failed serie removal");
+					echo json_encode(array('href' => site_url("admin/series/manage")));
 					return false;
 				}
 				flash_notice('notice', sprintf(_('The series %s has been deleted.'), $title));
@@ -436,8 +437,9 @@ class Series extends Admin_Controller
 				$title = $chapter->chapter;
 				if (!$comic = $chapter->remove())
 				{
-					//flash_notice('error', sprintf(_('Failed to delete chapter %s.'), $chapter->comic->chapter));
+					flash_notice('error', sprintf(_('Failed to delete chapter %s.'), $chapter->comic->chapter));
 					log_message("error", "Controller: series.php/remove: failed chapter removal");
+					echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
 					return false;
 				}
 				flash_notice('notice', sprintf(_('Chapter %s has been deleted.'), $title));

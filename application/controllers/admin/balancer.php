@@ -13,7 +13,7 @@ class Balancer extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// title on top
-		$this->viewdata['controller_title'] = _("Load balancer");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/balancer/balancers").'">' . _("Load Balancer") . '</a>';
 	}
 
 
@@ -58,7 +58,7 @@ class Balancer extends Admin_Controller
 
 		load_settings();
 
-		set_notice('notice', _('Settings changed.'));
+		set_notice('notice', _('Updated settings.'));
 	}
 
 
@@ -129,6 +129,8 @@ class Balancer extends Admin_Controller
 			}
 
 			load_settings();
+			
+			set_notice('notice', _('Updated settings.'));
 		}
 
 		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));
@@ -165,7 +167,6 @@ class Balancer extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Client");
 
-
 		$form = array();
 
 		// build the array for the form
@@ -177,7 +178,7 @@ class Balancer extends Admin_Controller
 				'id' => 'site_title',
 				'placeholder' => 'http://',
 				'preferences' => 'fs_gen',
-				'help' => _('Turns this FoOlSlide in a load balancer. You can activate this only if there\'s no comics in your FoOlSlide. Every function of this FoOlSlide will be disabled and it will work silently to duplicate the data.')
+				'help' => _('Providing a URL will convert this FoOlSlide installation into a load balancer.')
 			)
 		);
 
@@ -188,6 +189,8 @@ class Balancer extends Admin_Controller
 
 		// create a form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('Client');
+		$data['form_description'] = _('These settings can only be activated if there are no comics available on this FoOlSlide. All core functions will be disabled and your data will be duplicated quietly in the background.');
 		$data['table'] = $table;
 
 		// print out

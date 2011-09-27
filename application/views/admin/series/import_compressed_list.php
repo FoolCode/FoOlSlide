@@ -74,10 +74,10 @@
 		result = "";
 		jQuery('.set_teams', '.teams_setter').each(function(index){
 			if (jQuery(this).val() != "")
-				result += "<input type='text' class='set_teams' value='" + jQuery(this).val() + "' />";
+				result += "<input type='text' id='set_teams' class='set_teams' value='" + jQuery(this).val() + "' />";
 		});
 		
-		result += "<input type='text' class='set_teams' value='' onKeyUp='addField(this);' />";
+		result += "<input type='text' id='set_teams' class='set_teams' value='' onKeyUp='addField(this);' />";
 		jQuery(".insert_teams").each(function(index){
 			jQuery(this).html(result);
 		});
@@ -167,6 +167,26 @@
 	jQuery(document).ready(function(){
 		chapters_options(archives);
 		jQuery('#manual_filename').val(archives[0].filename);
+		
+		jQuery('form#import_settings').keypress(function(e) {
+			if (e.which == 13) {
+				console.debug(e.target);
+				var input = jQuery(e.target).attr('id');
+				if (input == 'manual_filename')
+					try_filename();
+				if (input == 'set_volume')
+					set_volume();
+				if (input == 'set_init_chapter')
+					set_init_chapter();
+				if (input == 'set_teams')
+					set_teams();
+			}
+		});
+		
+		jQuery('a[rel=popover-import]').popover({
+			live: true,
+			placement: 'left'
+		});
 	});
 	
 </script>
@@ -185,29 +205,47 @@
 	}
 </style>
 
-<div id="tools">
-	<?php echo _('Manual setup: write {cc} for where the chapter is positioned. {ss} for subchapter. {vv} for volume. The amount of letters sets the amount of numbers. "Chapter_123" is caught by writing "Chapter_{ccc}".') ?>
-	<br/>
-	<input type="text" id="manual_filename" value="" /> <a href="#" class="" onClick="try_filename(); return false;">Try</a>
-	<br/><br/>
-	<?php echo _("Mass set the volume") ?>:<br/>
-	<input type="text" id="set_volume" value="" /> <a href="#" class="" onClick="set_volume(); return false;">Set</a>
-	<br/><br/>
-	<?php echo _("Set first chapter number and +1 each next chapter") ?>:<br/>
-	<input type="text" id="set_init_chapter" value="" /> <a href="#" class="" onClick="set_init_chapter(); return false;">Set</a>
-	<br/><br/>
-	<?php echo _("Mass set the teams") ?>:<br/>
-	<div class="teams_setter" style="width:500px;">
-		<input type="text" class="set_teams" value="" /> <a href="#" class="" onClick="set_teams(); return false;">Set</a>
-		<br/><input type="text" class="set_teams" value="" onKeyUp="addField(this);" />
+<div class="table">
+	<h3><?php echo _('Import'); ?></h3>
+	<div id="tools">
+		<form id="import_settings" class="form-stacked" onsubmit="return false;">
+			<fieldset>
+				<div class="clearfix">
+					<label><?php echo _('Manual Setup'); ?>:</label>
+					<div class="input"><input type="text" id="manual_filename" value="" /> <a href="#" class="btn" onClick="try_filename(); return false;"><?php echo _('Try') ?></a></div>
+					<span class="help-inline"><?php echo _('Attempts to detect the volume, chapter, and sub-chapter numbers for the chapters listed below. (For Example: "Chapter_123" would be detected by using "Chapter_{ccc}" in the field.)') ?></span><br/>
+					<span class="help-inline">Variables: {vv} denotes volume, {cc} denotes chapter, and {ss} denotes sub-chapter.</span>
+				</div>
+				<div class="clearfix">
+					<label><?php echo _('Mass Set Volumes'); ?>:</label>
+					<div class="input"><input type="text" id="set_volume" value="" /> <a href="#" class="btn" onClick="set_volume(); return false;"><?php echo _('Set') ?></a></div>
+					<span class="help-inline"><?php echo _('Sets the volume for all of the chapters listed below.') ?></span>
+				</div>
+				<div class="clearfix">
+					<label><?php echo _('Set Initial Chapter Number'); ?>:</label>
+					<div class="input"><input text="text" id="set_init_chapter" value="" /> <a href="#" class="btn" onClick="set_init_chapter(); return false;"><?php echo _('Set') ?></a></div>
+					<span class="help-inline"><?php echo _('Sets the initial chapter and auto-increments for additional chapters listed below.') ?></span>
+				</div>
+				<div class="clearfix">
+					<label><?php echo _('Mass Set Teams'); ?>:</label>
+					<div class="input">
+						<input type="text" id="set_teams" class="set_teams" value="" /> <a href="#" class="btn" onClick="set_teams(); return false;"><?php echo _('Set') ?></a>
+						<br/><input type="text" id="set_teams" class="set_teams" value="" onKeyUp="addField(this);" />
+					</div>
+					<span class="help-inline"><?php echo _('Sets the teams for all the chapters listed below.') ?></span>
+				</div>
+			</fieldset>			
+		</form>
 	</div>
-	<br/><br/>
-	<?php echo _("If you checked all chapter numbers") ?>:
-	<a href="#" onClick="submit_all(0)" class="">Submit all</a>
 </div>
 
 <br/>
-</div>
-<br/><?php echo _("Currently adding chapters to") ?>: <b><?php echo $comic->name ?></b><br/><br/>
 
-<div id="chapters"></div>
+<div class="table">
+	<h3 style="float: left"><?php echo _('Adding Chapters to'); ?>: <?php echo $comic->name ?></h3>
+	<span style="float: right; padding: 5px"><a href="#" onClick="submit_all(0)" class="btn primary"><?php echo _('Submit All') ?></a></span>
+	<hr class="clear"/>
+	
+	<br/>
+	<div id="chapters" style="padding-right: 10px; padding-bottom: 10px"></div>
+</div>

@@ -13,7 +13,7 @@ class Preferences extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// set controller title
-		$this->viewdata['controller_title'] = _("Preferences");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/preferences").'">' . _("Preferences") . '</a>';;
 	}
 
 
@@ -37,9 +37,21 @@ class Preferences extends Admin_Controller
 	 */
 	function _submit($post, $form)
 	{
+		// Support Checkbox Listing
+		$former = array();
 		foreach ($form as $key => $item)
 		{
+			if (isset($item[1]['value']) && is_array($item[1]['value'])) {
+				foreach ($item[1]['value'] as $key => $item2) {
+					$former[] = array('1', $item2);
+				}
+			}
+			else
+				$former[] = $form[$key];
+		}
 
+		foreach ($former as $key => $item)
+		{
 			if (isset($post[$item[1]['name']]))
 				$value = $post[$item[1]['name']];
 			else
@@ -65,7 +77,7 @@ class Preferences extends Admin_Controller
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
-		set_notice('notice', _('Settings changed.'));
+		set_notice('notice', _('Updated settings.'));
 	}
 
 
@@ -78,20 +90,19 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("General");
 
-
 		$form = array();
 
 		// build the array for the form
 		$form[] = array(
-			_('Site title'),
+			_('Slide Title'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_gen_site_title',
 				'id' => 'site_title',
 				'maxlength' => '200',
-				'placeholder' => _('comic reader'),
+				'placeholder' => _('FoOlSlide'),
 				'preferences' => 'fs_gen',
-				'help' => _('Title that appears on top of your Slide')
+				'help' => _('Sets the title of your FoOlSlide. This appears in the title of every page.')
 			)
 		);
 
@@ -104,12 +115,12 @@ class Preferences extends Admin_Controller
 				'maxlength' => '200',
 				'placeholder' => 'http://',
 				'preferences' => 'fs_gen',
-				'help' => _('Small link that appears near title in public pages')
+				'help' => _('A small URL linked to another page. This is located next to the title at the top of every page.')
 			)
 		);
 
 		$form[] = array(
-			_('Default team'),
+			_('Default Team'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_gen_default_team',
@@ -117,7 +128,7 @@ class Preferences extends Admin_Controller
 				'maxlength' => '200',
 				'placeholder' => 'Anonymous',
 				'preferences' => 'fs_gen',
-				'help' => _('Default team for widgets and releases')
+				'help' => _('Sets the default team used for widgets and releases.')
 			)
 		);
 
@@ -128,18 +139,18 @@ class Preferences extends Admin_Controller
 				'type' => 'language',
 				'name' => 'fs_gen_default_lang',
 				'preferences' => 'fs_gen',
-				'help' => _('Change the default release language, so you don\'t have to change it from English every time')
+				'help' => _('Changes the default release language for all future releases.')
 			)
 		);
 
 		$form[] = array(
-			_('Default software language'),
+			_('Default Software Language'),
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
 				'values' => array('' => 'English', 'cs_CZ.utf8' => 'Czech', 'fr_FR.utf8' => 'French', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pl_PL.utf8' => 'Polish', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)', 'ru_RU.utf8' => 'Russian', 'es_ES.utf8' => 'Spanish', 'tr_TR.utf8' => 'Turkish'),
 				'preferences' => 'fs_gen',
-				'help' => _('Changes the overall language of the FoOlSlide software. If you can\'t find your language, you can contribute by translating on <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">our transifex project</a>')
+				'help' => _('Changes the software language of FoOlSlide. Please contribute by translating this software on our <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">Transfix project</a>.')
 			)
 		);
 
@@ -150,6 +161,7 @@ class Preferences extends Admin_Controller
 
 		// create a form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('General');
 		$data['table'] = $table;
 
 		// print out
@@ -168,11 +180,10 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Theme");
 
-
 		$form = array();
 
 		$form[] = array(
-			_('Select theme'),
+			_('Select Theme'),
 			array(
 				'type' => 'themes',
 				'name' => 'fs_theme_dir',
@@ -182,57 +193,57 @@ class Preferences extends Admin_Controller
 		);
 		
 		$form[] = array(
-			_('Pre-header text'),
+			_('Pre-Header Text'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_theme_preheader_text',
 				'placeholder' => '',
 				'preferences' => 'fs_gen',
-				'help' => _("This allows adding HTML code before the header navigation block.")
+				'help' => _("This will insert HTML code above before the header navigation block.")
 			)
 		);
 		
 		$form[] = array(
-			_('Header text'),
+			_('Header Text'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_theme_header_text',
 				'placeholder' => '',
 				'preferences' => 'fs_gen',
-				'help' => _("You can use this area to add text, a banner or any HTML in the header, where the navigation links are")
+				'help' => _("Inserts the text above in the header where the nagivation linkes are located.")
 			)
 		);
 
 		$form[] = array(
-			_('Footer text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_gen_footer_text',
-				'placeholder' => '',
-				'preferences' => 'fs_gen',
-				'help' => _('Add text in the footer, place where to write disclaimers. Don\'t write things like "All Rights Reserved©", especially if what you upload is not yours. If you\'re releasing your own work, consider using <a href="http://creativecommons.org/">Creative Commons licenses</a> to protect it. Remember that in 2011 sharing means power!')
-			)
-		);
-
-		$form[] = array(
-			_('Header code'),
+			_('Header Code'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_theme_header_code',
 				'placeholder' => '',
 				'preferences' => 'fs_gen',
-				'help' => _("This allows you to add code inside the HEAD of the HTML.")
+				'help' => _("This will insert the HTML code above inside the &lt;HEAD&gt;.")
 			)
 		);
 
 		$form[] = array(
-			_('Footer code'),
+			_('Footer Text'),
+			array(
+				'type' => 'textarea',
+				'name' => 'fs_gen_footer_text',
+				'placeholder' => '',
+				'preferences' => 'fs_gen',
+				'help' => _('Inserts the text above in the footer such as disclaimers. (Note: If the content uploaded does not belong to you, do not write things like "All Rights Reserived&copy;" above. However, if you\'re releasing your own works, please consider using <a href="http://creativecommons.org/">Creative Commons Licenses</a> to protect them.)')
+			)
+		);
+		
+		$form[] = array(
+			_('Footer Code'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_theme_footer_code',
 				'placeholder' => '',
 				'preferences' => 'fs_gen',
-				'help' => _("This allows you to add code after the BODY.")
+				'help' => _("This will insert the HTML code above after the &lt;BODY&gt;.")
 			)
 		);
 
@@ -243,6 +254,7 @@ class Preferences extends Admin_Controller
 
 		// create the form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('Theme');
 		$data['table'] = $table;
 
 		// print out
@@ -262,68 +274,72 @@ class Preferences extends Admin_Controller
 
 		$form = array();
 
-
 		$form[] = array(
 			_('Top banner'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_top_banner',
-				'help' => _('Insert the HTML provided by your advertiser'),
+				'help' => _('Insert the HTML code provided by your advertiser above.'),
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			_('Reload every pageview?'),
+			_('Top Banner Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_top_banner_reload',
-				'placeholder' => '',
-				'preferences' => 'fs_ads',
-				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
+				'name' => 'fs_ads_top_options',
+				'value' => array(
+					array(
+						'type' => 'checkbox',
+						'name' => 'fs_ads_top_banner_active',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Enable')
+					),
+					array(
+						'name' => 'fs_ads_top_banner_reload',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Reload on Every Pageview')
+					)
+				),
+				'help' => _('')
 			)
 		);
-
-
-		$form[] = array(
-			_('Active'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_top_banner_active',
-				'placeholder' => '',
-				'preferences' => 'fs_ads'
-			)
-		);
-
+		
 		$form[] = array(
 			_('Bottom banner'),
 			array(
 				'type' => 'textarea',
 				'name' => 'fs_ads_bottom_banner',
-				'help' => _('Insert the HTML provided by your advertiser'),
+				'help' => _('Insert the HTML code provided by your advertiser above.'),
 				'preferences' => 'fs_ads'
 			)
 		);
 
 		$form[] = array(
-			_('Reload every pageview?'),
+			_('Bottom Banner Options'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_ads_bottom_banner_reload',
-				'placeholder' => '',
-				'preferences' => 'fs_ads',
-				'help' => _('Reload the advertising. Useful for ProjectWonderful.com. Use it without violating the TOS of your advertiser.')
-			)
-		);
-
-
-		$form[] = array(
-			_('Active'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_ads_bottom_banner_active',
-				'placeholder' => '',
-				'preferences' => 'fs_ads'
+				'name' => 'fs_ads_bottom_options',
+				'value' => array(
+					array(
+						'type' => 'checkbox',
+						'name' => 'fs_ads_bottom_banner_active',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Enable')
+					),
+					array(
+						'name' => 'fs_ads_bottom_banner_reload',
+						'placeholder' => '',
+						'preferences' => 'fs_ads',
+						'text' => _('Reload on Every Pageview')
+					)
+					
+				),
+				'help' => _('')
 			)
 		);
 
@@ -360,6 +376,7 @@ class Preferences extends Admin_Controller
 
 		// create the form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('Advertising');
 		$data['table'] = $table;
 
 		// print out
@@ -372,51 +389,50 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Registration");
 
-
 		$form = array();
 
-
 		$form[] = array(
-			_('Disable registration'),
+			_('Settings'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_reg_disabled',
-				'id' => 'disable_reg',
-				'preferences' => 'fs_reg',
-				'help' => _('Disable registration in case you\'re not expecting any')
+				'name' => 'fs_reg_options',
+				'value' => array(
+					array(
+						'name' => 'fs_reg_disabled',
+						'id' => 'disable_reg',
+						'preferences' => 'fs_reg',
+						'text' => _('Disable New User Registrations')
+					),
+					array(
+						'name' => 'fs_reg_email_disabled',
+						'id' => 'disable_reg',
+						'preferences' => 'fs_reg',
+						'text' => _('Disable Email Activation')
+					)
+				),
+				'help' => _('Modify the settings for the registration system.')
 			)
 		);
 
 		$form[] = array(
-			_('Disable activation email'),
-			array(
-				'type' => 'checkbox',
-				'name' => 'fs_reg_email_disabled',
-				'id' => 'disable_reg',
-				'preferences' => 'fs_reg',
-				'help' => _('Disable the necessity to proceed with an activation after registering')
-			)
-		);
-
-		$form[] = array(
-			_('reCaptcha public key'),
+			_('reCaptcha&trade; Public Key'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_reg_recaptcha_public',
 				'id' => 'captcha_public',
 				'maxlength' => '200',
 				'preferences' => 'fs_reg',
-				'help' => _('Use <a href="http://www.google.com/recaptcha">reCaptcha</a> service, avoid hellish captchas!')
+				'help' => _('Insert the public key provided by reCAPTCHA&trade;.')
 			)
 		);
 
 		$form[] = array(
-			_('reCaptcha secret key'),
+			_('reCaptcha&trade; Secret Key'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_reg_recaptcha_secret',
 				'preferences' => 'fs_reg',
-				'help' => _('You must insert both public and secret key if you want to use reCaptcha')
+				'help' => _('Insert the private key provided by reCAPTCHA&trade;.')
 			)
 		);
 
@@ -427,6 +443,8 @@ class Preferences extends Admin_Controller
 
 		// prepare form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('Registration');
+		$data['form_description'] = _('In order to use reCAPTCHA&trade; you need to sign up for the service at <a href="http://www.google.com/recaptcha">reCAPTCHA&trade;</a>, which will provide you with a public and a private key.');
 		$data['table'] = $table;
 
 		// print out
@@ -444,29 +462,28 @@ class Preferences extends Admin_Controller
 	{
 		$this->viewdata["function_title"] = _("Reading");
 
-
 		$form = array();
 
-
 		$form[] = array(
-			_('Enable direct downloads'),
+			_('Settings'),
 			array(
 				'type' => 'checkbox',
 				'name' => 'fs_dl_enabled',
 				'id' => 'enable_dl',
 				'preferences' => 'fs_dl',
-				'help' => _('Direct downloads usually increase the bandwidth usage by one-third. The issue is wheter you have enough space to keep both images and ZIPs. FoOlSlide tries to avoid dealing with the problem by using on-the-fly ZIP compression and caching.')
+				'text' => _('Enable Direct Downloads'),
+				'help' => _('Note: Direct downloads usually increase bandwidth usage by one-third. The issue is whether you have enough space to keep both images and ZIP archives. FoOlSlide tries to avoid this problem by using on-the-fly ZIP compression and caching.')
 			)
 		);
 
 		$form[] = array(
-			_('Maximum direct download cache in Megabyte'),
+			_('Maximum Direct Download Cache in Megabyte'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_dl_archive_max',
 				'id' => 'max_dl',
 				'preferences' => 'fs_dl',
-				'help' => _('Over this size, the ZIPs that have been downloaded the furthest in time will be removed. If you insert a very large number, the ZIPs will be cached indefinitely.')
+				'help' => _('Once this limit has been reached, ZIP archives that have not been downloaded recently will be removed. If a very large number is set, the ZIP archives will be cached indefinitely.')
 			)
 		);
 
@@ -477,6 +494,7 @@ class Preferences extends Admin_Controller
 
 		// create form
 		$table = tabler($form, FALSE);
+		$data['form_title'] = _('Reading');
 		$data['table'] = $table;
 
 		// print out

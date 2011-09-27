@@ -16,7 +16,7 @@ class Upgrade extends Admin_Controller
 		$this->load->model('upgrade_model');
 
 		// page title
-		$this->viewdata['controller_title'] = "Upgrade FoOlSlide";
+		$this->viewdata['controller_title'] = _("Upgrade FoOlSlide");
 	}
 
 

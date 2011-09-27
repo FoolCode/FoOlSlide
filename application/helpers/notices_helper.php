@@ -13,6 +13,11 @@ if (!function_exists('set_notice'))
 	 */
 	function set_notice($type, $message)
 	{
+		if ($type == 'warn')
+			$type = 'warning';
+		if ($type == 'notice')
+			$type = 'success';
+		
 		$CI = & get_instance();
 		$CI->notices[] = array("type" => $type, "message" => $message);
 	}
@@ -30,6 +35,11 @@ if (!function_exists('flash_notice'))
 	 */
 	function flash_notice($type, $message)
 	{
+		if ($type == 'warn')
+			$type = 'warning';
+		if ($type == 'notice')
+			$type = 'success';
+		
 		$CI = & get_instance();
 		$CI->flash_notice_data[] = array('type' => $type, 'message' => $message);
 		$CI->session->set_flashdata('notices', $CI->flash_notice_data);

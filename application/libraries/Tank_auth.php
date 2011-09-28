@@ -82,13 +82,10 @@ class Tank_auth
 					}
 					else
 					{
-						$profile = new Profile();
-						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
 							'status' => ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
-							'group' => $profile->group_id,
 						));
 
 						if ($user->activated == 0)
@@ -136,7 +133,7 @@ class Tank_auth
 		$this->delete_autologin();
 
 		// See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
-		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => '', 'group' => ''));
+		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => ''));
 
 		$this->ci->session->sess_destroy();
 	}
@@ -170,12 +167,7 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			// use the userdata
-			if ($this->ci->session->userdata('group') === '1')
-			{
-				return TRUE;
-			}
-			return FALSE;
+			$user_id = $this->ci->session->userdata('user_id');
 		}
 
 		// we're checking if another user is an admin
@@ -205,12 +197,7 @@ class Tank_auth
 		// if no ID is set it means we're checking on ourselves
 		if (is_null($user_id))
 		{
-			// use the userdata
-			if ($this->ci->session->userdata('group') === '3')
-			{
-				return TRUE;
-			}
-			return FALSE;
+			$user_id = $this->ci->session->userdata('user_id');
 		}
 
 		// we're checking if another user is an admin
@@ -239,30 +226,12 @@ class Tank_auth
 		return FALSE;
 	}
 
-
-	/**
-	 * Returns the group ID
-	 * 
-	 * @author Woxxy
-	 * @return int
-	 */
-	function get_group_id()
-	{
-		if (!$this->is_logged_in())
-			return FALSE;
-		return $this->ci->session->userdata('group');
-		return FALSE;
-	}
-
-
 	function is_group($group_name)
 	{
 		if (!$this->is_logged_in())
 			return FALSE;
 		if ($group_name == 'member')
 			return TRUE;
-		if (!$group_id = $this->get_group_id())
-			return FALSE;
 		$group = new Group();
 		$group->where('name', $group_name)->get();
 		if ($group->id == $group_id)
@@ -913,13 +882,10 @@ class Tank_auth
 					{
 
 						// Login user
-						$profile = new Profile();
-						$profile->where('user_id', $user->id)->limit(1)->get();
 						$this->ci->session->set_userdata(array(
 							'user_id' => $user->id,
 							'username' => $user->username,
-							'status' => STATUS_ACTIVATED,
-							'group' => $profile->group_id
+							'status' => STATUS_ACTIVATED
 						));
 						
 

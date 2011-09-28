@@ -26,8 +26,8 @@ class Comic extends DataMapper
 		),
 		'hidden' => array(
 			'rules' => array('is_int'),
-			'label' => 'Hidden',
-			'type' => 'checkbox',
+			'label' => 'Visibility',
+			'type' => 'checkbox'
 		),
 		'description' => array(
 			'rules' => array(),
@@ -107,11 +107,12 @@ class Comic extends DataMapper
 	function help_lang()
 	{
 		$this->validation['name']['label'] = _('Name');
-		$this->validation['name']['help'] = _('Insert the title of the serie.');
+		$this->validation['name']['help'] = _('Insert the title of the series.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
-		$this->validation['hidden']['label'] = _('Hidden');
-		$this->validation['hidden']['help'] = _('Hide the serie from public view.');
+		$this->validation['hidden']['label'] = _('Visibility');
+		$this->validation['hidden']['help'] = _('Hide the series from public view.');
+		$this->validation['hidden']['text'] = _('Hidden');
 		$this->validation['thumbnail']['label'] = _('Thumbnail');
 		$this->validation['thumbnail']['help'] = _('Upload an image to use as thumbnail.');
 		$this->validation['customchapter']['label'] = _('Custom Chapter Title');
@@ -223,7 +224,7 @@ class Comic extends DataMapper
 
 
 	/**
-	 * Comodity get() function that fetches extra data for the serie selected.
+	 * Comodity get() function that fetches extra data for the series selected.
 	 * It doesn't get the chapters.
 	 * 
 	 * CURRENTLY USELESS.
@@ -252,7 +253,7 @@ class Comic extends DataMapper
 
 
 	/**
-	 * Gets the nations where the serie is licensed
+	 * Gets the nations where the series is licensed
 	 * 
 	 * @author	Woxxy
 	 * @return	bool true on success
@@ -278,7 +279,7 @@ class Comic extends DataMapper
 
 
 	/**
-	 * Function to create a new entry for a serie from scratch. It creates
+	 * Function to create a new entry for a series from scratch. It creates
 	 * both a directory and a database entry, and removes them if something
 	 * goes wrong.
 	 *
@@ -289,12 +290,20 @@ class Comic extends DataMapper
 	 */
 	public function add($data = array())
 	{
-		// For the serie, the stub is just the name.
+		// For the series, the stub is just the name.
 		$this->to_stub = $data['name'];
 		// Uniqid to prevent directory clash
 		$this->uniqid = uniqid();
 		// stub() checks for to_stub and makes a stub.
 		$this->stub = $this->stub();
+
+		// Check if the series database entry and remove dir in case it's not.
+		// GUI errors are inner to the function
+		if (!$this->update_comic_db($data))
+		{
+			log_message('error', 'add_comic: failed writing to database');
+			return false;
+		}
 
 		// Check if dir is created. GUI errors in inner function.
 		if (!$this->add_comic_dir())
@@ -302,23 +311,14 @@ class Comic extends DataMapper
 			log_message('error', 'add_comic: failed creating dir');
 			return false;
 		}
-
-		// Check if the serie database entry and remove dir in case it's not.
-		// GUI errors are inner to the function
-		if (!$this->update_comic_db($data))
-		{
-			log_message('error', 'add_comic: failed writing to database');
-			$this->remove_comic_dir();
-			return false;
-		}
-
+		
 		// Good job!
 		return true;
 	}
 
 
 	/**
-	 * Removes serie from database, all its pages, chapters, and its directory.
+	 * Removes series from database, all its pages, chapters, and its directory.
 	 * There's no going back from this!
 	 *
 	 * @author	Woxxy
@@ -361,14 +361,14 @@ class Comic extends DataMapper
 	public function update_comic_db($data = array())
 	{
 
-		// Check if we're updating or creating a new serie by looking at $data["id"].
+		// Check if we're updating or creating a new series by looking at $data["id"].
 		// False is returned if the chapter ID was not found.
 		if (isset($data["id"]) && $data['id'] != '')
 		{
 			$this->where("id", $data["id"])->get();
 			if ($this->result_count() == 0)
 			{
-				set_notice('error', _('The serie you wanted to edit doesn\'t exist.'));
+				set_notice('error', _('The series you wanted to edit doesn\'t exist.'));
 				log_message('error', 'update_comic_db: failed to find requested id');
 				return false;
 			}
@@ -475,7 +475,7 @@ class Comic extends DataMapper
 			}
 			else
 			{
-				set_notice('error', _('Failed saving the serie to database for unknown reasons.'));
+				set_notice('error', _('Failed saving the series to database for unknown reasons.'));
 				log_message('error', 'update_comic_db: failed to save');
 			}
 			return false;
@@ -494,11 +494,11 @@ class Comic extends DataMapper
 
 
 	/**
-	 * Removes the serie from the database, but before it removes all the 
+	 * Removes the series from the database, but before it removes all the 
 	 * related chapters and their pages from the database (not the files).
 	 *
 	 * @author	Woxxy
-	 * @return	object a copy of the serie that has been deleted
+	 * @return	object a copy of the series that has been deleted
 	 */
 	public function remove_comic_db()
 	{
@@ -517,7 +517,7 @@ class Comic extends DataMapper
 		$success = $this->delete();
 		if (!$success)
 		{
-			set_notice('error', _('The serie couldn\'t be removed from the database for unknown reasons.'));
+			set_notice('error', _('The series couldn\'t be removed from the database for unknown reasons.'));
 			log_message('error', 'remove_comic_db: id found but entry not removed');
 			return false;
 		}
@@ -547,7 +547,7 @@ class Comic extends DataMapper
 
 
 	/**
-	 * Removes the serie directory with all the data that was inside of it.
+	 * Removes the series directory with all the data that was inside of it.
 	 * This means chapters, pages and props too.
 	 *
 	 * @author	Woxxy
@@ -560,7 +560,7 @@ class Comic extends DataMapper
 		// Delete all inner files
 		if (!delete_files($dir, TRUE))
 		{
-			set_notice('error', _('The files inside the serie directory could not be removed. Please, check the file permissions.'));
+			set_notice('error', _('The files inside the series directory could not be removed. Please, check the file permissions.'));
 			log_message('error', 'remove_comic_dir: files inside folder could not be removed');
 			return false;
 		}
@@ -598,7 +598,7 @@ class Comic extends DataMapper
 		// Copy the full image over
 		if (!copy($filedata["server_path"], $dir . $filedata["name"]))
 		{
-			set_notice('error', _('Failed to create the thumbnail image for the serie. Check file permissions.'));
+			set_notice('error', _('Failed to create the thumbnail image for the series. Check file permissions.'));
 			log_message('error', 'add_comic_thumb: failed to create/copy the image');
 			return false;
 		}
@@ -622,7 +622,7 @@ class Comic extends DataMapper
 		// Resize! And return false of failure
 		if (!$CI->image_lib->resize())
 		{
-			set_notice('error', _('Failed to create the thumbnail image for the serie. Resize function didn\'t work'));
+			set_notice('error', _('Failed to create the thumbnail image for the series. Resize function didn\'t work'));
 			log_message('error', 'add_comic_thumb: failed to create thumbnail');
 			return false;
 		}
@@ -630,8 +630,8 @@ class Comic extends DataMapper
 		// Whatever we might want to do later, we better clear the library now!
 		$CI->image_lib->clear();
 
-		// The thumbnail is actually the filename of the original for serie thumbnails
-		// It's different from page thumbnails - those have "thumb_" in this variable!
+		// The thumbnail is actually the filename of the original for series thumbnails
+		// It's different from page thumbnails - those have "thumb_" in thiserie s variable!
 		$this->thumbnail = $filedata["name"];
 
 		// Save hoping we're lucky

@@ -17,7 +17,7 @@ class Series extends Admin_Controller
 
 		$this->load->model('files_model');
 		$this->load->library('pagination');
-		$this->viewdata['controller_title'] = _("Series");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/series").'">' . _("Series") . '</a>';;
 	}
 
 
@@ -29,7 +29,7 @@ class Series extends Admin_Controller
 
 	function manage($page = 1)
 	{
-		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/series/manage/') . '">' . _('manage') . '</a>';
+		$this->viewdata["function_title"] = _('Manage');
 		$comics = new Comic();
 
 		if ($this->input->post('search'))
@@ -54,12 +54,14 @@ class Series extends Admin_Controller
 		$comic->where("stub", $stub)->get();
 		if ($comic->result_count() == 0)
 		{
-			set_notice('warn', _('The comic you looked for doesn\'t exist.'));
+			set_notice('warn', _('Sorry, the series you are looking for does not exist.'));
 			$this->manage();
 			return false;
 		}
 
-		$this->viewdata["function_title"] = '<a href="' . site_url('admin/series/serie') . '/' . $comic->stub . '">' . $comic->name . '</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/series/manage/') . '">' . _('Manage') . '</a>';
+		if ($chapter_id == "") $this->viewdata["extra_title"][] = $comic->name;
+
 		$data["comic"] = $comic;
 
 		if ($chapter_id != "")
@@ -68,6 +70,8 @@ class Series extends Admin_Controller
 			{
 				$chapter = new Chapter();
 				$chapter->update_chapter_db($this->input->post());
+				$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
+				set_notice('notice', sprintf(_('Information for Chapter %s has been updated.'), $chapter->chapter.'.'.$subchapter));
 			}
 
 			$chapter = new Chapter($chapter_id);
@@ -92,9 +96,8 @@ class Series extends Admin_Controller
 
 			$data["table"] = $table;
 
-
+			$this->viewdata["extra_title"][] = '<a href="' . site_url('admin/series/serie/'.$comic->stub) . '">' . $comic->name . '</a>';
 			$this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter . "." . $chapter->subchapter);
-
 
 			$data["pages"] = $chapter->get_pages();
 
@@ -126,7 +129,8 @@ class Series extends Admin_Controller
 					return false;
 				}
 			}
-
+			
+			flash_notice('notice', sprintf(_('Updated series information for %s.'), $comic->name));
 			// Did we change the stub of the comic? We need to redirect to the new page then.
 			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub)
 			{
@@ -164,7 +168,7 @@ class Series extends Admin_Controller
 				'name' => 'licensed',
 				'type' => 'nation',
 				'value' => $licenses->get_by_comic($comic->id),
-				'help' => _('Insert the nations where the serie is licensed in order to limit the availability.')
+				'help' => _('Insert the nations where the series is licensed in order to limit the availability.')
 			)
 		);
 
@@ -178,7 +182,7 @@ class Series extends Admin_Controller
 
 	function add_new($stub = "")
 	{
-		$this->viewdata["function_title"] = _("Add new");
+		$this->viewdata["function_title"] = '<a href="#">'._("Add New").'</a>';
 
 		//$stub stands for $comic, but there's already a $comic here
 		if ($stub != "")
@@ -188,6 +192,8 @@ class Series extends Admin_Controller
 				$chapter = new Chapter();
 				if ($chapter->add($this->input->post()))
 				{
+					$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
+					flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
 					redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
 				}
 			}
@@ -211,6 +217,7 @@ class Series extends Admin_Controller
 
 			$table = tabler($table, FALSE, TRUE);
 
+			$data["form_title"] = _('Add New Chapter');
 			$data["table"] = $table;
 
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
@@ -241,6 +248,7 @@ class Series extends Admin_Controller
 							return false;
 						}
 					}
+					flash_notice('notice', sprintf(_('The series %s has been added.'), $comic->name));
 					redirect('/admin/series/serie/' . $comic->stub);
 				}
 			}
@@ -252,20 +260,74 @@ class Series extends Admin_Controller
 					'name' => 'licensed',
 					'type' => 'nation',
 					'value' => array(),
-					'help' => _('Insert the nations where the serie is licensed in order to limit the availability.')
+					'help' => _('Insert the nations where the series is licensed in order to limit the availability.')
 				)
 			);
 
 			$table = tabler($table, FALSE, TRUE);
+			$data["form_title"] = _('Add New') . ' ' . _('Series');
 			$data['table'] = $table;
 
-			$this->viewdata["extra_title"][] = _("Serie");
+			$this->viewdata["extra_title"][] = _("Series");
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
 		}
 	}
 
+	function add_new_chapter()
+	{
+		$this->viewdata["function_title"] = '<a href="#">'._("Add New").'</a>';
 
+		if ($this->input->post())
+		{
+			$chapter = new Chapter();
+			if ($chapter->add($this->input->post()))
+			{
+				$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
+				flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
+				redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
+			}
+		}
+		$this->viewdata["extra_title"][] = _("Chapter");
+		
+		// Obtain All Comics
+		$comics = new Comic();
+		$comics->order_by('name', 'ASC')->get();
+		
+		// Generate Dropdown Array
+		$dropdown = array();
+		foreach ($comics->all as $comic) {
+			$dropdown[$comic->id] = $comic->name;
+		}
+		
+		// Setup Comics Dropdown
+		$chapter = new Chapter();
+		$chapter->validation['comic_id']['label'] = _('Series');
+		$chapter->validation['comic_id']['type'] = 'dropdowner';
+		$chapter->validation['comic_id']['values'] = $dropdown;
+		$chapter->validation['comic_id']['help'] = _('Add chapter to selected series.');
+		
+		$table = ormer($chapter);
+		$table[] = array(
+			_('Teams'),
+			array(
+				'name' => 'team',
+				'type' => 'input',
+				'value' => array('value' => get_setting('fs_gen_default_team')),
+				'help' => _('Insert the names of the teams who worked on this chapter.')
+			)
+		);
+
+		$table = tabler($table, FALSE, TRUE);
+
+		$data["form_title"] = _('Add New Chapter');
+		$data["table"] = $table;
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+		return true;
+	}
+	
 	function upload()
 	{
 		$info = array();
@@ -353,22 +415,28 @@ class Series extends Admin_Controller
 			case("serie"):
 				$comic = new Comic();
 				$comic->where('id', $id)->get();
+				$title = $comic->name;
 				if (!$comic->remove())
 				{
+					flash_notice('error', sprintf(_('Failed to delete the series %s.'), $title));
 					log_message("error", "Controller: series.php/remove: failed serie removal");
+					echo json_encode(array('href' => site_url("admin/series/manage")));
 					return false;
 				}
-				flash_notice('notice', 'The serie ' . $comic->name . ' has been removed');
+				flash_notice('notice', sprintf(_('The series %s has been deleted.'), $title));
 				$this->output->set_output(json_encode(array('href' => site_url("admin/series/manage"))));
 				break;
 			case("chapter"):
 				$chapter = new Chapter($id);
+				$title = $chapter->chapter;
 				if (!$comic = $chapter->remove())
 				{
+					flash_notice('error', sprintf(_('Failed to delete chapter %s.'), $chapter->comic->chapter));
 					log_message("error", "Controller: series.php/remove: failed chapter removal");
+					echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
 					return false;
 				}
-				set_notice('notice', 'Chapter deleted.');
+				flash_notice('notice', sprintf(_('Chapter %s has been deleted.'), $title));
 				$this->output->set_output(json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub))));
 				break;
 			case("page"):

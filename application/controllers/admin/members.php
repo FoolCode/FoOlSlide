@@ -8,7 +8,7 @@ class Members extends Admin_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->viewdata['controller_title'] = "Members";
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/members").'">' . _("Members") . '</a>';
 	}
 
 
@@ -40,7 +40,7 @@ class Members extends Admin_Controller
 			$can_edit = false;
 
 		// set the subtitle
-		$this->viewdata["function_title"] = "Members list";
+		$this->viewdata["function_title"] = _('Members');
 
 		$users = new User();
 
@@ -54,7 +54,7 @@ class Members extends Admin_Controller
 		// page results
 		$users->get_paged($page, 20);
 
-		$users_arr = array();
+		$form = array();
 
 		// prepare the array to print out as a form
 		foreach ($users->all as $key => $item)
@@ -67,6 +67,7 @@ class Members extends Admin_Controller
 		}
 
 		// create the form off the array
+		$data['form_title'] = _('Members');
 		$data['table'] = tabler($form, TRUE, FALSE);
 
 		// print out
@@ -94,7 +95,7 @@ class Members extends Admin_Controller
 		// the second part of the if makes sure that if "member" method is called from "you"
 		// the user is not redirected to "you" again
 		if ($this->tank_auth->get_user_id() == $id && $this->uri->segment(3) != 'you')
-			redirect('/account/profile/edit/');
+			redirect('/account/profile/');
 
 		// give admins and mods ability to edit user profiles
 		if ($this->input->post() && $this->tank_auth->is_allowed())
@@ -105,7 +106,7 @@ class Members extends Admin_Controller
 		}
 
 		// set the subtitle
-		$this->viewdata["function_title"] = _("Member");
+		$this->viewdata["function_title"] = '<a href="'.site_url("admin/members").'">'._('Members').'</a>';
 
 		// create a table with user login name and email
 		$table = ormer($user);
@@ -120,7 +121,8 @@ class Members extends Admin_Controller
 		$profile->where('user_id', $id)->get();
 		$profile_table = ormer($profile);
 		$data['profile'] = tabler($profile_table, TRUE, ($this->tank_auth->is_allowed() || $this->uri->segment(3) != 'you'));
-
+		
+		$this->viewdata["extra_title"][] = $user->username;
 		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/members/user', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
@@ -138,10 +140,18 @@ class Members extends Admin_Controller
 		if ($stub == "")
 		{
 			// set subtitle
-			$this->viewdata["function_title"] = "Team list";
+			$this->viewdata["function_title"] = _('Teams');
 
 			// we can use get_iterated on teams
 			$teams = new Team();
+			
+			// support filtering via search
+			if ($this->input->post())
+			{
+				$teams->ilike('name', $this->input->post('search'));
+				$this->viewdata['extra_title'][] = _('Searching') . " : " . $this->input->post('search');
+			}
+			
 			$teams->order_by('name', 'ASC')->get_iterated();
 			$rows = array();
 			// produce links for each team
@@ -150,6 +160,7 @@ class Members extends Admin_Controller
 				$rows[] = array('title' => '<a href="' . site_url('admin/members/teams/' . $team->stub) . '">' . $team->name . '</a>');
 			}
 			// put in a list the teams
+			$data['form_title'] = _('Teams');
 			$data['table'] = lister($rows);
 
 			// print out
@@ -198,7 +209,7 @@ class Members extends Admin_Controller
 
 
 			// subtitle
-			$this->viewdata["function_title"] = "Team";
+			$this->viewdata["function_title"] = '<a href="'.site_url("admin/members/teams").'">'._('Teams').'</a>';
 			// subsubtitle!
 			$this->viewdata["extra_title"][] = $team->name;
 
@@ -244,7 +255,7 @@ class Members extends Admin_Controller
 				}
 
 				// add button to array or stay silent if there's no button
-				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
+				$users_arr[$key]['action'] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 				if (!$item->is_leader && ($this->tank_auth->is_team_leader($team->id) || $this->tank_auth->is_allowed()))
 				{
 					$buttoner = array();
@@ -264,7 +275,7 @@ class Members extends Admin_Controller
 					);
 				}
 				// add button to array or stay silent if there's no button
-				$users_arr[$key][] = (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
+				$users_arr[$key]['action'] .= (isset($buttoner) && !empty($buttoner)) ? buttoner($buttoner) : '';
 			}
 
 			// Spawn the form for adding a team leader
@@ -313,18 +324,20 @@ class Members extends Admin_Controller
 		{
 			$team = new Team();
 			$team->update_team($this->input->post());
+			flash_notice('notice', 'Added the team ' . $team->name . '.');
 			redirect('/admin/members/teams/' . $team->stub);
 		}
 
 		$team = new Team();
 
 		// set title and subtitle
-		$this->viewdata["function_title"] = "Team";
-		$this->viewdata["extra_title"][] = 'New';
+		$this->viewdata["function_title"] = '<a href="'.site_url("/admin/members/teams").'">'._('Teams').'</a>';
+		$this->viewdata["extra_title"][] = _('Add New');
 
 		// transform the Datamapper array to a form
 		$result = ormer($team);
 		$result = tabler($result, FALSE, TRUE);
+		$data['form_title'] = _('Add New Team');
 		$data['table'] = $result;
 
 		// print out
@@ -382,7 +395,8 @@ class Members extends Admin_Controller
 		{
 			return FALSE;
 		}
-		flash_notice('notice', _('User removed from the team.'));
+		$user = new User($user_id);
+		flash_notice('notice', sprintf(_('You have removed %s from the team.'), $user->username));
 		$team = new Team($team_id);
 		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
@@ -406,7 +420,8 @@ class Members extends Admin_Controller
 		$this->viewdata["function_title"] = "Making team leader...";
 		$member = new Membership();
 		$member->make_team_leader($team_id, $user_id);
-		flash_notice('notice', _('You have made the user a team leader.'));
+		$user = new User($user_id);
+		flash_notice('notice', sprintf(_('You have upgrade %s to team leader.'), $user->username));
 		$team = new Team($team_id);
 		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
@@ -434,7 +449,7 @@ class Members extends Admin_Controller
 		$this->viewdata["function_title"] = "Making team leader...";
 		$member = new Membership();
 		$member->make_team_leader($team_id, $user->id);
-		flash_notice('notice', _('You have made the user a team leader.'));
+		flash_notice('notice', sprintf(_('You have added %s to the team with the position of team leader.'), $user->username));
 		redirect('/admin/members/teams/' . $team->stub);
 	}
 
@@ -457,7 +472,8 @@ class Members extends Admin_Controller
 		$this->viewdata["function_title"] = "Removing team leader...";
 		$member = new Membership();
 		$member->remove_team_leader($team_id, $user_id);
-		flash_notice('notice', _('You have removed the user from his team leader position.'));
+		$user = new User($user_id);
+		flash_notice('notice', sprintf(_('You have stripped %s of their team leader position.'), $user->username));
 		$team = new Team($team_id);
 		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
@@ -481,7 +497,7 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 1))
 		{
-			flash_notice('notice', _('You have added the user to the admin group.'));
+			flash_notice('notice', _('You have added this user to the administrators group.'));
 			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
@@ -507,7 +523,7 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 0))
 		{
-			flash_notice('notice', _('You have removed the user from the administrators group.'));
+			flash_notice('notice', _('You have removed this user from the administrators group.'));
 			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
@@ -533,7 +549,7 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 3))
 		{
-			flash_notice('notice', _('You have added the user to the moderators group.'));
+			flash_notice('notice', _('You have added this user to the moderators group.'));
 			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
@@ -559,7 +575,7 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 0))
 		{
-			flash_notice('notice', _('You have removed the user from the moderators group.'));
+			flash_notice('notice', _('You have removed this user from the moderators group.'));
 			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}

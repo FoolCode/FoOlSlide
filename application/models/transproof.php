@@ -8,14 +8,15 @@ class Transproof extends DataMapper
 
 	var $table = 'transproofs';
 	var $has_one = array(
-		'chapter' => array()
+		'chapter' => array(),
+		'user' => array()
 	);
 	var $has_many = array(
 		'transproof' => array()
 	);
 	var $validation = array(
 		'chapter_id' => array(// need this to not be bound by page_id, as we can have many versions (RAW, v1, v2)
-			'rules' => array('required', 'min_size' => 1),
+			'rules' => array('min_size' => 1),
 			'label' => 'Chapter ID'
 		),
 		'related_transproof_id' => array(// original transproof_id to be updated with this
@@ -27,7 +28,7 @@ class Transproof extends DataMapper
 			'label' => 'User ID'
 		),
 		'pagenum' => array(// unbind the translations from the page_id, so we can have multiple versions
-			'rules' => array('required', 'min_size' => 1),
+			'rules' => array('min_size' => 1),
 			'label' => 'Page number',
 		),
 		'order' => array(// selective order of reading of the elements on the page
@@ -109,7 +110,8 @@ class Transproof extends DataMapper
 	 */
 	public function get($limit = NULL, $offset = NULL, $upwards = FALSE)
 	{
-		$CI =& get_instance();
+		$CI = & get_instance();
+		$this->include_related('user', 'username');
 		$result = parent::get($limit, $offset);
 
 		// add data only if any result is found
@@ -155,6 +157,26 @@ class Transproof extends DataMapper
 	}
 
 
+	function to_array()
+	{
+		$result = parent::to_array();
+		if (isset($this->related_transproof))
+		{
+			$result["related_transproof"]->related_transproof->to_array();
+		}
+
+		if (isset($this->transproofs))
+		{
+			$result["transproofs"] = $this->transproofs->all_to_array();
+		}
+
+		// add the username (the transproof already contains the user data)
+		$result["user_name"] = $this->user_username;
+
+		return $result;
+	}
+
+
 	/**
 	 * Comodity function to get a whole page of data
 	 * 
@@ -172,7 +194,7 @@ class Transproof extends DataMapper
 		{
 			$this->where('created >', $datetime);
 		}
-		
+
 		$this->get();
 	}
 
@@ -186,8 +208,8 @@ class Transproof extends DataMapper
 	 */
 	function add($data = array())
 	{
-		$CI =& get_instance();
-		
+		$CI = & get_instance();
+
 		// variables to override
 		$data["user_id"] = $CI->tank_auth->get_user_id();
 
@@ -237,7 +259,7 @@ class Transproof extends DataMapper
 		if (isset($data["chapter_id"]))
 		{
 			$data["chapter_id"] = intval($data["chapter_id"]);
-			
+
 			$chapter = new Chapter($data["chapter_id"]);
 
 			// check that it exists at all
@@ -248,19 +270,19 @@ class Transproof extends DataMapper
 				return FALSE;
 			}
 
-			
+
 			/*
 			 * If we're here, it already means the controller checked that the chapter_id is editable by the user
 			 * 
-			// check if the current user is part of a team working on this chapter
-			$chapter->get_teams(); // puts teams in $chapter->teams
-			$is_team = $CI->tank_auth->is_team_array($chapter->teams); // using the is_team_array simplification!
-			if (!$is_team)
-			{
-				$this->error_message('error', _('You tried to post a comment on a chapter not worked on by your team.'));
-				log_message('error', 'Transproof: Chapter team didn\'t match any user team.');
-				return FALSE;
-			}
+			  // check if the current user is part of a team working on this chapter
+			  $chapter->get_teams(); // puts teams in $chapter->teams
+			  $is_team = $CI->tank_auth->is_team_array($chapter->teams); // using the is_team_array simplification!
+			  if (!$is_team)
+			  {
+			  $this->error_message('error', _('You tried to post a comment on a chapter not worked on by your team.'));
+			  log_message('error', 'Transproof: Chapter team didn\'t match any user team.');
+			  return FALSE;
+			  }
 			 * 
 			 */
 
@@ -278,13 +300,14 @@ class Transproof extends DataMapper
 			return FALSE;
 		}
 
+		// we don't want detailed pagenum on related transproof, we'll use the main one
+		if (isset($data["related_transproof_id"]))
+		{
+			unset($data["pagenum"]);
+		}
+
 		if (isset($data["pagenum"]))
 		{
-			// we don't want detailed pagenum on related transproof, we'll use the main one
-			if (isset($data["related_transproof_id"]))
-			{
-				unset($data["pagenum"]);
-			}
 
 			$data["pagenum"] = intval($data["pagenum"]);
 
@@ -375,10 +398,10 @@ class Transproof extends DataMapper
 				return FALSE;
 			}
 
-			if ($data["delete"] === 0)
+			if ($data["deleted"] === 0)
 			{
 				// if it's not 1 just unset and forget it
-				unset($data["delete"]);
+				unset($data["deleted"]);
 			}
 			else // the deletion request is actually active
 			{
@@ -501,19 +524,19 @@ class Transproof extends DataMapper
 				unset($data[$size]);
 			}
 		}
-		
+
 		// change the accepted setting on translations
-		if(isset($data["accepted"]))
+		if (isset($data["accepted"]))
 		{
 			$data["accepted"] = intval($data["accepted"]);
-			if(!in_array($data["accepted"], array(1, 2, 3)))
+			if (!in_array($data["accepted"], array(1, 2, 3)))
 			{
 				$this->error_message('error', _('You didn\'t use a proper value for accepting or rejecting.'));
 				log_message('error', 'Transproof: Tried to set a wrong value to accepted.');
 				return FALSE;
 			}
-			
-			if($data["type"] == 1 && isset($related_tp)) // a translation edit
+
+			if ($data["type"] == 1 && isset($related_tp)) // a translation edit
 			{
 				// leave it alone
 			}
@@ -523,7 +546,7 @@ class Transproof extends DataMapper
 				unset($data["accepted"]);
 			}
 		}
-		
+
 		// incredibly so, we might be done
 		if (!$this->from_array($data, '', TRUE))
 		{

@@ -36,6 +36,8 @@
 				e.preventDefault()
 			});
 			
+			sync();
+			
 			toggleMousedown(true);
 			
 		}
@@ -132,6 +134,8 @@
 				if(urelativeX - relativeX > 40 && urelativeY - relativeY > 40)
 				{
 					var sendOpt = {
+						user_id: plugin.settings.user_id,
+						user_name: plugin.settings.user_name,
 						type: 1,
 						text: '',
 						top: relativeY,
@@ -260,15 +264,23 @@
 			
 			
 			var boxElem = $("<div />").addClass('foolproofr_box').css({
-				top: top + "px",
-				left: left + "px",
-				width: width + "px",
-				height: height + "px"
-			});
+				top: pref.top + "px",
+				left: pref.left + "px",
+				width: pref.width + "px",
+				height: pref.height + "px"
+			}).data('transproof', pref);
 			var remover = $("<div />").addClass("foolproofr_remover").click(function(e){
+				// prepare to send deletion to server
+				var tp = $(e.target).parents(".foolproofr_box").data('transproof');
+				var remPref = {
+					related_transproof_id: tp.id,
+					deleted: 1,
+					type: 1
+				}
+				sendBox(remPref);
 				removeBox(e);
 			}).html("X");
-			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append("Name");
+			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append(pref.user_name);
 			var resizer = $("<div />").addClass("foolproofr_resizer");
 			var textarea = $("<textarea />").addClass("foolproofr_textarea");
 			boxElem.append(dragger).append(resizer).append(textarea);
@@ -296,7 +308,7 @@
 		}
 		
 		var removeBox = function(e) {
-			$(e.target).parents(".foolproofr_box").remove();
+			$(e.target).parents(".foolproofr_box").hide();
 		}
 		
 		var sendBox = function(objj) {
@@ -313,7 +325,6 @@
 				dataType: 'json',
 				url: plugin.settings.updateUrl,
 				success: function(data, textStatus, jqXHR) {
-					console.log(dump(data));
 				},
 				error: function(jqXHR, textStatus, errorThrown)
 				{
@@ -322,6 +333,33 @@
 			});
 		}
 		
+		var lastSync = 0;
+		var transproofs = [];
+		var sync = function() {
+			var data = {
+				//update: [objj],
+				chapter_id: plugin.settings.chapter_id,
+				pagenum: plugin.settings.page_number
+			};
+			
+			$.ajax({
+				type: 'POST',
+				data: data,
+				async: false,
+				dataType: 'json',
+				url: plugin.settings.updateUrl,
+				success: function(data, textStatus, jqXHR) {
+					$.each(data.sync, function(index, value){
+						transproofs.push(value);
+						createBox(value);
+					});
+				},
+				error: function(jqXHR, textStatus, errorThrown)
+				{
+				//alert(errorThrown);
+				}
+			});
+		}
 
 		plugin.init();
 

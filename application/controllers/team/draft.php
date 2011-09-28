@@ -121,7 +121,8 @@ class Draft extends Team_Controller
 		
 		$transproof = new Transproof();
 		$transproof->get_page($this->input->post('chapter_id'), $this->input->post('pagenum'));
-		$this->output->set_output(json_encode(array("sync" => $transproof->all_to_array(), "results" => $result)));
+		$sync = $transproof->all_to_array();
+		$this->output->set_output(json_encode(array("sync" => $sync, "results" => $result)));
 	}
 
 

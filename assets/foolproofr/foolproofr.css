@@ -89,6 +89,7 @@
 	position:relative;
 	font-family: Arial, sans-serif;
 	display:none;
+	height:1.7em;
 }
 
 .foolproofr_box.focused .foolproofr_dragger, .foolproofr_box:hover .foolproofr_dragger{

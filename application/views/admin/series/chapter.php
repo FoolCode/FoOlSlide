@@ -25,104 +25,104 @@ $this->buttoner[] = array(
 <br/>
 
 <div class="table">
-	<h3 style="float: left"><?php echo _('Pages'); ?></h3>
-<?php
-$session_name = $this->session->get_js_session(TRUE);
-$session_data = $this->session->get_js_session();
-?>
-<div class="uploadify" style="float: right; padding: 48px 15px 0 0;">
-	<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
-	<script type="text/javascript">
-		
-		function deleteImage(id)
-		{
-			jQuery.post('<?php echo site_url('/admin/series/delete/page/') ?>', {id: id}, function(){
-				jQuery('#image_' + id).hide();
-			});
-		}
-	
-		function deleteAllPages()
-		{
-			jQuery.post('<?php echo site_url('/admin/series/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
-				location.reload();
-			});
-		}
-	
-		function updateSession()
-		{
-			jQuery.post('<?php echo site_url('/admin/series/get_sess_id'); ?>', 
-			function(result){
-				
-				jQuery('#file_upload_flash').uploadifySettings( 'postData', {
-					'ci_sessionz' : result.session, 
-					'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
-					'chapter_id' : <?php echo $chapter->id; ?>
-				}, false );
-				setTimeout('updateSession()', 6000);
-			}, 'json');
-		}
-		
-		jQuery(document).ready(function() {
-			jQuery('#file_upload_flash').uploadify({
-				'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
-				'uploader'    : '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
-				'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
-				'checkExisting' : false,
-				'preventCaching' : false,
-				'multi' : true,
-				'buttonText' : '<?php echo _('Use flash upload'); ?>',
-				'width': 200,
-				'auto'      : true,
-				'requeueErrors' : true,
-				'uploaderType'    : 'flash',
-				'postData' : {},
-				'onSWFReady'  : function() {
-					updateSession();
-				},
-				'onUploadSuccess' : function(file, data, response) {
-					var files = jQuery.parseJSON(data);
-					var fu = jQuery('#fileupload').data('fileupload');
-					fu._adjustMaxNumberOfFiles(-files.length);
-					fu._renderDownload(files)
-					.appendTo(jQuery('#fileupload .files'))
-					.fadeIn(function () {
-						jQuery(this).show();
-					});
-				}	
-			});
-		});
+	<h3><?php echo _('Pages'); ?></h3>
+	<?php
+	$session_name = $this->session->get_js_session(TRUE);
+	$session_data = $this->session->get_js_session();
+	?>
+	<div class="uploadify" style="float: right; padding: 10px 15px 0 0;">
+		<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
+		<script type="text/javascript">
 
-	</script>
-	<div id="file_upload_flash"></div>
-</div>
-<hr class="clear"/>
-<div id="fileupload">
-	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
-	<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
-	<div class="fileupload-buttonbar" style="margin-right: 10px; height: 32px">
-		<?php echo form_open_multipart(""); ?>
-		<label class="fileinput-button">
-			<span>Add files...</span>
-			<input type="file" name="Filedata[]" multiple>
-		</label>
-		<button type="submit" class="start">Start upload</button>
-		<button type="reset" class="cancel">Cancel upload</button>
-		<button type="button" class="delete">Delete files</button>
-		<?php echo form_close(); ?>
+			function deleteImage(id)
+			{
+				jQuery.post('<?php echo site_url('/admin/series/delete/page/') ?>', {id: id}, function(){
+					jQuery('#image_' + id).hide();
+				});
+			}
+
+			function deleteAllPages()
+			{
+				jQuery.post('<?php echo site_url('/admin/series/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
+					location.reload();
+				});
+			}
+
+			function updateSession()
+			{
+				jQuery.post('<?php echo site_url('/admin/series/get_sess_id'); ?>', 
+				function(result){
+
+					jQuery('#file_upload_flash').uploadifySettings( 'postData', {
+						'ci_sessionz' : result.session, 
+						'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
+						'chapter_id' : <?php echo $chapter->id; ?>
+					}, false );
+					setTimeout('updateSession()', 6000);
+				}, 'json');
+			}
+
+			jQuery(document).ready(function() {
+				jQuery('#file_upload_flash').uploadify({
+					'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
+					'uploader'    : '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
+					'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
+					'checkExisting' : false,
+					'preventCaching' : false,
+					'multi' : true,
+					'buttonText' : '<?php echo _('Use flash upload'); ?>',
+					'width': 200,
+					'auto'      : true,
+					'requeueErrors' : true,
+					'uploaderType'    : 'flash',
+					'postData' : {},
+					'onSWFReady'  : function() {
+						updateSession();
+					},
+					'onUploadSuccess' : function(file, data, response) {
+						var files = jQuery.parseJSON(data);
+						var fu = jQuery('#fileupload').data('fileupload');
+						fu._adjustMaxNumberOfFiles(-files.length);
+						fu._renderDownload(files)
+						.appendTo(jQuery('#fileupload .files'))
+						.fadeIn(function () {
+							jQuery(this).show();
+						});
+					}	
+				});
+			});
+
+		</script>
+		<div id="file_upload_flash"></div>
 	</div>
-	<div class="fileupload-content" style="margin-right: 10px; margin-bottom: 10px">
-		<table class="files zebra-striped"></table>
-		<div class="fileupload-progressbar"></div>
+
+	<div id="fileupload" style="margin-right: 10px; padding-bottom: 10px">
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
+		<div class="fileupload-buttonbar">
+			<?php echo form_open_multipart(""); ?>
+			<label class="fileinput-button">
+				<span>Add files...</span>
+				<input type="file" name="Filedata[]" multiple>
+			</label>
+			<button type="submit" class="start">Start upload</button>
+			<button type="reset" class="cancel">Cancel upload</button>
+			<button type="button" class="delete">Delete files</button>
+			<?php echo form_close(); ?>
+		</div>
+		<div class="fileupload-content">
+			<table class="files zebra-striped"></table>
+			<div class="fileupload-progressbar"></div>
+		</div>
 	</div>
-</div>
 </div>
 <script id="template-upload" type="text/x-jquery-tmpl">
     <tr class="template-upload{{if error}} ui-state-error{{/if}}">
         <td class="name">${name}</td>
         <td class="size">${sizef}</td>
         {{if error}}
-		<td class="error" colspan="2">Error:
+		<td class="error" colspan="2" align="right">Error:
 			{{if error === 'maxFileSize'}}File is too big
 			{{else error === 'minFileSize'}}File is too small
 			{{else error === 'acceptFileTypes'}}Filetype not allowed
@@ -132,9 +132,9 @@ $session_data = $this->session->get_js_session();
 		</td>
         {{else}}
 		<td class="progress"><div></div></td>
-		<td class="start"><button>Start</button></td>
+		<td class="start" width="32"><button>Start</button></td>
         {{/if}}
-        <td class="cancel"><button>Cancel</button></td>
+        <td class="cancel" width="32"><button>Cancel</button></td>
     </tr>
 </script>
 <script id="template-download" type="text/x-jquery-tmpl">
@@ -166,7 +166,7 @@ $session_data = $this->session->get_js_session();
 		<td class="size">${sizef}</td>
 		<td colspan="2"></td>
         {{/if}}
-        <td class="delete">
+        <td class="delete" width="32">
             <button data-type="${delete_type}" data-url="${delete_url}" data-id="${delete_data}">Delete</button>
         </td>
     </tr>
@@ -178,7 +178,6 @@ $session_data = $this->session->get_js_session();
 <script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js"></script>
 
 <script type="text/javascript">
-
 	jQuery(function () {
 		jQuery('#fileupload').fileupload({
 			url: '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
@@ -208,7 +207,19 @@ $session_data = $this->session->get_js_session();
 			.prop('src', this.href)
 			.appendTo('body');
 		});
-
 	});
 	
+	$.widget('blueimpUIX.fileupload', $.blueimpUI.fileupload, {
+		_deleteHandler: function(e) {
+			e.preventDefault();
+			var button = $(this);
+			e.data.fileupload._trigger('destroy', e, {
+				context: button.closest('.template-download'),
+				url: button.attr('data-url'),
+				type: button.attr('data-type'),
+				data: { id: button.attr('data-id') },
+				dataType: e.data.fileupload.options.dataType
+			});
+		}
+	});
 </script>

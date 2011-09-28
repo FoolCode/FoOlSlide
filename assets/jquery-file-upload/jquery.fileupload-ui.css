@@ -58,7 +58,7 @@
 }
 
 .fileupload-content .ui-progressbar-value {
-  background: url(images/progress.gif);
+  background: url(pbar-ani.gif);
 }
 
 .fileupload-content .fileupload-progressbar {
@@ -68,7 +68,6 @@
 
 .files {
   margin: 10px 0;
-  border-collapse: collapse;
 }
 
 .files td {
@@ -97,4 +96,8 @@
 
 .ui-state-disabled input {
   cursor: default;
+}
+
+#fileupload input[type="file"] {
+    font-size: 2em;
 }

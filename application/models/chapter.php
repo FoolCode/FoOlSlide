@@ -315,7 +315,9 @@ class Chapter extends DataMapper
 	{
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
 		// the addition of the chapter.
-		//if(!is_int($data["subchapter"])) $data["subchapter"] = 0;
+		if (!isset($data["subchapter"]) || !is_int($data["subchapter"]))
+			$data["subchapter"] = 0;
+		
 		// Create a stub that is humanly readable, for the worst cases.
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
 
@@ -478,9 +480,6 @@ class Chapter extends DataMapper
 			$this->stub = $this->stub();
 
 		// This is necessary to make the checkbox work.
-		/**
-		 *  @todo make the checkbox work consistently across the whole framework
-		 */
 		if (!isset($data['hidden']) || $data['hidden'] != 1)
 			$this->hidden = 0;
 

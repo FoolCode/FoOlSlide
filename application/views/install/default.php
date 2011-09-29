@@ -107,11 +107,6 @@
 		</div>
 		
 		<div class="container-fluid">
-			<div class="sidebar">
-				<div class="well">
-					<?php echo $sidebar ?>
-				</div>
-			</div>
 			
 			<div class="content">
 				<ul class="breadcrumb">

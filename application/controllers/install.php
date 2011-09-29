@@ -31,7 +31,7 @@ class Install extends Install_Controller
 		{
 			$data["table"] = "";
 			$this->viewdata['main_content_view'] = "";
-			$this->load->view("admin/default", $this->viewdata);
+			$this->load->view("install/default", $this->viewdata);
 			return FALSE;
 		}
 
@@ -168,7 +168,7 @@ class Install extends Install_Controller
 
 		// print out
 		$this->viewdata['main_content_view'] = $this->load->view("install/index", $data, TRUE);
-		$this->load->view("admin/default", $this->viewdata);
+		$this->load->view("install/default", $this->viewdata);
 	}
 
 
@@ -285,7 +285,7 @@ class Install extends Install_Controller
 			$this->notices = array();
 			$data["config"] = $config;
 			$this->viewdata['main_content_view'] = $this->load->view("install/manual_config", $data, TRUE);
-			$this->load->view("admin/default", $this->viewdata);
+			$this->load->view("install/default", $this->viewdata);
 			return 'stop';
 		}
 

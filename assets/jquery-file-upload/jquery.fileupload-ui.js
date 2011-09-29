@@ -1,5 +1,5 @@
 /*
- * jQuery File Upload User Interface Plugin 5.0.13
+ * jQuery File Upload User Interface Plugin 5.0.17
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
@@ -197,6 +197,7 @@
                             });
                         });
                 } else {
+                    that._adjustMaxNumberOfFiles(1);
                     data.context.fadeOut(function () {
                         $(this).remove();
                     });
@@ -278,13 +279,17 @@
                     $(this).unbind('load');
                     that._revokeObjectURL(url);
                     callback(that._scaleImage(img[0], options));
-                }).prop('src', url);
-                if (!url) {
-                    this._loadFile(file, function (url) {
+                });
+                if (url) {
+                    img.prop('src', url);
+                    return true;
+                } else {
+                    return this._loadFile(file, function (url) {
                         img.prop('src', url);
                     });
                 }
             }
+            return false;
         },
 
         // Link handler, that allows to download files
@@ -359,10 +364,12 @@
 
         _validate: function (files) {
             var that = this,
-                valid;
+                valid = !!files.length;
             $.each(files, function (index, file) {
                 file.error = that._hasError(file);
-                valid = !file.error;
+                if (file.error) {
+                    valid = false;
+                }
             });
             return valid;
         },
@@ -385,17 +392,20 @@
         _renderUpload: function (files) {
             var that = this,
                 options = this.options,
-                tmpl = this._renderUploadTemplate(files);
+                tmpl = this._renderUploadTemplate(files),
+                isValidated = this._validate(files);
             if (!(tmpl instanceof $)) {
                 return $();
             }
             tmpl.css('display', 'none');
             // .slice(1).remove().end().first() removes all but the first
             // element and selects only the first for the jQuery collection:
-            tmpl.find('.progress div').slice(1).remove().end().first()
+            tmpl.find('.progress div').slice(
+                isValidated ? 1 : 0
+            ).remove().end().first()
                 .progressbar();
             tmpl.find('.start button').slice(
-                this.options.autoUpload ? 0 : 1
+                this.options.autoUpload || !isValidated ? 0 : 1
             ).remove().end().first()
                 .button({
                     text: false,
@@ -481,7 +491,6 @@
                 context: button.closest('.template-download'),
                 url: button.attr('data-url'),
                 type: button.attr('data-type'),
-		data: {id: button.attr('data-id')},
                 dataType: e.data.fileupload.options.dataType
             });
         },

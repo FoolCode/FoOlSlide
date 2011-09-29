@@ -6,7 +6,7 @@
 	function chapter_options(index, chapter) {
 		result = "<div class='chapter chapter_" + index + "'><table class='form'>";
 		
-		result += "<?php echo _('Chapter filename') ?> : <b>" + chapter.filename + "</b>";
+		result += "<?php echo _('Chapter Filename') ?>: <b>" + chapter.filename + "</b>";
 
 		result += "<input class='input_hidden' type='hidden' value='" + index + "' /></td></tr>";
 
@@ -38,11 +38,11 @@
 			result += "<input type='text' class='set_teams' value='" + default_team + "' />";
 		}
 		
-		result += "<input type='text' class='set_teams' value='' onKeyUp='addField(this);' /></td></tr>";
+		result += "<br/><input type='text' class='set_teams' value='' onKeyUp='addField(this);' /></td></tr>";
 		
 		result += "</table>";
 			
-		result += "<div class'gbuttons'><a class='gbutton' href='#' onClick='submit_chapter(this); return false;'>Submit</a><div class='clearer'></div><div>";
+		result += "<a class='btn' href='#' onClick='submit_chapter(this); return false;'>Submit</a>";
 		
 		result += "</div>"
 		return result;
@@ -74,7 +74,7 @@
 		result = "";
 		jQuery('.set_teams', '.teams_setter').each(function(index){
 			if (jQuery(this).val() != "")
-				result += "<input type='text' id='set_teams' class='set_teams' value='" + jQuery(this).val() + "' />";
+				result += "<input type='text' id='set_teams' class='set_teams' value='" + jQuery(this).val() + "' /><br/>";
 		});
 		
 		result += "<input type='text' id='set_teams' class='set_teams' value='' onKeyUp='addField(this);' />";
@@ -130,7 +130,7 @@
 	
 	function submit_chapter(obj, all)
 	{
-		box = jQuery(obj).parent().parent();
+		box = jQuery(obj).parent();
 		jQuery(box).css({'background': '#FCDEDE', 'opacity' : '0.6'});
 		teams = [];
 		jQuery('.set_teams',box).each(function(index){
@@ -229,8 +229,10 @@
 				<div class="clearfix">
 					<label><?php echo _('Mass Set Teams'); ?>:</label>
 					<div class="input">
-						<input type="text" id="set_teams" class="set_teams" value="" /> <a href="#" class="btn" onClick="set_teams(); return false;"><?php echo _('Set') ?></a>
-						<br/><input type="text" id="set_teams" class="set_teams" value="" onKeyUp="addField(this);" />
+						<div class="teams_setter">
+							<input type="text" id="set_teams" class="set_teams" value="" /> <a href="#" class="btn" onClick="set_teams(); return false;"><?php echo _('Set') ?></a>
+							<br/><input type="text" id="set_teams" class="set_teams" value="" onKeyUp="addField(this);" />
+						</div>
 					</div>
 					<span class="help-inline"><?php echo _('Sets the teams for all the chapters listed below.') ?></span>
 				</div>

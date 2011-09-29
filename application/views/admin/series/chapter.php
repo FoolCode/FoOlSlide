@@ -220,6 +220,50 @@ $this->buttoner[] = array(
 				data: { id: button.attr('data-id') },
 				dataType: e.data.fileupload.options.dataType
 			});
+		},
+		options: { 
+			done: function (e, data) {
+				var that = $(this).data('fileupload');
+				if (data.context) {
+					data.context.each(function (index) {
+						var file = ($.isArray(data.result) &&
+							data.result[index]) || {error: 'emptyResult'};
+						if (file.error) {
+							that._adjustMaxNumberOfFiles(1);
+						}
+						
+						if (data.result.length > 1) {
+							$(this).fadeOut(function() {
+								that._adjustMaxNumberOfFiles(-data.result.length);
+								that._renderDownload(data.result)
+									.appendTo(jQuery('#fileupload .files'))
+									.fadeIn(function() {
+										jQuery(this).show();
+									});
+							});
+						} else {
+							$(this).fadeOut(function () {
+								that._renderDownload([file])
+									.css('display', 'none')
+									.replaceAll(this)
+									.fadeIn(function () {
+										// Fix for IE7 and lower:
+										$(this).show();
+									});
+							});
+						}
+					});
+				} else {
+					that._renderDownload(data.result)
+						.css('display', 'none')
+						.appendTo($(this).find('.files'))
+						.fadeIn(function () {
+							// Fix for IE7 and lower:
+							$(this).show();
+						});
+				}
+			}
 		}
+		
 	});
 </script>

@@ -48,6 +48,7 @@
 				if (jQuery(e).val().length > 0)
 				{
 					jQuery(e).clone().val('').insertAfter(e);
+					jQuery(e).after('<br/>');
 					jQuery(e).attr('onKeyUp', '');
 					jQuery(e).attr('onChange', '');
 				}

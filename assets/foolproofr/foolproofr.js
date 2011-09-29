@@ -145,8 +145,10 @@
 						image_width: $element.find("img").width(),
 						image_height: $element.find("img").height()
 					}
-					createBox(sendOpt);
-					var result = sendBox(sendOpt);
+					var boxElem = createBox(sendOpt);
+					var ticket = sendTransproof(sendOpt);
+					boxElem.data('ticket', ticket);
+					
 				}
 			});
 		}
@@ -269,6 +271,7 @@
 				width: pref.width + "px",
 				height: pref.height + "px"
 			}).data('transproof', pref);
+			
 			var remover = $("<div />").addClass("foolproofr_remover").click(function(e){
 				// prepare to send deletion to server
 				var tp = $(e.target).parents(".foolproofr_box").data('transproof');
@@ -278,7 +281,7 @@
 					type: 1
 				}
 				sendBox(remPref);
-				removeBox(e);
+				removeBox(remPref);
 			}).html("X");
 			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append(pref.user_name);
 			var resizer = $("<div />").addClass("foolproofr_resizer");
@@ -305,36 +308,26 @@
 			// put the focus on the just created box
 			boxElem.find(".foolproofr_textarea").focus();
 			
+			return boxElem;
 		}
 		
-		var removeBox = function(e) {
-			$(e.target).parents(".foolproofr_box").hide();
+		var removeBox = function(objj) {
+			//alert(objj.related_transproof_id);
+			var el = findBoxByID(objj.related_transproof_id);
+			$(el).hide();
 		}
 		
-		var sendBox = function(objj) {
-			var data = {
-				update: [objj],
-				chapter_id: plugin.settings.chapter_id,
-				pagenum: plugin.settings.page_number
-			};
-			
-			$.ajax({
-				type: 'POST',
-				data: data,
-				async: false,
-				dataType: 'json',
-				url: plugin.settings.updateUrl,
-				success: function(data, textStatus, jqXHR) {
-				},
-				error: function(jqXHR, textStatus, errorThrown)
-				{
-				//alert(errorThrown);
-				}
-			});
+		var ticketCounter = 0;
+		var newTransproofs = [];
+		var sendTransproof = new function(objj) {
+			objj.ticket = ticketCounter++;
+			newTransproofs.push(objj);
+			return ticketCounter;
 		}
 		
 		var lastSync = 0;
-		var transproofs = [];
+		
+		
 		var sync = function() {
 			var data = {
 				//update: [objj],
@@ -342,16 +335,20 @@
 				pagenum: plugin.settings.page_number
 			};
 			
+			$.each(newTransproofs, function(index, value){
+				
+				}); 
+			
 			$.ajax({
 				type: 'POST',
-				data: data,
+				data: true,
 				async: false,
 				dataType: 'json',
 				url: plugin.settings.updateUrl,
 				success: function(data, textStatus, jqXHR) {
 					$.each(data.sync, function(index, value){
 						transproofs.push(value);
-						createBox(value);
+						processSync(value);
 					});
 				},
 				error: function(jqXHR, textStatus, errorThrown)
@@ -359,6 +356,64 @@
 				//alert(errorThrown);
 				}
 			});
+		}
+		
+		var processSync = function(objj) {
+			// here basically only box creation happens
+			if(objj.related_transproof_id == 0)
+			{
+				
+				createBox(objj);
+				
+				if(objj.transproofs instanceof Array)
+				{
+					// recursive is cool
+					processSync(objj.transproofs);
+				}
+			}
+			else // here we get modifications for the boxes, we won't deal with comments here
+			{
+				// we're getting transproofs arrays
+				$.each(objj, function(index, value){
+					if(value.deleted == 1)
+					{
+						removeBox(value);
+					}
+				});
+				
+			}
+		}
+		
+		var findBoxByID = function(id) {
+			var result;
+			$(".foolproofr_box").each(function(index, el){
+				var objj = $(el).data('transproof');
+				if(objj.id == id)
+				{
+					result = el;
+					return false;
+				}
+			});
+
+			if(result != undefined)
+				return result;
+			return false;
+		}
+		
+		var findBoxByTicket = function(ticket) {
+			var result;
+			$(".foolproofr_box").each(function(index, el){
+				var objj = $(el).data('ticket');
+				if(objj == ticket)
+				{
+					result = el;
+					return false;
+				}
+			});
+
+			if(result != undefined)
+				return result;
+			return false;
 		}
 
 		plugin.init();

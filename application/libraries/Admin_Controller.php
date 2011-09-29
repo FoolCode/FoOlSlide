@@ -137,16 +137,7 @@ class Admin_Controller extends MY_Controller
 			)
 		);
 		
-		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
-			"level" => "member",
-			"default" => "http://ask.foolrulez.com",
-			"icon" => 44,
-			"content" => array(
-				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ")),
-				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker")),
-			)
-		);
-
+		
 		return $sidebar;
 	}
 

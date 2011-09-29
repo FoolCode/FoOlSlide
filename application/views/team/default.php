@@ -9,14 +9,14 @@
 		<![endif]-->
 
 <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/admin/style.css" /> -->
-		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+		<link rel="stylesheet" href="<?php echo site_url() ?>assets/bootstrap/style.css">
 		<style type="text/css">
 			body {
 				padding-top: 60px;
 			}
 		</style>
 		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
-		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/bootstrap.js"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/bootstrap/bootstrap.js"></script>
 	</head>
 
 	<body>
@@ -71,6 +71,15 @@
 			<?php echo $main_content_view; ?>
 		</div>
 
-
+		<footer style="position: relative; bottom: 0px; width: 100%">
+			<p style="padding-left: 20px;">FoOlSlide Version <?php
+			if (isset($this->tank_auth))
+			{
+				echo get_setting('fs_priv_version');
+				if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
+					echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
+			}
+			?></p>
+		</footer>
 	</body>
 </html>

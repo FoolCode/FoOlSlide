@@ -146,8 +146,8 @@ class Transproof extends DataMapper
 				{
 					foreach ($this->all as $key => $item)
 					{
-						$item->transproofs = new Transproof();
-						$item->transproofs->where('related_transproof_id', $this->id)->get(NULL, NULL, $upwards);
+						$this->all[$key]->transproofs = new Transproof();
+						$this->all[$key]->transproofs->where('related_transproof_id', $this->all[$key]->id)->get(NULL, NULL, $upwards);
 					}
 				}
 			}
@@ -212,6 +212,14 @@ class Transproof extends DataMapper
 
 		// variables to override
 		$data["user_id"] = $CI->tank_auth->get_user_id();
+		
+		// ticket is used to confirm the newly made boxes and changes to javascript
+		if(isset($data["ticket"]))
+		{
+			$this->error_message('error', _('The ticket wasn\'t set.'));
+			log_message('error', 'Transproof: The ticket wasn\'t set.');
+			return FALSE;
+		}
 
 		unset($data["created"]);
 		unset($data["updated"]);

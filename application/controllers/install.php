@@ -159,7 +159,9 @@ class Install extends Install_Controller
 			{
 				return FALSE;
 			}
-			set_notice('error', validation_errors());
+
+			if (validation_errors())
+				set_notice('error', validation_errors());
 		}
 
 		// make a form off the array
@@ -251,12 +253,12 @@ class Install extends Install_Controller
 		// migrate to latest database
 		$this->load->library('migration');
 		$this->migration->latest();
-		
+
 		// load everything needed for a normal startup
 		$this->load->library('session');
 		$this->load->library('tank_auth');
 		$this->load->library('datamapper');
-		
+
 		// load the settings from the now filled database
 		load_settings();
 
@@ -305,6 +307,13 @@ class Install extends Install_Controller
 	{
 		$prob = FALSE;
 
+		if (version_compare(phpversion(), '5.2.0') < 0)
+		{
+			set_notice('error', _('You need at least PHP version 5.2.0 to run FoOlSlide. This means you have a many years old version. It is suggested to upgrade to a more recent version of PHP to avoid security issues with your server in general.'));
+			$prob = TRUE;
+			return FALSE;
+		}
+
 		if (!file_exists('assets/config.sample.php'))
 		{
 			set_notice('error', sprintf(_('The file %s was removed. The installation can\'t continue without that file. You can find it in the FoOlSlide download.'), FCPATH . 'config.sample.php'));
@@ -330,11 +339,11 @@ class Install extends Install_Controller
 		if (!is_writable('.'))
 		{
 			$whoami = FALSE;
-			
+
 			// if exec is enable, just check with whoami function who's running php
 			if ($this->_exec_enabled())
 				$whoami = exec('whoami');
-			
+
 			// if exec is not enabled, write a file and check who has the permissions on it
 			if (!$whoami && is_writable('content') && function_exists('posix_getpwid'))
 			{
@@ -343,12 +352,12 @@ class Install extends Install_Controller
 				$whoami = $whoami['name'];
 				unlink('content/testing_123.txt');
 			}
-			
+
 			// if absolutely unable to tell who's the php user, just apologize
 			// else, give a precise command for shell to enter
 			if ($whoami != "")
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<br/><b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
-			else 
+			else
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it\'s www-data or Apache)'), FCPATH, '<br/><b><code>chown -R www-data ' . FCPATH . '</code></b><br/>'));
 			set_notice('warn', sprintf(_('If you can\'t do the above, after the installation you will be given a textfile to paste in config.php. More info after submitting.')));
 			$prob = TRUE;

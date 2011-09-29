@@ -146,7 +146,8 @@
 						image_height: $element.find("img").height()
 					}
 					var boxElem = createBox(sendOpt);
-					var ticket = sendTransproof(sendOpt);
+					var ticket = boxElem.data('ticket')
+					ticket.push(sendTransproof(sendOpt));
 					boxElem.data('ticket', ticket);
 					
 				}
@@ -313,7 +314,7 @@
 		
 		var removeBox = function(objj) {
 			//alert(objj.related_transproof_id);
-			var el = findBoxByID(objj.related_transproof_id);
+			var el = findTransproofByID(objj.related_transproof_id);
 			$(el).hide();
 		}
 		
@@ -335,10 +336,6 @@
 				pagenum: plugin.settings.page_number
 			};
 			
-			$.each(newTransproofs, function(index, value){
-				
-				}); 
-			
 			$.ajax({
 				type: 'POST',
 				data: true,
@@ -347,7 +344,6 @@
 				url: plugin.settings.updateUrl,
 				success: function(data, textStatus, jqXHR) {
 					$.each(data.sync, function(index, value){
-						transproofs.push(value);
 						processSync(value);
 					});
 				},
@@ -384,7 +380,7 @@
 			}
 		}
 		
-		var findBoxByID = function(id) {
+		var findTransproofByID = function(id) {
 			var result;
 			$(".foolproofr_box").each(function(index, el){
 				var objj = $(el).data('transproof');
@@ -400,15 +396,19 @@
 			return false;
 		}
 		
-		var findBoxByTicket = function(ticket) {
+		var findTransproofByTicket = function(ticket) {
 			var result;
 			$(".foolproofr_box").each(function(index, el){
 				var objj = $(el).data('ticket');
-				if(objj == ticket)
-				{
-					result = el;
+				$.each(objj, function(i,v){
+					if(v == ticket)
+					{
+						result = el;
+						return false;
+					}
+				})
+				if(result != undefined)
 					return false;
-				}
 			});
 
 			if(result != undefined)

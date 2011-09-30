@@ -97,13 +97,13 @@
 						'name' => 'GD2',
 						'title' => 'GD2',
 						'value' => (extension_loaded('gd')) ? _('Installed') : _('Missing'),
-						'text' => _('This is a library used to dynamicly create images and thumbnails.')
+						'text' => _('This is a library used to dynamically create images and thumbnails.')
 					),
 					array(
 						'name' => 'ImageMagick',
 						'title' => 'ImageMagick',
 						'value' => (extension_loaded('imagick')) ? _('Installed') : _('Not Installed'),
-						'text' => _('This is a library used to dynamicaly create, edit, compose or convert images.') . '<p class="vartext">' . _('Optional') . '</p>'
+						'text' => _('This is a library used to dynamically create, edit, compose or convert images.') . '<p class="vartext">' . _('Optional') . '</p>'
 					)
 				)
 			);

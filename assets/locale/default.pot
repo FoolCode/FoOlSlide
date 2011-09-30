@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-30 16:09+0100\n"
-"PO-Revision-Date: 2011-09-30 16:09+0100\n"
+"POT-Creation-Date: 2011-09-30 16:16+0100\n"
+"PO-Revision-Date: 2011-09-30 16:16+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1852,7 +1852,7 @@ msgid "Missing"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:100
-msgid "This is a library used to dynamicly create images and thumbnails."
+msgid "This is a library used to dynamically create images and thumbnails."
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:105
@@ -1860,7 +1860,7 @@ msgid "Not Installed"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:106
-msgid "This is a library used to dynamicaly create, edit, compose or convert images."
+msgid "This is a library used to dynamically create, edit, compose or convert images."
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:106

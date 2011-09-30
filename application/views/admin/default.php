@@ -11,8 +11,8 @@
 				padding-top: 60px;
 			}
 		</style>
-		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
-		<script type="text/javascript" src="<?php echo site_url() ?>assets/bootstrap/bootstrap.js"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/bootstrap/bootstrap.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
 		<script type="text/javascript">
 			function slideDown(item) { jQuery(item).slideDown(); }
 			function slideUp(item) { jQuery(item).slideUp(); }
@@ -90,7 +90,7 @@
 				jQuery("a[rel=twipsy]").twipsy({ live: true });
 				jQuery("a[rel^='popover']").each(function() {
 					var direction = $(this).attr('rel').replace("popover-", "");
-					$(this).popover({ offset: 10, placement: direction });
+					$(this).popover({ offset: 10, placement: direction, html: true });
 				});
 			});
 		</script>
@@ -182,7 +182,7 @@
 			{
 				echo get_setting('fs_priv_version');
 				if ($this->tank_auth->is_admin() && (get_setting('fs_priv_version') != get_setting('fs_cron_autoupgrade_version') && (get_setting('fs_cron_autoupgrade_version'))))
-					echo ' – <a href="' . site_url('/admin/upgrade/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
+					echo ' – <a href="' . site_url('admin/system/upgrade/') . '">' . _('New upgrade available:') . ' ' . get_setting('fs_cron_autoupgrade_version') . '</a>';
 			} ?></p>
 		</footer>
 		

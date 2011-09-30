@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-30 11:06+0100\n"
-"PO-Revision-Date: 2011-09-30 11:06+0100\n"
+"POT-Creation-Date: 2011-09-30 16:09+0100\n"
+"PO-Revision-Date: 2011-09-30 16:09+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1595,6 +1595,22 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:74
 msgid "Use flash upload"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:106
+msgid "Add files..."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:109
+msgid "Start upload"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:110
+msgid "Cancel upload"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:111
+msgid "Delete files"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import.php:3

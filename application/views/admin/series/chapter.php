@@ -103,12 +103,12 @@ $this->buttoner[] = array(
 		<div class="fileupload-buttonbar">
 			<?php echo form_open_multipart(""); ?>
 			<label class="fileinput-button">
-				<span>Add files...</span>
+				<span><?php echo _("Add files...") ?></span>
 				<input type="file" name="Filedata[]" multiple>
 			</label>
-			<button type="submit" class="start">Start upload</button>
-			<button type="reset" class="cancel">Cancel upload</button>
-			<button type="button" class="delete">Delete files</button>
+			<button type="submit" class="start"><?php echo _("Start upload") ?></button>
+			<button type="reset" class="cancel"><?php echo _("Cancel upload") ?></button>
+			<button type="button" class="delete"><?php echo _("Delete files") ?></button>
 			<?php echo form_close(); ?>
 		</div>
 		<div class="fileupload-content">

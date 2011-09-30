@@ -214,7 +214,7 @@ class Transproof extends DataMapper
 		$data["user_id"] = $CI->tank_auth->get_user_id();
 		
 		// ticket is used to confirm the newly made boxes and changes to javascript
-		if(isset($data["ticket"]))
+		if(!isset($data["ticket"]))
 		{
 			$this->error_message('error', _('The ticket wasn\'t set.'));
 			log_message('error', 'Transproof: The ticket wasn\'t set.');

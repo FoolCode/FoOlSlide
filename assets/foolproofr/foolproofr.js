@@ -42,6 +42,19 @@
 			
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		/******************
+		 *   USER-TRIGGERED
+		 *	FUNCTIONS
+		 ******************/
+		
+		
 		var toggleMousedown = function(bool) {
 			if(bool)
 			{
@@ -253,6 +266,23 @@
 			});
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/******************
+		 *   INTERFACE CREATION
+		 *	FUNCTIONS
+		 ******************/
+		
 		var createBox = function(opt){
 			
 			var def = {
@@ -281,7 +311,7 @@
 					deleted: 1,
 					type: 1
 				}
-				sendBox(remPref);
+				sendTransproof(remPref);
 				removeBox(remPref);
 			}).html("X");
 			var dragger = $("<div />").addClass("foolproofr_dragger").append(remover).append(pref.user_name);
@@ -318,38 +348,72 @@
 			$(el).hide();
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/******************
+		 *   NETWORK
+		 *	FUNCTIONS
+		 ******************/
+		
 		var ticketCounter = 0;
 		var newTransproofs = [];
-		var sendTransproof = new function(objj) {
+		var sendTransproof = function(objj) {
 			objj.ticket = ticketCounter++;
 			newTransproofs.push(objj);
 			return ticketCounter;
 		}
 		
-		var lastSync = 0;
 		
+		var syncID = 0;		
+		var compareSyncID = function(a){
+			if(a > syncID)
+			{
+				syncID = a;
+				return true;
+			}
+			return false;
+		}
 		
-		var sync = function() {
+		var sync = function(manual) {
 			var data = {
-				//update: [objj],
+				update: newTransproofs,
 				chapter_id: plugin.settings.chapter_id,
 				pagenum: plugin.settings.page_number
 			};
 			
 			$.ajax({
 				type: 'POST',
-				data: true,
+				data: data,
 				async: false,
 				dataType: 'json',
 				url: plugin.settings.updateUrl,
 				success: function(data, textStatus, jqXHR) {
+					// let's try breaking the millisecond
 					$.each(data.sync, function(index, value){
 						processSync(value);
 					});
+					newTransproofs = [];
 				},
 				error: function(jqXHR, textStatus, errorThrown)
 				{
-				//alert(errorThrown);
+					
+				},
+				complete: function(jqXHR, textStatus)
+				{
+					if(manual !== true)
+						setTimeout(function(){
+							sync()
+						}, 3000);
 				}
 			});
 		}
@@ -358,8 +422,10 @@
 			// here basically only box creation happens
 			if(objj.related_transproof_id == 0)
 			{
-				
-				createBox(objj);
+				if(compareSyncID(objj.id))
+				{
+					createBox(objj);
+				}
 				
 				if(objj.transproofs instanceof Array)
 				{
@@ -379,6 +445,23 @@
 				
 			}
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/******************
+		 *   TRASVERSING
+		 *	FUNCTIONS
+		 ******************/
 		
 		var findTransproofByID = function(id) {
 			var result;
@@ -416,11 +499,43 @@
 			return false;
 		}
 
+
+		/**
+		 * converts MySQL DateTime to unix time.
+		 */
+		var dateTimeToDate = function(timestamp) {
+			//function parses mysql datetime string and returns javascript Date object
+			//input has to be in this format: 2007-06-05 15:26:02
+			var regex=/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
+			var parts=timestamp.replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
+			return new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5]);
+		}
+
+		/**
+		 * Get current unix time
+		 */
+		var unixtime = function(){
+			return (new Date().getTime() * 0.001)|0;
+		}
+		
+		var compareDateTime = function(a, b)
+		{
+			return dateTimeToDate(a.created) - dateTimeToDate(b.created)
+		}
+
+
+
+
+
+
+
+
+
+
+
 		plugin.init();
 
 	}
-	
-
 
 	$.fn.foolproofr = function(options) {
 

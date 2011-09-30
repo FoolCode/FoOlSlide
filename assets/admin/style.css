@@ -17,6 +17,7 @@ table td { vertical-align: middle; }
 table th + th, table td + td {
   border-left: 0px solid #ddd;
 }
+.fixed-table { table-layout: fixed; }
 
 /* End Twitter Bootstrap CSS Changes */
 
@@ -76,3 +77,5 @@ table th + th, table td + td {
 
 /* Loader */
 .loading { display: none; width: 100%; text-align: center; margin: auto; }
+
+.vartext { padding: 5px; font-style: italic; font-size: 10px }

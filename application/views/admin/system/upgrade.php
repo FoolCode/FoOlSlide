@@ -9,7 +9,7 @@ if ($new_versions) {
 	if ($can_upgrade) {
 		$CI->buttoner[] = array(
 			'text' => _('Upgrade FoOlSlide Automatically'),
-			'href' => site_url('admin/upgrade/do_upgrade'),
+			'href' => site_url('admin/system/do_upgrade'),
 			'plug' => _('Do you really want to upgrade to the latest version?'),
 			'rel' => 'popover-below',
 			'title' => _('Automatic Upgrade'),
@@ -30,7 +30,7 @@ if (!$new_versions) {
 	if ($can_upgrade) {
 		$CI->buttoner[] = array(
 			'text' => _('Repair FoOlSlide'),
-			'href' => site_url('admin/upgrade/do_upgrade'),
+			'href' => site_url('admin/system/do_upgrade'),
 			'plug' => _('Do you really want to re-install FoOlSlide?'),
 			'rel' => 'popover-left',
 			'title' => _('Download'),

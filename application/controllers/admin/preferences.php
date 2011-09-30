@@ -13,7 +13,7 @@ class Preferences extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// set controller title
-		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/preferences").'">' . _("Preferences") . '</a>';
+		$this->viewdata['controller_title'] = '<a href="' . site_url("admin/preferences") . '">' . _("Preferences") . '</a>';
 	}
 
 
@@ -41,8 +41,10 @@ class Preferences extends Admin_Controller
 		$former = array();
 		foreach ($form as $key => $item)
 		{
-			if (isset($item[1]['value']) && is_array($item[1]['value'])) {
-				foreach ($item[1]['value'] as $key => $item2) {
+			if (isset($item[1]['value']) && is_array($item[1]['value']))
+			{
+				foreach ($item[1]['value'] as $key => $item2)
+				{
 					$former[] = array('1', $item2);
 				}
 			}
@@ -191,7 +193,7 @@ class Preferences extends Admin_Controller
 				'preferences' => 'fs_gen'
 			)
 		);
-		
+
 		$form[] = array(
 			_('Google Analytics code'),
 			array(
@@ -202,7 +204,7 @@ class Preferences extends Admin_Controller
 				'help' => _("Your Google Analytics code in the UAXXXXXXXX1 format.")
 			)
 		);
-		
+
 		$form[] = array(
 			_('Pre-Header Text'),
 			array(
@@ -213,7 +215,7 @@ class Preferences extends Admin_Controller
 				'help' => _("This will insert HTML code above before the header navigation block.")
 			)
 		);
-		
+
 		$form[] = array(
 			_('Header Text'),
 			array(
@@ -246,7 +248,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Inserts the text above in the footer such as disclaimers. (Note: If the content uploaded does not belong to you, do not write things like "All Rights Reserived&copy;" above. However, if you\'re releasing your own works, please consider using <a href="http://creativecommons.org/">Creative Commons Licenses</a> to protect them.)')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Footer Code'),
 			array(
@@ -318,7 +320,7 @@ class Preferences extends Admin_Controller
 				'help' => _('')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Bottom banner'),
 			array(
@@ -348,7 +350,6 @@ class Preferences extends Admin_Controller
 						'preferences' => 'fs_ads',
 						'text' => _('Reload on Every Pageview')
 					)
-					
 				),
 				'help' => _('')
 			)
@@ -512,9 +513,8 @@ class Preferences extends Admin_Controller
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	
-	
+
+
 	/*
 	 * Generic info influcencing all of FoOlSlide
 	 * 
@@ -538,7 +538,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('1st URL'),
 			array(
@@ -559,7 +559,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('2nd Image URL'),
 			array(
@@ -570,7 +570,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('2nd URL'),
 			array(
@@ -591,7 +591,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('3rd Image URL'),
 			array(
@@ -602,7 +602,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('3rd URL'),
 			array(
@@ -623,7 +623,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('4th Image URL'),
 			array(
@@ -634,164 +634,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
-		$form[] = array(
-			_('4th URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_url_4',
-				'placeholder' => _('Not required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Link URL (don\'t forget "http://")')
-			)
-		);
 
-		$form[] = array(
-			_('4th Display text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_slsh_text_4',
-				'preferences' => 'fs_gen',
-				'help' => _('Text that appears on bottom of the image. HTML accepted')
-			)
-		);
-
-		if ($post = $this->input->post())
-		{
-			$this->_submit($post, $form);
-		}
-
-		// create a form
-		$table = tabler($form, FALSE);
-		$data['table'] = $table;
-
-		// print out
-		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
-		$this->load->view("admin/default.php", $this->viewdata);
-	}
-	
-	
-	
-	/*
-	 * Generic info influcencing all of FoOlSlide
-	 * 
-	 * @author Woxxy
-	 */
-	function slideshow()
-	{
-		$this->viewdata["function_title"] = _("Slideshow");
-
-
-		$form = array();
-
-		// build the array for the form
-		$form[] = array(
-			_('1st Image URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_src_1',
-				'placeholder' => _('Activate by inserting an URL'),
-				'preferences' => 'fs_gen',
-				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
-			)
-		);
-		
-		$form[] = array(
-			_('1st URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_url_1',
-				'placeholder' => _('Not required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Link URL (don\'t forget "http://")')
-			)
-		);
-
-		$form[] = array(
-			_('1st Display text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_slsh_text_1',
-				'preferences' => 'fs_gen',
-				'help' => _('Text that appears on bottom of the image. HTML accepted')
-			)
-		);
-		
-		$form[] = array(
-			_('2nd Image URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_src_2',
-				'placeholder' => _('Activate by inserting an URL'),
-				'preferences' => 'fs_gen',
-				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
-			)
-		);
-		
-		$form[] = array(
-			_('2nd URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_url_2',
-				'placeholder' => _('Not required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Link URL (don\'t forget "http://")')
-			)
-		);
-
-		$form[] = array(
-			_('2nd Display text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_slsh_text_2',
-				'preferences' => 'fs_gen',
-				'help' => _('Text that appears on bottom of the image. HTML accepted')
-			)
-		);
-		
-		$form[] = array(
-			_('3rd Image URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_src_3',
-				'placeholder' => _('Activate by inserting an URL'),
-				'preferences' => 'fs_gen',
-				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
-			)
-		);
-		
-		$form[] = array(
-			_('3rd URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_url_3',
-				'placeholder' => _('Not required'),
-				'preferences' => 'fs_gen',
-				'help' => _('Link URL (don\'t forget "http://")')
-			)
-		);
-
-		$form[] = array(
-			_('3rd Display text'),
-			array(
-				'type' => 'textarea',
-				'name' => 'fs_slsh_text_3',
-				'preferences' => 'fs_gen',
-				'help' => _('Text that appears on bottom of the image. HTML accepted')
-			)
-		);
-		
-		$form[] = array(
-			_('4th Image URL'),
-			array(
-				'type' => 'input',
-				'name' => 'fs_slsh_src_4',
-				'placeholder' => _('Activate by inserting an URL'),
-				'preferences' => 'fs_gen',
-				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
-			)
-		);
-		
 		$form[] = array(
 			_('4th URL'),
 			array(

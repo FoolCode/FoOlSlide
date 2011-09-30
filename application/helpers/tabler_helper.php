@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-if (!function_exists('tabler')) {
+if (!function_exists('tabler'))
+{
 
-	function tabler($rows, $list = TRUE, $edit = TRUE, $repopulate = FALSE) {
+	function tabler($rows, $list = TRUE, $edit = TRUE, $repopulate = FALSE)
+	{
 		$result = array();
 		$CI = & get_instance();
 
@@ -22,39 +24,48 @@ if (!function_exists('tabler')) {
 		);
 
 		$echo = "";
-	
-		foreach ($rows as $rowk => $row) {
-			foreach ($row as $colk => $column) {
-				if ($colk == 0) {
+
+		foreach ($rows as $rowk => $row)
+		{
+			foreach ($row as $colk => $column)
+			{
+				if ($colk == 0)
+				{
 					$result[$rowk][$colk]["table"] = $column;
 					$result[$rowk][$colk]["form"] = $column;
 					$result[$rowk][$colk]["field"] = $rows[$rowk][$colk + 1]['name'];
 				}
-				else {
-					if (isset($column['list']) && is_array($column['list'])) {
+				else
+				{
+					if (isset($column['list']) && is_array($column['list']))
+					{
 						foreach ($column['list'] as $key => $item)
 							if (!isset($column['list'][$key]['value']))
 								$column['list'][$key]['value'] = "";
 					}
 					elseif (!isset($column['value']))
 						$column['value'] = "";
-					if (is_array($column)) {
+					if (is_array($column))
+					{
 						$result[$rowk][$colk]["table"] = writize($column);
-						if (isset($column['type'])) {
+						if (isset($column['type']))
+						{
 							$result[$rowk][$colk]["form"] = formize($column, $repopulate);
 							$result[$rowk][$colk]["type"] = $column['type'];
 						}
 					}
-					else {
+					else
+					{
 						$result[$rowk][$colk]["table"] = writize($column);
 						$result[$rowk][$colk]["form"] = $column;
 					}
 				}
 			}
 		}
-	
+
 		// echo '<pre>'; print_r($result); echo '</pre>';
-		if ($list && $edit) {
+		if ($list && $edit)
+		{
 			$CI->buttoner[] = array(
 				'text' => _('Edit'),
 				'href' => '',
@@ -62,24 +73,34 @@ if (!function_exists('tabler')) {
 			);
 		}
 
-		if ($list && $edit) {
+		if ($list && $edit)
+		{
 			$echo .= '<div class="plain"><fieldset>';
-			foreach ($result as $rowk => $row) {
-				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
+			foreach ($result as $rowk => $row)
+			{
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden')
+				{
 					//$echo .= $row[1]['form'];
 				}
-				else {
-					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
+				else
+				{
+					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id')
+					{
 						$echo .= '<div class="clearfix">';
-						foreach ($row as $colk => $column) {
-							if ($colk == 0) {
+						foreach ($row as $colk => $column)
+						{
+							if ($colk == 0)
+							{
 								$echo .= '<label for="' . $column['field'] . '">' . $column['table'] . '</label>';
 								$echo .= '<div class="input">';
 							}
-							else {
+							else
+							{
 								$echo .= '<span class="uneditable-input">';
-								if (is_array($column['table'])) {
-									foreach ($column['table'] as $mini) {
+								if (is_array($column['table']))
+								{
+									foreach ($column['table'] as $mini)
+									{
 										$echo .= '' . $mini->name . ' ';
 									}
 								}
@@ -96,22 +117,30 @@ if (!function_exists('tabler')) {
 			}
 			$echo .= '</fieldset></div>';
 		}
-		elseif ($list) {
+		elseif ($list)
+		{
 			$echo .= '<div class="plain"><table class="zebra-striped" rules="rows">';
-			foreach ($result as $rowk => $row) {
-				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
+			foreach ($result as $rowk => $row)
+			{
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden')
+				{
 					//$echo .= $row[1]['form'];
 				}
-				else {
-					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id') {
+				else
+				{
+					if (!isset($row[1]) || $row[1]['table'] != _('Save') && $row[0]['table'] != 'id')
+					{
 						$echo .= '<tr>';
-						foreach ($row as $key => $column) {
+						foreach ($row as $key => $column)
+						{
 							if ($key == 'action' && $key !== 0)
 								$echo .= '<td><div style="float: right">';
 							else
 								$echo .= '<td>';
-							if (is_array($column['table'])) {
-								foreach ($column['table'] as $mini) {
+							if (is_array($column['table']))
+							{
+								foreach ($column['table'] as $mini)
+								{
 									$echo .= '' . $mini->name . ' ';
 								}
 							}
@@ -130,21 +159,28 @@ if (!function_exists('tabler')) {
 			$echo .= '</table></div>';
 		}
 
-		if ($edit) {
+		if ($edit)
+		{
 			$echo .= '<div class="edit" ' . (($list && $edit) ? 'style="display:none;"' : '') . '><fieldset>';
-			foreach ($result as $rowk => $row) {
-				
-				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden') {
+			foreach ($result as $rowk => $row)
+			{
+
+				if (isset($row[1]['type']) && $row[1]['type'] == 'hidden')
+				{
 					$echo .= $row[1]['form'];
 				}
-				else {
+				else
+				{
 					$echo .= '<div class="clearfix">';
-					foreach ($row as $colk => $column) {
-						if ($colk == 0) {
+					foreach ($row as $colk => $column)
+					{
+						if ($colk == 0)
+						{
 							$echo .= '<label for="' . $column['field'] . '">' . $column['form'] . '</label>';
 							$echo .= '<div class="input">';
 						}
-						else {
+						else
+						{
 							$echo .= $column['form'];
 						}
 					}
@@ -153,16 +189,19 @@ if (!function_exists('tabler')) {
 			}
 			$echo .= '</fieldset></div>';
 		}
-		
+
 		return $echo;
 	}
+
 
 }
 
 
-if (!function_exists('formize')) {
+if (!function_exists('formize'))
+{
 
-	function formize($column, $repopulate) {
+	function formize($column, $repopulate)
+	{
 		$CI = & get_instance();
 		if ($repopulate && $CI->input->post())
 			$column['value'] = (set_value($column['name']) == "") ? $column["value"] : set_value($column['name']);
@@ -171,11 +210,13 @@ if (!function_exists('formize')) {
 
 		if (isset($column['serialized']) && $column['serialized'])
 			$column['value'] = unserialize($column["value"]);
-		
+
 		//if($column['type'] == 'input' || $column['type'] == 'nation') $column['value'] = set_value($column['name']);
-		
-		if ($column['type'] == 'checkbox') {
-			if (!is_array($column['value'])) {
+
+		if ($column['type'] == 'checkbox')
+		{
+			if (!is_array($column['value']))
+			{
 				if ($column['value'] == 1)
 					$column['checked'] = 'checked';
 				$column['value'] = 1;
@@ -183,7 +224,7 @@ if (!function_exists('formize')) {
 		}
 
 		$formize = 'form_' . $column['type'];
-		if(!isset($column['type']))
+		if (!isset($column['type']))
 			$formize = "";
 		$type = $column['type'];
 		if (isset($column['help']))
@@ -201,28 +242,34 @@ if (!function_exists('formize')) {
 		unset($column['text']);
 		unset($column['help']);
 
-		if (is_array($column['value'])) {
-			if ($type == 'checkbox') {
+		if (is_array($column['value']))
+		{
+			if ($type == 'checkbox')
+			{
 				$result = array();
 				$minion = $column['value'];
 				$result[] = '<ul class="inputs-list">';
-				foreach ($minion as $mini) {
+				foreach ($minion as $mini)
+				{
 					$mini['type'] = 'checkbox';
-					$result[] = '<li><label>'. formize($mini, FALSE) . '</label></li>';
+					$result[] = '<li><label>' . formize($mini, FALSE) . '</label></li>';
 				}
 				$result[] = '</ul>';
 			}
-			else {
+			else
+			{
 				$column['name'] .= '[]';
 				$minion = $column['value'];
-				foreach ($minion as $mini) {
+				foreach ($minion as $mini)
+				{
 					if (isset($mini->name))
 						$column['value'] = $mini->name;
 					else
 						$column['value'] = $mini;
 					$result[] = $formize($column);
 				}
-				if (empty($result)) {
+				if (empty($result))
+				{
 					$column['value'] = "";
 					$result[] = $formize($column);
 				}
@@ -231,25 +278,29 @@ if (!function_exists('formize')) {
 				$result[] = $formize($column);
 			}
 		}
-		else {
+		else
+		{
 			// echo '<pre>'; print_r($column); echo '</pre>';
-			if ($type == 'hidden' && isset($column["value"])) {
+			if ($type == 'hidden' && isset($column["value"]))
+			{
 				$result = $formize($column['name'], $column['value']);
 			}
 			else
 				$result = $formize($column);
 		}
 
-		if (is_array($result)) {
+		if (is_array($result))
+		{
 			$results = $result;
 			$result = "";
-			foreach ($results as $resulting) {
+			foreach ($results as $resulting)
+			{
 				$result.= $resulting;
 				if ($type != 'checkbox')
 					$result .= '<br/>';
 			}
 		}
-			
+
 		if (isset($text) && !is_array($column['value']))
 			$result = $result . ' <span>' . $text . '</span>';
 		if (isset($help))
@@ -257,17 +308,21 @@ if (!function_exists('formize')) {
 		return $result;
 	}
 
-}
 
-function writize($column) {
+}
+function writize($column)
+{
 	//echo '<pre>'; print_r($column); echo '</pre>';
-	if (!is_array($column)) {
+	if (!is_array($column))
+	{
 		return $column;
 	}
 
-	if (isset($column['display'])) {
+	if (isset($column['display']))
+	{
 
-		if (function_exists('display_' . $column['display'])) {
+		if (function_exists('display_' . $column['display']))
+		{
 			$displayfn = 'display_' . $column['display'];
 			$column['value'] = $displayfn($column);
 		}
@@ -277,18 +332,21 @@ function writize($column) {
 		//if($column['display'] == 'hidden') return '';
 	}
 
-	if (isset($column['type']) && $column['type'] == 'language') {
+	if (isset($column['type']) && $column['type'] == 'language')
+	{
 		$lang = config_item('fs_languages');
 		if (!isset($column['value']) || $column['value'] == "")
 			$column['value'] = get_setting('fs_gen_default_lang');
 		$column['value'] = $lang[$column['value']];
 	}
 
-	if (isset($column['type']) && $column['type'] == 'nation') {
+	if (isset($column['type']) && $column['type'] == 'nation')
+	{
 		$value = $column['value'];
 		$column['value'] = "";
 		$nations = config_item('fs_country_names');
-		foreach ($value as $key => $item) {
+		foreach ($value as $key => $item)
+		{
 			$num = array_search($item, config_item('fs_country_codes'));
 			if ($key > 0)
 				$column['value'] .= ", ";
@@ -299,11 +357,15 @@ function writize($column) {
 	return $column['value'];
 }
 
-if (!function_exists('lister')) {
 
-	function lister($rows) {
+if (!function_exists('lister'))
+{
+
+	function lister($rows)
+	{
 		$echo = '<div class="list">';
-		foreach ($rows as $row) {
+		foreach ($rows as $row)
+		{
 			if (!isset($row['smalltext_r']))
 				$row['smalltext_r'] = "";
 			if (!isset($row['smalltext']))
@@ -324,20 +386,26 @@ if (!function_exists('lister')) {
 		return $echo . '</div>';
 	}
 
+
 }
 
 
-if (!function_exists('ormer')) {
+if (!function_exists('ormer'))
+{
 
-	function ormer($db) {
+	function ormer($db)
+	{
 		$result = array();
 		$rows = $db->validation;
-		foreach ($rows as $key => $row) {
-			if ($key == 'id') {
+		foreach ($rows as $key => $row)
+		{
+			if ($key == 'id')
+			{
 				$row['type'] = 'hidden';
 			}
 
-			if (isset($row['type'])) {
+			if (isset($row['type']))
+			{
 				if ($db->$key != "")
 					$row['value'] = $db->$key;
 
@@ -356,12 +424,16 @@ if (!function_exists('ormer')) {
 		return $result;
 	}
 
+
 }
 
-if (!function_exists('form_dropdowner')) {
+if (!function_exists('form_dropdowner'))
+{
 
-	function form_dropdowner($column) {
-		if (isset($column['onKeyUp'])) {
+	function form_dropdowner($column)
+	{
+		if (isset($column['onKeyUp']))
+		{
 			$column['onChange'] = 'onChange="' . $column['onKeyUp'] . '"';
 			unset($column['onKeyUp']);
 		}
@@ -370,19 +442,24 @@ if (!function_exists('form_dropdowner')) {
 		return form_dropdown($column['name'], $column['values'], $column['value'], $column['onChange']);
 	}
 
+
 }
 
-if (!function_exists('form_nation')) {
+if (!function_exists('form_nation'))
+{
 
-	function form_nation($column) {
+	function form_nation($column)
+	{
 		$codes = config_item('fs_country_codes');
 		$nations = config_item('fs_country_names');
 
 		$nationcodes = array();
-		foreach ($codes as $key => $code) {
+		foreach ($codes as $key => $code)
+		{
 			$nationcodes[$code] = $nations[$key];
 		}
-		if (isset($column['onKeyUp'])) {
+		if (isset($column['onKeyUp']))
+		{
 			$column['onChange'] = 'onChange="' . $column['onKeyUp'] . '"';
 			unset($column['onKeyUp']);
 		}
@@ -391,55 +468,71 @@ if (!function_exists('form_nation')) {
 		return form_dropdown($column['name'], $nationcodes, $column['value'], $column['onChange']);
 	}
 
+
 }
 
-if (!function_exists('form_language')) {
+if (!function_exists('form_language'))
+{
 
-	function form_language($column) {
+	function form_language($column)
+	{
 		$lang = config_item('fs_languages');
 		if (!isset($column['value']) || $column['value'] == "")
 			$column['value'] = get_setting('fs_gen_default_lang');
 		return form_dropdown($column['name'], $lang, $column['value']);
 	}
 
+
 }
 
-if (!function_exists('form_group')) {
+if (!function_exists('form_group'))
+{
 
-	function form_group($column) {
+	function form_group($column)
+	{
 		$CI = & get_instance();
 		$groups = new Group();
 		$groups->get();
 		$set = array();
-		foreach ($groups->all as $group) {
+		foreach ($groups->all as $group)
+		{
 			$set[$group->id] = $group->name;
 		}
 
 		return form_dropdown($column['name'], $set, $column['value']);
 	}
 
+
 }
 
-if (!function_exists('form_themes')) {
+if (!function_exists('form_themes'))
+{
 
-	function form_themes($column) {
+	function form_themes($column)
+	{
 		$column["value"] = get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default';
 		$dirs = scandir('content/themes', 1);
 		$set = array();
-		foreach ($dirs as $key => $item) {
-			if (is_dir('content/themes/' . $item) && $item != '.' && $item != '..' && $item != 'mobile') {
+		foreach ($dirs as $key => $item)
+		{
+			if (is_dir('content/themes/' . $item) && $item != '.' && $item != '..' && $item != 'mobile')
+			{
 				$set[$item] = $item;
 			}
 		}
 		return form_dropdown($column['name'], $set, $column['value']);
 	}
 
+
 }
 
-if (!function_exists('buttoner')) {
+if (!function_exists('buttoner'))
+{
 
-	function buttoner($data = NULL) {
-		if (!is_array($data)) {
+	function buttoner($data = NULL)
+	{
+		if (!is_array($data))
+		{
 			$CI = & get_instance();
 			if (!isset($CI->buttoner))
 				return "";
@@ -449,22 +542,26 @@ if (!function_exists('buttoner')) {
 			$texturl = array($data);
 
 		$echo = '';
-		foreach ($texturl as $item) {
+		foreach ($texturl as $item)
+		{
 			$echo .= '<a class="btn" ';
 			$text = $item['text'];
 			unset($item['text']);
-			if (isset($item['onclick'])) {
+			if (isset($item['onclick']))
+			{
 				$echo .= 'onclick="' . ($item['onclick']) . '" ';
 				unset($item['onclick']);
 			}
-			if (isset($item['plug'])) {
+			if (isset($item['plug']))
+			{
 				$echo .= 'onclick="confirmPlug(\'' . $item['href'] . '\', \'' . addslashes($item['plug']) . '\', this); return false;"';
 				unset($item['plug']);
-			}	
-			if (isset($item['href'])) {
+			}
+			if (isset($item['href']))
+			{
 				$echo .= 'href="' . ($item['href']) . '" ';
 				unset($item['href']);
-			}	
+			}
 			foreach ($item as $key => $arg)
 				$echo .= $key . '="' . $arg . '" ';
 			$echo .= '>';
@@ -473,44 +570,56 @@ if (!function_exists('buttoner')) {
 		return $echo;
 	}
 
+
 }
 
-if (!function_exists('display_buttoner')) {
+if (!function_exists('display_buttoner'))
+{
 
-	function display_buttoner($column) {
+	function display_buttoner($column)
+	{
 		return buttoner($column);
 	}
 
+
 }
 
-if (!function_exists('form_buttoner')) {
+if (!function_exists('form_buttoner'))
+{
 
-	function form_buttoner($column) {
+	function form_buttoner($column)
+	{
 		return buttoner($column);
 	}
 
+
 }
 
-if (!function_exists('prevnext')) {
+if (!function_exists('prevnext'))
+{
 
-	function prevnext($base_url, $item) {
+	function prevnext($base_url, $item)
+	{
 		$echo = '<div class="prevnext">';
 
-		if ($item->paged->has_previous) {
+		if ($item->paged->has_previous)
+		{
 			$echo .= '<div class="prev">
-					<a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« First</a>
-					<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« Prev</a>
+					<a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« ' . _('First') . '</a>
+					<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« ' . _('Prev') . '</a>
 				</div>';
 		}
-		if ($item->paged->has_next) {
+		if ($item->paged->has_next)
+		{
 			$echo .= '<div class="next">
-					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">Last »»</a>
-					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">Next »</a>
+					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">' . _('Last') . ' »»</a>
+					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">' . _('Next') . ' »</a>
 				</div>';
 		}
 		$echo .= '<div class="clearer"></div></div>';
 
 		return $echo;
 	}
+
 
 }

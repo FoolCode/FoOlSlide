@@ -26,82 +26,12 @@ $this->buttoner[] = array(
 
 <div class="table">
 	<h3><?php echo _('Pages'); ?></h3>
-	<?php
-	$session_name = $this->session->get_js_session(TRUE);
-	$session_data = $this->session->get_js_session();
-	?>
-	<div class="uploadify" style="float: right; padding: 10px 15px 0 0;">
-		<link href="<?php echo site_url(); ?>assets/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
-		<script type="text/javascript" src="<?php echo site_url(); ?>assets/uploadify/jquery.uploadify.js"></script>
-		<script type="text/javascript">
-
-			function deleteImage(id)
-			{
-				jQuery.post('<?php echo site_url('/admin/series/delete/page/') ?>', {id: id}, function(){
-					jQuery('#image_' + id).hide();
-				});
-			}
-
-			function deleteAllPages()
-			{
-				jQuery.post('<?php echo site_url('/admin/series/delete/allpages/') ?>', {id: <?php echo $chapter->id ?>}, function(){
-					location.reload();
-				});
-			}
-
-			function updateSession()
-			{
-				jQuery.post('<?php echo site_url('/admin/series/get_sess_id'); ?>', 
-				function(result){
-
-					jQuery('#file_upload_flash').uploadifySettings( 'postData', {
-						'ci_sessionz' : result.session, 
-						'<?php echo $this->security->get_csrf_token_name(); ?>' : result.csrf, 
-						'chapter_id' : <?php echo $chapter->id; ?>
-					}, false );
-					setTimeout('updateSession()', 6000);
-				}, 'json');
-			}
-
-			jQuery(document).ready(function() {
-				jQuery('#file_upload_flash').uploadify({
-					'swf'  : '<?php echo site_url(); ?>assets/uploadify/uploadify.swf',
-					'uploader'    : '<?php echo site_url('/admin/series/upload/compressed_chapter'); ?>',
-					'cancelImage' : '<?php echo site_url(); ?>assets/uploadify/uploadify-cancel.png',
-					'checkExisting' : false,
-					'preventCaching' : false,
-					'multi' : true,
-					'buttonText' : '<?php echo _('Use flash upload'); ?>',
-					'width': 200,
-					'auto'      : true,
-					'requeueErrors' : true,
-					'uploaderType'    : 'flash',
-					'postData' : {},
-					'onSWFReady'  : function() {
-						updateSession();
-					},
-					'onUploadSuccess' : function(file, data, response) {
-						var files = jQuery.parseJSON(data);
-						var fu = jQuery('#fileupload').data('fileupload');
-						fu._adjustMaxNumberOfFiles(-files.length);
-						fu._renderDownload(files)
-						.appendTo(jQuery('#fileupload .files'))
-						.fadeIn(function () {
-							jQuery(this).show();
-						});
-					}	
-				});
-			});
-
-		</script>
-		<div id="file_upload_flash"></div>
-	</div>
 
 	<div id="fileupload" style="margin-right: 10px; padding-bottom: 10px">
-		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css" rel="stylesheet" id="theme" />
-		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css" rel="stylesheet" />
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css?v=<?php echo get_setting('fs_priv_version') ?>" rel="stylesheet" id="theme" />
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css?v=<?php echo get_setting('fs_priv_version') ?>" rel="stylesheet" />
 		<div class="fileupload-buttonbar">
-			<?php echo form_open_multipart(""); ?>
+			<?php echo form_open_multipart("", array('style' => 'margin-bottom:0px;')); ?>
 			<label class="fileinput-button">
 				<span><?php echo _("Add files...") ?></span>
 				<input type="file" name="Filedata[]" multiple>
@@ -171,11 +101,11 @@ $this->buttoner[] = array(
         </td>
     </tr>
 </script>
-<script src="<?php echo site_url(); ?>assets/js/jquery-ui.js"></script>
-<script src="<?php echo site_url(); ?>assets/js/jquery.tmpl.js"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery-ui.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery.tmpl.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
 
 <script type="text/javascript">
 	jQuery(function () {

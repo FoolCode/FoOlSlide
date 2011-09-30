@@ -91,29 +91,6 @@
 			)
 		);
 
-
-		$imagick = FALSE;
-		// check if exec is disabled
-		$ini_disabled = explode(', ', ini_get('disable_functions'));
-		if (!in_array('exec', $ini_disabled))
-		{
-			$imagick_path = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
-			
-			if (!preg_match("/convert$/i", $imagick_path))
-			{
-				$imagick_path = rtrim($imagick_path, '/').'/';
-
-				$imagick_path .= 'convert';
-			}
-			if(file_exists($imagick_path) || file_exists($imagick_path.'.exe'))
-			{
-				$imagick = TRUE;
-			}
-		}
-
-
-
-
 		$information['extensions'] = array(
 			'name' => 'Extensions',
 			'title' => _('Extensions'),
@@ -127,7 +104,7 @@
 				array(
 					'name' => 'ImageMagick',
 					'title' => 'ImageMagick',
-					'value' => ($imagick) ? _('Installed') : _('Not Installed'),
+					'value' => (find_imagick()) ? _('Installed') : _('Not Installed'),
 					'text' => _('This is a library used to dynamically create, edit, compose or convert images.') . '<p class="vartext">' . _('Optional') . '</p>'
 				)
 			)

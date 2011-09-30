@@ -8,21 +8,34 @@
 		<?php
 			// name = non-localized for developers
 			// title = localized for users
-			$information['software'] = array(
+			$information['server'] = array(
 				'name' => 'Server Information',
 				'title' => _('Server Information'),
 				'data' => array(
 					array(
-						'name' => 'Server Software',
-						'title' => _('Server Software'),
+						'name' => 'Web Server Software',
+						'title' => _('Web Server Software'),
 						'value' => $_SERVER["SERVER_SOFTWARE"],
-						'text' => _('THIS IS FUCKING MAGIC')
+						'text' => _('The web server that is currently running to server your content.')
 					),
 					array(
 						'name' => 'PHP Version',
 						'title' => _('PHP Version'),
 						'value' => phpversion(),
 						'text' => _('The version of the currently running PHP parser.')
+					)
+				)
+			);
+			
+			$information['software'] = array(
+				'name' => 'Software Information',
+				'title' => _('Software Information'),
+				'data' => array(
+					array(
+						'name' => 'FoOlSlide Version',
+						'title' => _('FoOlSlide Version'),
+						'value' => get_setting('fs_priv_version'),
+						'text' => _('The version of FoOlSlide that you are currently running on your server.')
 					)
 				)
 			);
@@ -111,7 +124,7 @@
 		<h3><?php echo _('System Information'); ?></h3>
 	</div>
 	<div class="modal-body" style="text-align: center">
-		<textarea id="server-information-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important"><?php
+		<textarea id="server-information-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important" readonly="readonly"><?php
 			foreach ($information as $key => $item) {
 				echo $item['name'] . "\n";
 				echo "------------------------------\n";
@@ -131,7 +144,7 @@
 <script type="text/javascript">
 	jQuery(document).ready(function() {
 		var modalInfoContainer = jQuery("#modal-for-information").find("#server-information-output");
-		modalInfoContainer.focus(function() {
+		modalInfoContainer.click(function() {
 			modalInfoContainer.select();
 			// Chrome Fix
 			modalInfoContainer.mouseup(function() { modalInfoContainer.unbind('mouseup'); return false; });

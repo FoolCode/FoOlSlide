@@ -36,6 +36,12 @@
 						'title' => _('FoOlSlide Version'),
 						'value' => get_setting('fs_priv_version'),
 						'text' => _('The version of FoOlSlide that you are currently running on your server.')
+					),
+					array(
+						'name' => 'Environment',
+						'title' => _('Environment'),
+						'value' => ucfirst(ENVIRONMENT),
+						'text' => _('The environment FoOlSlide is current running as on the server.')
 					)
 				)
 			);
@@ -107,7 +113,7 @@
 				echo '<h5>' . $item['title'] . '</h5>';
 				echo '<table class="zebra-striped fixed-table"><tbody>';
 				foreach ($item['data'] as $subkey => $subitem) {
-					$tooltip = (isset($subitem['text'])) ? '<a rel="popover-right" href="#" data-content="' . htmlspecialchars($subitem['text']) . '" data-original-title="' . htmlspecialchars($subitem['title']) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>' : '';
+					$tooltip = (isset($subitem['text']) && $subitem['text'] != "") ? '<a rel="popover-right" href="#" data-content="' . htmlspecialchars($subitem['text']) . '" data-original-title="' . htmlspecialchars($subitem['title']) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>' : '';
 					echo '<tr><td>' . $subitem['title'] . ' ' . $tooltip . '</td><td>' . $subitem['value'] . '</td></tr>';
 				}
 				echo '</tbody></table>';

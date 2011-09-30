@@ -82,6 +82,29 @@ if (!function_exists('parse_irc')) {
 }
 
 /**
+ * Locate ImageMagick and determine if it has been installed or not. 
+ */
+function find_imagick() {
+	$ini_disabled = explode(', ', ini_get('disable_functions'));
+	if (!in_array('exec', $ini_disabled))
+	{
+		$imagick_path = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
+		
+		if (!preg_match("/convert$/i", $imagick_path))
+		{
+			$imagick_path = rtrim($imagick_path, '/').'/';
+
+			$imagick_path .= 'convert';
+		}
+		if(file_exists($imagick_path) || file_exists($imagick_path.'.exe'))
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
  * Checks that the call is made from Ajax
  * 
  * @author Woxxy

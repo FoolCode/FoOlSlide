@@ -238,7 +238,7 @@ class Page extends DataMapper {
 
 		// Prepare the variables
 		$this->filename = $filename;
-		$this->description = (check_imagick())?'im':'';
+		$this->description = (find_imagick())?'im':'';
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];

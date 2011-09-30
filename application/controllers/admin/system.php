@@ -54,7 +54,7 @@ class System extends Admin_Controller
 			_('Path to ImageMagick'),
 			array(
 				'type' => 'input',
-				'name' => 'fs_serv_imagick:path',
+				'name' => 'fs_serv_imagick_path',
 				'placeholder' => '/usr/bin',
 				'preferences' => 'fs_gen',
 				'help' => sprintf(_('FoOlSlide uses %s via command line to maximize speed. Enter here the location of the "convert" application on your server if it %s automatically.'), '<a href="#" rel="popover-below" title="ImageMagick" data-content="' . _('This is a library used to dynamically create, edit, compose or convert images.') . '">ImageMagick</a>', '<a href="#" rel="popover-below" title="' . _('How to find convert') . '" data-content="' . _('Normally on linux servers you don\'t need to set this variable. In case it\'s not found automatically, try /usr/bin. On Windows, you will need to know where did you install ImageMagick.') . '" >' . _('can\'t be found') . '</a>')

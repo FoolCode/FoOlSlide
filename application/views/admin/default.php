@@ -11,8 +11,8 @@
 				padding-top: 60px;
 			}
 		</style>
-		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js"></script>
-		<script type="text/javascript" src="<?php echo site_url() ?>assets/bootstrap/bootstrap.js"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/js/jquery.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url() ?>assets/bootstrap/bootstrap.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
 		<script type="text/javascript">
 			function slideDown(item) { jQuery(item).slideDown(); }
 			function slideUp(item) { jQuery(item).slideUp(); }

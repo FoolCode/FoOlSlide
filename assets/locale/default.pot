@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-30 16:16+0100\n"
-"PO-Revision-Date: 2011-09-30 16:16+0100\n"
+"POT-Creation-Date: 2011-09-30 16:17+0100\n"
+"PO-Revision-Date: 2011-09-30 16:17+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1738,7 +1738,7 @@ msgid "Web Server Software"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:19
-msgid "The web server that is currently running to server your content."
+msgid "The web server that is currently running to serve your content."
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:23

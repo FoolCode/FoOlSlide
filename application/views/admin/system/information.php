@@ -16,7 +16,7 @@
 						'name' => 'Web Server Software',
 						'title' => _('Web Server Software'),
 						'value' => $_SERVER["SERVER_SOFTWARE"],
-						'text' => _('The web server that is currently running to server your content.')
+						'text' => _('The web server that is currently running to serve your content.')
 					),
 					array(
 						'name' => 'PHP Version',

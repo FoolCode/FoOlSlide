@@ -124,6 +124,8 @@ class Admin_Controller extends MY_Controller
 			"icon" => 248,
 			"content" => array(
 				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
+				"preferences" => array("level" => "admin", "name" => _("Preferences"), "icon" => 149),
+				"tools" => array("level" => "admin", "name" => _("Tools"), "icon" => 351),
 				"upgrade" => array("level" => "admin", "name" => _("Upgrade"), "icon" => 353),
 			)
 		);

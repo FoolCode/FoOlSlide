@@ -428,6 +428,9 @@ class Page extends DataMapper {
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
 		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
+		if (find_imagick()) {
+			$img_config['library_path'] = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
+		}
 		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
 		$img_config['source_image'] = $path;
 		$img_config["new_image"] = $dir . "thumb_" . $filename;

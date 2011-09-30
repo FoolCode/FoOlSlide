@@ -238,6 +238,7 @@ class Page extends DataMapper {
 
 		// Prepare the variables
 		$this->filename = $filename;
+		$this->description = (find_imagick())?'im':'';
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
@@ -350,6 +351,7 @@ class Page extends DataMapper {
 		unset($data["creator"]);
 		unset($data["editor"]);
 		unset($data["filename"]);
+		unset($data["description"]);
 		unset($data["thumnail"]);
 		unset($data["mime"]);
 		unset($data["size"]);
@@ -425,7 +427,11 @@ class Page extends DataMapper {
 		// Prepare the image library to create the thumbnail
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
-		$img_config['image_library'] = 'GD2';
+		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
+		if (find_imagick()) {
+			$img_config['library_path'] = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
+		}
+		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
 		$img_config['source_image'] = $path;
 		$img_config["new_image"] = $dir . "thumb_" . $filename;
 		$img_config['width'] = 250;

@@ -118,11 +118,12 @@ class Admin_Controller extends MY_Controller
 				"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
 			)
 		);
-		$sidebar["upgrade"] = array("name" => _("Upgrade"),
+		$sidebar["system"] = array("name" => _("System"),
 			"level" => "admin",
-			"default" => "upgrade",
+			"default" => "system",
 			"icon" => 248,
 			"content" => array(
+				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
 				"upgrade" => array("level" => "admin", "name" => _("Upgrade"), "icon" => 353),
 			)
 		);

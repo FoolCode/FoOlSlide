@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Upgrade extends Admin_Controller
+class System extends Admin_Controller
 {
 	function __construct()
 	{
@@ -16,7 +16,7 @@ class Upgrade extends Admin_Controller
 		$this->load->model('upgrade_model');
 
 		// page title
-		$this->viewdata['controller_title'] = _("Upgrade FoOlSlide");
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/system").'">' . _("System") . '</a>';
 	}
 
 
@@ -27,7 +27,25 @@ class Upgrade extends Admin_Controller
 	 */
 	function index()
 	{
+		redirect('/admin/system/information');
+	}
 
+
+	function information() {
+		$this->viewdata["function_title"] = _("Information");
+		
+		// get current version from database
+		$data["current_version"] = get_setting('fs_priv_version');
+		$data["form_title"] = _("Information");
+
+		$this->viewdata["main_content_view"] = $this->load->view("admin/system/information", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
+	}
+	
+	function upgrade()
+	{
+		$this->viewdata["function_title"] = _("Upgrade FoOlSlide");
+		
 		// get current version from database
 		$data["current_version"] = get_setting('fs_priv_version');
 
@@ -43,11 +61,10 @@ class Upgrade extends Admin_Controller
 		$data["new_versions"] = $this->upgrade_model->check_latest();
 
 		// print out
-		$this->viewdata["main_content_view"] = $this->load->view("admin/upgrade/index", $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view("admin/system/upgrade", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-
-
+	
 	/*
 	 * This just triggers the upgrade function in the upgrade model
 	 * 
@@ -67,12 +84,12 @@ class Upgrade extends Admin_Controller
 			// clean the cache in case of failure
 			$this->upgrade_model->clean();
 			// show some kind of error
-			log_message('error', 'upgrade.php do_upgrade(): failed upgrade');
+			log_message('error', 'system.php do_upgrade(): failed upgrade');
 			flash_message('error', _('Upgrade failed: check file permissions.'));
 		}
 		
 		// return an url
-		$this->output->set_output(json_encode(array('href' => site_url('admin/upgrade'))));
+		$this->output->set_output(json_encode(array('href' => site_url('admin/system/upgrade'))));
 	}
 
 

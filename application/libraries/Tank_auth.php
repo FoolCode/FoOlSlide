@@ -234,7 +234,9 @@ class Tank_auth
 			return TRUE;
 		$group = new Group();
 		$group->where('name', $group_name)->get();
-		if ($group->id == $group_id)
+		$user = new Profile();
+		$user->where('user_id', $this->get_user_id())->limit(1)->get();
+		if ($group->id == $user->group_id)
 			return TRUE;
 		return FALSE;
 	}

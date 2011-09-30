@@ -118,12 +118,25 @@ class Admin_Controller extends MY_Controller
 				"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
 			)
 		);
-		$sidebar["upgrade"] = array("name" => _("Upgrade"),
+		$sidebar["system"] = array("name" => _("System"),
 			"level" => "admin",
-			"default" => "upgrade",
+			"default" => "system",
 			"icon" => 248,
 			"content" => array(
+				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
+				"preferences" => array("level" => "admin", "name" => _("Preferences"), "icon" => 149),
+				"tools" => array("level" => "admin", "name" => _("Tools"), "icon" => 351),
 				"upgrade" => array("level" => "admin", "name" => _("Upgrade"), "icon" => 353),
+			)
+		);
+		
+		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
+			"level" => "member",
+			"default" => "http://ask.foolrulez.com",
+			"icon" => 423,
+			"content" => array(
+				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ"), "icon" => 356),
+				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker"), "icon" => 312),
 			)
 		);
 		

@@ -22,5 +22,4 @@ class Public_Controller extends MY_Controller
 		$this->template->set_theme((get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default'));
 	}
 
-
 }

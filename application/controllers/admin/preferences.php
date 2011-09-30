@@ -13,7 +13,7 @@ class Preferences extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// set controller title
-		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/preferences").'">' . _("Preferences") . '</a>';;
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/preferences").'">' . _("Preferences") . '</a>';
 	}
 
 

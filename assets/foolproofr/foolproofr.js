@@ -348,12 +348,14 @@
 			$(el).hide();
 		}
 		
+		var moveBox = function(objj) {
+			var el = findTransproofByID(objj.related_transproof_id);
+		}
 		
 		
 		
 		
-		
-		
+			
 		
 		
 		
@@ -373,15 +375,20 @@
 			return ticketCounter;
 		}
 		
-		
+		var tempSyncID = 0;
 		var syncID = 0;		
 		var compareSyncID = function(a){
 			if(a > syncID)
 			{
-				syncID = a;
+				tempSyncID = a;
 				return true;
 			}
 			return false;
+		}
+		
+		var updateSyncID = function()
+		{
+			 syncID = tempSyncID;
 		}
 		
 		var sync = function(manual) {
@@ -437,13 +444,39 @@
 			{
 				// we're getting transproofs arrays
 				$.each(objj, function(index, value){
-					if(value.deleted == 1)
+					
+					// if it's a translation
+					if(value.type == 1 && compareSyncID(value.id))
 					{
-						removeBox(value);
+						// moving a translation box
+						if(value.width > 0)
+						{
+							moveBox(value);
+						}
+						
+						// change the translation
+						if(value.text != "")
+						{
+							textBox(value);
+						}
+						
+						if(value.deleted === 1)
+						{
+							removeBox(value);
+						}
+					}
+					
+					
+					if(value.transproofs instanceof Array)
+					{
+						// recursive is cool
+						processSync(value.transproofs);
 					}
 				});
 				
 			}
+			
+			updateSyncID();
 		}
 		
 		

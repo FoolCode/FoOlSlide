@@ -163,7 +163,9 @@
 	{
 		var modalInfoOutput = jQuery("#modal-for-information");
 		jQuery.post(href, { output: modalInfoOutput.find("#server-information-output").val() }, function(result) {
-			modalInfoOutput.find(".modal-footer").html('<center><input value="' + result.href + '" style="text-align: center" onclick="select(this);" readonly="readonly" /><br/><?php echo _('Note: This paste expires in 1 hour.'); ?></center>');
+			if (result.href != "") {
+				modalInfoOutput.find(".modal-footer").html('<center><input value="' + result.href + '" style="text-align: center" onclick="select(this);" readonly="readonly" /><br/><?php echo _('Note: This paste expires in 1 hour.'); ?></center>');
+			}
 		}, 'json');
 	}
 			

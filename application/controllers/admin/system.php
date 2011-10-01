@@ -251,7 +251,7 @@ class System extends Admin_Controller
 			return TRUE;
 		}
 
-		flash_notice('error', _('There was an error while optimizing the database.'));
+		flash_notice('error', _('An error occurred while optimizing the database.'));
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 		return FALSE;
 	}
@@ -263,7 +263,7 @@ class System extends Admin_Controller
 
 		if (count($logs) == 0)
 		{
-			$this->output->set_output(json_encode(array('error' => _('There is no logs available.'))));
+			$this->output->set_output(json_encode(array('error' => _('There are no logs available.'))));
 		}
 
 		if (is_null($date))
@@ -300,6 +300,7 @@ class System extends Admin_Controller
 		}
 		
 		delete_files($this->config->item('log_path'));
+		flash_notice('success', _('Your FoOlSlide logs have been pruned.'));
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 	}
 
@@ -360,8 +361,7 @@ class System extends Admin_Controller
 	{
 		if (!isAjax())
 		{
-			echo _("Access to this function outside the admin panel is denied.");
-			return false;
+			show_404();
 		}
 
 		$response = '';

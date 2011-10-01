@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
-"POT-Creation-Date: 2011-09-28 01:59+0100\n"
-"PO-Revision-Date: 2011-09-29 17:08+0100\n"
+"POT-Creation-Date: 2011-10-01 20:57+0100\n"
+"PO-Revision-Date: 2011-10-01 21:46+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid "Installation"
 msgstr "Установка"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:40
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:185
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:187
 msgid "Database type"
 msgstr "Тип базы данных"
 
@@ -38,7 +38,7 @@ msgid "The type of database you're going to use. Leave it on MySQL if using a st
 msgstr "Тип базы данных, который будет использован. Оставьте \"MySQL\", если используется стандартный тип установки."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:52
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:186
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:188
 msgid "Database hostname"
 msgstr "Имя сервера базы данных"
 
@@ -48,7 +48,7 @@ msgid "The hostname of the server hosting the database. 99.8% of times is localh
 msgstr "Имя хоста сервера с базой данных. В 99,8% случаях это \"localhost\""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:187
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:189
 msgid "Database name"
 msgstr "Имя базы данных"
 
@@ -57,7 +57,7 @@ msgid "The name of the database"
 msgstr "Имя базы данных"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:79
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:188
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:190
 msgid "Database username"
 msgstr "Имя пользователя базы данных"
 
@@ -66,7 +66,7 @@ msgid "The username of the user with permissions to the database"
 msgstr "Имя пользователя с правами доступа к базе данных"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:92
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:189
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:191
 msgid "Database password"
 msgstr "Пароль базы данных"
 
@@ -75,7 +75,7 @@ msgid "The password of the user with permissions to the database"
 msgstr "Пароль пользователя с правами доступа к базе данных"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:105
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:190
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:192
 msgid "Database prefix"
 msgstr "Префикс базы данных"
 
@@ -84,7 +84,7 @@ msgid "Add a database prefix to avoid collisions, in example if you have other F
 msgstr "Добавить префикс в базе данных, чтобы избежать совпадений, в случае, если уже есть другие FoOlSlides"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:117
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:191
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:193
 msgid "Administrator username"
 msgstr "Имя администратора"
 
@@ -93,7 +93,7 @@ msgid "The username of the administrator's account"
 msgstr "Имя пользователя учетной записи администратора"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:130
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:192
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:194
 msgid "Administrator password"
 msgstr "Пароль администратора"
 
@@ -102,7 +102,7 @@ msgid "The password of the administrator's account"
 msgstr "Пароль учетной записи администратора"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:143
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:193
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:195
 msgid "Administrator email"
 msgstr "Электронная почта администратора"
 
@@ -110,45 +110,49 @@ msgstr "Электронная почта администратора"
 msgid "The email of the administrator's account"
 msgstr "Электронная почта учетной записи администратора"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:225
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:227
 msgid "Connection with database not enstabilished: check the database fields."
 msgstr "Связь с базой данных не установлена: проверьте поля базы данных."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:293
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:295
 msgid "FoOlSlide has installed successfully. Check the preferences and make sure you create a team for your own chapters."
 msgstr "FoOlSlide был успешно установлен. Проверьте настройки и убедитесь, что вы создали команду для своих проектов."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:310
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:312
+msgid "You need at least PHP version 5.2.0 to run FoOlSlide. This means you have a many years old version. It is suggested to upgrade to a more recent version of PHP to avoid security issues with your server in general."
+msgstr "Вам потребуется версия  PHP  5.2.0 для запуска FoOlSlide. Это означает, что вы используете старую версию. Предполагается перейти на более новую версию PHP, чтобы избежать проблем безопасности с сервером."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:319
 #, php-format
 msgid "The file %s was removed. The installation can't continue without that file. You can find it in the FoOlSlide download."
 msgstr "Файл %s был удален. Установка не может быть продолжена без этого файла. Вы можете найти его в директории загрузок FoOlSlide."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:317
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:326
 #, php-format
 msgid "The %s directory needs to be writable. Use this command in your shell if possible: %s or change its permissions recursively to 777 with your own FTP software. You won't be able to install or run FoOlSlide without this."
 msgstr "Каталог %s должен быть доступен для записи. Используйте эту команду в командной оболочке, если это возможно: %s или измените права доступа на 777 с помощью FTP менеджера. Вы не сможете установить или запустить FoOlSlide без этого."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:324
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:333
 #, php-format
 msgid "The %s directory needs to be writable as well. Use this command in your shell if possible: %s or change its permissions recursively to 777 with your own FTP software. You won't be able to install or run FoOlSlide without this."
 msgstr "Каталог %s также должен быть доступен для записи. Используйте эту команду в командной оболочке, если это возможно: %s или изменить права доступа на 777 с помощью FTP менеджера. Вы не сможете установить или запустить FoOlSlide без этого."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:350
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:359
 #, php-format
 msgid "The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s"
 msgstr "Для осуществления автоматического обновления каталог %s должен быть доступен для записи. Используйте эту команду в командной оболочке, если это возможно: %s"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:352
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:361
 #, php-format
 msgid "The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it's www-data or Apache)"
 msgstr "Для осуществления автоматического обновления каталог %s должен быть доступен для записи.<br/>Было невозможно определить пользователя, запустившего PHP. Используйте эту команду в командной оболочке, если это возможно: %s где www-data используется в качестве примера (обычно это www-data или Apache)"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:353
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:362
 #, php-format
 msgid "If you can't do the above, after the installation you will be given a textfile to paste in config.php. More info after submitting."
 msgstr "Если вы не можете проделать вышеописанное, после установки будет выведен текстовый файл для вставки в config.php. Подробнее после отправки."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:360
+#: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:369
 msgid "If you made any changes, just refresh this page to recheck the directory permissions."
 msgstr "Если было что-то изменено, просто обновите страницу, чтобы перепроверить права доступа к каталогам."
 
@@ -424,6 +428,8 @@ msgid "You have removed this user from the moderators group."
 msgstr "Вы удалили этого пользователя из группы модераторов."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:16
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:49
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:78
 msgid "Preferences"
 msgstr "Предпочтения"
 
@@ -822,11 +828,70 @@ msgstr "Импорт"
 msgid "The directory you set does not exist."
 msgstr "Указанный вами каталог не существует."
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/upgrade.php:19
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:19
+msgid "System"
+msgstr "Система"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:36
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:40
+msgid "Information"
+msgstr "Информация"
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:54
+msgid "Path to ImageMagick"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:60
+#, php-format
+msgid "FoOlSlide uses %s via command line to maximize speed. Enter here the location of the \"convert\" application on your server if it %s automatically."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:60
+msgid "This is a library used to dynamically create, edit, compose or convert images."
+msgstr "Это библиотека используется для динамического создания, редактирования, создания или преобразования изображений."
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:60
+msgid "How to find convert"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:60
+msgid "Normally on linux servers you don't need to set this variable. In case it's not found automatically, try /usr/bin. On Windows, you will need to know where did you install ImageMagick."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:60
+msgid "can't be found"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:143
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:146
+msgid "Tools"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:249
+msgid "Your FoOlSlide database has been optimized."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:254
+msgid "An error occurred while optimizing the database."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:266
+msgid "There are no logs available."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:278
+msgid "There is no available log for this date."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:303
+msgid "Your FoOlSlide logs have been pruned."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:310
 msgid "Upgrade FoOlSlide"
 msgstr "Обновить FoOlSlide"
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/upgrade.php:71
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:352
 msgid "Upgrade failed: check file permissions."
 msgstr "Ошибка обновления: проверьте права доступа к файлам."
 
@@ -858,15 +923,15 @@ msgstr "Манга не найдена"
 msgid "Chapter could not be found"
 msgstr "Глава не найдена"
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:194
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:217
 msgid "Today"
 msgstr "Сегодня"
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:197
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:220
 msgid "Tomorrow"
 msgstr "Завтра"
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:200
+#: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:223
 msgid "Yesterday"
 msgstr "Вчера"
 
@@ -879,15 +944,31 @@ msgstr "%sСледите за нами%s в Твиттере"
 msgid "Come chat with us on"
 msgstr "Общайтесь с нами на"
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:20
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:72
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:106
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:22
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:87
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:131
 msgid "Save"
 msgstr "Сохранить"
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:59
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:70
 msgid "Edit"
 msgstr "Изменить"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:608
+msgid "First"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:609
+msgid "Prev"
+msgstr "Предыдущая"
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:615
+msgid "Last"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:616
+msgid "Next"
+msgstr "Следующая"
 
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:52
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:93
@@ -922,11 +1003,16 @@ msgstr "Читалка"
 msgid "Master"
 msgstr "Сервер"
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:135
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:127
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:128
+msgid "New"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:138
 msgid "Ask FoOlRulez & FAQ"
 msgstr "Ask FoOlRulez & FAQ"
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:136
+#: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:139
 msgid "Bug tracker"
 msgstr "Баг трекер"
 
@@ -1019,70 +1105,70 @@ msgstr "Скрыть главу от общего просмотра."
 msgid "Hidden"
 msgstr "Скрытый"
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:333
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:335
 msgid "The series you were adding the chapter to doesn't exist."
 msgstr "Проекта, к которому вы хотите добавить главу, не существует."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:379
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:381
 msgid "You're trying to delete something that doesn't even have a related series'?"
 msgstr "Вы пытаетесь удалить то, что даже не связанно с этим проектом?"
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:425
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:427
 msgid "The chapter you tried to edit doesn't exist."
 msgstr "Глава, которую вы пытаетесь отредактировать, не существует."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:447
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:449
 msgid "The series you were referring to doesn't exist."
 msgstr "Проект, который вы имели ввиду, не существует."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:546
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:545
 msgid "The team you were referring this chapter to doesn't exist."
 msgstr "Команда, которую вы пытаетесь добавить к данной главе, не существует."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:554
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:553
 msgid "You must select at least one team for this chapter"
 msgstr "Вы должны выбрать хотя бы одну команду для этой главы"
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:563
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:562
 msgid "You haven't selected any team in relation to this chapter."
 msgstr "Вы не выбрали ни одной команды для этой главы."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:576
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:575
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:469
 #: /Users/woxxy/github/FoOlSlide/application/models/joint.php:104
 #: /Users/woxxy/github/FoOlSlide/application/models/joint.php:136
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:372
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:413
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:257
 msgid "Check that you have inputted all the required fields."
 msgstr "Убедитесь, что у вас заполнены все необходимые поля."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:581
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:580
 msgid "Failed to save to database for unknown reasons."
 msgstr "Не удалось сохранить в базе данных по неизвестным причинам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:617
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:616
 msgid "Failed to remove the chapter from the database for unknown reasons."
 msgstr "Не удалось удалить главу из базы данных по неизвестным причинам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:638
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:668
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:637
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:667
 msgid "No series related to this chapter."
 msgstr "Нет проекта, связанного с этой главой."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:647
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:646
 msgid "Failed to create the chapter directory. Please, check file permissions."
 msgstr "Не удалось создать каталог для главы. Пожалуйста, проверьте права доступа к файлам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:679
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:678
 msgid "Failed to remove the files inside the chapter directory. Please, check file permissions."
 msgstr "Не удалось удалить файлы внутри каталога главы. Пожалуйста, проверьте права доступа к файлам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:688
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:687
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:278
 msgid "Failed to remove the chapter directory. Please, check file permissions."
 msgstr "Не удалось удалить каталог главы. Пожалуйста, проверьте права доступа к файлам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:839
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:838
 msgid "Vol."
 msgstr "Том "
 
@@ -1182,41 +1268,53 @@ msgstr "Не удается удалить совместную команду."
 msgid "Couldn't remove the team from all the joints."
 msgstr "Не удается удалить команду из всех совместных проектов."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:320
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:354
 msgid "There isn't a page in the database related to this ID."
 msgstr "Не существует страниц в базе данных, связанных с этим ID."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:328
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:364
 msgid "There was no selected chapter."
 msgstr "Главы не выбраны."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:336
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:373
 msgid "The selected chapter doesn't exist."
 msgstr "Выбранные главы не существуют."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:376
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:418
 msgid "Failed to write to database for unknown reasons."
 msgstr "Ошибка записи в базу данных по неизвестным причинам."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:396
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:442
 msgid "Failed to remove the page from the database."
 msgstr "Не удалось удалить страницу из базы данных."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:420
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:469
 msgid "Failed to add the page's file. Please, check file permissions."
 msgstr "Не удалось добавить файлы. Пожалуйста, проверьте права доступа."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:439
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:490
 msgid "Failed to create the thumbnail of the page."
 msgstr "Не удалось создать эскиз страницы."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:466
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:520
 msgid "Failed to remove the page's file. Please, check file permissions."
 msgstr "Не удалось удалить файлы. Пожалуйста, проверьте права доступа."
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:473
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:528
 msgid "Failed to remove the page's thumbnail. Please, check file permissions."
 msgstr "Не удалось удалить эскиз страницы. Пожалуйста, проверьте права доступа к файлам."
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:553
+msgid "Failed to remove the thumbnail while rebuilding it. Please, check file permissions."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:575
+msgid "Failed to recreate the thumbnail of the page."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:585
+msgid "Failed to save the image compression method in the database."
+msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:173
 msgid "Failed to find the selected team's ID."
@@ -1285,6 +1383,7 @@ msgstr "Учетная запись"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/change_email_form.php:34
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/change_password_form.php:44
+#: /Users/woxxy/github/FoOlSlide/application/views/account/auth/unregister_form.php:21
 msgid "Back to profile"
 msgstr "Вернуться к профилю"
 
@@ -1355,10 +1454,12 @@ msgid "You're leaving the team leadership:"
 msgstr "Вы покинули пост руководителя команды:"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_leadership.php:7
+#: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_team.php:7
 msgid "Leave"
 msgstr "Покинуть"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_leadership.php:11
+#: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_team.php:11
 msgid "Back to your teams"
 msgstr "Вернуться к вашим командам"
 
@@ -1448,23 +1549,23 @@ msgid "You have pending applications for the following teams:"
 msgstr "Вы подали заявку на вступление в следующие команды:"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:4
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:103
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:104
 msgid "Control Panel"
 msgstr "Панель управления"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:114
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:115
 msgid "Your Profile"
 msgstr "Ваш профиль"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:184
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:185
 msgid "New upgrade available:"
 msgstr "Доступны новые обновления:"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:199
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:200
 msgid "No"
 msgstr "Нет"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:200
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:201
 msgid "Yes"
 msgstr "Да"
 
@@ -1563,6 +1664,7 @@ msgid "Member Profile"
 msgstr "Профиль пользователя"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/members/users.php:11
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:17
 msgid "To search, write and hit enter"
 msgstr "Для поиска, введите ключевое слово и нажмите Enter"
 
@@ -1586,65 +1688,77 @@ msgstr "Информация о главе"
 msgid "Pages"
 msgstr "Страницы"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:74
-msgid "Use flash upload"
-msgstr "Использовать флэш загрузчик"
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:36
+msgid "Add files..."
+msgstr "Добавить..."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:39
+msgid "Start upload"
+msgstr "Начать загрузку"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:40
+msgid "Cancel upload"
+msgstr "Отменить загрузку"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:41
+msgid "Delete files"
+msgstr "Удалить файлы"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import.php:3
 msgid "Here you can select a directory and import chapters from it. This directory must contain ZIP, RAR or directories with each representing one single chapter. After you select a valid directory, the interface will give you the ability to fine-tune the import of each chapter. Notice that every directory, ZIP or RAR will be scanned for images and these will all be put in the same folder. If there are two files with the same name in the same ZIP, RAR or directory, the second found will overwrite the first."
 msgstr "Здесь вы можете выбрать папку и импортировать главы из нее. Папка должна содержать архивы в формате ZIP/RAR либо папки, каждая из которых содержит отдельную главу. После выбора нужной вам папки вы сможете настроить импорт каждой главы. Обратите внимание на то, что каждая папка или архив формата ZIP/RAR будут просканированы на наличие изображений, которые затем будут помещены в одну папку. Если в одной папке/архиве будут обнаружены 2 изображения с одинаковыми именами, то второе изображение заменит первое."
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:9
-msgid "Chapter filename"
+msgid "Chapter Filename"
 msgstr "Имя файла главы"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:214
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:215
 msgid "Manual Setup"
 msgstr "Настройка вручную"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:215
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:216
 msgid "Try"
 msgstr "Попытка"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:216
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:217
 msgid "Attempts to detect the volume, chapter, and sub-chapter numbers for the chapters listed below. (For Example: \"Chapter_123\" would be detected by using \"Chapter_{ccc}\" in the field.)"
 msgstr "Ручная настройка: пишите {cc} в месте, где нужно указать главу. {ss} для суб-главы. {vv} для тома. Количество цифр устанавливается количеством букв. Например, \\\"Chapter_123\\\" соответствует \\\"Chapter_{ccc}\\\"."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:220
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:221
 msgid "Mass Set Volumes"
 msgstr "Выбор нескольких томов"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:221
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:226
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:232
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:222
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:227
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:234
 msgid "Set"
 msgstr "Выбор"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:222
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:223
 msgid "Sets the volume for all of the chapters listed below."
 msgstr "Выберите том для всех приведенных ниже глав."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:225
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:226
 msgid "Set Initial Chapter Number"
 msgstr "Выберите начальный номер главы"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:227
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:228
 msgid "Sets the initial chapter and auto-increments for additional chapters listed below."
 msgstr "Выберите начальную главу и автошаг для приведенных ниже дополнительных глав."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:230
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:231
 msgid "Mass Set Teams"
 msgstr "Выбор нескольких команд"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:235
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:238
 msgid "Sets the teams for all the chapters listed below."
 msgstr "Выберите команды для всех приведенных ниже глав."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:245
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:248
 msgid "Adding Chapters to"
 msgstr "Добавление глав, в"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:246
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/import_compressed_list.php:249
 msgid "Submit All"
 msgstr "Отметить все"
 
@@ -1653,12 +1767,10 @@ msgid "Add Series"
 msgstr "Добавить проект"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:12
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/serie.php:9
 msgid "Series Information"
 msgstr "Информация о проекте"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:31
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/serie.php:62
 msgid "Quick tools"
 msgstr "Быстрые инструменты"
 
@@ -1667,24 +1779,12 @@ msgid "Do you really want to delete this serie and its chapters?"
 msgstr "Вы действительно хотите удалить этот проект и его главы?"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:33
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/serie.php:63
 msgid "Delete"
 msgstr "Удалить"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:34
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/serie.php:69
 msgid "Read"
 msgstr "Читать"
-
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:48
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:50
-msgid "Prev"
-msgstr "Предыдущая"
-
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:63
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:65
-msgid "Next"
-msgstr "Следующая"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/serie.php:3
 msgid "Delete Series"
@@ -1702,74 +1802,318 @@ msgstr "Импорт из папки"
 msgid "Chapters"
 msgstr "Главы"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:11
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:7
+msgid "Output Server Information"
+msgstr "Вывести информацию о сервере"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:15
+msgid "Server Information"
+msgstr "Информация о сервере"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:19
+msgid "Web Server Software"
+msgstr "ПО веб-сервера"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:21
+msgid "The web server that is currently running to serve your content."
+msgstr "Веб-сервер, который в настоящее время работает для хранения вашего контента."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:25
+msgid "PHP Version"
+msgstr "Версия PHP "
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:27
+msgid "The version of the currently running PHP parser."
+msgstr "Версия запущенного PHP парсера."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:34
+msgid "Software Information"
+msgstr "Информация о ПО"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:38
+msgid "FoOlSlide Version"
+msgstr "Версия FoOlSlide"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:40
+msgid "The version of FoOlSlide that you are currently running on your server."
+msgstr "Версия FoOlSlide, которая установлена в данный момент на вашем сервере."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:44
+msgid "Environment"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:46
+msgid "The environment FoOlSlide is current running as on the server."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:53
+msgid "PHP Configuration"
+msgstr "Конфигурация PHP"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:57
+msgid "Memory Limit"
+msgstr "Лимит памяти"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:59
+msgid "This is the maximum amount of memory in bytes that a script is allowed to allocate."
+msgstr "Это максимальный объем памяти в байтах, который разрешается использовать скрипту."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:59
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:65
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:71
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:77
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:83
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:89
+msgid "Variable"
+msgstr "Переменная"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:63
+msgid "Max Execution Time"
+msgstr "Макс Время запуска"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:65
+msgid "This is the maximum time in seconds a script is allowed to run before it is terminated by the parser."
+msgstr "Это максимальное время в секундах,  в течении которого скрипт может выполняться до его завершения парсером."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:69
+msgid "File Uploads"
+msgstr "Загрузка файлов"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:70
+msgid "Enabled"
+msgstr "Включено"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:70
+msgid "Disabled"
+msgstr "Отключено"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:71
+msgid "This states whether or not to allow HTTP file uploads."
+msgstr "Включено  ли  закачивание файлов через  HTTP."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:75
+msgid "Max POST Size"
+msgstr "Max POST Size"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:77
+msgid "This is max size of post data allowed."
+msgstr "Это максимально допустимый размер отправленных данных ."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:81
+msgid "Max Upload Size"
+msgstr "Max Upload Size"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:83
+msgid "This is the maximum size allowed for an uploaded file."
+msgstr "Это максимально допустимый размер загружаемого файла."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:87
+msgid "Max File Uploads"
+msgstr "Max File Uploads"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:89
+msgid "This is the maximum number of files allowed to be uploaded simultaneously."
+msgstr "Это максимальное количество файлов разрешенных к загрузке одновременно."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:96
+msgid "Extensions"
+msgstr "Расширения"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:101
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:107
+msgid "Installed"
+msgstr "Установлено"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:101
+msgid "Missing"
+msgstr "Отсутствует"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:102
+msgid "This is a library used to dynamically create images and thumbnails."
+msgstr "Это библиотека используется для динамического создания изображений и миниатюр."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:107
+msgid "Not Installed"
+msgstr "Не установлен"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:108
+msgid "Optional"
+msgstr "Необязательно"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:127
+msgid "If you are asked to provide an output of your server information, please click the \"Output Server Information\" button at the top right and provide it to us via <a href=\"http://pastebin.com\">Pastebin</a> or some similar service."
+msgstr "Если вас попросят предоставить информацию о  вашем сервере, пожалуйста, нажмите кнопку  \"Вывести информацию о сервере\" в верхнем правом углу и предоставьте эти данные нам с помощью  <a href=\"http://pastebin.com\">Pastebin</a> или через другие подобные сервисы."
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:134
+msgid "System Information"
+msgstr "Информация о системе"
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:154
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:150
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:185
+msgid "Pastebin It!"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:166
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:193
+msgid "Note: This paste expires in 1 hour."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:7
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:9
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:14
+msgid "Optimize Thumbnails"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:8
+msgid "Important"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:8
+#, php-format
+msgid "FoOlSlide has detected that your server is able to use a better compression algorithm for thumbnail generation. This optimization will create small thumbnails and reduce up to 10% bandwidth usage. However, regardless of this action, all thumbnails will be generated with this new algorithmn."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:18
+msgid "Pictures left to be processed:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:22
+msgid "Optimize"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:23
+msgid "Stop Optimization"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:57
+msgid "Done."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:93
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:95
+msgid "Download Database Backup"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:94
+msgid "This will allow you to routinely download a copy of your FoOlSlide database. Furthermore, routine backups of the FoOlSlide directory is also required in case of a complete server failure for this file to be useful."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:101
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:106
+msgid "Optimize Database"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:102
+msgid "Performing database optimization from time to time will cause your FoOlSlide installation to be slightly faster."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:108
+msgid "Are you sure you want to optimize your FoOlSlide database?"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:118
+msgid "FoOlSlide Logs"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:119
+msgid "Daily logs are generated by FoOlSlide and contains information that will help developers debug your problems. If any actual errors are found, please report any serious errors to the FoOlSlide developers. However, do not report any 404 and missing cookie notices."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:120
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:137
+msgid "View Logs"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:124
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:128
+msgid "Prune Logs"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:126
+msgid "Are you sure you want to prune all FoOlSlide logs?"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:129
+msgid "FoOlSlide logs can often use a lot of space. This function will allow you to remove all logs to save space."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:129
+msgid "Current Size"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:12
 msgid "Upgrade FoOlSlide Automatically"
 msgstr "Обновить FoOlSlide автоматически"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:13
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:14
 msgid "Do you really want to upgrade to the latest version?"
 msgstr "Действительно ли вы хотите обновить до последней версии?"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:15
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:16
 msgid "Automatic Upgrade"
 msgstr "Автоматическое обновление"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:16
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:17
 msgid "This will upgrade your FoOlSlide installation to the latest version."
 msgstr "Это обновит вашу установку FoOlSlide до последней версии."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:21
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:22
 msgid "Download Latest Version"
 msgstr "Скачать последнюю версию"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:24
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:36
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:25
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:39
 msgid "Download"
 msgstr "Скачать"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:25
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:26
 msgid "This allows you to download the latest FoOlSlide package to re-install or update your installation manually."
 msgstr "Это позволит вам скачать последний пакет FoOlSlide для переустановки или обновления вручную."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:32
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:35
 msgid "Repair FoOlSlide"
 msgstr "Восстановить FoOlSlide"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:34
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:37
 msgid "Do you really want to re-install FoOlSlide?"
 msgstr "Вы действительно хотите переустановить FoOlSlide?"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:37
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:40
 msgid "This will re-install FoOlslide automatically and repair any broken files during the process."
 msgstr "Это автоматически переустановит FoOlslide и восстановит поврежденные файлы во время процесса."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:47
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:50
 msgid "Current Version"
 msgstr "Текущая версия"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:48
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:51
 msgid "Latest Version Available"
 msgstr "Последняя доступная версия "
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:48
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:51
 msgid "You have the latest version of FoOlSlide."
 msgstr "У вас есть последняя версия FoOlSlide."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:53
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:56
 #, php-format
 msgid "Note: If you're fluent in another language, please help contribute by translating our software into your language with %s. All localization updates of FoOlSlide is normally available within 48 hours."
 msgstr "Заметка: Если вы свободно владеете другим языком, пожалуйста, помогите в переводе нашего программного обеспечения на ваш язык с %s. Обновления всех локализаций FoOlSlide обычно доступны в течение 48 часов."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:54
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:56
+msgid "A web based portal for translations."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:57
 #, php-format
 msgid "This chart provides information regarding the percentage of localized strings completed in another language. If you're using FoOlSlide relying on language localization, please check our <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">Transifex translation project</a> for this software and ensure that it is above 90% before proceeding with an upgrade."
 msgstr "Данный график предоставляет информацию о процентном соотношении локализованных строк, переведенных на другой язык. Если вы пользуетесь FoOlSlide, опираясь на язык локализации, пожалуйста проверьте <a href=\"https://www.transifex.net/projects/p/foolslide/resource/defaultpot/\">Transifex translation project</a> на данное программное обеспечение и перед обновлением убедитесь, что перевод составляет более 90%."
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:64
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:67
 msgid "Changelog"
 msgstr "Изменения"
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/upgrade/index.php:68
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:71
 msgid "Version"
 msgstr "Версия"
 

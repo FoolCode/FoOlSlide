@@ -201,5 +201,48 @@ class System extends Admin_Controller
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/upgrade'))));
 	}
 
+	function pastebin()
+	{
+		if (!isAjax())
+		{
+			echo _("Access to this function outside the admin panel is denied.");
+			return false;
+		}
 
+		$response = '';
+		
+		if ($post = $this->input->post()) {
+			$api_dev_key = '04798e47893bd006f2061e736342a83b';
+			$api_paste_private = '1';
+			$api_paste_expire_date = '1H';
+			$api_paste_format = 'text';
+			$api_user_key = '';
+			
+			$this->load->library('curl');
+			
+			$this->curl->create('http://pastebin.com/api/api_post.php');
+			
+			$this->curl->options(array(
+				'POST' => true,
+				'RETURNTRANSFER' => 1,
+				'VERBOSE' => 1,
+				'NOBODY' => 0
+			));
+			
+			$this->curl->post(array(
+				'api_option' => 'paste',
+				'api_user_key' => $api_user_key,
+				'api_paste_private' => $api_paste_private,
+				'api_paste_name' => 'FoOlSlide System Information Output',
+				'api_paste_expire_date' => $api_paste_expire_date,
+				'api_paste_format' => $api_paste_format,
+				'api_dev_key' => $api_dev_key,
+				'api_paste_code' => $post['output'],
+			));
+
+			$response = $this->curl->execute();
+		}
+		
+		$this->output->set_output(json_encode(array('href' => $response)));
+	}
 }

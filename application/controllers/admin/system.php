@@ -264,6 +264,7 @@ class System extends Admin_Controller
 		if (count($logs) == 0)
 		{
 			$this->output->set_output(json_encode(array('error' => _('There are no logs available.'))));
+			return FALSE;
 		}
 
 		if (is_null($date))

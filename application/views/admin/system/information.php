@@ -151,7 +151,7 @@
 	<div class="modal-footer">
 	<?php
 		if (function_exists('curl_init')) {
-			echo '<center><a class="btn" style="float: none" href="' . site_url("admin/system/pastebin") . '" onclick="return pasteSystemInfo();">' . _('Pastebin It!') . '</a></center>';
+			echo '<center><a class="btn" style="float: none" href="#" onclick="return pasteSystemInfo();">' . _('Pastebin It!') . '</a></center>';
 		}
 	?>
 	</div>

@@ -24,20 +24,20 @@
 				</div>
 
 				<script type="text/javascript">
-									
-									
+											
+											
 					var stop = false;
-									
+											
 					var stopOptimizeThumbnails = function() {
 						stop = true;
 					}
-									
+											
 					var optimizeThumbnails = function(manual){
 						if(manual === true)
 						{
 							stop = false;
 						}
-										
+												
 						if(!stop)
 						{
 							jQuery('#modal-loading-optimize-thumbnails').show();
@@ -51,14 +51,14 @@
 									});
 									return false;
 								}
-												
+														
 								if(data.status == "done")
 								{
 									jQuery('#modal-optimize-thumbnails-count').html('<?php echo _('Done.') ?>');
 									jQuery('#modal-loading-optimize-thumbnails').hide();
 									return false;
 								}
-												
+														
 								var activeCount = jQuery('#modal-optimize-thumbnails-current-count');
 								activeCount.text((parseInt(activeCount.html()) < 10)?0:parseInt(activeCount.html()) - 10);
 								optimizeThumbnails();
@@ -69,7 +69,7 @@
 							jQuery('#modal-loading-optimize-thumbnails').hide();
 						}
 					}
-									
+											
 					jQuery(document).ready(function(){
 						jQuery('#modal-for-thumbnail-optimization').bind('show', function () {
 							jQuery.post('<?php echo site_url('admin/system/tools_optimize_thumbnails') ?>', function(data){
@@ -78,7 +78,7 @@
 								jQuery('#modal-optimize-thumbnails-current-count').text(data.count);
 							}, 'json');
 						});
-										
+												
 						jQuery('#modal-for-thumbnail-optimization').bind('hide', function () {
 							stop = true;
 						});
@@ -100,7 +100,16 @@
 		<div style="margin:0 10px 15px 0;">
 			<h3><?php echo _('Optimize database') ?></h3>
 			<p><?php echo _('Optimizing your database from time to time will make your FoOlSlide sligtly faster.') ?></p>
-			<span><a href="<?php echo site_url('admin/system/tools_database_backup') ?>" class="btn" data-keyboard="true" data-backdrop="true"><?php echo _('Optimize database'); ?></a></span>
+			<span style=""><?php
+	$CI = & get_instance();
+	$CI->buttoner[] = array(
+		'text' => _('Optimize database'),
+		'href' => site_url('admin/system/tools_database_optimize'),
+		'plug' => _('Do you really want to optimize the database?')
+	);
+	echo buttoner();
+	$CI->buttoner = array();
+		?></span>
 		</div>
 	<?php endif; ?>
 
@@ -127,7 +136,7 @@
 				<?php
 				if (function_exists('curl_init'))
 				{
-					echo '<center><a class="btn" style="float: none" href="' . site_url("admin/system/pastebin") . '" onclick="return pastebinLog()">' . _('Pastebin It!') . '</a></center>';
+					echo '<center><a class="btn" style="float: none" href="#" onclick="return pastebinLog()">' . _('Pastebin It!') . '</a></center>';
 				}
 				?>
 			</div>
@@ -162,6 +171,7 @@
 						
 						jQuery('#modal-loading-log-display').hide();
 						jQuery('#log-display-output').val(data.log);
+						jQuery("#modal-for-log-display").find(".modal-footer").html('<center><a class="btn" style="float: none" href="#" onclick="return pastebinLog()"><?php echo _('Pastebin It!') ?></a></center>');
 					}, 'json');
 				}
 				
@@ -177,5 +187,20 @@
 			</script>
 		</div>
 
+	</div>
+
+	<div style="margin:0 10px 15px 0;">
+		<h3><?php echo _('Prune the logs') ?></h3>
+		<p><?php echo _('FoOlSlide logs can take up a lot of space. This allows you to delete them at once.') ?></p>
+		<p><?php echo _('Space currently used by logs:') . ' ' . $logs_space ?>kb</p>
+		<span style=""><?php
+				$CI = & get_instance();
+				$CI->buttoner[] = array(
+					'text' => _('Prune the logs'),
+					'href' => site_url('admin/system/tools_logs_prune'),
+					'plug' => _('Do you really want to prune the logs?')
+				);
+				echo buttoner();
+				?></span>
 	</div>
 </div>

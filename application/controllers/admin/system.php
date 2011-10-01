@@ -158,6 +158,14 @@ class System extends Admin_Controller
 
 		$data["database_backup"] = strtolower($this->db->dbdriver) == "mysql";
 		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli";
+		$logs = get_dir_file_info($this->config->item('log_path'));
+		$data["logs_space"] = 0;
+		foreach ($logs as $log)
+		{
+			$data["logs_space"] += $log["size"];
+		}
+
+		$data["logs_space"] = round($data["logs_space"] / 1024);
 
 		$this->viewdata["main_content_view"] = $this->load->view("admin/system/tools", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
@@ -209,7 +217,7 @@ class System extends Admin_Controller
 
 	function tools_database_backup()
 	{
-		if (strtolower($this->db->dbdriver) == "mysql")
+		if (strtolower($this->db->dbdriver) != "mysql")
 		{
 			show_404();
 		}
@@ -223,7 +231,12 @@ class System extends Admin_Controller
 
 	function tools_database_optimize()
 	{
-		if (strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli")
+		if (!isAjax())
+		{
+			show_404();
+		}
+		
+		if (strtolower($this->db->dbdriver) != "mysql" && strtolower($this->db->dbdriver) != "mysqli")
 		{
 			show_404();
 		}
@@ -234,19 +247,21 @@ class System extends Admin_Controller
 		if ($result !== FALSE)
 		{
 			flash_notice('success', _('Your FoOlSlide database has been optimized.'));
-			redirect('admin/system/tools');
+			$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
+			return TRUE;
 		}
 
 		flash_notice('error', _('There was an error while optimizing the database.'));
-		redirect('admin/system/tools');
+		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
+		return FALSE;
 	}
 
 
 	function tools_logs_get($date = NULL)
 	{
 		$logs = get_dir_file_info($this->config->item('log_path'));
-		
-		if(count($logs) == 0)
+
+		if (count($logs) == 0)
 		{
 			$this->output->set_output(json_encode(array('error' => _('There is no logs available.'))));
 		}
@@ -274,6 +289,18 @@ class System extends Admin_Controller
 		}
 
 		$this->output->set_output(json_encode(array('dates' => $dates, 'log' => $selected_log)));
+	}
+
+
+	function tools_logs_prune()
+	{
+		if (!isAjax())
+		{
+			show_404();
+		}
+		
+		delete_files($this->config->item('log_path'));
+		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 	}
 
 

@@ -3,7 +3,8 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Page extends DataMapper {
+class Page extends DataMapper
+{
 
 	var $has_one = array('chapter');
 	var $has_many = array();
@@ -74,16 +75,21 @@ class Page extends DataMapper {
 		)
 	);
 
-	function __construct($id = NULL) {
+	function __construct($id = NULL)
+	{
 		parent::__construct(NULL);
-		if (!is_null($id)) {
+		if (!is_null($id))
+		{
 			$this->where('id', $id)->get();
 		}
 	}
 
-	function post_model_init($from_cache = FALSE) {
+
+	function post_model_init($from_cache = FALSE)
+	{
 		
 	}
+
 
 	/**
 	 * Overwrite of the get() function to add filters to the search.
@@ -94,7 +100,8 @@ class Page extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get($limit = NULL, $offset = NULL) {
+	public function get($limit = NULL, $offset = NULL)
+	{
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
@@ -105,6 +112,7 @@ class Page extends DataMapper {
 		return parent::get($limit, $offset);
 	}
 
+
 	/**
 	 * Overwrite of the get_iterated() function to add filters to the search.
 	 * Refer to DataMapper ORM for get_iterated() function details.
@@ -114,7 +122,8 @@ class Page extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get_iterated($limit = NULL, $offset = NULL) {
+	public function get_iterated($limit = NULL, $offset = NULL)
+	{
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
@@ -129,6 +138,7 @@ class Page extends DataMapper {
 		return parent::get_iterated($limit, $offset);
 	}
 
+
 	/**
 	 * Comodity get() function that fetches extra data for the chapter selected.
 	 * It doesn't get the pages. For pages, see: $this->get_pages()
@@ -138,7 +148,8 @@ class Page extends DataMapper {
 	 * @param	integer|NULL $offset Offset the results when limiting.
 	 * @return	DataMapper Returns self for method chaining.
 	 */
-	public function get_bulk($limit = NULL, $offset = NULL) {
+	public function get_bulk($limit = NULL, $offset = NULL)
+	{
 		// Call the get()
 		$result = $this->get($limit, $offset);
 		// Return instantly on false.
@@ -146,7 +157,8 @@ class Page extends DataMapper {
 			return $result;
 
 		// For each item we fetched, add the data, beside the pages
-		foreach ($this->all as $item) {
+		foreach ($this->all as $item)
+		{
 			$item->comic = new Comic($this->comic_id);
 			$teams = new Team();
 			$item->teams = $teams->get_teams($this->team_id, $this->joint_id);
@@ -155,6 +167,7 @@ class Page extends DataMapper {
 		return $result;
 	}
 
+
 	/**
 	 * Sets the $this->chapter and $this->chapter->comic variables if it hasn't 
 	 * been done before.
@@ -162,15 +175,19 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	boolean True on success, false on failure.
 	 */
-	public function get_chapter() {
+	public function get_chapter()
+	{
 		// Check if the variable is not yet set, in order to save a databse read.
-		if (!isset($this->chapter)) {
+		if (!isset($this->chapter))
+		{
 			$this->chapter = new Chapter($this->chapter_id);
-			if($this->chapter->result_count() < 1) {
+			if ($this->chapter->result_count() < 1)
+			{
 				log_message('error', 'get_chapter: chapter not found');
 				return FALSE;
 			}
-			if (!$this->chapter->get_comic()) {
+			if (!$this->chapter->get_comic())
+			{
 				log_message('error', 'get_chapter: comic not found');
 				return FALSE;
 			}
@@ -179,6 +196,7 @@ class Page extends DataMapper {
 		// All good, return true.
 		return TRUE;
 	}
+
 
 	/**
 	 * Function to create a new page from a $filedata array. It deals with
@@ -195,10 +213,12 @@ class Page extends DataMapper {
 	 * @param	string|$description NOT USED
 	 * @return	boolean true on success, false on failure.
 	 */
-	public function add_page($path, $filename, $chapter_id) {
+	public function add_page($path, $filename, $chapter_id)
+	{
 
 		// Check if that file is actually an image
-		if (!$imagedata = @getimagesize($path)) {
+		if (!$imagedata = @getimagesize($path))
+		{
 			log_message('error', 'add_page: uploaded file doesn\'t seem to be an image');
 			return false;
 		}
@@ -207,14 +227,16 @@ class Page extends DataMapper {
 		$this->chapter_id = $chapter_id;
 
 		// Load the chapter and comic as soon as possible.
-		if (!$this->get_chapter()) {
+		if (!$this->get_chapter())
+		{
 			log_message('error', 'add_page: couldn\'t find related chapter');
 			return false;
 		}
 
 		// Throw the image to the folder with this function
 		// While we aren't looking, this also creates the thumbnails
-		if (!$this->add_page_file($path, $filename)) {
+		if (!$this->add_page_file($path, $filename))
+		{
 			log_message('error', 'add_page: failed creating file');
 			return false;
 		}
@@ -232,13 +254,14 @@ class Page extends DataMapper {
 		// This makes so everything gets overwritten with no error
 		$page = new Page();
 		$page->where('chapter_id', $this->chapter_id)->where('filename', $filename)->get();
-		if ($page->result_count() > 0) {
+		if ($page->result_count() > 0)
+		{
 			$this->id = $page->id;
 		}
 
 		// Prepare the variables
 		$this->filename = $filename;
-		$this->description = (find_imagick())?'im':'';
+		$this->description = (find_imagick()) ? 'im' : '';
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
@@ -254,13 +277,15 @@ class Page extends DataMapper {
 			$this->grayscale = 1;
 		else if ($is_bw == "rgb")
 			$this->grayscale = 0;
-		else {
+		else
+		{
 			log_message('error', 'add_page: error while determining if black and white or RGB');
 			return false;
 		}
 
 		// Finally, save everything to database, and, in case of failure, remove the image files
-		if (!$this->update_page_db()) {
+		if (!$this->update_page_db())
+		{
 			log_message('error', 'add_page: failed writing to database');
 			$this->remove_page_file();
 			return false;
@@ -270,6 +295,7 @@ class Page extends DataMapper {
 		return true;
 	}
 
+
 	/**
 	 * Removes the page from database and from the direcotry
 	 * There's no going back from this!
@@ -277,18 +303,21 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	object basically chapter with comic inside
 	 */
-	public function remove_page() {
+	public function remove_page()
+	{
 		// Get chapter and comic to be sure they're set
 		$this->get_chapter();
 
 		// Remove the files
-		if (!$this->remove_page_file()) {
+		if (!$this->remove_page_file())
+		{
 			log_message('error', 'remove_page: failed to delete dir');
 			return false;
 		}
 
 		// Remove from database
-		if (!$this->remove_page_db()) {
+		if (!$this->remove_page_db())
+		{
 			log_message('error', 'remove_page: failed to delete database entry');
 			return false;
 		}
@@ -296,6 +325,7 @@ class Page extends DataMapper {
 		// Return both comic and chapter for comfy redirects
 		return $this->chapter;
 	}
+
 
 	/**
 	 * Handles both creating of new pages in the database and editing old ones.
@@ -312,20 +342,25 @@ class Page extends DataMapper {
 	 * @param	array $data contains the minimal data
 	 * @return	boolean true on success, false on failure
 	 */
-	public function update_page_db($data = array()) {
+	public function update_page_db($data = array())
+	{
 		// Check if we're updating or creating a new entry by looking at $data["id"].
 		// False is returned if the ID was not found.
-		if (isset($data["id"])) {
+		if (isset($data["id"]))
+		{
 			$this->where("id", $data["id"])->get();
-			if ($chapter->result_count() == 0) {
+			if ($chapter->result_count() == 0)
+			{
 				set_notice('error', _('There isn\'t a page in the database related to this ID.'));
 				log_message('error', 'update_page_db: failed to find requested id');
 				return false;
 			}
 		}
-		else {
+		else
+		{
 			// let's set the creator name if it's a new entry
-			if (!isset($this->chapter_id)) {
+			if (!isset($this->chapter_id))
+			{
 				set_notice('error', _('There was no selected chapter.'));
 				log_message('error', 'update_page_db: chapter_id was not set');
 				return false;
@@ -333,7 +368,8 @@ class Page extends DataMapper {
 
 			// let's also check that the related comic is defined, and exists
 			$chapter = new Chapter($this->chapter_id);
-			if ($chapter->result_count() == 0) {
+			if ($chapter->result_count() == 0)
+			{
 				set_notice('error', _('The selected chapter doesn\'t exist.'));
 				log_message('error', 'update_page_db: chapter_id does not exist in comic database');
 				return false;
@@ -363,28 +399,34 @@ class Page extends DataMapper {
 
 
 		// Loop over the array and assign values to the variables.
-		foreach ($data as $key => $value) {
+		foreach ($data as $key => $value)
+		{
 			$this->$key = $value;
 		}
 
 		// let's save and give some error check. Push false if fail, true if good.
 		$success = $this->save();
-		if (!$success) {
-			if (!$this->valid) {
+		if (!$success)
+		{
+			if (!$this->valid)
+			{
 				set_notice('error', _('Check that you have inputted all the required fields.'));
 				log_message('error', 'update_page_db: failed validation');
 			}
-			else {
+			else
+			{
 				set_notice('error', _('Failed to write to database for unknown reasons.'));
 				log_message('error', 'update_page_db: failed to save');
 			}
 			return false;
 		}
-		else {
+		else
+		{
 			// Good job!
 			return true;
 		}
 	}
+
 
 	/**
 	 * Removes the page from the database (not the files).
@@ -392,15 +434,18 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	true on success, false on failure
 	 */
-	public function remove_page_db() {
+	public function remove_page_db()
+	{
 		// All we have to do is deleting
-		if (!$this->delete()) {
+		if (!$this->delete())
+		{
 			set_notice('error', _('Failed to remove the page from the database.'));
 			log_message('error', 'remove_page_db: failed remove page entry');
 			return false;
 		}
 		return true;
 	}
+
 
 	/**
 	 * Copies the image file (usually uploaded or in the cache) to the directory and
@@ -412,13 +457,15 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function add_page_file($path, $filename) {
+	public function add_page_file($path, $filename)
+	{
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
 
 		// Get the directory and copy the image in the cache to the directory
 		$dir = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/";
-		if (!copy($path, $dir . $filename)) {
+		if (!copy($path, $dir . $filename))
+		{
 			set_notice('error', _('Failed to add the page\'s file. Please, check file permissions.'));
 			log_message('error', 'add_page_file: failed to create/copy the image');
 			return false;
@@ -427,8 +474,8 @@ class Page extends DataMapper {
 		// Prepare the image library to create the thumbnail
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
-		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
-		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
+		$img_config['image_library'] = (find_imagick()) ? 'ImageMagick' : 'GD2'; // Use GD2 as fallback
+		$img_config['library_path'] = (find_imagick()) ? (get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin') : ''; // If GD2, use none
 		$img_config['source_image'] = $path;
 		$img_config["new_image"] = $dir . "thumb_" . $filename;
 		$img_config['width'] = 250;
@@ -438,7 +485,8 @@ class Page extends DataMapper {
 		$CI->image_lib->initialize($img_config);
 
 		// Resize to create the thumbnail
-		if (!$CI->image_lib->resize()) {
+		if (!$CI->image_lib->resize())
+		{
 			set_notice('error', _('Failed to create the thumbnail of the page.'));
 			log_message('error', 'add_page_file: failed to create thumbnail');
 			return false;
@@ -451,13 +499,15 @@ class Page extends DataMapper {
 		return true;
 	}
 
+
 	/**
 	 * Removes the image file and the thumbnail.
 	 *
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function remove_page_file() {
+	public function remove_page_file()
+	{
 		// Make sure chapter and comic are set
 		$this->get_chapter();
 
@@ -465,14 +515,16 @@ class Page extends DataMapper {
 		$dir = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/";
 
 		// Remove the image
-		if (!unlink($dir . $this->filename)) {
+		if (!unlink($dir . $this->filename))
+		{
 			set_notice('error', _('Failed to remove the page\'s file. Please, check file permissions.'));
 			log_message('error', 'remove_page_file: failed to delete image');
 			return false;
 		}
 
 		// Remove the thumbnail
-		if (!unlink($dir . "thumb_" . $this->filename)) {
+		if (!unlink($dir . "thumb_" . $this->filename))
+		{
 			set_notice('error', _('Failed to remove the page\'s thumbnail. Please, check file permissions.'));
 			log_message('error', 'remove_page_file: failed to delete thumbnail');
 			return false;
@@ -481,33 +533,34 @@ class Page extends DataMapper {
 		// Good
 		return true;
 	}
-	
-	
-	public function rebuild_thumbnail() {
-		if(true)
-		{
-			set_notice('error', _('Failed to save the image compression method.'));
-			log_message('error', 'rebuild_thumbnail: failed to save the image compression method');
-			return FALSE;
-		}
-		
+
+
+	public function rebuild_thumbnail()
+	{
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
 
 		// get paths and remove the thumb
-		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;;
-		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;;
-		if (!unlink($thumb_path)) {
-			set_notice('error', _('Failed to remove the thumbnail while rebuilding it. Please, check file permissions.'));
-			log_message('error', 'rebuild_thumbnail: failed to remove thumbnail while rebuilding');
-			return FALSE;
+		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
+		;
+		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
+		;
+
+		if (file_exists($thumb_path))
+		{
+			if (!unlink($thumb_path))
+			{
+				set_notice('error', _('Failed to remove the thumbnail while rebuilding it. Please, check file permissions.'));
+				log_message('error', 'rebuild_thumbnail: failed to remove thumbnail while rebuilding');
+				return FALSE;
+			}
 		}
-	
+
 		// Prepare the image library to create the thumbnail
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
-		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
-		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
+		$img_config['image_library'] = (find_imagick()) ? 'ImageMagick' : 'GD2'; // Use GD2 as fallback
+		$img_config['library_path'] = (find_imagick()) ? (get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin') : ''; // If GD2, use none
 		$img_config['source_image'] = $path;
 		$img_config["new_image"] = $thumb_path;
 		$img_config['width'] = 250;
@@ -517,30 +570,30 @@ class Page extends DataMapper {
 		$CI->image_lib->initialize($img_config);
 
 		// Resize to create the thumbnail
-		if (!$CI->image_lib->resize()) {
+		if (!$CI->image_lib->resize())
+		{
 			set_notice('error', _('Failed to recreate the thumbnail of the page.'));
 			log_message('error', 'rebuild_thumbnail: failed to recreate thumbnail');
 			return FALSE;
 		}
 
-		$this->description = (find_imagick())?'im':'';
-		if(!$this->save())
+		// update the kind of compression used and thumbnail filesize
+		$this->thumbsize = filesize($thumb_path);
+		$this->description = (find_imagick()) ? 'im' : '';
+		if (!$this->save())
 		{
-			set_notice('error', _('Failed to save the image compression method.'));
+			set_notice('error', _('Failed to save the image compression method in the database.'));
 			log_message('error', 'rebuild_thumbnail: failed to save the image compression method');
 			return FALSE;
 		}
-		
+
 		// Clear the image library for who knows who else calls it
 		$CI->image_lib->clear();
 
 		// Good
 		return TRUE;
 	}
-	
-	
-	
-	
+
 
 	/**
 	 * Optimizes the selected image with optipng, if optipng is even available.
@@ -552,7 +605,8 @@ class Page extends DataMapper {
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
-	public function optipng() {
+	public function optipng()
+	{
 		if ($this->mime != 'image/png')
 			return false;
 		$chapter = new Chapter($this->chapter_id);
@@ -563,6 +617,7 @@ class Page extends DataMapper {
 		exec('optipng -o7 ' . $abs, $output);
 	}
 
+
 	/**
 	 * With a heavy pixel-per-pixel, it checks if the image is black and white.
 	 * For better performance, it uses the thumbnail to check on less pixels.
@@ -570,7 +625,8 @@ class Page extends DataMapper {
 	 * @author woxxy, and a loop taken from a site...
 	 * @return string "bw" if black and white, "rgb" if colors, false on failure 
 	 */
-	public function is_bw() {
+	public function is_bw()
+	{
 		// Make sure the chapter and comic are selected
 		$this->get_chapter();
 
@@ -578,7 +634,8 @@ class Page extends DataMapper {
 		$rel = 'content/comics/' . $this->chapter->comic->directory() . '/' . $this->chapter->directory() . '/' . $this->thumbnail . $this->filename;
 
 		// We need to know the image type to spawn the right imagecreate function
-		switch ($this->mime) {
+		switch ($this->mime)
+		{
 			case "image/jpeg":
 				$im = imagecreatefromjpeg($rel); //jpeg file
 				break;
@@ -603,8 +660,10 @@ class Page extends DataMapper {
 
 		$c = 0;
 
-		for ($i = 0; $i < $imgw; $i++) {
-			for ($j = 0; $j < $imgh; $j++) {
+		for ($i = 0; $i < $imgw; $i++)
+		{
+			for ($j = 0; $j < $imgh; $j++)
+			{
 
 				// get the rgb value for current pixel
 				$rgb = ImageColorAt($im, $i, $j);
@@ -615,21 +674,25 @@ class Page extends DataMapper {
 				$b[$i][$j] = $rgb & 0xFF;
 
 				// count gray pixels (r=g=b)
-				if ($r[$i][$j] == $g[$i][$j] && $r[$i][$j] == $b[$i][$j]) {
+				if ($r[$i][$j] == $g[$i][$j] && $r[$i][$j] == $b[$i][$j])
+				{
 					$c++;
 				}
 			}
 		}
 
 		// If every pixel is black and white, return bw
-		if ($c == ($imgw * $imgh)) {
+		if ($c == ($imgw * $imgh))
+		{
 			return "bw";
 		}
-		else {
+		else
+		{
 			// The image is in colors
 			return "rgb";
 		}
 	}
+
 
 	/**
 	 * Creates the href to the image. Set 
@@ -638,11 +701,13 @@ class Page extends DataMapper {
 	 * @param boolean|$thumbnail if TRUE function returns thumbnail
 	 * @return string href to the image
 	 */
-	public function page_url($thumbnail = FALSE) {
+	public function page_url($thumbnail = FALSE)
+	{
 		// Make sure we loaded chapter and comic
 		$this->get_chapter();
 		return balance_url() . "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . ($thumbnail ? $this->thumbnail : "") . $this->filename;
 	}
+
 
 }
 

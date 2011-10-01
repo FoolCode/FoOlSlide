@@ -9,13 +9,13 @@ class System extends Admin_Controller
 	{
 		parent::__construct();
 
-// only admins should do this
+		// only admins should do this
 		$this->tank_auth->is_admin() or redirect('admin');
 
-// we need the upgrade module's functions
+		// we need the upgrade module's functions
 		$this->load->model('upgrade_model');
 
-// page title
+		// page title
 		$this->viewdata['controller_title'] = '<a href="' . site_url("admin/system") . '">' . _("System") . '</a>';
 	}
 
@@ -139,49 +139,143 @@ class System extends Admin_Controller
 
 	function tools()
 	{
+		$this->db->dbdriver;
 		$this->viewdata["function_title"] = _("Tools");
 
 		// get current version from database
 		$data["form_title"] = _("Tools");
 
+		$data["imagick_optimize"] = FALSE;
+		if (find_imagick())
+		{
+			$page = new Page();
+			$page->where('description', '')->limit(1)->get();
+			if ($page->result_count() == 1)
+			{
+				$data["imagick_optimize"] = TRUE;
+			}
+		}
+
+		$data["database_backup"] = strtolower($this->db->dbdriver) == "mysql";
+		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli";
+
 		$this->viewdata["main_content_view"] = $this->load->view("admin/system/tools", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
+
 	function tools_optimize_thumbnails($howmany = NULL)
 	{
-		if(!isAjax())
+		if (!isAjax())
 		{
 			show_404();
 		}
-		
-		if(!find_imagick())
+
+		if (!find_imagick())
 		{
 			show_404();
 		}
-		
+
 		$pages = new Page();
-		if(is_null($howmany))
+		if (is_null($howmany))
 		{
 			$count = $pages->where('description', '')->count();
 			$this->output->set_output(json_encode(array('count' => $count)));
 			return TRUE;
 		}
-		
-		if(is_numeric($howmany) && $howmany > 0)
+
+		if (is_numeric($howmany) && $howmany > 0)
 		{
 			$pages->where('description', '')->limit(10)->get();
-			foreach($pages->all as $page)
+			if ($pages->result_count() < 1)
 			{
-				if(!$page->rebuild_thumbnail())
+				$this->output->set_output(json_encode(array('status' => 'done')));
+				return TRUE;
+			}
+
+			foreach ($pages->all as $page)
+			{
+				if (!$page->rebuild_thumbnail())
 				{
 					$this->output->set_output(json_encode(array('error' => $this->notices)));
+					return FALSE;
 				}
 			}
-			$this->output->set_output(json_encode(array('success' => true)));
+			$this->output->set_output(json_encode(array('status' => 'success')));
 			return TRUE;
 		}
 	}
+
+
+	function tools_database_backup()
+	{
+		if (strtolower($this->db->dbdriver) == "mysql")
+		{
+			show_404();
+		}
+
+		$this->load->dbutil();
+		$backup = & $this->dbutil->backup(array('filename' => '[' . date("Y-m-d") . ']FoOlSlide_database.gz'));
+		$this->load->helper('download');
+		force_download('[' . date("Y-m-d") . ']FoOlSlide_database.gz', $backup);
+	}
+
+
+	function tools_database_optimize()
+	{
+		if (strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli")
+		{
+			show_404();
+		}
+
+		$this->load->dbutil();
+		$result = $this->dbutil->optimize_database();
+
+		if ($result !== FALSE)
+		{
+			flash_notice('success', _('Your FoOlSlide database has been optimized.'));
+			redirect('admin/system/tools');
+		}
+
+		flash_notice('error', _('There was an error while optimizing the database.'));
+		redirect('admin/system/tools');
+	}
+
+
+	function tools_logs_get($date = NULL)
+	{
+		$logs = get_dir_file_info($this->config->item('log_path'));
+		
+		if(count($logs) == 0)
+		{
+			$this->output->set_output(json_encode(array('error' => _('There is no logs available.'))));
+		}
+
+		if (is_null($date))
+		{
+			$selected = end($logs);
+		}
+		else
+		{
+			$date = 'log-' . $date . '.php';
+			if (!isset($logs[$date]))
+			{
+				$this->output->set_output(json_encode(array('error' => _('There is no available log for this date.'))));
+				return FALSE;
+			}
+			$selected = $logs[$date];
+		}
+
+		$selected_log = read_file($selected['server_path']);
+		$dates = array();
+		foreach ($logs as $key => $log)
+		{
+			$dates[] = substr($key, 4, -4);
+		}
+
+		$this->output->set_output(json_encode(array('dates' => $dates, 'log' => $selected_log)));
+	}
+
 
 	function upgrade()
 	{
@@ -234,6 +328,7 @@ class System extends Admin_Controller
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/upgrade'))));
 	}
 
+
 	function pastebin()
 	{
 		if (!isAjax())
@@ -243,25 +338,26 @@ class System extends Admin_Controller
 		}
 
 		$response = '';
-		
-		if ($post = $this->input->post()) {
+
+		if ($post = $this->input->post())
+		{
 			$api_dev_key = '04798e47893bd006f2061e736342a83b';
 			$api_paste_private = '1';
 			$api_paste_expire_date = '1H';
 			$api_paste_format = 'text';
 			$api_user_key = '';
-			
+
 			$this->load->library('curl');
-			
+
 			$this->curl->create('http://pastebin.com/api/api_post.php');
-			
+
 			$this->curl->options(array(
 				'POST' => true,
 				'RETURNTRANSFER' => 1,
 				'VERBOSE' => 1,
 				'NOBODY' => 0
 			));
-			
+
 			$this->curl->post(array(
 				'api_option' => 'paste',
 				'api_user_key' => $api_user_key,
@@ -275,7 +371,9 @@ class System extends Admin_Controller
 
 			$response = $this->curl->execute();
 		}
-		
+
 		$this->output->set_output(json_encode(array('href' => $response)));
 	}
+
+
 }

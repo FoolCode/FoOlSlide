@@ -149,17 +149,32 @@
 ?></textarea>
 	</div>
 	<div class="modal-footer">
-
+	<?php
+		if (function_exists('curl_init')) {
+			echo '<center><a class="btn" style="float: none" href="' . site_url("admin/system/pastebin") . '" onclick="pasteSystemInfo(\'' . site_url("admin/system/pastebin") . '\'); return false;">' . _('Pastebin It!') . '</a></center>';
+		}
+	?>
 	</div>
 </div>
 
 <script type="text/javascript">
+	
+	function pasteSystemInfo(href)
+	{
+		var modalInfoOutput = jQuery("#modal-for-information");
+		jQuery.post(href, { output: modalInfoOutput.find("#server-information-output").val() }, function(result) {
+			if (result.href != "") {
+				modalInfoOutput.find(".modal-footer").html('<center><input value="' + result.href + '" style="text-align: center" onclick="select(this);" readonly="readonly" /><br/><?php echo _('Note: This paste expires in 1 hour.'); ?></center>');
+			}
+		}, 'json');
+	}
+			
 	jQuery(document).ready(function() {
 		var modalInfoContainer = jQuery("#modal-for-information").find("#server-information-output");
 		modalInfoContainer.click(function() {
 			modalInfoContainer.select();
 			// Chrome Fix
 			modalInfoContainer.mouseup(function() { modalInfoContainer.unbind('mouseup'); return false; });
-		});	
+		});
 	});
 </script>

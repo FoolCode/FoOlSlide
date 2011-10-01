@@ -14,9 +14,9 @@
 					<h3><?php echo _('Optimize Thumbnails'); ?></h3>
 				</div>
 				<div class="modal-body" style="text-align: center">
+					<div id="modal-optimize-thumbnails-errors" style="margin-bottom:10px;"></div>
+					<div id="modal-optimize-thumbnails-count" style="margin-bottom:10px;"><?php echo _('Pictures left to be processed:') ?> <span id="modal-optimize-thumbnails-current-count">0</span></div>
 					<div id="modal-loading-optimize-thumbnails" class="loading" style="display:block;"><img src="<?php echo site_url() ?>assets/js/images/loader-18.gif"/></div>
-					<div id="modal-optimize-thumbnails-count"><?php echo _('Pictures left to be processed:') ?> <span id="modal-optimize-thumbnails-current-count">0</span></div>
-					<div id="modal-optimize-thumbnails-errors"></div>
 				</div>
 				<div class="modal-footer">
 					<a href="#" class="btn primary" onClick="return optimizeThumbnails(true)"><?php echo _('Optimize') ?></a>

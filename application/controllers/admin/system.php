@@ -139,16 +139,49 @@ class System extends Admin_Controller
 
 	function tools()
 	{
-		$this->viewdata["function_title"] = _("Information");
+		$this->viewdata["function_title"] = _("Tools");
 
 		// get current version from database
-		$data["current_version"] = get_setting('fs_priv_version');
-		$data["form_title"] = _("Information");
+		$data["form_title"] = _("Tools");
 
-		$this->viewdata["main_content_view"] = $this->load->view("admin/system/information", $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view("admin/system/tools", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
+	function tools_optimize_thumbnails($howmany = NULL)
+	{
+		if(!isAjax())
+		{
+			show_404();
+		}
+		
+		if(!find_imagick())
+		{
+			show_404();
+		}
+		
+		$pages = new Page();
+		if(is_null($howmany))
+		{
+			$count = $pages->where('description', '')->count();
+			$this->output->set_output(json_encode(array('count' => $count)));
+			return TRUE;
+		}
+		
+		if(is_numeric($howmany) && $howmany > 0)
+		{
+			$pages->where('description', '')->limit(10)->get();
+			foreach($pages->all as $page)
+			{
+				if(!$page->rebuild_thumbnail())
+				{
+					$this->output->set_output(json_encode(array('error' => $this->notices)));
+				}
+			}
+			$this->output->set_output(json_encode(array('success' => true)));
+			return TRUE;
+		}
+	}
 
 	function upgrade()
 	{

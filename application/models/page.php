@@ -428,9 +428,6 @@ class Page extends DataMapper {
 		$CI = & get_instance();
 		$CI->load->library('image_lib');
 		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
-		if (find_imagick()) {
-			$img_config['library_path'] = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
-		}
 		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
 		$img_config['source_image'] = $path;
 		$img_config["new_image"] = $dir . "thumb_" . $filename;
@@ -484,6 +481,66 @@ class Page extends DataMapper {
 		// Good
 		return true;
 	}
+	
+	
+	public function rebuild_thumbnail() {
+		if(true)
+		{
+			set_notice('error', _('Failed to save the image compression method.'));
+			log_message('error', 'rebuild_thumbnail: failed to save the image compression method');
+			return FALSE;
+		}
+		
+		// Let's make sure the chapter and comic is set
+		$this->get_chapter();
+
+		// get paths and remove the thumb
+		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;;
+		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;;
+		if (!unlink($thumb_path)) {
+			set_notice('error', _('Failed to remove the thumbnail while rebuilding it. Please, check file permissions.'));
+			log_message('error', 'rebuild_thumbnail: failed to remove thumbnail while rebuilding');
+			return FALSE;
+		}
+	
+		// Prepare the image library to create the thumbnail
+		$CI = & get_instance();
+		$CI->load->library('image_lib');
+		$img_config['image_library'] = (find_imagick())?'ImageMagick':'GD2'; // Use GD2 as fallback
+		$img_config['library_path'] = (find_imagick())?(get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin'):''; // If GD2, use none
+		$img_config['source_image'] = $path;
+		$img_config["new_image"] = $thumb_path;
+		$img_config['width'] = 250;
+		$img_config['height'] = 250;
+		$img_config['maintain_ratio'] = TRUE;
+		$img_config['master_dim'] = 'auto';
+		$CI->image_lib->initialize($img_config);
+
+		// Resize to create the thumbnail
+		if (!$CI->image_lib->resize()) {
+			set_notice('error', _('Failed to recreate the thumbnail of the page.'));
+			log_message('error', 'rebuild_thumbnail: failed to recreate thumbnail');
+			return FALSE;
+		}
+
+		$this->description = (find_imagick())?'im':'';
+		if(!$this->save())
+		{
+			set_notice('error', _('Failed to save the image compression method.'));
+			log_message('error', 'rebuild_thumbnail: failed to save the image compression method');
+			return FALSE;
+		}
+		
+		// Clear the image library for who knows who else calls it
+		$CI->image_lib->clear();
+
+		// Good
+		return TRUE;
+	}
+	
+	
+	
+	
 
 	/**
 	 * Optimizes the selected image with optipng, if optipng is even available.

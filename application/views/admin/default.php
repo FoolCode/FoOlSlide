@@ -101,7 +101,7 @@
 		<div class="topbar" data-dropdown="dropdown">
 			<div class="topbar-inner">
 				<div class="container-fluid">
-					<a class="brand" href="#"><?php echo get_setting('fs_gen_site_title'); ?> Slide - <?php echo _('Control Panel'); ?></a>
+					<a class="brand" href="<?php echo site_url('admin') ?>"><?php echo get_setting('fs_gen_site_title'); ?> - <?php echo _('Control Panel'); ?></a>
 					<ul class="nav secondary-nav">
 						<li><a href="<?php echo site_url(); ?>">
 							<?php echo _("Reader") ?></a></li>

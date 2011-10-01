@@ -300,6 +300,7 @@ class System extends Admin_Controller
 		}
 		
 		delete_files($this->config->item('log_path'));
+		flash_notice('success', _('The logs have been pruned.'));
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 	}
 

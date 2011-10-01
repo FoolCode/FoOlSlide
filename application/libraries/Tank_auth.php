@@ -226,17 +226,35 @@ class Tank_auth
 		return FALSE;
 	}
 
+
 	function is_group($group_name)
 	{
 		if (!$this->is_logged_in())
 			return FALSE;
 		if ($group_name == 'member')
 			return TRUE;
-		$group = new Group();
-		$group->where('name', $group_name)->get();
-		$user = new Profile();
-		$user->where('user_id', $this->get_user_id())->limit(1)->get();
-		if ($group->id == $user->group_id)
+
+		if (!isset($this->cached["group"][$group_name]))
+		{
+			$group = new Group();
+			$group->where('name', $group_name)->get();
+			if($group->result_count() != 1)
+			{
+				log_message('error', 'tank_auth:is_group: using non-existent group name');
+				return FALSE;
+			}
+
+			$this->cached["group"][$group_name] = $group;
+		}
+
+		if (!isset($this->cached["profile"]))
+		{
+			$profile = new Profile();
+			$profile->where('user_id', $this->get_user_id())->limit(1)->get();
+			$this->cached["profile"] = $profile;
+		}
+
+		if ($this->cached["group"][$group_name]->id == $this->cached["profile"]->group_id)
 			return TRUE;
 		return FALSE;
 	}
@@ -610,7 +628,7 @@ class Tank_auth
 		if ((strlen($user_id) > 0) AND (strlen($new_pass_key) > 0))
 		{
 			return $this->ci->users->can_reset_password(
-					$user_id, $new_pass_key, $this->ci->config->item('forgot_password_expire', 'tank_auth'));
+							$user_id, $new_pass_key, $this->ci->config->item('forgot_password_expire', 'tank_auth'));
 		}
 		return FALSE;
 	}
@@ -763,7 +781,7 @@ class Tank_auth
 		if ((strlen($user_id) > 0) AND (strlen($new_email_key) > 0))
 		{
 			return $this->ci->users->activate_new_email(
-					$user_id, $new_email_key);
+							$user_id, $new_email_key);
 		}
 		return FALSE;
 	}
@@ -889,7 +907,7 @@ class Tank_auth
 							'username' => $user->username,
 							'status' => STATUS_ACTIVATED
 						));
-						
+
 
 						// Renew users cookie to prevent it from expiring
 						set_cookie(array(
@@ -921,7 +939,7 @@ class Tank_auth
 		{
 			$this->ci->load->model('tank_auth/login_attempts');
 			return $this->ci->login_attempts->get_attempts_num($this->ci->input->ip_address(), $login)
-			>= $this->ci->config->item('login_max_attempts', 'tank_auth');
+					>= $this->ci->config->item('login_max_attempts', 'tank_auth');
 		}
 		return FALSE;
 	}

@@ -161,7 +161,8 @@
 	}
 	
 	function submit_all(index){
-		submit_chapter(jQuery('.chapter:eq('+index+') .gbutton'), index);
+		submit_chapter(jQuery('.chapter:eq('+index+') .btn'), index);
+		return false;
 	}
 	
 	jQuery(document).ready(function(){
@@ -245,7 +246,7 @@
 
 <div class="table">
 	<h3 style="float: left"><?php echo _('Adding Chapters to'); ?>: <?php echo $comic->name ?></h3>
-	<span style="float: right; padding: 5px"><a href="#" onClick="submit_all(0)" class="btn primary"><?php echo _('Submit All') ?></a></span>
+	<span style="float: right; padding: 5px"><a href="#" onClick="return submit_all(0)" class="btn primary"><?php echo _('Submit All') ?></a></span>
 	<hr class="clear"/>
 	
 	<br/>

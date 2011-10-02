@@ -10,14 +10,18 @@ if (!defined('BASEPATH'))
  * @author Woxxy
  * @return string the option
  */
-if (!function_exists('get_setting')) {
+if (!function_exists('get_setting'))
+{
 
-	function get_setting($option) {
+	function get_setting($option)
+	{
 		$CI = & get_instance();
 		$array = $CI->fs_options;
-		if (isset($array[$option])) return $array[$option];
+		if (isset($array[$option]))
+			return $array[$option];
 		return FALSE;
 	}
+
 
 }
 
@@ -26,17 +30,21 @@ if (!function_exists('get_setting')) {
  * 
  * @author Woxxy
  */
-if (!function_exists('load_settings')) {
+if (!function_exists('load_settings'))
+{
 
-	function load_settings() {
+	function load_settings()
+	{
 		$CI = & get_instance();
 		$array = $CI->db->get('preferences')->result_array();
 		$result = array();
-		foreach ($array as $item) {
+		foreach ($array as $item)
+		{
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
 	}
+
 
 }
 
@@ -46,30 +54,37 @@ if (!function_exists('load_settings')) {
  * @author Woxxy
  * @return object home team
  */
-if (!function_exists('get_home_team')) {
+if (!function_exists('get_home_team'))
+{
 
-	function get_home_team() {
+	function get_home_team()
+	{
 		$CI = & get_instance();
 		if (isset($CI->fs_loaded->home_team))
 			return $CI->fs_loaded->home_team;
 		$hometeam = get_setting('fs_gen_default_team');
 		$team = new Team();
 		$team->where('name', $hometeam)->limit(1)->get();
-		if ($team->result_count() < 1) {
+		if ($team->result_count() < 1)
+		{
 			$team = new Team();
 			$team->limit(1)->get();
 		}
-		
+
 		$CI->fs_loaded->home_team = $team;
 		return $team;
 	}
 
+
 }
 
-if (!function_exists('parse_irc')) {
+if (!function_exists('parse_irc'))
+{
 
-	function parse_irc($string) {
-		if (substr($string, 0, 1) == '#') {
+	function parse_irc($string)
+	{
+		if (substr($string, 0, 1) == '#')
+		{
 			$echo = 'irc://';
 			$at = strpos($string, '@');
 			$echo .= substr($string, $at + 1);
@@ -79,42 +94,54 @@ if (!function_exists('parse_irc')) {
 		return $string;
 	}
 
-}
 
+}
 /**
  * Locate ImageMagick and determine if it has been installed or not. 
  */
-function find_imagick() {
+function find_imagick()
+{
 	$CI = & get_instance();
-	if(isset($CI->fs_imagick->available))
+	if (isset($CI->fs_imagick->available))
 	{
 		return $CI->fs_imagick->available;
 	}
-	
+
+	$CI->fs_imagick->exec = FALSE;
+	$CI->fs_imagick->found = FALSE;
+	$CI->fs_imagick->available = FALSE;
 	$ini_disabled = explode(', ', ini_get('disable_functions'));
-	if (!in_array('exec', $ini_disabled))
+	if (ini_get('safe_mode') || !in_array('exec', $ini_disabled))
 	{
-		$imagick_path = get_setting('fs_serv_imagick_path')?get_setting('fs_serv_imagick_path'):'/usr/bin';
-		
+		$CI->fs_imagick->exec = TRUE;
+		$imagick_path = get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin';
+
 		if (!preg_match("/convert$/i", $imagick_path))
 		{
-			$imagick_path = rtrim($imagick_path, '/').'/';
+			$imagick_path = rtrim($imagick_path, '/') . '/';
 
 			$imagick_path .= 'convert';
 		}
-		if(file_exists($imagick_path) || file_exists($imagick_path.'.exe'))
+
+		if (file_exists($imagick_path) || file_exists($imagick_path . '.exe'))
 		{
-			exec($imagick_path.' -version', $result);
-			if(preg_match('/ImageMagick/i', $result[0]))
-			{
-				$CI->fs_imagick->available = TRUE;
-				return TRUE;
-			}
+			$CI->fs_imagick->found = $imagick_path;
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+		exec($imagick_path . ' -version', $result);
+		if (preg_match('/ImageMagick/i', $result[0]))
+		{
+			$CI->fs_imagick->available = TRUE;
+			return TRUE;
 		}
 	}
-	$CI->fs_imagick->available = FALSE;
 	return FALSE;
 }
+
 
 /**
  * Checks that the call is made from Ajax
@@ -122,21 +149,27 @@ function find_imagick() {
  * @author Woxxy
  * @return bool true if ajax request
  */
-function isAjax() {
+function isAjax()
+{
 	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-	($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+			($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
 }
 
-function current_url_real() {
+
+function current_url_real()
+{
 	$pageURL = (isset($_SERVER["HTTPS"]) && @$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
-	if ($_SERVER["SERVER_PORT"] != "80") {
+	if ($_SERVER["SERVER_PORT"] != "80")
+	{
 		$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
 	}
-	else {
+	else
+	{
 		$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 	}
 	return $pageURL;
 }
+
 
 /**
  * Get either a Gravatar URL or complete image tag for a specified email address.
@@ -150,11 +183,13 @@ function current_url_real() {
  * @return String containing either just a URL or a complete image tag
  * @source http://gravatar.com/site/implement/images/php/
  */
-function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array()) {
+function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array())
+{
 	$url = 'http://www.gravatar.com/avatar/';
 	$url .= md5(strtolower(trim($email)));
 	$url .= "?s=$s&d=$d&r=$r";
-	if ($img) {
+	if ($img)
+	{
 		$url = '<img src="' . $url . '"';
 		foreach ($atts as $key => $val)
 			$url .= ' ' . $key . '="' . $val . '"';
@@ -163,6 +198,7 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 	return $url;
 }
 
+
 /**
  * Returns a random string
  * 
@@ -170,14 +206,17 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
  * @param int length of string to generate
  * @return string random string
  */
-function random_string($length = 20) {
+function random_string($length = 20)
+{
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyz';
 	$string = '';
-	for ($p = 0; $p < $length; $p++) {
+	for ($p = 0; $p < $length; $p++)
+	{
 		$string .= $characters[mt_rand(0, strlen($characters - 1))];
 	}
 	return $string;
 }
+
 
 /**
  * Future function for load balancing the source of the images
@@ -186,90 +225,107 @@ function random_string($length = 20) {
  * @param string $string the url of the image
  * @return string the base url for the image server
  */
-function balance_url($string = '') {
+function balance_url($string = '')
+{
 	$balancers = unserialize(get_setting('fs_balancer_clients'));
-	
-	if(is_array($balancers))
+
+	if (is_array($balancers))
 	{
 		$urls = array();
-		foreach($balancers as $balancer)
+		foreach ($balancers as $balancer)
 		{
-			for($i = 0; $i < $balancer["priority"]; $i++)
+			for ($i = 0; $i < $balancer["priority"]; $i++)
 			{
 				$urls[] = $balancer["url"];
 			}
 		}
-		while(count($urls) < 100)
+		while (count($urls) < 100)
 		{
 			$urls[] = site_url();
 		}
 		$urlkey = array_rand($urls);
-		
+
 		return $urls[$urlkey];
 	}
-	
+
 	return site_url($string);
 }
 
-function glyphish($num, $on = FALSE) {
-	return site_url().'assets/glyphish/'.($on?'on':'off').'/'.$num.'.png';
+
+function glyphish($num, $on = FALSE)
+{
+	return site_url() . 'assets/glyphish/' . ($on ? 'on' : 'off') . '/' . $num . '.png';
 }
 
-function icons($num, $size = '32', $icons = 'sweeticons2') {
-	return site_url() . 'assets/icons/' . $icons . '/' . $size . '/' . $num .'.png';
+
+function icons($num, $size = '32', $icons = 'sweeticons2')
+{
+	return site_url() . 'assets/icons/' . $icons . '/' . $size . '/' . $num . '.png';
 }
 
-function relative_date($time) {
+
+function relative_date($time)
+{
 
 	$today = strtotime(date('M j, Y'));
 
 	$reldays = ($time - $today) / 86400;
 
-	if ($reldays >= 0 && $reldays < 1) {
+	if ($reldays >= 0 && $reldays < 1)
+	{
 		return _('Today');
 	}
-	else if ($reldays >= 1 && $reldays < 2) {
+	else if ($reldays >= 1 && $reldays < 2)
+	{
 		return _('Tomorrow');
 	}
-	else if ($reldays >= -1 && $reldays < 0) {
+	else if ($reldays >= -1 && $reldays < 0)
+	{
 		return _('Yesterday');
 	}
 
 	/* THIS SCREWS UP WITH THE GETTEXT
 	 * @todo fix the relative days' gettext
-	if (abs($reldays) < 7) {
-		if ($reldays > 0) {
-			$reldays = floor($reldays);
-			return 'In ' . $reldays . ' day' . ($reldays != 1 ? 's' : '');
-		}
-		else {
-			$reldays = abs(floor($reldays));
-			return $reldays . ' day' . ($reldays != 1 ? 's' : '') . ' ago';
-		}
-	}
-	*/
-	
-	if (abs($reldays) < 182) {
+	  if (abs($reldays) < 7) {
+	  if ($reldays > 0) {
+	  $reldays = floor($reldays);
+	  return 'In ' . $reldays . ' day' . ($reldays != 1 ? 's' : '');
+	  }
+	  else {
+	  $reldays = abs(floor($reldays));
+	  return $reldays . ' day' . ($reldays != 1 ? 's' : '') . ' ago';
+	  }
+	  }
+	 */
+
+	if (abs($reldays) < 182)
+	{
 		return date('jS F', $time ? $time : time());
 	}
-	else {
+	else
+	{
 		return date('jS F, Y', $time ? $time : time());
 	}
 }
 
+
 /**
  * 
  */
-function HTMLpurify($dirty_html, $set = 'default') {
-	if (is_array($dirty_html)) {
-		foreach ($dirty_html as $key => $val) {
+function HTMLpurify($dirty_html, $set = 'default')
+{
+	if (is_array($dirty_html))
+	{
+		foreach ($dirty_html as $key => $val)
+		{
 			$dirty_html[$key] = purify($val);
 		}
 
 		return $dirty_html;
 	}
 
-	if (trim($dirty_html) === '') {
+	if (trim($dirty_html) === '')
+	{
 		return $dirty_html;
 	}
 
@@ -284,7 +340,8 @@ function HTMLpurify($dirty_html, $set = 'default') {
 
 
 
-	switch ($set) {
+	switch ($set)
+	{
 		case 'default':
 			break;
 		case 'unallowed':

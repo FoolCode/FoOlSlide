@@ -77,7 +77,7 @@ class Preferences extends Admin_Controller
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
-		set_notice('notice', _('Updated settings.'));
+		flash_notice('notice', _('Updated settings.'));
 	}
 
 
@@ -157,6 +157,7 @@ class Preferences extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/preferences/general');
 		}
 
 		// create a form
@@ -250,6 +251,7 @@ class Preferences extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/preferences/theme');
 		}
 
 		// create the form
@@ -369,9 +371,11 @@ class Preferences extends Admin_Controller
 				if (!write_file('./content/ads/' . $adfile, $ad_before . $this->input->post($ad) . $ad_after))
 				{
 					log_message('error', 'preferences.php/advertising: couldn\'t update HTML files');
-					set_notice('error', _('Couldn\'t save the advertising code in the HTML'));
+					flash_notice('error', _('Couldn\'t save the advertising code in the HTML'));
 				}
 			}
+			
+			redirect('admin/preferences/advertising');
 		}
 
 		// create the form
@@ -439,6 +443,7 @@ class Preferences extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/preferences/registration');
 		}
 
 		// prepare form
@@ -490,6 +495,7 @@ class Preferences extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/preferences/reader');
 		}
 
 		// create form
@@ -648,6 +654,7 @@ class Preferences extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/preferences/slideshow');
 		}
 
 		// create a form

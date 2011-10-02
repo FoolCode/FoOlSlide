@@ -130,7 +130,7 @@ class Chapter extends DataMapper
 		$this->validation['chapter']['label'] = _('Chapter Number');
 		$this->validation['chapter']['help'] = _('Insert the chapter number.');
 		$this->validation['subchapter']['label'] = _('Subchapter Number');
-		$this->validation['subchapter']['help'] = _('Insert a subchapter number to identify extra chapters. Zero for main chapter.');
+		$this->validation['subchapter']['help'] = _('Insert a subchapter number to identify extra chapters. Zero for main chapter. Start counting subchapters from 1, not from 5.');
 		$this->validation['volume']['label'] = _('Volume');
 		$this->validation['volume']['help'] = _('Insert the volume number.');
 		$this->validation['language']['label'] = _('Language');

@@ -283,6 +283,9 @@ class System extends Admin_Controller
 			return FALSE;
 		}
 
+		// sort by key high to low
+		ksort($logs);
+		
 		if (is_null($date))
 		{
 			$selected = end($logs);

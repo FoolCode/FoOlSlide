@@ -63,12 +63,12 @@ if (!$new_versions)
 <?php
 if ($new_versions)
 {
-	echo '<div class="table" style="padding-bottom: 10px">';
+	echo '<div class="table" style="padding-bottom: 10px; margin-right:10px;">';
 	echo '<h3>' . _('Changelog') . '</h3><div class="changelog">';
 	foreach ($new_versions as $version)
 	{
 		echo '<br/><div class="item">
-			<div class="title">' . _('Version') . ' ' . implode('.', array($version->version, $version->subversion, $version->subsubversion)) . '</div>
+			<h4 class="title">' . _('Version') . ' ' . implode('.', array($version->version, $version->subversion, $version->subsubversion)) . '</h4>
 			<div class="description">' . nl2br($version->changelog) . '</div></div>';
 	}
 	echo '</div></div>';

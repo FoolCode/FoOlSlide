@@ -50,8 +50,23 @@ class System extends Admin_Controller
 
 		$form = array();
 
+		if(find_imagick())
+		{
+			$imagick_status = '<span class="label success">' . _('Found and working') . '</span>';
+		}
+		else
+		{
+			if(!$this->fs_imagick->exec)
+				$imagick_status = '<span class="label important">' . _('Not available') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must have Safe Mode off and the exec function enabled to use ImageMagick as converter. Check the information panel for details.')) . '" data-original-title="' . htmlspecialchars(_('Disabled functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
+			else if (!$this->fs_imagick->found) 
+				$imagick_status = '<span class="label important">' . _('Not found') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must provide the path to the convert file on your system. Typically under /usr/bin (Linux), /opt/local/bin (Mac OSX) or where you extracted it on Windows.')) . '" data-original-title="' . htmlspecialchars(_('Disabled functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
+			else if (!$this->fs_imagick->available) 
+				$imagick_status = '<span class="label important">' . _('Not working') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(sprintf(_('There\'s been an error when trying to run ImageMagick. To check manually for errors, access your server via shell and type: %s'), '<br/><code>'.$this->fs_imagick->found . ' -version</code>')) . '" data-original-title="' . htmlspecialchars(_('Disabled functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
+		}
+		
+		
 		$form[] = array(
-			_('Path to ImageMagick'),
+			_('Path to ImageMagick') . ' ' . $imagick_status,
 			array(
 				'type' => 'input',
 				'name' => 'fs_serv_imagick_path',
@@ -65,6 +80,7 @@ class System extends Admin_Controller
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
+			redirect('admin/system/preferences');
 		}
 
 		// create a form
@@ -133,7 +149,7 @@ class System extends Admin_Controller
 			$result[$item['name']] = $item['value'];
 		}
 		$CI->fs_options = $result;
-		set_notice('notice', _('Updated settings.'));
+		flash_notice('notice', _('Settings updated.'));
 	}
 
 
@@ -235,7 +251,7 @@ class System extends Admin_Controller
 		{
 			show_404();
 		}
-		
+
 		if (strtolower($this->db->dbdriver) != "mysql" && strtolower($this->db->dbdriver) != "mysqli")
 		{
 			show_404();
@@ -264,8 +280,12 @@ class System extends Admin_Controller
 		if (count($logs) == 0)
 		{
 			$this->output->set_output(json_encode(array('error' => _('There are no logs available.'))));
+			return FALSE;
 		}
 
+		// sort by key high to low
+		ksort($logs);
+		
 		if (is_null($date))
 		{
 			$selected = end($logs);
@@ -298,7 +318,7 @@ class System extends Admin_Controller
 		{
 			show_404();
 		}
-		
+
 		delete_files($this->config->item('log_path'));
 		flash_notice('success', _('Your FoOlSlide logs have been pruned.'));
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));

@@ -43,7 +43,7 @@ $this->buttoner[] = array(
 		foreach ($chapters as $item)
 		{
 			echo '<div class="item">
-				<div class="title"><a href="'.site_url("admin/series/serie/".$comic->stub."/".$item->id).'">'. $item->title().'</a></div>
+				<div class="title"><a href="'.site_url("admin/series/series/".$comic->stub."/".$item->id).'">'. $item->title().'</a></div>
 				<div class="smalltext info">
 					Chapter #'.$item->chapter.'
 					Sub #'.$item->subchapter;

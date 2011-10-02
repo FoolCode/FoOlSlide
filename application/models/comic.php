@@ -787,7 +787,7 @@ class Comic extends DataMapper
 		$CI = & get_instance();
 		if (!$CI->tank_auth->is_allowed())
 			return "";
-		return site_url('/admin/series/serie/' . $this->stub);
+		return site_url('/admin/series/series/' . $this->stub);
 	}
 
 
@@ -818,7 +818,7 @@ class Comic extends DataMapper
 		if (isset($this->href))
 			return $this->href;
 
-		return site_url('/reader/serie/' . $this->stub);
+		return site_url('/reader/series/' . $this->stub);
 	}
 
 

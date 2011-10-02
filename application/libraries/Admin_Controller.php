@@ -124,12 +124,12 @@ class Admin_Controller extends MY_Controller
 			"icon" => 248,
 			"content" => array(
 				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
-				"preferences" => array("level" => "admin", "name" => _("Preferences"), "icon" => 149),
-				"tools" => array("level" => "admin", "name" => _("Tools"), "icon" => 351),
-				"upgrade" => array("level" => "admin", "name" => _("Upgrade"), "icon" => 353),
+				"preferences" => array("level" => "admin", "name" => _("Preferences") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 149),
+				"tools" => array("level" => "admin", "name" => _("Tools") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 351),
+				"upgrade" => array("level" => "admin", "name" => _("Upgrade") . ((get_setting('fs_cron_autoupgrade_version') && version_compare(get_setting('fs_priv_version'), get_setting('fs_cron_autoupgrade_version')) < 0) ? ' <span class="label success">' . _('New') . '</span>' : ''), "icon" => 353),
 			)
 		);
-		
+
 		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
 			"level" => "member",
 			"default" => "http://ask.foolrulez.com",
@@ -166,7 +166,7 @@ class Admin_Controller extends MY_Controller
 				$active = FALSE;
 			if (($this->tank_auth->is_admin() || $this->tank_auth->is_group($item["level"])) && !empty($item))
 			{
-				$result .= '<h5><a href="' . ((substr($item["default"], 0, 7) == 'http://')?$item["default"]:site_url(array("admin", $key, $item["default"]))) . '" '.((substr($item["default"], 0, 7) == 'http://')?'target="_blank"':'').'><img src="' . icons($item['icon']) . '" class="icon">' . $item["name"] . '</a></h5>';
+				$result .= '<h5><a href="' . ((substr($item["default"], 0, 7) == 'http://') ? $item["default"] : site_url(array("admin", $key, $item["default"]))) . '" ' . ((substr($item["default"], 0, 7) == 'http://') ? 'target="_blank"' : '') . '><img src="' . icons($item['icon']) . '" class="icon">' . $item["name"] . '</a></h5>';
 				$result .= '<ul class="sidebar">';
 				foreach ($item["content"] as $subkey => $subitem)
 				{
@@ -178,7 +178,7 @@ class Admin_Controller extends MY_Controller
 					{
 						//if($subitem["name"] == $_GET["location"]) $is_active = " active"; else $is_active = "";
 						$is_active = "";
-						$result .= '<li class="' . ($subactive ? 'active' : '') . '"><a href="' . ((substr($subkey, 0, 7) == 'http://')?$subkey:site_url(array("admin", $key, $subkey))) . '"  '.((substr($subkey, 0, 7) == 'http://')?'target="_blank"':'').'><img src="' . icons($subitem['icon'], 16) . '" class="icon icon-small">' . $subitem["name"] . '</a></li>';
+						$result .= '<li class="' . ($subactive ? 'active' : '') . '"><a href="' . ((substr($subkey, 0, 7) == 'http://') ? $subkey : site_url(array("admin", $key, $subkey))) . '"  ' . ((substr($subkey, 0, 7) == 'http://') ? 'target="_blank"' : '') . '><img src="' . icons($subitem['icon'], 16) . '" class="icon icon-small">' . $subitem["name"] . '</a></li>';
 					}
 				}
 				$result .= '</ul>';

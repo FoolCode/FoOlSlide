@@ -933,7 +933,7 @@ class Chapter extends DataMapper
 		if (!$CI->tank_auth->is_team_leader_array($this->teams))
 			return "";
 		$this->get_comic();
-		return site_url('/admin/series/serie/' . $this->comic->stub . '/' . $this->id);
+		return site_url('/admin/series/series/' . $this->comic->stub . '/' . $this->id);
 	}
 
 

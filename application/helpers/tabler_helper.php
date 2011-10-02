@@ -485,25 +485,27 @@ if (!function_exists('form_language'))
 
 }
 
-if (!function_exists('form_group'))
+
+if (!function_exists('form_teams'))
 {
 
-	function form_group($column)
+	function form_teams($column)
 	{
-		$CI = & get_instance();
-		$groups = new Group();
-		$groups->get();
-		$set = array();
-		foreach ($groups->all as $group)
+		$teams = Team();
+		$teams->order_by('name', 'asc')->limit(100)->get();
+		$values = array();
+		foreach($teams->all as $team)
 		{
-			$set[$group->id] = $group->name;
+			$values[] = $team->name;
 		}
-
-		return form_dropdown($column['name'], $set, $column['value']);
+		
+		if (!isset($column['value']) || $column['value'] == "")
+			$column['value'] = get_setting('fs_gen_default_lang');
+		return form_dropdown($column['name'], $lang, $column['value']);
 	}
 
-
 }
+
 
 if (!function_exists('form_themes'))
 {

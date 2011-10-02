@@ -63,7 +63,7 @@ if (!$new_versions)
 <?php
 if ($new_versions)
 {
-	echo '<div class="table" style="padding-bottom: 10px">';
+	echo '<div class="table" style="padding-bottom: 10px; margin-right:10px;">';
 	echo '<h3>' . _('Changelog') . '</h3><div class="changelog">';
 	foreach ($new_versions as $version)
 	{

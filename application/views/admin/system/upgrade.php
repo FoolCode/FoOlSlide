@@ -68,7 +68,7 @@ if ($new_versions)
 	foreach ($new_versions as $version)
 	{
 		echo '<br/><div class="item">
-			<div class="title">' . _('Version') . ' ' . implode('.', array($version->version, $version->subversion, $version->subsubversion)) . '</div>
+			<h4 class="title">' . _('Version') . ' ' . implode('.', array($version->version, $version->subversion, $version->subsubversion)) . '</h4>
 			<div class="description">' . nl2br($version->changelog) . '</div></div>';
 	}
 	echo '</div></div>';

@@ -40,8 +40,8 @@
 			$information['server']['data'][] = array(
 				'name' => 'Nginx Upload Size',
 				'title' => _('Nginx Upload Size'),
-				'value' => _('Can\'t be checked via PHP'),
-				'text' => _('The webserver Nginx has an internal upload limit variable. If you get upload errors, and the PHP configuration looks fine, check this variable in your Nginx configuration file.') . '</p><p class="vartext">' . _('Variable') . ': client_max_body_size (in nginx.conf)</p>'
+				'value' => _('This value cannot be checked via PHP.'),
+				'text' => _('The Nginx web server has its own internal upload limit variable. If you are receiving upload errors, and your PHP configuration looks fine, check this variable in your Nginx configuration file.') . '</p><p class="vartext">' . _('Variable') . ': client_max_body_size (in nginx.conf)</p>'
 			);
 		}
 
@@ -56,9 +56,9 @@
 					'text' => _('The version of FoOlSlide that you are currently running on your server.'),
 					'alert' => array(
 						'type' => 'success',
-						'type_text' => _('New version available'),
-						'title' => _('FoOlSlide upgrade available'),
-						'text' => _('Upgrading FoOlSlide ensures that you have the most secure, stable and featureful version released.') . '<p class="vartext">' . _('Suggested') . ': ' . get_setting('fs_cron_autoupgrade_version') . '</p>',
+						'type_text' => _('New Version Available'),
+						'title' => _('New Version Available'),
+						'text' => _('Upgrading FoOlSlide ensures that you have the most secure, stable and feature enhanced release.') . '<p class="vartext">' . _('Suggested') . ': ' . get_setting('fs_cron_autoupgrade_version') . '</p>',
 						'if' => get_setting('fs_cron_autoupgrade_version') && version_compare(get_setting('fs_priv_version'), get_setting('fs_cron_autoupgrade_version')) < 0
 					)
 				),
@@ -83,15 +83,39 @@
 					'text' => _('This is the location of the file to edit to change the following variables.')
 				),
 				array(
+					'name' => 'Safe Mode',
+					'title' => _('Safe Mode'),
+					'value' => (ini_get('safe_mode')) ? _('On') : _('Off'),
+					'text' => _('The PHP safe mode is an attempt to solve the shared-server security problems and disables many important PHP functions. This is mainly used by shared hosting services to avoid implementing correct security fixes for shared-server environments.') . '</p><p class="vartext">' . _('Variable') . ': safe_mode</p>',
+					'alert' => array(
+						'type' => 'important',
+						'title' => _('Safe Mode'),
+						'text' => _('Safe Mode has been enabled on your PHP installation. This setting has nothing to do with security, and it\'s used by shared server hosts to limit your actions. This variable should be turned off for FoOlSlide to function correctly.') . '<p class="vartext">' . _('Suggested') . ': Off</p>',
+						'if' => ini_get('safe_mode')
+					)
+				),
+				array(
+					'name' => 'Allow URL fopen',
+					'title' => _('Allow URL fopen'),
+					'value' => (ini_get('allow_url_fopen')) ? _('On') : _('Off'),
+					'text' => _('This function allows PHP to use URL-aware fopen wrappers to access remote files via FTP or HTTP protocol.') . '</p><p class="vartext">' . _('Variable') . ': allow_url_fopen</p>',
+					'alert' => array(
+						'type' => 'important',
+						'title' => _('Disabled'),
+						'text' => _('Your PHP configuration currently has URL-aware fopen wrappers disabled. This affects FoOlSlide functions that require accessing remote files in case cURL is not installed on the system. If it is possible, this variable should be enabled with cURL installed as well.') . '<p class="vartext">' . _('Suggested') . ': On</p>',
+						'if' => ini_get('allow_url_fopen')
+					)
+				),
+				array(
 					'name' => 'Max Execution Time',
 					'title' => _('Max Execution Time'),
 					'value' => ini_get('max_execution_time'),
 					'text' => _('This is the maximum time in seconds a script is allowed to run before it is terminated by the parser.') . '<p class="vartext">' . _('Variable') . ': max_execution_time</p>',
 					'alert' => array(
 						'type' => 'notice',
-						'title' => _('Low execution time'),
-						'text' => _('Processing images takes time. If your server doesn\'t have a powerful processor, or if you\'re going to upload very large files, this value must be set as high as the processing time.') . '<p class="vartext">' . _('Suggested') . ': 60+</p>',
-						'if' => intval(ini_get('max_execution_time')) < 50
+						'title' => _('Low Value'),
+						'text' => _('Your current value for max execution time is low. This option affects functions that require large amounts of processing time, such as processing images. If your server doesn\'t have a powerful processor or you\'re processing large amounts of images, this value must be set as high as the total processing time taken to complete the function.') . '<p class="vartext">' . _('Suggested') . ': 120+</p>',
+						'if' => intval(ini_get('max_execution_time')) < 110
 					)
 				),
 				array(
@@ -101,8 +125,8 @@
 					'text' => _('This states whether or not to allow HTTP file uploads.') . '<p class="vartext">' . _('Variable') . ': file_uploads</p>',
 					'alert' => array(
 						'type' => 'important',
-						'title' => _('Uploads not active'),
-						'text' => _('Uploads must be enabled, or you won\'t be able to use most of the FoOlSlide functions.') . '<p class="vartext">' . _('Suggested') . ': On</p>',
+						'title' => _('Disabled'),
+						'text' => _('Your PHP configuration currently has file uploads disabled. This variable must be enabled or FoOlSlide will not operate correctly.') . '<p class="vartext">' . _('Suggested') . ': On</p>',
 						'if' => !ini_get('file_uploads')
 					)
 				),
@@ -113,8 +137,8 @@
 					'text' => _('This is max size of post data allowed.') . '<p class="vartext">' . _('Variable') . ': post_max_size</p>',
 					'alert' => array(
 						'type' => 'notice',
-						'title' => _('Low POST size value'),
-						'text' => _('You should have a fairly large POST size to make sure your chapters will upload. This should be at least as high as the size of your largest chapter.') . '<p class="vartext">' . _('Suggested') . ': 16M+</p>',
+						'title' => _('Low Value'),
+						'text' => _('Your current value for POST size is low. This variable should generally be set at a higher value to accomodate and ensure that all of your chapters will be uploaded.') . '<p class="vartext">' . _('Suggested') . ': 16M+</p>',
 						'if' => (intval(substr(ini_get('post_max_size'), 0, -1)) < 16)
 					)
 				),
@@ -125,8 +149,8 @@
 					'text' => _('This is the maximum size allowed for an uploaded file.') . '<p class="vartext">' . _('Variable') . ': upload_max_filesize</p>',
 					'alert' => array(
 						'type' => 'notice',
-						'title' => _('Low upload size value'),
-						'text' => _('You should have a fairly large upload size to make sure your chapters will upload. This should be at least as high as the size of your largest chapter.') . '<p class="vartext">' . _('Suggested') . ': 16M+</p>',
+						'title' => _('Low Value'),
+						'text' => _('Your current value for max upload size is low. This variable should generally be set at a higher value to accommodate and allow your largest chapter to be uploaded.') . '<p class="vartext">' . _('Suggested') . ': 16M+</p>',
 						'if' => (intval(substr(ini_get('upload_max_filesize'), 0, -1)) < 16)
 					)
 				),
@@ -137,21 +161,9 @@
 					'text' => _('This is the maximum number of files allowed to be uploaded simultaneously.') . '<p class="vartext">' . _('Variable') . ': max_file_uploads</p>',
 					'alert' => array(
 						'type' => 'notice',
-						'title' => _('Low max number of uploads'),
-						'text' => _('This variable should have a value higher than the number of pages your chapters can have.') . '<p class="vartext">' . _('Suggested') . ': 54+</p>',
+						'title' => _('Low Value'),
+						'text' => _('Your current value for max file uploads is low. This variable should generally be set at a higher value than the number of pages your chapters may have.') . '<p class="vartext">' . _('Suggested') . ': 54+</p>',
 						'if' => (intval(ini_get('max_file_uploads')) < 54)
-					)
-				),
-				array(
-					'name' => 'Safe Mode',
-					'title' => _('Safe Mode'),
-					'value' => (ini_get('safe_mode')) ? _('Enabled') : _('Disabled'),
-					'text' => _('This is a setting for shared hosting services that disables important PHP functions.') . '</p><p class="vartext">' . _('Variable') . ': max_file_uploads</p>',
-					'alert' => array(
-						'type' => 'important',
-						'title' => _('Safe Mode is enabled'),
-						'text' => _('Safe Mode has nothing to do with security, and it\'s used by shared server hosts to limit your actions. Turn it off to make FoOlSlide much faster and more stable.') . '<p class="vartext">' . _('Suggested') . ': Off</p>',
-						'if' => ini_get('safe_mode')
 					)
 				)
 			)
@@ -163,6 +175,11 @@
 			'title' => _('Extensions'),
 			'data' => array(
 				array(
+					'name' => 'cURL',
+					'title' => 'cURL',
+					'value' => (extension_loaded('curl')) ? _('Installed') : _('Not Installed'),
+					'text' => _('This is a library used to communicate with different types of servers with many types of protocols.')
+				),array(
 					'name' => 'GD2',
 					'title' => 'GD2',
 					'value' => (extension_loaded('gd')) ? _('Installed') : _('Missing'),
@@ -186,7 +203,7 @@
 			echo '<table class="zebra-striped fixed-table"><tbody>';
 			foreach ($item['data'] as $subkey => $subitem)
 			{
-				$tooltip = (isset($subitem['text']) && $subitem['text'] != "") ? '<a rel="popover-right" href="#" data-content="' . htmlspecialchars($subitem['text']) . '" data-original-title="' . htmlspecialchars($subitem['title']) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>' : '';
+				$tooltip = (isset($subitem['text']) && $subitem['text'] != "") ? '<a rel="popover-right" href="#" data-content="' . htmlspecialchars($subitem['text']) . '" data-original-title="' . htmlspecialchars($subitem['title']) . '"><img src="' . icons(219, 16) . '" class="icon icon-small"></a>' : '';
 				$tooltip2 = (isset($subitem['alert']) && $subitem['alert']['text'] != "" && $subitem['alert']['if']) ? '<span class="label ' . $subitem['alert']['type'] . '">' . _(isset($subitem['alert']['type_text'])?$subitem['alert']['type_text']:$subitem['alert']['type']) . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars($subitem['alert']['text']) . '" data-original-title="' . htmlspecialchars($subitem['alert']['title']) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>' : '';
 				echo '<tr><td>' . $subitem['title'] . ' ' . $tooltip . '</td><td>' . $subitem['value'] . ' ' . $tooltip2 . '</td></tr>';
 			}

@@ -818,7 +818,7 @@ class Comic extends DataMapper
 		if (isset($this->href))
 			return $this->href;
 
-		return site_url('/reader/serie/' . $this->stub);
+		return site_url('/reader/series/' . $this->stub);
 	}
 
 

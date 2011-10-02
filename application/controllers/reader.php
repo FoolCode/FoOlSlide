@@ -124,7 +124,7 @@ class Reader extends Public_Controller {
 		}
 
 		if ($chapter == "") {
-			redirect('/reader/serie/' . $comic);
+			redirect('/reader/series/' . $comic);
 		}
 
 		$chaptere = new Chapter();
@@ -265,10 +265,20 @@ class Reader extends Public_Controller {
 	 * @author Woxxy
 	 */
 	public function comic($stub = NULL) {
-		redirect('/reader/serie/'.$stub);
+		redirect('/reader/series/'.$stub);
 	}
 	
+	/**
+	 * Replacing serie with series, for deprecated "serie"...
+	 * 
+	 * @deprecated 0.7 30/07/2011
+	 * @author Woxxy
+	 */
 	public function serie($stub = NULL) {
+		redirect('/reader/series/'.$stub);
+	}
+	
+	public function series($stub = NULL) {
 		if (is_null($stub))
 			show_404();
 		$comic = new Comic();

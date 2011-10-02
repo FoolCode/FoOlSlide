@@ -31,7 +31,7 @@ $CI->buttoner = array(
 				<div class="smalltext">'._('Quick tools').': 
 					<a href="'.site_url("admin/series/add_new/".$comic->stub).'">'._('Add Chapter').'</a> |
 					<a href="'.site_url("admin/series/delete/serie/".$comic->id).'" onclick="confirmPlug(\''.site_url("admin/series/delete/serie/".$comic->id).'\', \''._('Do you really want to delete this serie and its chapters?').'\'); return false;">'._('Delete').'</a> |
-					<a href="'.site_url("reader/serie/".$comic->stub).'">'._('Read').'</a>
+					<a href="'.site_url("reader/series/".$comic->stub).'">'._('Read').'</a>
 				</div>';
 			echo '</div>';
 		}

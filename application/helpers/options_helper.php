@@ -85,6 +85,12 @@ if (!function_exists('parse_irc')) {
  * Locate ImageMagick and determine if it has been installed or not. 
  */
 function find_imagick() {
+	$CI = & get_instance();
+	if(isset($CI->fs_imagick->available))
+	{
+		return $CI->fs_imagick->available;
+	}
+	
 	$ini_disabled = explode(', ', ini_get('disable_functions'));
 	if (!in_array('exec', $ini_disabled))
 	{
@@ -98,9 +104,15 @@ function find_imagick() {
 		}
 		if(file_exists($imagick_path) || file_exists($imagick_path.'.exe'))
 		{
-			return TRUE;
+			exec($imagick_path.' -version', $result);
+			if(preg_match('/ImageMagick/i', $result[0]))
+			{
+				$CI->fs_imagick->available = TRUE;
+				return TRUE;
+			}
 		}
 	}
+	$CI->fs_imagick->available = FALSE;
 	return FALSE;
 }
 

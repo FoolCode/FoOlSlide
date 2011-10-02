@@ -103,7 +103,7 @@
 						'type' => 'important',
 						'title' => _('Disabled'),
 						'text' => _('Your PHP configuration currently has URL-aware fopen wrappers disabled. This affects FoOlSlide functions that require accessing remote files in case cURL is not installed on the system. If it is possible, this variable should be enabled with cURL installed as well.') . '<p class="vartext">' . _('Suggested') . ': On</p>',
-						'if' => ini_get('allow_url_fopen')
+						'if' => !ini_get('allow_url_fopen')
 					)
 				),
 				array(

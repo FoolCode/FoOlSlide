@@ -486,27 +486,6 @@ if (!function_exists('form_language'))
 }
 
 
-if (!function_exists('form_teams'))
-{
-
-	function form_teams($column)
-	{
-		$teams = Team();
-		$teams->order_by('name', 'asc')->limit(100)->get();
-		$values = array();
-		foreach($teams->all as $team)
-		{
-			$values[] = $team->name;
-		}
-		
-		if (!isset($column['value']) || $column['value'] == "")
-			$column['value'] = get_setting('fs_gen_default_lang');
-		return form_dropdown($column['name'], $lang, $column['value']);
-	}
-
-}
-
-
 if (!function_exists('form_themes'))
 {
 

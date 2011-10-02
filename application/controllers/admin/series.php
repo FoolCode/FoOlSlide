@@ -96,7 +96,7 @@ class Series extends Admin_Controller
 
 			$data["table"] = $table;
 
-			$this->viewdata["extra_title"][] = '<a href="' . site_url('admin/series/serie/'.$comic->stub) . '">' . $comic->name . '</a>';
+			$this->viewdata["extra_title"][] = '<a href="' . site_url('admin/series/series/'.$comic->stub) . '">' . $comic->name . '</a>';
 			$this->viewdata["extra_title"][] = (($chapter->name != "") ? $chapter->name : $chapter->chapter . "." . $chapter->subchapter);
 
 			$data["pages"] = $chapter->get_pages();
@@ -134,7 +134,7 @@ class Series extends Admin_Controller
 			// Did we change the stub of the comic? We need to redirect to the new page then.
 			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub)
 			{
-				redirect('/admin/series/serie/' . $comic->stub);
+				redirect('/admin/series/series/' . $comic->stub);
 			}
 		}
 
@@ -175,7 +175,7 @@ class Series extends Admin_Controller
 		$table = tabler($table);
 		$data['table'] = $table;
 
-		$this->viewdata["main_content_view"] = $this->load->view("admin/series/serie.php", $data, TRUE);
+		$this->viewdata["main_content_view"] = $this->load->view("admin/series/series.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
@@ -194,7 +194,7 @@ class Series extends Admin_Controller
 				{
 					$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
 					flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
-					redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
+					redirect('/admin/series/series/' . $chapter->comic->stub . '/' . $chapter->id);
 				}
 			}
 			$comic = new Comic();
@@ -249,7 +249,7 @@ class Series extends Admin_Controller
 						}
 					}
 					flash_notice('notice', sprintf(_('The series %s has been added.'), $comic->name));
-					redirect('/admin/series/serie/' . $comic->stub);
+					redirect('/admin/series/series/' . $comic->stub);
 				}
 			}
 
@@ -285,7 +285,7 @@ class Series extends Admin_Controller
 			{
 				$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
 				flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
-				redirect('/admin/series/serie/' . $chapter->comic->stub . '/' . $chapter->id);
+				redirect('/admin/series/series/' . $chapter->comic->stub . '/' . $chapter->id);
 			}
 		}
 		$this->viewdata["extra_title"][] = _("Chapter");
@@ -439,11 +439,11 @@ class Series extends Admin_Controller
 				{
 					flash_notice('error', sprintf(_('Failed to delete chapter %s.'), $chapter->comic->chapter));
 					log_message("error", "Controller: series.php/remove: failed chapter removal");
-					echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
+					echo json_encode(array('href' => site_url("admin/series/series/" . $comic->stub)));
 					return false;
 				}
 				flash_notice('notice', sprintf(_('Chapter %s has been deleted.'), $title));
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $comic->stub)));
+				echo json_encode(array('href' => site_url("admin/series/series/" . $comic->stub)));
 				break;
 			case("page"):
 				$page = new Page($this->input->post('id'));
@@ -454,7 +454,7 @@ class Series extends Admin_Controller
 					log_message("error", "Controller: series.php/remove: failed page removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $page->chapter->comic->stub . "/" . $page->chapter->id)));
+				echo json_encode(array('href' => site_url("admin/series/series/" . $page->chapter->comic->stub . "/" . $page->chapter->id)));
 				break;
 			case("allpages"):
 				$chapter = new Chapter($id);
@@ -464,7 +464,7 @@ class Series extends Admin_Controller
 					log_message("error", "Controller: series.php/remove: failed all pages removal");
 					return false;
 				}
-				echo json_encode(array('href' => site_url("admin/series/serie/" . $chapter->comic->stub . "/" . $chapter->id)));
+				echo json_encode(array('href' => site_url("admin/series/series/" . $chapter->comic->stub . "/" . $chapter->id)));
 				break;
 		}
 	}

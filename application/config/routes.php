@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "reader";
 $route['admin'] = "admin/series";
+$route['admin/series/series/(:any)'] = "admin/series/serie/$1";
 $route['account'] = "account/index/profile";
 $route['account/profile'] = "account/index/profile";
 $route['account/teams'] = "account/index/teams";

@@ -540,12 +540,17 @@ class Page extends DataMapper
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
 
-		// get paths and remove the thumb
-		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
-		;
-		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
-		;
 
+		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
+		// get paths and remove the thumb
+		if (file_exists($thumb_path))
+		{
+			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
+			// don't stop the process
+			return TRUE;
+		}
+		
+		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
 		if (file_exists($thumb_path))
 		{
 			if (!unlink($thumb_path))

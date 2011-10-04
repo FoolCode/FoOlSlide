@@ -573,8 +573,32 @@ class Comic extends DataMapper
 
 		return true;
 	}
+	
+	public function check($repair = FALSE)
+	{
+		$dir = "content/comics/" . $this->directory() . "/";
+		if(!is_dir($dir))
+		{
+			$errors[] = 'comic_directory_not_found';
+			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name);
+			log_message('debug', 'check: comic directory missing at ' . $path);
+			
+			if($repair)
+			{
+				// the best we can do is removing the database entry
+				$this->remove_comic_db();
+			}
+		}
+		
+		return $errors;
+	}
 
 
+	public function check_external($repair = FALSE)
+	{
+		
+	}
+	
 	/**
 	 * Creates the thumbnail and saves the original as well
 	 *

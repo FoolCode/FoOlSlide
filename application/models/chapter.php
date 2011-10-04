@@ -722,7 +722,7 @@ class Chapter extends DataMapper
 	}
 
 
-	function check($repair = FALSE, $recursive = TRUE)
+	function check($repair = FALSE)
 	{
 		// make sure we got the comic
 		$this->get_comic();
@@ -735,7 +735,7 @@ class Chapter extends DataMapper
 		{
 			$errors[] = 'chapter_directory_not_found';
 			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name . ' > ' . $this->title());
-			log_message('debug', 'check_page: chapter directory missing at ' . $path);
+			log_message('debug', 'check: chapter directory missing at ' . $path);
 
 			// the folder doesn't exist, so get rid of the entry from database
 			if ($repair)

@@ -567,7 +567,7 @@ class Page extends DataMapper
 			if(in_array('missing_thumbnail', $errors))
 			{
 				// just rebuild the thumbnail
-				$this->remove_page_db();
+				$this->rebuild_thumbnail();
 				return TRUE;
 			}
 		}

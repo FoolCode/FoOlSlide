@@ -550,10 +550,29 @@ class Page extends DataMapper
 		
 		if (!file_exists($thumb_path))
 		{
-			$errors[] = 'missing_page';
+			$errors[] = 'missing_thumbnail';
 			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
 			log_message('error', 'check_page: there\'s a missing image in '. $path);
 		}
+		
+		if($repair)
+		{
+			if(in_array('missing_page', $errors) && in_array('missing_thumbnail', $errors))
+			{
+				// no better suggestion than removing
+				$this->remove_page_db();
+				return TRUE;
+			}
+			
+			if(in_array('missing_thumbnail', $errors))
+			{
+				// just rebuild the thumbnail
+				$this->remove_page_db();
+				return TRUE;
+			}
+		}
+		
+		return $errors;
 	}
 
 
@@ -561,7 +580,6 @@ class Page extends DataMapper
 	{
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
-
 
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
 		// get paths and remove the thumb

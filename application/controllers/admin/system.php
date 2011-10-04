@@ -225,7 +225,7 @@ class System extends Admin_Controller
 					$last_notice = end($this->notices);
 					if($last_notice['type'] == 'warning')
 					{
-						
+						$warnings[] = $last_notice['message'];
 					}
 					$this->output->set_output(json_encode(array('error' => $this->notices)));
 					return FALSE;

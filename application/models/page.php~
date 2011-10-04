@@ -534,10 +534,19 @@ class Page extends DataMapper
 		return true;
 	}
 
-	public function check_page()
+	public function check_page($repair = FALSE)
 	{
 		// check the files
-		
+		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
+		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
+		// get paths and remove the thumb
+		if (file_exists($path))
+		{
+			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
+			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
+			// don't stop the process
+			return TRUE;
+		}
 	}
 
 

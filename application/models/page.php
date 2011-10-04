@@ -534,6 +534,7 @@ class Page extends DataMapper
 		return true;
 	}
 
+
 	/**
 	 * Checks if the database entry reflects the files for the page
 	 *
@@ -544,7 +545,7 @@ class Page extends DataMapper
 	{
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
-		
+
 		$errors = array();
 		// check the files
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
@@ -553,34 +554,34 @@ class Page extends DataMapper
 		if (!file_exists($path))
 		{
 			$errors[] = 'missing_page';
-			set_message('warning', _('Page mpy found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('debug', 'check_page: page not found in '. $path);
+			set_message('warning', _('Page not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('debug', 'check_page: page not found in ' . $path);
 		}
-		
+
 		if (!file_exists($thumb_path))
 		{
 			$errors[] = 'missing_thumbnail';
-			set_message('warning', _('Thumbnail not found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('error', 'check_page: there\'s a missing thumbnail in '. $thumb_path);
+			set_message('warning', _('Thumbnail not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('error', 'check_page: there\'s a missing thumbnail in ' . $thumb_path);
 		}
-		
-		if($repair)
+
+		if ($repair)
 		{
-			if(in_array('missing_page', $errors) && in_array('missing_thumbnail', $errors))
+			if (in_array('missing_page', $errors) && in_array('missing_thumbnail', $errors))
 			{
 				// no better suggestion than removing
 				$this->remove_page_db();
 				return TRUE;
 			}
-			
-			if(in_array('missing_thumbnail', $errors))
+
+			if (in_array('missing_thumbnail', $errors))
 			{
 				// just rebuild the thumbnail
 				$this->rebuild_thumbnail();
 				return TRUE;
 			}
 		}
-		
+
 		return $errors;
 	}
 
@@ -594,12 +595,12 @@ class Page extends DataMapper
 		// get paths and remove the thumb
 		if (!file_exists($path))
 		{
-			set_message('warning', _('Page not found while creating thumbnail:'). ' ' .$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
+			set_message('warning', _('Page not found while creating thumbnail:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('error', 'rebuild_thumbnail: there\'s a missing image in ' . $path);
 			// don't stop the process
 			return TRUE;
 		}
-		
+
 		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
 		if (!file_exists($thumb_path))
 		{

@@ -63,8 +63,7 @@ class Chapter extends DataMapper
 		),
 		'description' => array(
 			'rules' => array(),
-			'label' => 'Description',
-			'type' => 'textarea'
+			'label' => 'Description'
 		),
 		'thumbnail' => array(
 			'rules' => array('max_length' => 512),
@@ -317,7 +316,7 @@ class Chapter extends DataMapper
 		// the addition of the chapter.
 		if (!isset($data["subchapter"]) || !is_int($data["subchapter"]))
 			$data["subchapter"] = 0;
-		
+
 		// Create a stub that is humanly readable, for the worst cases.
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
 
@@ -721,35 +720,122 @@ class Chapter extends DataMapper
 		// Even if false is returned all removable pages will be removed.
 		return $return;
 	}
-	
-	function check($repair = FALSE)
+
+
+	function check($repair = FALSE, $recursive = TRUE)
 	{
 		// make sure we got the comic
 		$this->get_comic();
-		
+
 		$errors = array();
-		
+
 		// check if the directory exists at all
 		$path = 'content/comics/' . $this->comic->directory() . '/' . $this->directory() . '/';
-		if(!is_dir($path))
+		if (!is_dir($path))
 		{
-			$errors[] = 'chapter_folder_not_found';
-			set_message('warning', _('No directory found for:').' '.$this->comic->name.' > '.$this->title());
-			log_message('debug', 'check_page: chapter directory missing at '. $path);
-		}
-		
-		$files = get_dir_file_info($path);
-		
-		foreach($files as $file)
-		{
-			$page = new Page();
-			$page->where('chapter_id', $this->id)->where('filename', $file['filename'])->get();
-			if($page->result_count() == 0)
+			$errors[] = 'chapter_directory_not_found';
+			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name . ' > ' . $this->title());
+			log_message('debug', 'check_page: chapter directory missing at ' . $path);
+
+			// the folder doesn't exist, so get rid of the entry from database
+			if ($repair)
 			{
-				// do something
+				$this->remove_chapter_db();
+			}
+
+			// there's no recovery from this, return the error codes
+			return $errors;
+		}
+
+		// check if there are extraneous files in the folder
+		$files = get_dir_file_info($path);
+		foreach ($files as $key => $file)
+		{
+			// check that the file is writable
+			if (!is_writable($file['relative_path']))
+			{
+				// non writable files are horrendous, send a notice and stop the machines
+				$errors[] = 'chapter_non_writable_file';
+				set_message('warning', _('Found non writable files in the comics folder. Check your files permissions.'));
+				log_message('debug', 'check: non writable file: ' . $file['relative_path']);
+				return $errors;
+			}
+
+			// get the extension
+			$ext = strtolower(substr($file['filename'], 0, -4));
+
+			if (in_array($ext, array('.zip')))
+			{
+				// maybe it's just the zip created by the archive system
+				$archive = new Archive();
+				$archive->where('chapter_id', $this->id)->get();
+				if ($archive->result_count() == 1)
+				{
+					// we actually have an archive, but is it the same file?
+					if ($file['filename'] == $archive->filename)
+					{
+						// same file, unset to confirm
+						unset($files[$key]);
+					}
+				}
+			}
+
+			if (in_array($ext, array('.png', '.jpg', 'jpeg', '.gif')))
+			{
+				$page = new Page();
+				$page->where('chapter_id', $this->id)->where('filename', $file['filename'])->get();
+				if ($page->result_count() == 1)
+				{
+					// it's a simple page, unset to confirm
+					unset($files[$key]);
+					continue;
+				}
+
+				// probably it's just a thumbnail
+				$thumbnail = preg_replace('thumb_', '', $file['filename'], 1);
+
+				// check if it's actually different
+				if ($thumbnail != $file['filename'])
+				{
+					$page = new Page();
+					$page->where('chapter_id', $this->id)->where('filename', $thumbnail)->get();
+
+					// if it's 1, it's a thumbnail, so let's unset it
+					if ($page->result_count() == 1)
+					{
+						// unset to confirm existence
+						unset($files[$key]);
+						continue;
+					}
+				}
 			}
 		}
-		
+
+		// now we have an array with files that don't belong here
+		// repairing this means getting rid of extraneous files
+		if ($repair)
+		{
+			foreach ($files as $file)
+			{
+				// it's possible the file is not removeable
+				if (is_writable($file['relative_path']))
+				{
+					// the files SHOULD be writable, we checked it earlier
+					unlink($file['relative_path']);
+				}
+			}
+		}
+
+		// viceversa, check that all the database entries have a matching file
+		$pages = new Page();
+		$pages->where('chapter_id', $this->id)->get();
+		foreach ($pages->all as $page)
+		{
+			$page_error = $page->check($repair);
+		}
+
+		// everything's been checked. The errors are in the set_notice system
+		return $errors;
 	}
 
 

@@ -534,8 +534,17 @@ class Page extends DataMapper
 		return true;
 	}
 
-	public function check_page($repair = FALSE)
+	/**
+	 * Checks if the database entry reflects the files for the page
+	 *
+	 * @author Woxxy
+	 * @return array with error codes (missing_page, missing_thumbnail)
+	 */
+	public function check($repair = FALSE)
 	{
+		// Let's make sure the chapter and comic is set
+		$this->get_chapter();
+		
 		$errors = array();
 		// check the files
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
@@ -567,7 +576,7 @@ class Page extends DataMapper
 			if(in_array('missing_thumbnail', $errors))
 			{
 				// just rebuild the thumbnail
-				$this->remove_page_db();
+				$this->rebuild_thumbnail();
 				return TRUE;
 			}
 		}

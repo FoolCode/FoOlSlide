@@ -534,8 +534,17 @@ class Page extends DataMapper
 		return true;
 	}
 
-	public function check_page($repair = FALSE)
+	/**
+	 * Checks if the database entry reflects the files for the page
+	 *
+	 * @author Woxxy
+	 * @return array with error codes (missing_page, missing_thumbnail)
+	 */
+	public function check($repair = FALSE)
 	{
+		// Let's make sure the chapter and comic is set
+		$this->get_chapter();
+		
 		$errors = array();
 		// check the files
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
@@ -544,15 +553,15 @@ class Page extends DataMapper
 		if (!file_exists($path))
 		{
 			$errors[] = 'missing_page';
-			set_message('warning', 'Missing page found in: '.$this->chapter->comic->name.' > '.$this->chapter->title());
+			set_message('warning', _('Missing page found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
 			log_message('debug', 'check_page: missing page in '. $path);
 		}
 		
 		if (!file_exists($thumb_path))
 		{
 			$errors[] = 'missing_thumbnail';
-			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('error', 'check_page: there\'s a missing image in '. $path);
+			set_message('warning', _('Thumbnail not found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
+			log_message('error', 'check_page: there\'s a missing thumbnail in '. $thumb_path);
 		}
 		
 		if($repair)
@@ -585,7 +594,7 @@ class Page extends DataMapper
 		// get paths and remove the thumb
 		if (!file_exists($path))
 		{
-			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
+			set_message('warning', _('Page not found while creating thumbnail:'). ' ' .$this->chapter->comic->name.' > '.$this->chapter->title());
 			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
 			// don't stop the process
 			return TRUE;

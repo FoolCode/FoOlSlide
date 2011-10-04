@@ -721,6 +721,36 @@ class Chapter extends DataMapper
 		// Even if false is returned all removable pages will be removed.
 		return $return;
 	}
+	
+	function check($repair = FALSE)
+	{
+		// make sure we got the comic
+		$this->get_comic();
+		
+		$errors = array();
+		
+		// check if the directory exists at all
+		$path = 'content/comics/' . $this->comic->directory() . '/' . $this->directory() . '/';
+		if(!is_dir($path))
+		{
+			$errors[] = 'chapter_folder_not_found';
+			set_message('warning', _('No directory found for:').' '.$this->comic->name.' > '.$this->title());
+			log_message('debug', 'check_page: chapter directory missing at '. $path);
+		}
+		
+		$files = get_dir_file_info($path);
+		
+		foreach($files as $file)
+		{
+			$page = new Page();
+			$page->where('chapter_id', $this->id)->where('filename', $file['filename'])->get();
+			if($page->result_count() == 0)
+			{
+				// do something
+			}
+		}
+		
+	}
 
 
 	function get_dirsize()

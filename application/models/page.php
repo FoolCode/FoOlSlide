@@ -553,8 +553,8 @@ class Page extends DataMapper
 		if (!file_exists($path))
 		{
 			$errors[] = 'missing_page';
-			set_message('warning', _('Missing page found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('debug', 'check_page: missing page in '. $path);
+			set_message('warning', _('Page mpy found in:').' '.$this->chapter->comic->name.' > '.$this->chapter->title());
+			log_message('debug', 'check_page: page not found in '. $path);
 		}
 		
 		if (!file_exists($thumb_path))

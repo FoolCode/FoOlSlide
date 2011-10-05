@@ -330,6 +330,12 @@ class System extends Admin_Controller
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 	}
 
+	
+	function tools_check_comics()
+	{
+		$comics = new Comic();
+		$comics->check_external();
+	}
 
 	function upgrade()
 	{

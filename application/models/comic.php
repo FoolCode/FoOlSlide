@@ -596,7 +596,55 @@ class Comic extends DataMapper
 
 	public function check_external($repair = FALSE)
 	{
+		$this->load->helper('directory');
+		$map = directory_map('content/comics/', 1);
 		
+		// first check if everything is writable, EVERYTHING inside of it
+		foreach($map as $key => $item)
+		{
+			$item = 'content/comics/'.$item;
+			
+			if(is_dir($item))
+			{
+				// check if even the dir itself is writable 
+				if(!is_writable($item))
+				{
+					
+				}
+				
+				$files = get_dir_file_info($path, FALSE);
+			}
+			
+			// check if there's any file
+			foreach($files as $file)
+			{
+				
+			}
+		}
+		
+		foreach($map as $key => $item)
+		{
+			$item = 'content/comics/'.$item;
+			
+			
+			// if it's a file
+			if(!is_dir($item))
+			{
+				// there shouldn't be files in this folder
+				$errors[] = 'comic_unidentified_file';
+				set_message('warning', _('Found a file not belonging to the comics directory.'));
+				log_message('debug', 'check: file found in comics directory at ' . $item);
+				
+				if($repair)
+				{
+					unlink($item);
+				}
+			}
+			else
+			{
+				echo 'here';
+			}
+		}
 	}
 	
 	/**

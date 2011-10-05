@@ -64,20 +64,24 @@ class Comic extends DataMapper
 		// Set language
 		$this->help_lang();
 
-		if (!is_null($id) && $comic = $this->get_cached($id)) {
+		if (!is_null($id) && $comic = $this->get_cached($id))
+		{
 			parent::__construct();
-			foreach($comic->to_array() as $key => $c) {
+			foreach ($comic->to_array() as $key => $c)
+			{
 				$this->$key = $c;
-				
+
 				// fill also the all array so result_count() is correctly 1
 				$this->all[0]->$key = $c;
 			}
-			if(isset($comic->licenses))$this->licenses = $comic->licenses;
-			if(isset($comic->chapters))$this->chapters = $comic->chapters;
-			
+			if (isset($comic->licenses))
+				$this->licenses = $comic->licenses;
+			if (isset($comic->chapters))
+				$this->chapters = $comic->chapters;
+
 			return TRUE;
-		} 
-		
+		}
+
 		parent::__construct(NULL);
 
 		// We've overwrote the get() function so we need to look for $id from here
@@ -307,7 +311,7 @@ class Comic extends DataMapper
 			log_message('error', 'add_comic: failed creating dir');
 			return false;
 		}
-		
+
 		// Good job!
 		return true;
 	}
@@ -573,23 +577,24 @@ class Comic extends DataMapper
 
 		return true;
 	}
-	
+
+
 	public function check($repair = FALSE)
 	{
 		$dir = "content/comics/" . $this->directory() . "/";
-		if(!is_dir($dir))
+		if (!is_dir($dir))
 		{
 			$errors[] = 'comic_directory_not_found';
 			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name);
 			log_message('debug', 'check: comic directory missing at ' . $path);
-			
-			if($repair)
+
+			if ($repair)
 			{
 				// the best we can do is removing the database entry
 				$this->remove_comic_db();
 			}
 		}
-		
+
 		return $errors;
 	}
 
@@ -597,45 +602,25 @@ class Comic extends DataMapper
 	public function check_external($repair = FALSE)
 	{
 		$this->load->helper('directory');
-		$map = directory_map('content/comics/', 1);
-		
+		$this->check_writable('content/comics/');
+
 		// first check if everything is writable, EVERYTHING inside of it
-		foreach($map as $key => $item)
-		{
-			$item = 'content/comics/'.$item;
-			
-			if(is_dir($item))
-			{
-				// check if even the dir itself is writable 
-				if(!is_writable($item))
-				{
-					
-				}
-				
-				$files = get_dir_file_info($path, FALSE);
-			}
-			
-			// check if there's any file
-			foreach($files as $file)
-			{
-				
-			}
-		}
 		
-		foreach($map as $key => $item)
+
+		foreach ($map as $key => $item)
 		{
-			$item = 'content/comics/'.$item;
-			
-			
+			$item = 'content/comics/' . $item;
+
+
 			// if it's a file
-			if(!is_dir($item))
+			if (!is_dir($item))
 			{
 				// there shouldn't be files in this folder
 				$errors[] = 'comic_unidentified_file';
 				set_message('warning', _('Found a file not belonging to the comics directory.'));
 				log_message('debug', 'check: file found in comics directory at ' . $item);
-				
-				if($repair)
+
+				if ($repair)
 				{
 					unlink($item);
 				}
@@ -646,7 +631,41 @@ class Comic extends DataMapper
 			}
 		}
 	}
-	
+
+
+	private function check_writable($path)
+	{
+		$map = directory_map($path, 1);
+		foreach ($map as $key => $item)
+		{
+			$item = 'content/comics/' . $item;
+
+			if (is_dir($item))
+			{
+				// check if even the dir itself is writable 
+				if (!is_writable($item))
+				{
+					$errors[] = 'comic_non_writable_directory';
+					set_message('warning', _('Found a non-writable directory: aborting. Please, restore your comics folder files permissions before retrying.'));
+					log_message('debug', 'check: non-writable directory found in comics: ' . $item);
+				}
+
+				// use the recursive check function
+				$this->check_writable($item);
+			}
+			else
+			{
+				if (!is_writable($item))
+				{
+					$errors[] = 'comic_non_writable_file';
+					set_message('warning', _('Found a non-writable file: aborting. Please, restore your comics folder files permissions before retrying.'));
+					log_message('debug', 'check: non-writable file found in comics: ' . $item);
+				}
+			}
+		}
+	}
+
+
 	/**
 	 * Creates the thumbnail and saves the original as well
 	 *
@@ -847,7 +866,8 @@ class Comic extends DataMapper
 	{
 		return $this->name;
 	}
-	
+
+
 	/**
 	 * Returns the href to the chapter editing
 	 *

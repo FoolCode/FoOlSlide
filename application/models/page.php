@@ -545,6 +545,7 @@ class Page extends DataMapper
 		// get paths and remove the thumb
 		if (file_exists($thumb_path))
 		{
+			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
 			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
 			// don't stop the process
 			return TRUE;

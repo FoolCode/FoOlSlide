@@ -217,15 +217,21 @@ class System extends Admin_Controller
 				return TRUE;
 			}
 
+			$warnings = array();
 			foreach ($pages->all as $page)
 			{
 				if (!$page->rebuild_thumbnail())
 				{
+					$last_notice = end($this->notices);
+					if($last_notice['type'] == 'warning')
+					{
+						$warnings[] = $last_notice['message'];
+					}
 					$this->output->set_output(json_encode(array('error' => $this->notices)));
 					return FALSE;
 				}
 			}
-			$this->output->set_output(json_encode(array('status' => 'success')));
+			$this->output->set_output(json_encode(array('status' => 'success', 'warnings' => $warnings)));
 			return TRUE;
 		}
 	}

@@ -51,6 +51,13 @@
 									});
 									return false;
 								}
+								
+								if(data.warning instanceof Array)
+								{
+									jQuery.each(data.error, function(i,v){
+										jQuery('#modal-optimize-thumbnails-errors').append('<div class="alert-message warning fade in" data-alert="alert"><p>' + v.message + '</p></div>');
+									});
+								}
 															
 								if(data.status == "done")
 								{

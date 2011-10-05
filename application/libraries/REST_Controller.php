@@ -912,7 +912,7 @@ class REST_Controller extends MY_Controller
 	 * @param array $remove removes default accepted values
 	 * @param array $default default accepted values
 	 */
-	function _orderby($object, $add = array(), $remove = array(), $default = array('id', 'name', 'created', 'edited'))
+	function _orderby($object, $add = array(), $remove = array(), $default = array('id', 'name', 'created', 'updated'))
 	{
 		// return TRUE if there's no orderby set
 		if (!$this->get('orderby'))
@@ -921,6 +921,7 @@ class REST_Controller extends MY_Controller
 		// the tag is set
 		$order = $this->get('orderby');
 
+		
 		// add and remove from default array
 		$default = array_merge($default, $add);
 		$default = array_diff($default, $remove);
@@ -947,6 +948,10 @@ class REST_Controller extends MY_Controller
 			return FALSE;
 		}
 
+		// fix for compatibility FoOlSlide 0.8.4 (05/10/2011)
+		if($order == 'edited')
+			$order = 'updated';
+		
 		// check that the orderby method exists
 		if (in_array($order, $default))
 		{

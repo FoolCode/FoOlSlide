@@ -585,7 +585,7 @@ class Comic extends DataMapper
 		if (!is_dir($dir))
 		{
 			$errors[] = 'comic_directory_not_found';
-			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name);
+			set_notice('warning', _('No directory found for:') . ' ' . $this->comic->name);
 			log_message('debug', 'check: comic directory missing at ' . $path);
 
 			if ($repair)
@@ -602,32 +602,32 @@ class Comic extends DataMapper
 	public function check_external($repair = FALSE)
 	{
 		$this->load->helper('directory');
-		$this->check_writable('content/comics/');
 
-		// first check if everything is writable, EVERYTHING inside of it
-		
+		// check if all that is inside is writeable
+		if($this->check_writable('content/comics/'))
+			echo 'true';
 
+		// check that every folder has a correpsonding comic
+		$map = directory_map('content/comics/', 1);
 		foreach ($map as $key => $item)
 		{
-			$item = 'content/comics/' . $item;
-
-
-			// if it's a file
-			if (!is_dir($item))
+			$item_arr = explode('_', $item);
+			$uniqid = end($item_arr);echo $uniqid.'<br/>';
+			$stub = str_replace('_' . $uniqid, '', $item);
+			$comic = new Comic();
+			$comic->where('stub', $stub)->where('uniqid', $uniqid)->get();
+			echo $stub.'<br/>';
+			if ($comic->result_count() == 0)
 			{
-				// there shouldn't be files in this folder
-				$errors[] = 'comic_unidentified_file';
-				set_message('warning', _('Found a file not belonging to the comics directory.'));
-				log_message('debug', 'check: file found in comics directory at ' . $item);
-
+				$errors[] = 'comic_entry_not_found';
+				set_notice('warning', _('No database entry found for:') . ' ' . $stub);
+				log_message('debug', 'check: database entry missing for ' . $stub);
 				if ($repair)
 				{
-					unlink($item);
+					// you have to remove all the files in the folder first
+					delete_files('content/comics/' . $item, TRUE);
+					unlink('content/comics/' . $item);
 				}
-			}
-			else
-			{
-				echo 'here';
 			}
 		}
 	}
@@ -638,31 +638,35 @@ class Comic extends DataMapper
 		$map = directory_map($path, 1);
 		foreach ($map as $key => $item)
 		{
-			$item = 'content/comics/' . $item;
-
-			if (is_dir($item))
+			if (is_dir($path . $item))
 			{
 				// check if even the dir itself is writable 
-				if (!is_writable($item))
+				if (!is_writable($path . $item . '/'))
 				{
 					$errors[] = 'comic_non_writable_directory';
-					set_message('warning', _('Found a non-writable directory: aborting. Please, restore your comics folder files permissions before retrying.'));
+					set_notice('warning', _('Found a non-writable directory: aborting. Please, restore your comics folder files permissions before retrying.'));
 					log_message('debug', 'check: non-writable directory found in comics: ' . $item);
+					return FALSE;
 				}
 
 				// use the recursive check function
-				$this->check_writable($item);
+				if (!$this->check_writable($path . $item . '/'))
+				{
+					return FALSE;
+				}
 			}
 			else
 			{
-				if (!is_writable($item))
+				if (!is_writable($path . $item))
 				{
 					$errors[] = 'comic_non_writable_file';
-					set_message('warning', _('Found a non-writable file: aborting. Please, restore your comics folder files permissions before retrying.'));
+					set_notice('warning', _('Found a non-writable file: aborting. Please, restore your comics folder files permissions before retrying.'));
 					log_message('debug', 'check: non-writable file found in comics: ' . $item);
+					return FALSE;
 				}
 			}
 		}
+		return TRUE;
 	}
 
 

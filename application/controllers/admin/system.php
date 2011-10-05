@@ -174,6 +174,7 @@ class System extends Admin_Controller
 
 		$data["database_backup"] = strtolower($this->db->dbdriver) == "mysql";
 		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli";
+		
 		$logs = get_dir_file_info($this->config->item('log_path'));
 		$data["logs_space"] = 0;
 		foreach ($logs as $log)
@@ -335,6 +336,9 @@ class System extends Admin_Controller
 	{
 		$comics = new Comic();
 		$comics->check_external();
+		if(isset($this->fs_notices))
+			print_r($this->fs_notices);
+		echo 'here';
 	}
 
 	function upgrade()

@@ -20,6 +20,11 @@ if (!function_exists('set_notice'))
 		
 		$CI = & get_instance();
 		$CI->notices[] = array("type" => $type, "message" => $message, "data" => $data);
+		
+		if($CI->input->is_cli_request())
+		{
+			echo '['.$type.'] '.$message.PHP_EOL;
+		}
 	}
 
 

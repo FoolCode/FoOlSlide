@@ -639,32 +639,15 @@ class Comic extends DataMapper
 				}
 			}
 		}
-		
+
 		// if recursive, this will go through a through (and long) check of all chapters
-		if($recursive)
+		if ($recursive)
 		{
-			/**
-			 * @todo This is suicidal with too little RAM.
-			 */
-			// do 30 chapters at time not to risk filling up the RAM
-			$done = 1;
-			while($done !== TRUE)
-			{echo 'here';
-				$chapters = new Chapter();
-				$chapters->limit(30, $done)->get();
-				if($chapters->result_count() > 0)
-				{
-					$done += 30;
-				}
-				else
-				{
-					$done = TRUE;
-				}
-				
-				foreach($chapters->all as $chapter)
-				{
-					$chapter->check($repair);
-				}
+			$chapters = new Chapter();
+			$chapters->where('comic_id', $this->id)->get();
+			foreach ($chapters->all as $chapter)
+			{
+				$chapter->check($repair);
 			}
 		}
 

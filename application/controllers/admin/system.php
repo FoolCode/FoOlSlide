@@ -332,23 +332,36 @@ class System extends Admin_Controller
 	}
 
 
-	function tools_check_comics()
+	function tools_check_comics($repair = FALSE)
 	{
-		$repair = FALSE;
+		// basically CSRF protection from repairing
+		if(!$this->input->is_cli_request())
+		{
+			$repair = FALSE;
+		}
+		
 		if ($this->input->post('repair') == 'repair')
 		{
 			$repair = TRUE;
 		}
 
+		if ($this->input->is_cli_request())
+		{
+			$recursive = TRUE;
+		}
+
 		$comics = new Comic();
-		$comics->check_external($repair, TRUE);
+		$comics->check_external($repair, $recursive);
 
 		$warnings = array();
 		foreach ($this->notices as $notice)
 		{
 			if ($notice['type'] == 'error')
 			{
-				$this->output->set_output(json_encode(array('status' => 'error', 'message' => $notice['message'])));
+				if (!$this->input->is_cli_request())
+				{
+					$this->output->set_output(json_encode(array('status' => 'error', 'message' => $notice['message'])));
+				}
 				return FALSE;
 			}
 
@@ -357,16 +370,27 @@ class System extends Admin_Controller
 				$warnings[] = $notice['message'];
 			}
 		}
-		// if we are here we at most have warning notices
-		// add count to request so we can process chapters one by one
-		$chapters = new Chapter();
-		$count = $chapters->count();
 
-		$this->output->set_output(json_encode(array(
-					'status' => (count($warnings) > 0) ? 'warning' : 'success',
-					'messages' => $warnings,
-					'chapters_count' => $count
-				)));
+		if (!$recursive)
+		{
+			// if we are here we at most have warning notices
+			// add count to request so we can process chapters one by one
+			$chapters = new Chapter();
+			$count = $chapters->count();
+		}
+
+		if (!$this->input->is_cli_request())
+		{
+			$this->output->set_output(json_encode(array(
+						'status' => (count($warnings) > 0) ? 'warning' : 'success',
+						'messages' => $warnings,
+						'chapters_count' => $count
+					)));
+		}
+		else
+		{
+			echo PHP_EOL . sprintf(_('To repair automatically by removing the unidentified data and rebuilding the missing thumbnails, enter: %s'), 'php ' . FCPATH . 'index.php admin system tools_check_comics repair') . PHP_EOL;
+		}
 	}
 
 

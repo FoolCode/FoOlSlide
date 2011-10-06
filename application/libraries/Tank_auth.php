@@ -147,6 +147,11 @@ class Tank_auth
 	 */
 	function is_logged_in($activated = TRUE)
 	{
+		if($this->ci->input->is_cli_request())
+		{
+			return TRUE;
+		}
+		
 		return $this->ci->session->userdata('status') === ($activated ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED);
 	}
 
@@ -160,6 +165,11 @@ class Tank_auth
 	 */
 	function is_admin($user_id = NULL)
 	{
+		if($this->ci->input->is_cli_request())
+		{
+			return TRUE;
+		}
+		
 		// not logged users gonna login
 		if (!$this->is_logged_in() && is_null($user_id))
 			return FALSE;

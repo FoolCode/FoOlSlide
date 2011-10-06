@@ -579,14 +579,15 @@ class Comic extends DataMapper
 	}
 
 
-	public function check($repair = FALSE)
+	public function check($repair = FALSE, $recursive = FALSE)
 	{
 		$dir = "content/comics/" . $this->directory() . "/";
+		$errors = array();
 		if (!is_dir($dir))
 		{
 			$errors[] = 'comic_directory_not_found';
-			set_notice('warning', _('No directory found for:') . ' ' . $this->comic->name);
-			log_message('debug', 'check: comic directory missing at ' . $path);
+			set_notice('warning', _('No directory found for:') . ' ' . $this->name . ' (' . $this->directory() . ')');
+			log_message('debug', 'check: comic directory missing at ' . $dir);
 
 			if ($repair)
 			{
@@ -594,29 +595,103 @@ class Comic extends DataMapper
 				$this->remove_comic_db();
 			}
 		}
+		else
+		{
+			// check that there are no unidentified files in the comic folder
+			$map = directory_map($dir, 1);
+			foreach ($map as $key => $item)
+			{
+				$item_path = $dir . $item;
+				if (is_dir($item_path))
+				{
+					// gotta split the directory to get stub and uniqid
+					$item_arr = explode('_', $item);
+					$uniqid = end($item_arr);
+					$stub = str_replace('_' . $uniqid, '', $item);
+					$chapter = new Chapter();
+					$chapter->where('stub', $stub)->where('uniqid', $uniqid)->get();
+					if ($chapter->result_count() == 0)
+					{
+						$errors[] = 'comic_unidentified_directory_found';
+						set_notice('warning', _('Unidentified directory found at:') . ' ' . $item_path);
+						log_message('debug', 'check: unidentified directory found at ' . $item_path);
+						if ($repair)
+						{
+							// you have to remove all the files in the folder first
+							delete_files($item_path, TRUE);
+							rmdir($item_path);
+						}
+					}
+				}
+				else
+				{
+					if ($item != $this->thumbnail && $item != 'thumb_' . $this->thumbnail)
+					{
+						// if it's not the thumbnail image, it's an unidentified file
+						$errors[] = 'comic_unidentified_file_found';
+						set_notice('warning', _('Unidentified file found at:') . ' ' . $item_path);
+						log_message('debug', 'check: unidentified file found at ' . $item_path);
+						if ($repair)
+						{
+							unlink($item_path);
+						}
+					}
+				}
+			}
+		}
+		
+		// if recursive, this will go through a through (and long) check of all chapters
+		if($recursive)
+		{
+			/**
+			 * @todo This is suicidal with too little RAM.
+			 */
+			// do 30 chapters at time not to risk filling up the RAM
+			$done = 1;
+			while($done !== TRUE)
+			{echo 'here';
+				$chapters = new Chapter();
+				$chapters->limit(30, $done)->get();
+				if($chapters->result_count() > 0)
+				{
+					$done += 30;
+				}
+				else
+				{
+					$done = TRUE;
+				}
+				
+				foreach($chapters->all as $chapter)
+				{
+					$chapter->check($repair);
+				}
+			}
+		}
 
 		return $errors;
 	}
 
 
-	public function check_external($repair = FALSE)
+	public function check_external($repair = FALSE, $recursive = FALSE)
 	{
 		$this->load->helper('directory');
 
 		// check if all that is inside is writeable
-		if($this->check_writable('content/comics/'))
-			echo 'true';
+		if (!$this->check_writable('content/comics/'))
+		{
+			return FALSE;
+		}
 
 		// check that every folder has a correpsonding comic
 		$map = directory_map('content/comics/', 1);
 		foreach ($map as $key => $item)
 		{
+			// gotta split the directory to get stub and uniqid
 			$item_arr = explode('_', $item);
-			$uniqid = end($item_arr);echo $uniqid.'<br/>';
+			$uniqid = end($item_arr);
 			$stub = str_replace('_' . $uniqid, '', $item);
 			$comic = new Comic();
 			$comic->where('stub', $stub)->where('uniqid', $uniqid)->get();
-			echo $stub.'<br/>';
 			if ($comic->result_count() == 0)
 			{
 				$errors[] = 'comic_entry_not_found';
@@ -626,9 +701,17 @@ class Comic extends DataMapper
 				{
 					// you have to remove all the files in the folder first
 					delete_files('content/comics/' . $item, TRUE);
-					unlink('content/comics/' . $item);
+					rmdir('content/comics/' . $item);
 				}
 			}
+		}
+
+		// check the database entries
+		$comics = new Comic();
+		$comics->get();
+		foreach ($comics->all as $key => $comic)
+		{
+			$comic->check($repair, $recursive);
 		}
 	}
 
@@ -643,9 +726,9 @@ class Comic extends DataMapper
 				// check if even the dir itself is writable 
 				if (!is_writable($path . $item . '/'))
 				{
-					$errors[] = 'comic_non_writable_directory';
-					set_notice('warning', _('Found a non-writable directory: aborting. Please, restore your comics folder files permissions before retrying.'));
-					log_message('debug', 'check: non-writable directory found in comics: ' . $item);
+					$errors[] = 'non_writable_directory';
+					set_notice('warning', _('Found a non-writable directory.'));
+					log_message('debug', 'check: non-writable directory found: ' . $item);
 					return FALSE;
 				}
 
@@ -660,8 +743,8 @@ class Comic extends DataMapper
 				if (!is_writable($path . $item))
 				{
 					$errors[] = 'comic_non_writable_file';
-					set_notice('warning', _('Found a non-writable file: aborting. Please, restore your comics folder files permissions before retrying.'));
-					log_message('debug', 'check: non-writable file found in comics: ' . $item);
+					set_notice('warning', _('Found a non-writable file.'));
+					log_message('debug', 'check: non-writable file: ' . $item);
 					return FALSE;
 				}
 			}

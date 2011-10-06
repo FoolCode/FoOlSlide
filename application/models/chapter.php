@@ -734,7 +734,7 @@ class Chapter extends DataMapper
 		if (!is_dir($path))
 		{
 			$errors[] = 'chapter_directory_not_found';
-			set_message('warning', _('No directory found for:') . ' ' . $this->comic->name . ' > ' . $this->title());
+			set_notice('warning', _('No directory found for:') . ' ' . $this->comic->name . ' > ' . $this->title());
 			log_message('debug', 'check: chapter directory missing at ' . $path);
 
 			// the folder doesn't exist, so get rid of the entry from database
@@ -756,13 +756,13 @@ class Chapter extends DataMapper
 			{
 				// non writable files are horrendous, send a notice and stop the machines
 				$errors[] = 'chapter_non_writable_file';
-				set_message('warning', _('Found non writable files in the comics folder. Check your files permissions.'));
+				set_notice('warning', _('Found non writable files in the comics folder. Check your files permissions.'));
 				log_message('debug', 'check: non writable file: ' . $file['relative_path']);
 				return $errors;
 			}
 
 			// get the extension
-			$ext = strtolower(substr($file['filename'], 0, -4));
+			$ext = strtolower(substr($file['name'], -4));
 
 			if (in_array($ext, array('.zip')))
 			{
@@ -772,10 +772,11 @@ class Chapter extends DataMapper
 				if ($archive->result_count() == 1)
 				{
 					// we actually have an archive, but is it the same file?
-					if ($file['filename'] == $archive->filename)
+					if ($file['name'] == $archive->filename)
 					{
 						// same file, unset to confirm
 						unset($files[$key]);
+						continue;
 					}
 				}
 			}
@@ -783,7 +784,7 @@ class Chapter extends DataMapper
 			if (in_array($ext, array('.png', '.jpg', 'jpeg', '.gif')))
 			{
 				$page = new Page();
-				$page->where('chapter_id', $this->id)->where('filename', $file['filename'])->get();
+				$page->where('chapter_id', $this->id)->where('filename', $file['name'])->get();
 				if ($page->result_count() == 1)
 				{
 					// it's a simple page, unset to confirm
@@ -792,10 +793,10 @@ class Chapter extends DataMapper
 				}
 
 				// probably it's just a thumbnail
-				$thumbnail = preg_replace('thumb_', '', $file['filename'], 1);
+				$thumbnail = preg_replace('/^thumb_/', '', $file['name'], 1);
 
 				// check if it's actually different
-				if ($thumbnail != $file['filename'])
+				if ($thumbnail != $file['name'])
 				{
 					$page = new Page();
 					$page->where('chapter_id', $this->id)->where('filename', $thumbnail)->get();
@@ -812,16 +813,20 @@ class Chapter extends DataMapper
 		}
 
 		// now we have an array with files that don't belong here
-		// repairing this means getting rid of extraneous files
-		if ($repair)
+		foreach ($files as $file)
 		{
-			foreach ($files as $file)
+			$errors[] = 'chapter_unidentified_file';
+			set_notice('warning', _('Unidentified file found in:') . ' ' . $this->comic->name . ' > ' . $this->title());
+			log_message('debug', 'check: unidentified file ' . $file['relative_path'] . $file['name']);
+
+			// repairing this means getting rid of extraneous files
+			if ($repair)
 			{
 				// it's possible the file is not removeable
-				if (is_writable($file['relative_path']))
+				if (is_writable($file['relative_path'] . $file['name']))
 				{
 					// the files SHOULD be writable, we checked it earlier
-					unlink($file['relative_path']);
+					unlink($file['relative_path'] . $file['name']);
 				}
 			}
 		}

@@ -50,21 +50,21 @@ class System extends Admin_Controller
 
 		$form = array();
 
-		if(find_imagick())
+		if (find_imagick())
 		{
 			$imagick_status = '<span class="label success">' . _('Found and Working') . '</span>';
 		}
 		else
 		{
-			if(!$this->fs_imagick->exec)
+			if (!$this->fs_imagick->exec)
 				$imagick_status = '<span class="label important">' . _('Not Available') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must have Safe Mode turned off and the exec() function enabled to allow ImageMagick to process your images. Please check the information panel for more details.')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
-			else if (!$this->fs_imagick->found) 
+			else if (!$this->fs_imagick->found)
 				$imagick_status = '<span class="label important">' . _('Not Found') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must provide the correct path to the "convert" binary on your system. This is typically located under /usr/bin (Linux), /opt/local/bin (Mac OSX) or the installation directory (Windows).')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
-			else if (!$this->fs_imagick->available) 
-				$imagick_status = '<span class="label important">' . _('Not Working') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(sprintf(_('There has been an error encountered when testing your ImageMagick installation. To manually check for errors, access your server via shell or command line and type: %s'), '<br/><code>'.$this->fs_imagick->found . ' -version</code>')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
+			else if (!$this->fs_imagick->available)
+				$imagick_status = '<span class="label important">' . _('Not Working') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(sprintf(_('There has been an error encountered when testing your ImageMagick installation. To manually check for errors, access your server via shell or command line and type: %s'), '<br/><code>' . $this->fs_imagick->found . ' -version</code>')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
 		}
-		
-		
+
+
 		$form[] = array(
 			_('Path to ImageMagick') . ' ' . $imagick_status,
 			array(
@@ -174,7 +174,7 @@ class System extends Admin_Controller
 
 		$data["database_backup"] = strtolower($this->db->dbdriver) == "mysql";
 		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli";
-		
+
 		$logs = get_dir_file_info($this->config->item('log_path'));
 		$data["logs_space"] = 0;
 		foreach ($logs as $log)
@@ -224,7 +224,7 @@ class System extends Admin_Controller
 				if (!$page->rebuild_thumbnail())
 				{
 					$last_notice = end($this->notices);
-					if($last_notice['type'] == 'warning')
+					if ($last_notice['type'] == 'warning')
 					{
 						$warnings[] = $last_notice['message'];
 					}
@@ -292,7 +292,7 @@ class System extends Admin_Controller
 
 		// sort by key high to low
 		ksort($logs);
-		
+
 		if (is_null($date))
 		{
 			$selected = end($logs);
@@ -331,15 +331,61 @@ class System extends Admin_Controller
 		$this->output->set_output(json_encode(array('href' => site_url('admin/system/tools'))));
 	}
 
-	
+
 	function tools_check_comics()
 	{
+		$repair = FALSE;
+		if ($this->input->post('repair') == 'repair')
+		{
+			$repair = TRUE;
+		}
+
 		$comics = new Comic();
-		$comics->check_external();
-		if(isset($this->fs_notices))
-			print_r($this->fs_notices);
-		echo 'here';
+		$comics->check_external($repair, TRUE);
+
+		$warnings = array();
+		foreach ($this->notices as $notice)
+		{
+			if ($notice['type'] == 'error')
+			{
+				$this->output->set_output(json_encode(array('status' => 'error', 'message' => $notice['message'])));
+				return FALSE;
+			}
+
+			if ($notice['type'] == 'warning')
+			{
+				$warnings[] = $notice['message'];
+			}
+		}
+		// if we are here we at most have warning notices
+		// add count to request so we can process chapters one by one
+		$chapters = new Chapter();
+		$count = $chapters->count();
+
+		$this->output->set_output(json_encode(array(
+					'status' => (count($warnings) > 0) ? 'warning' : 'success',
+					'messages' => $warnings,
+					'chapters_count' => $count
+				)));
 	}
+
+
+	function tools_check_chapter()
+	{
+		if (!is_numeric($this->input->post('num')))
+		{
+			show_404();
+		}
+
+		$repair = FALSE;
+		if ($this->input->post('repair') == 'repair')
+		{
+			$repair = TRUE;
+		}
+
+		$chapter->check($repair);
+	}
+
 
 	function upgrade()
 	{

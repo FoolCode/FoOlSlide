@@ -11,7 +11,7 @@ if (!function_exists('set_notice'))
 	 * 
 	 * @author Woxxy
 	 */
-	function set_notice($type, $message)
+	function set_notice($type, $message, $data = FALSE)
 	{
 		if ($type == 'warn')
 			$type = 'warning';
@@ -19,7 +19,7 @@ if (!function_exists('set_notice'))
 			$type = 'success';
 		
 		$CI = & get_instance();
-		$CI->notices[] = array("type" => $type, "message" => $message);
+		$CI->notices[] = array("type" => $type, "message" => $message, "data" => $data);
 	}
 
 

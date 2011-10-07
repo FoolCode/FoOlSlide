@@ -396,7 +396,12 @@ class System extends Admin_Controller
 
 	function tools_check_chapter()
 	{
-		if (!is_numeric($this->input->post('num')))
+		if (!is_numeric($this->input->post('from')))
+		{
+			show_404();
+		}
+		
+		if (!is_numeric($this->input->post('howmany')))
 		{
 			show_404();
 		}
@@ -407,6 +412,8 @@ class System extends Admin_Controller
 			$repair = TRUE;
 		}
 
+		$chapter = new Chapter();
+		$chapter->limit($this->input->post('howmany'), $this->input->post('from'));
 		$chapter->check($repair);
 	}
 

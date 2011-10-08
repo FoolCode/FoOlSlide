@@ -548,7 +548,7 @@ class Page extends DataMapper
 		if($this->get_chapter() === FALSE)
 		{
 			$errors[] = 'page_chapter_entry_not_found';
-			set_notice('warning', _('Found a page entry without a chapter entry'));
+			set_notice('warning', _('Found a page entry without a chapter entry, ID: '.$this->id));
 			log_message('debug', 'check: page entry without chapter entry');
 			
 			if($repair)

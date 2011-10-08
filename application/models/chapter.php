@@ -259,11 +259,11 @@ class Chapter extends DataMapper
 		$this->comic = new Comic($this->comic_id);
 
 		if ($this->comic->result_count() == 0)
-		{	
+		{
 			unset($this->comic);
 			return FALSE;
 		}
-		
+
 		if (isset($this->all))
 			foreach ($this->all as $key => $item)
 			{
@@ -733,17 +733,17 @@ class Chapter extends DataMapper
 	function check($repair = FALSE)
 	{
 		// make sure we got the comic
-		if($this->get_comic() === FALSE)
+		if ($this->get_comic() === FALSE)
 		{
 			$errors[] = 'chapter_comic_entry_not_found';
-			set_notice('warning', _('Found a chapter entry without a comic entry'));
+			set_notice('warning', _('Found a chapter entry without a comic entry, Chapter ID: ' . $this->id));
 			log_message('debug', 'check: chapter entry without comic entry');
-			
-			if($repair)
+
+			if ($repair)
 			{
 				$this->remove_chapter_db();
 			}
-			
+
 			return FALSE;
 		}
 
@@ -836,7 +836,7 @@ class Chapter extends DataMapper
 		foreach ($files as $file)
 		{
 			$errors[] = 'chapter_unidentified_file';
-			set_notice('warning', _('Unidentified file found in:') . ' ' . $this->comic->name . ' > ' . $this->title());
+			set_notice('warning', _('Unidentified file found in:') . ' ' . $this->comic->name . ' > ' . $this->title() . ': ' . $file['name']);
 			log_message('debug', 'check: unidentified file ' . $file['relative_path'] . $file['name']);
 
 			// repairing this means getting rid of extraneous files
@@ -846,7 +846,15 @@ class Chapter extends DataMapper
 				if (is_writable($file['relative_path'] . $file['name']))
 				{
 					// the files SHOULD be writable, we checked it earlier
-					unlink($file['relative_path'] . $file['name']);
+					if (is_dir($file['relative_path'] . $file['name']))
+					{
+						delete_files($file['relative_path'] . $file['name']);
+						rmdir($file['relative_path'] . $file['name']);
+					}
+					else
+					{
+						unlink($file['relative_path'] . $file['name']);
+					}
 				}
 			}
 		}

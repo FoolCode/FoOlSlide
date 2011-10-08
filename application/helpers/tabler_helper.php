@@ -525,7 +525,7 @@ if (!function_exists('buttoner'))
 		$echo = '';
 		foreach ($texturl as $item)
 		{
-			$echo .= '<a class="btn" ';
+			$echo .= '<a ';
 			$text = $item['text'];
 			unset($item['text']);
 			if (isset($item['onclick']))
@@ -543,6 +543,17 @@ if (!function_exists('buttoner'))
 				$echo .= 'href="' . ($item['href']) . '" ';
 				unset($item['href']);
 			}
+			
+			$echo .= 'class="btn ';
+			
+			if (isset($item['class']))
+			{
+				$echo .= $item['class'];
+				unset($item['class']);
+			}
+			
+			$echo .= '"';
+			
 			foreach ($item as $key => $arg)
 				$echo .= $key . '="' . $arg . '" ';
 			$echo .= '>';

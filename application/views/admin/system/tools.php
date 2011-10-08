@@ -24,20 +24,20 @@
 				</div>
 
 				<script type="text/javascript">
-												
-												
+																		
+																		
 					var stop = false;
-												
+																		
 					var stopOptimizeThumbnails = function() {
 						stop = true;
 					}
-												
+																		
 					var optimizeThumbnails = function(manual){
 						if(manual === true)
 						{
 							stop = false;
 						}
-													
+																			
 						if(!stop)
 						{
 							jQuery('#modal-loading-optimize-thumbnails').show();
@@ -51,21 +51,21 @@
 									});
 									return false;
 								}
-								
+														
 								if(data.warning instanceof Array)
 								{
 									jQuery.each(data.error, function(i,v){
 										jQuery('#modal-optimize-thumbnails-errors').append('<div class="alert-message warning fade in" data-alert="alert"><p>' + v.message + '</p></div>');
 									});
 								}
-															
+																					
 								if(data.status == "done")
 								{
 									jQuery('#modal-optimize-thumbnails-count').html('<?php echo _('Done.') ?>');
 									jQuery('#modal-loading-optimize-thumbnails').hide();
 									return false;
 								}
-															
+																					
 								var activeCount = jQuery('#modal-optimize-thumbnails-current-count');
 								activeCount.text((parseInt(activeCount.html()) < 10)?0:parseInt(activeCount.html()) - 10);
 								optimizeThumbnails();
@@ -76,7 +76,7 @@
 							jQuery('#modal-loading-optimize-thumbnails').hide();
 						}
 					}
-												
+																		
 					jQuery(document).ready(function(){
 						jQuery('#modal-for-thumbnail-optimization').bind('show', function () {
 							jQuery.post('<?php echo site_url('admin/system/tools_optimize_thumbnails') ?>', function(data){
@@ -85,7 +85,7 @@
 								jQuery('#modal-optimize-thumbnails-current-count').text(data.count);
 							}, 'json');
 						});
-													
+																			
 						jQuery('#modal-for-thumbnail-optimization').bind('hide', function () {
 							stop = true;
 						});
@@ -216,93 +216,85 @@
 		</div>
 
 	</div>
-	
+
 	<div style="margin:0 10px 15px 0;">
 		<h3><?php echo _('Check and repair the library') ?></h3>
 		<p><?php echo _('It can happen that you or some server error touches the FoOlSlide library. This will allow you to find broken database entries and missing files. The repair function will rebuild the missing thumbnails, remove the database entries for missing files and remove the unidentified files.') ?></p>
-		<p><?php echo sprintf(_('You can also use this function via command line. Use the following line: %s'), '<br/><code>php '.FCPATH.'index.php admin system tools_check_comics</code>') ?></p>
+		<p><?php echo sprintf(_('You can also use this function via command line. Use the following line: %s'), '<br/><code>php ' . FCPATH . 'index.php admin system tools_check_comics</code>') ?></p>
 		<span><a href="#" class="btn" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-for-library-check"><?php echo _('Check library'); ?></a></span>
 		<span style=""><?php
-	$CI->buttoner = array();
-	$CI->buttoner[] = array(
-		'text' => _('Repair library'),
-		'href' => '#',
-		'plug' => _('Are you sure you want to prune all FoOlSlide logs?'),
-		'rel' => 'popover-right',
-		'title' => _('Repair library'),
-		'data-content' => _('This actually is a dangerous operation. Your files without dependencies will be removed. Before running, do a simple check to see what is the library missing.')
-	);
-	echo buttoner();
-	?></span>
-		
+				$CI->buttoner = array();
+				$CI->buttoner[] = array(
+					'text' => _('Repair library'),
+					'href' => '#',
+					'plug' => _('Are you sure you want to run a library repair?'),
+					'rel' => 'popover-right',
+					'class' => 'danger',
+					'title' => _('Repair library'),
+					'data-content' => _('This actually is a dangerous operation. Your files without dependencies will be removed. Before running, do a simple check to see what is the library missing.')
+				);
+				echo buttoner();
+				?></span>
+
 		<div id="modal-for-library-check" class="modal hide fade" style="display: none">
 			<div class="modal-header">
 				<a class="close" href="#">&times;</a>
 				<h3><?php echo _('Check and repair the library'); ?></h3>
 			</div>
 			<div class="modal-body" style="text-align: center">
-				<div id="modal-loading-log-display" class="loading" style="display:block;"><img src="<?php echo site_url() ?>assets/js/images/loader-18.gif"/></div>
-				<select id="modal-select-log" style="display:none; margin-bottom:10px;" onchange="getLog(this.value)"></select>
-				<textarea id="log-display-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important" readonly="readonly">
+				<div id="modal-loading-check-display" class="loading" style="display:block;"><img src="<?php echo site_url() ?>assets/js/images/loader-18.gif"/></div>
+				<textarea id="check-display-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important" readonly="readonly">
 				</textarea>
-				<div id="modal-log-display-errors" style="margin-top:10px;"></div>
+				<div id="modal-check-display-errors" style="margin-top:10px;"></div>
 			</div>
 			<div class="modal-footer">
-				
+
 			</div>
 
 			<script type="text/javascript">
-				var getLog = function(date){
-					jQuery('#modal-loading-log-display').show();
-					
-					if(date == undefined)
-					{
-						date = "";
-					}
-					
-					jQuery.post('<?php echo site_url('admin/system/tools_logs_get/') ?>' + date, function(data){
-						var log_select = jQuery('#modal-select-log');
-						if(data.error != undefined)
-						{
-							if(log_select.text().length < 3)
-							{
-								jQuery('#log-display-output').val(data.error);
-								jQuery('#modal-loading-log-display').hide();
-								jQuery("#modal-for-log-display").find(".modal-footer").html('')
-								return false;
-							}
-							else
-							{
-								jQuery('#modal-loading-log-display').hide();
-								jQuery('#modal-log-display-errors').append('<div class="alert-message error fade in" data-alert="alert"><p>' + data.error + '</p></div>');
-								return false;
-							}
-						}
-						
-						
-						if(log_select.text().length < 3)
-						{
-							var options = '';
-							jQuery.each(data.dates, function(i,v){
-								options = '<option value="' + v + '">' + v + '</option>' + options;
-							});
-							log_select.empty().html(options).show();
-						}
-						
-						jQuery('#modal-loading-log-display').hide();
-						jQuery('#log-display-output').val(data.log);
-						jQuery("#modal-for-log-display").find(".modal-footer").html('<center><a class="btn" style="float: none" href="#" onclick="return pastebinLog()"><?php echo _('Pastebin It!') ?></a></center>');
-					}, 'json');
+				var stop_check = false;
+												
+				var stopCheck = function() {
+					stop_check = true;
 				}
-				
-				var pastebinLog = function() {
-					var modalInfoOutput = jQuery("#modal-for-log-display");
-					jQuery.post('<?php echo site_url("admin/system/pastebin") ?>', { output: modalInfoOutput.find("#log-display-output").val() }, function(result) {
-						if (result.href != "") {
-							modalInfoOutput.find(".modal-footer").html('<center><input value="' + result.href + '" style="text-align: center" onclick="select(this);" readonly="readonly" /><br/><?php echo _('Note: This paste expires in 1 hour.'); ?></center>');
+												
+				var checkLibrary = function(manual, repair){
+					jQuery('#modal-loading-check-display').show();
+					
+					if(manual === true)
+					{
+						stop_check = false;
+					}
+													
+					if(!stop_check)
+					{
+						if(check_chapters !== true)
+						{
+							jQuery.post('<?php echo site_url('admin/system/tools_check_comics/') ?>',
+							{
+								repair: (repair === true)?'repair':'false'
+							},
+							function(data){
+								if(data.status == 'error')
+								{
+									jQuery('#modal-loading-check-display').hide();
+									jQuery('#modal-check-display-errors').append('<div class="alert-message error fade in" data-alert="alert"><p>' + data.error + '</p></div>');
+									jQuery('#modal-check-display-errors').append('<div class="alert-message error fade in" data-alert="alert"><p><?php echo htmlentities(_('You must fix the errors before you can proceed.')) ?></p></div>');
+									return false;
+								}
+						
+								if(data.status == 'warnings')
+								{
+									var messages = "";
+									jQuery.each(data.messages, function(index, value){
+										messages += value;
+									});
+									jQuery('#check-display-output').val(messages);
+								}
+								
+							}, 'json');
 						}
-					}, 'json');
-					return false;
+					}
 				}
 			</script>
 		</div>

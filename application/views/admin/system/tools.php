@@ -24,20 +24,20 @@
 				</div>
 
 				<script type="text/javascript">
-																		
-																		
+																				
+																				
 					var stop = false;
-																		
+																				
 					var stopOptimizeThumbnails = function() {
 						stop = true;
 					}
-																		
+																				
 					var optimizeThumbnails = function(manual){
 						if(manual === true)
 						{
 							stop = false;
 						}
-																			
+																					
 						if(!stop)
 						{
 							jQuery('#modal-loading-optimize-thumbnails').show();
@@ -51,21 +51,21 @@
 									});
 									return false;
 								}
-														
+																
 								if(data.warning instanceof Array)
 								{
 									jQuery.each(data.error, function(i,v){
 										jQuery('#modal-optimize-thumbnails-errors').append('<div class="alert-message warning fade in" data-alert="alert"><p>' + v.message + '</p></div>');
 									});
 								}
-																					
+																							
 								if(data.status == "done")
 								{
 									jQuery('#modal-optimize-thumbnails-count').html('<?php echo _('Done.') ?>');
 									jQuery('#modal-loading-optimize-thumbnails').hide();
 									return false;
 								}
-																					
+																							
 								var activeCount = jQuery('#modal-optimize-thumbnails-current-count');
 								activeCount.text((parseInt(activeCount.html()) < 10)?0:parseInt(activeCount.html()) - 10);
 								optimizeThumbnails();
@@ -76,7 +76,7 @@
 							jQuery('#modal-loading-optimize-thumbnails').hide();
 						}
 					}
-																		
+																				
 					jQuery(document).ready(function(){
 						jQuery('#modal-for-thumbnail-optimization').bind('show', function () {
 							jQuery.post('<?php echo site_url('admin/system/tools_optimize_thumbnails') ?>', function(data){
@@ -85,7 +85,7 @@
 								jQuery('#modal-optimize-thumbnails-current-count').text(data.count);
 							}, 'json');
 						});
-																			
+																					
 						jQuery('#modal-for-thumbnail-optimization').bind('hide', function () {
 							stop = true;
 						});
@@ -219,9 +219,9 @@
 
 	<div style="margin:0 10px 15px 0;">
 		<h3><?php echo _('Check and repair the library') ?></h3>
-		<p><?php echo _('It can happen that you or some server error touches the FoOlSlide library. This will allow you to find broken database entries and missing files. The repair function will rebuild the missing thumbnails, remove the database entries for missing files and remove the unidentified files.') ?></p>
+		<p><?php echo _('It can happen that you or some server error mess with the FoOlSlide library. This will allow you to find broken database entries and missing files. The repair function will rebuild the missing thumbnails, remove the database entries for missing files and remove the unidentified files.') ?></p>
 		<p><?php echo sprintf(_('You can also use this function via command line. Use the following line: %s'), '<br/><code>php ' . FCPATH . 'index.php admin system tools_check_comics</code>') ?></p>
-		<span><a href="#" class="btn" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-for-library-check"><?php echo _('Check library'); ?></a></span>
+		<span><a href="#" class="btn" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-for-library-check" onClick="checkLibrary(true)"><?php echo _('Check library'); ?></a></span>
 		<span style=""><?php
 				$CI->buttoner = array();
 				$CI->buttoner[] = array(
@@ -231,38 +231,63 @@
 					'rel' => 'popover-right',
 					'class' => 'danger',
 					'title' => _('Repair library'),
+					'function' => 'repairLibrary',
 					'data-content' => _('This actually is a dangerous operation. Your files without dependencies will be removed. Before running, do a simple check to see what is the library missing.')
 				);
 				echo buttoner();
 				?></span>
 
-		<div id="modal-for-library-check" class="modal hide fade" style="display: none">
+		
+		<div id="modal-for-library-check" class="modal hide fade" style="display: none;">
 			<div class="modal-header">
 				<a class="close" href="#">&times;</a>
 				<h3><?php echo _('Check and repair the library'); ?></h3>
 			</div>
 			<div class="modal-body" style="text-align: center">
+				<div id="modal-check-status" style="margin-bottom:10px;"></div>
 				<div id="modal-loading-check-display" class="loading" style="display:block;"><img src="<?php echo site_url() ?>assets/js/images/loader-18.gif"/></div>
-				<textarea id="check-display-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important" readonly="readonly">
-				</textarea>
+				<textarea id="check-display-output" style="min-height: 300px; font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important" readonly="readonly"></textarea>
 				<div id="modal-check-display-errors" style="margin-top:10px;"></div>
 			</div>
 			<div class="modal-footer">
-
+				<?php
+				if (function_exists('curl_init'))
+				{
+					echo '<center><a class="btn" style="float: none" href="#" onclick="return pastebinCheck()">' . _('Pastebin It!') . '</a></center>';
+				}
+				?>
 			</div>
 
 			<script type="text/javascript">
 				var stop_check = false;
-												
-				var stopCheck = function() {
-					stop_check = true;
-				}
-												
+					
+				var check_chapters = false;
+				var chapters_page = 1;
+				var chapters_left = 0;
+							
+				var repairLibrary = function(){
+					jQuery('#modal-for-library-check').modal({backdrop: true, show: true});
+					checkLibrary(true, true);
+				};
+							
 				var checkLibrary = function(manual, repair){
 					jQuery('#modal-loading-check-display').show();
 					
+					if(repair !== true)
+					{
+						jQuery('#modal-for-library-check').find('h3').text('<?php echo htmlentities(_('Checking the library')) ?>');	
+					}
+					else
+					{
+						jQuery('#modal-for-library-check').find('h3').text('<?php echo htmlentities(_('Repairing the library')) ?>');						
+					}
+					
 					if(manual === true)
 					{
+						chapters_page = 1;
+						chapters_left = 0;
+						check_chapters = false;
+						jQuery('#check-display-output').val("");
 						stop_check = false;
 					}
 													
@@ -270,6 +295,7 @@
 					{
 						if(check_chapters !== true)
 						{
+							jQuery('#modal-check-status').text('<?php echo htmlentities(_('Checking comics folder.')) ?>')
 							jQuery.post('<?php echo site_url('admin/system/tools_check_comics/') ?>',
 							{
 								repair: (repair === true)?'repair':'false'
@@ -283,19 +309,83 @@
 									return false;
 								}
 						
-								if(data.status == 'warnings')
+								if(data.status == 'warning')
 								{
 									var messages = "";
 									jQuery.each(data.messages, function(index, value){
-										messages += value;
+										messages += "["+((repair === true)?'repairing':'warning')+"] " + value + "\n";
 									});
 									jQuery('#check-display-output').val(messages);
 								}
+								
+								chapters_left = data.count;
+								jQuery('#modal-check-status').text('<?php echo htmlentities(_('Chapters left to check:')) ?> ' + chapters_left);
+
+								check_chapters = true;
+								if(!stop_check)
+									checkLibrary(false, repair);
+							}, 'json');
+						}
+						else
+						{
+							jQuery.post('<?php echo site_url('admin/system/tools_check_chapters/') ?>',
+							{
+								repair: (repair === true)?'repair':'false',
+								page: chapters_page
+							},
+							function(data){
+								chapters_page++;
+								if(data.status == 'error')
+								{
+									jQuery('#modal-loading-check-display').hide();
+									jQuery('#modal-check-display-errors').append('<div class="alert-message error fade in" data-alert="alert"><p>' + data.error + '</p></div>');
+									jQuery('#modal-check-display-errors').append('<div class="alert-message error fade in" data-alert="alert"><p><?php echo htmlentities(_('You must fix the errors before you can proceed.')) ?></p></div>');
+									return false;
+								}
+						
+								if(data.status == 'warning')
+								{
+									var messages = "";
+									jQuery.each(data.messages, function(index, value){
+										messages += "["+((repair === true)?'repairing':'warning')+"] " + value + "\n";
+									});
+									jQuery('#check-display-output').val(jQuery('#check-display-output').val() + messages);
+								}
+								
+								if(data.status == 'done')
+								{
+									jQuery('#modal-loading-check-display').hide();
+									jQuery('#modal-check-status').text('<?php echo htmlentities(_('Done.')) ?>');
+									return true;
+								}
+								
+								chapters_left -= data.processed;
+								jQuery('#modal-check-status').text('<?php echo htmlentities(_('Chapters left to check:')) ?> ' + chapters_left);
+								
+								if(!stop_check)
+									checkLibrary(false, repair);
 								
 							}, 'json');
 						}
 					}
 				}
+				
+				
+				var pastebinCheck = function() {
+					var modalInfoOutput = jQuery("#modal-for-library-check");
+					jQuery.post('<?php echo site_url("admin/system/pastebin") ?>', { output: modalInfoOutput.find("#check-display-output").val() }, function(result) {
+						if (result.href != "") {
+							modalInfoOutput.find(".modal-footer").html('<center><input value="' + result.href + '" style="text-align: center" onclick="select(this);" readonly="readonly" /><br/><?php echo _('Note: This paste expires in 1 hour.'); ?></center>');
+						}
+					}, 'json');
+					return false;
+				}
+				
+				jQuery(document).ready(function(){							
+					jQuery('#modal-for-library-check').bind('hide', function () {
+						stop = true;
+					});
+				});
 			</script>
 		</div>
 	</div>

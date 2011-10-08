@@ -335,16 +335,17 @@ class System extends Admin_Controller
 	function tools_check_comics($repair = FALSE)
 	{
 		// basically CSRF protection from repairing
-		if(!$this->input->is_cli_request())
+		if (!$this->input->is_cli_request())
 		{
 			$repair = FALSE;
 		}
-		
+
 		if ($this->input->post('repair') == 'repair')
 		{
 			$repair = TRUE;
 		}
 
+		$recursive = FALSE;
 		if ($this->input->is_cli_request())
 		{
 			$recursive = TRUE;
@@ -361,6 +362,10 @@ class System extends Admin_Controller
 				if (!$this->input->is_cli_request())
 				{
 					$this->output->set_output(json_encode(array('status' => 'error', 'message' => $notice['message'])));
+				}
+				if ($this->input->is_cli_request())
+				{
+					echo PHP_EOL . _('You have to correct the errors above to continue.') . PHP_EOL;
 				}
 				return FALSE;
 			}
@@ -384,7 +389,7 @@ class System extends Admin_Controller
 			$this->output->set_output(json_encode(array(
 						'status' => (count($warnings) > 0) ? 'warning' : 'success',
 						'messages' => $warnings,
-						'chapters_count' => $count
+						'count' => $count
 					)));
 		}
 		else
@@ -394,27 +399,62 @@ class System extends Admin_Controller
 	}
 
 
-	function tools_check_chapter()
+	function tools_check_chapters()
 	{
-		if (!is_numeric($this->input->post('from')))
-		{
-			show_404();
-		}
-		
-		if (!is_numeric($this->input->post('howmany')))
+		if (!is_numeric($this->input->post('page')))
 		{
 			show_404();
 		}
 
 		$repair = FALSE;
+		$count = 10;
 		if ($this->input->post('repair') == 'repair')
 		{
 			$repair = TRUE;
+			$count = 1;
 		}
 
-		$chapter = new Chapter();
-		$chapter->limit($this->input->post('howmany'), $this->input->post('from'));
-		$chapter->check($repair);
+		$page = ($this->input->post('page') * $count) - $count + 1;
+
+		$chapters = new Chapter();
+		$chapters->limit($count, $page)->get();
+		
+		if($chapters->result_count() == 0)
+		{
+			$this->output->set_output(json_encode(array(
+						'status' => 'done'
+					)));
+			return TRUE;
+		}
+		
+		foreach ($chapters as $chapter)
+		{
+			$chapter->check($repair);
+		}
+
+		$warnings = array();
+		foreach ($this->notices as $notice)
+		{
+			if ($notice['type'] == 'error')
+			{
+				if (!$this->input->is_cli_request())
+				{
+					$this->output->set_output(json_encode(array('status' => 'error', 'message' => $notice['message'])));
+				}
+				return FALSE;
+			}
+
+			if ($notice['type'] == 'warning')
+			{
+				$warnings[] = $notice['message'];
+			}
+		}
+		
+		$this->output->set_output(json_encode(array(
+						'status' => (count($warnings) > 0) ? 'warning' : 'success',
+						'messages' => $warnings,
+						'processed' => $chapters->result_count()
+					)));
 	}
 
 

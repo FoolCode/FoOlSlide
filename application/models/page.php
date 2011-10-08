@@ -554,14 +554,14 @@ class Page extends DataMapper
 		if (!file_exists($path))
 		{
 			$errors[] = 'missing_page';
-			set_notice('warning', _('Page not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			set_notice('warning', _('Page file not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
 			log_message('debug', 'check_page: page not found in ' . $path);
 		}
 
 		if (!file_exists($thumb_path))
 		{
 			$errors[] = 'missing_thumbnail';
-			set_notice('warning', _('Thumbnail not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			set_notice('warning', _('Thumbnail file not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
 			log_message('error', 'check_page: there\'s a missing thumbnail in ' . $thumb_path);
 		}
 
@@ -578,6 +578,14 @@ class Page extends DataMapper
 			{
 				// just rebuild the thumbnail
 				$this->rebuild_thumbnail();
+				return TRUE;
+			}
+			
+			if (in_array('missing_page', $errors))
+			{
+				// remove the thumbnail and the entry
+				unlink($thumb_path);
+				$this->remove_page_db();
 				return TRUE;
 			}
 		}
@@ -648,29 +656,6 @@ class Page extends DataMapper
 
 		// Good
 		return TRUE;
-	}
-
-
-	/**
-	 * Optimizes the selected image with optipng, if optipng is even available.
-	 * This function overwrites the existing images. Notice that this will be
-	 * a quite long-running function, but it will save you so much bandwidth
-	 * that it might be worth it.
-	 *
-	 * @todo complete this function and put it in the loop with some checkbox
-	 * @author	Woxxy
-	 * @return	boolean true if success, false if failure.
-	 */
-	public function optipng()
-	{
-		if ($this->mime != 'image/png')
-			return false;
-		$chapter = new Chapter($this->chapter_id);
-		$comic = new Comic($chapter->comic_id);
-		$rel = 'content/comics/"' . $comic->directory() . '/' . $chapter->directory() . '/' . $this->filename;
-		$abs = realpath($rel);
-		$output = array();
-		exec('optipng -o7 ' . $abs, $output);
 	}
 
 

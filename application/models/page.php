@@ -184,6 +184,7 @@ class Page extends DataMapper
 			if ($this->chapter->result_count() < 1)
 			{
 				log_message('error', 'get_chapter: chapter not found');
+				unset($this->chapter);
 				return FALSE;
 			}
 			if (!$this->chapter->get_comic())
@@ -544,7 +545,19 @@ class Page extends DataMapper
 	public function check($repair = FALSE)
 	{
 		// Let's make sure the chapter and comic is set
-		$this->get_chapter();
+		if($this->get_chapter() === FALSE)
+		{
+			$errors[] = 'page_chapter_entry_not_found';
+			set_notice('warning', _('Found a page entry without a chapter entry'));
+			log_message('debug', 'check: page entry without chapter entry');
+			
+			if($repair)
+			{
+				$this->remove_page_db();
+			}
+			
+			return FALSE;
+		}
 
 		$errors = array();
 		// check the files

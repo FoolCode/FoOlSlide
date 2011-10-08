@@ -394,42 +394,81 @@ class System extends Admin_Controller
 		}
 		else
 		{
-			echo PHP_EOL . sprintf(_('To repair automatically by removing the unidentified data and rebuilding the missing thumbnails, enter: %s'), 'php ' . FCPATH . 'index.php admin system tools_check_comics repair') . PHP_EOL;
+			echo '#----------DONE----------#' . PHP_EOL;
+			if (!$repair)
+				echo sprintf(_('To repair automatically by removing the unidentified data and rebuilding the missing thumbnails, enter: %s'), 'php ' . FCPATH . 'index.php admin system tools_check_comics repair') . PHP_EOL;
+			else
+				echo _('Successfully repaired your library.') . PHP_EOL;
 		}
 	}
 
 
-	function tools_check_chapters()
+	function tools_check_library()
 	{
-		if (!is_numeric($this->input->post('page')))
+		$type = $this->input->post('type');
+		if ($type != 'page' && $type != 'chapter')
+		{
+			show_404();
+		}
+
+		$page = $this->input->post('page');
+		if (!is_numeric($page))
 		{
 			show_404();
 		}
 
 		$repair = FALSE;
-		$count = 10;
 		if ($this->input->post('repair') == 'repair')
 		{
 			$repair = TRUE;
-			$count = 1;
 		}
 
-		$page = ($this->input->post('page') * $count) - $count + 1;
-
-		$chapters = new Chapter();
-		$chapters->limit($count, $page)->get();
-		
-		if($chapters->result_count() == 0)
+		if ($type == 'page')
 		{
-			$this->output->set_output(json_encode(array(
-						'status' => 'done'
-					)));
+			$count = 300;
+			if ($repair)
+			{
+				$count = 50;
+			}
+			$items = new Page();
+		}
+
+		if ($type == 'chapter')
+		{
+			$count = 30;
+			if ($repair)
+			{
+				$count = 2;
+			}
+			$items = new Chapter();
+		}
+
+		$offset = ($page * $count) - $count;
+		$items->limit($count, $offset)->get_iterated();
+
+		if ($items->result_count() == 0)
+		{
+			if ($type == 'chapter')
+			{
+				$pages = new Page();
+				$pages_count = $pages->count();
+				$this->output->set_output(json_encode(array(
+							'status' => 'done',
+							'pages_count' => $pages_count
+						)));
+			}
+			else
+			{
+				$this->output->set_output(json_encode(array(
+							'status' => 'done'
+						)));
+			}
 			return TRUE;
 		}
-		
-		foreach ($chapters as $chapter)
+
+		foreach ($items as $item)
 		{
-			$chapter->check($repair);
+			$item->check($repair);
 		}
 
 		$warnings = array();
@@ -449,12 +488,12 @@ class System extends Admin_Controller
 				$warnings[] = $notice['message'];
 			}
 		}
-		
+
 		$this->output->set_output(json_encode(array(
-						'status' => (count($warnings) > 0) ? 'warning' : 'success',
-						'messages' => $warnings,
-						'processed' => $chapters->result_count()
-					)));
+					'status' => (count($warnings) > 0) ? 'warning' : 'success',
+					'messages' => $warnings,
+					'processed' => $items->result_count()
+				)));
 	}
 
 

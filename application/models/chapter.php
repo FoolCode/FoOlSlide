@@ -255,10 +255,15 @@ class Chapter extends DataMapper
 	public function get_comic()
 	{
 		if (isset($this->comic))
-			return true;
+			return TRUE;
 		$this->comic = new Comic($this->comic_id);
-		if ($this->comic->result_count() < 1)
+
+		if ($this->comic->result_count() == 0)
+		{	
+			unset($this->comic);
 			return FALSE;
+		}
+		
 		if (isset($this->all))
 			foreach ($this->all as $key => $item)
 			{
@@ -266,12 +271,15 @@ class Chapter extends DataMapper
 				{
 					$item->comic = new Comic($item->comic_id);
 					if ($item->comic->result_count() != 1)
+					{
+						unset($this->all[$key]->comic);
 						return FALSE;
+					}
 				}
 			}
 
 		// All good, return true.
-		return true;
+		return TRUE;
 	}
 
 
@@ -725,7 +733,19 @@ class Chapter extends DataMapper
 	function check($repair = FALSE)
 	{
 		// make sure we got the comic
-		$this->get_comic();
+		if($this->get_comic() === FALSE)
+		{
+			$errors[] = 'chapter_comic_entry_not_found';
+			set_notice('warning', _('Found a chapter entry without a comic entry'));
+			log_message('debug', 'check: chapter entry without comic entry');
+			
+			if($repair)
+			{
+				$this->remove_chapter_db();
+			}
+			
+			return FALSE;
+		}
 
 		$errors = array();
 
@@ -829,14 +849,6 @@ class Chapter extends DataMapper
 					unlink($file['relative_path'] . $file['name']);
 				}
 			}
-		}
-
-		// viceversa, check that all the database entries have a matching file
-		$pages = new Page();
-		$pages->where('chapter_id', $this->id)->get();
-		foreach ($pages->all as $page)
-		{
-			$page_error = $page->check($repair);
 		}
 
 		// everything's been checked. The errors are in the set_notice system

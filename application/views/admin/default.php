@@ -28,11 +28,12 @@
 						modalContainer.modal('hide');
 						return false;
 					});
-					modalContainer.find("#modal-btn-yes").attr('href', href).click(function() {
+					modalContainer.find("#modal-btn-yes").attr('href', href).click(function(e) {
 						if(func instanceof Function)
 						{
+							e.preventDefault();
 							modalContainer.modal('hide');
-							setTimeout(func, 0);
+							func();
 							return false;
 						}
 						

@@ -640,17 +640,6 @@ class Comic extends DataMapper
 			}
 		}
 
-		// if recursive, this will go through a through (and long) check of all chapters
-		if ($recursive)
-		{
-			$chapters = new Chapter();
-			$chapters->where('comic_id', $this->id)->get();
-			foreach ($chapters->all as $chapter)
-			{
-				$chapter->check($repair);
-			}
-		}
-
 		return $errors;
 	}
 
@@ -682,9 +671,16 @@ class Comic extends DataMapper
 				log_message('debug', 'check: database entry missing for ' . $stub);
 				if ($repair)
 				{
-					// you have to remove all the files in the folder first
-					delete_files('content/comics/' . $item, TRUE);
-					rmdir('content/comics/' . $item);
+					if (is_dir('content/comics/' . $item))
+					{
+						// you have to remove all the files in the folder first
+						delete_files('content/comics/' . $item, TRUE);
+						rmdir('content/comics/' . $item);
+					}
+					else
+					{
+						unlink('content/comics/' . $item);
+					}
 				}
 			}
 		}
@@ -694,7 +690,26 @@ class Comic extends DataMapper
 		$comics->get();
 		foreach ($comics->all as $key => $comic)
 		{
-			$comic->check($repair, $recursive);
+			$comic->check($repair);
+		}
+
+		// if recursive, this will go through a through (and long) check of all chapters
+		if ($recursive)
+		{
+			$chapters = new Chapter();
+			$chapters->get_iterated();
+			foreach ($chapters as $chapter)
+			{
+				$chapter->check($repair);
+			}
+
+			// viceversa, check that all the database entries have a matching file
+			$pages = new Page();
+			$pages->get_iterated();
+			foreach ($pages as $page)
+			{
+				$page->check($repair);
+			}
 		}
 	}
 

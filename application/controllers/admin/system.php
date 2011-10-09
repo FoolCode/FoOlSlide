@@ -435,7 +435,7 @@ class System extends Admin_Controller
 
 		if ($type == 'chapter')
 		{
-			$count = 30;
+			$count = 15;
 			if ($repair)
 			{
 				$count = 2;

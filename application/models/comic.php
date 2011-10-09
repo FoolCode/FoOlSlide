@@ -998,6 +998,21 @@ class Comic extends DataMapper
 		return site_url('/reader/series/' . $this->stub);
 	}
 
+	
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '')
+	{
+		$result = parent::to_array($fields = '');
+		$result["thumb_url"] = $this->get_thumb();
+		$result["fullsized_thumb_url"] = $this->get_thumb(true);
+		$result["href"] = $this->href();
+		return $result;
+	}
 
 }
 

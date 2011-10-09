@@ -1262,6 +1262,22 @@ class Chapter extends DataMapper
 		// Just remove everything after the page segment and readd it with proper number.
 		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
 	}
+	
+	
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '')
+	{
+		$result = parent::to_array($fields = '');
+		$result["href"] = $this->href();
+		$result["title"] = $this->title();
+		$result["download_href"] = $this->download_href();
+		return $result;
+	}
 
 
 }

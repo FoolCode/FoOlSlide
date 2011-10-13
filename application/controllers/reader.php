@@ -3,23 +3,26 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Reader extends Public_Controller {
-
-	function __construct() {
+class Reader extends Public_Controller
+{
+	function __construct()
+	{
 		parent::__construct();
 		$this->load->library('pagination');
 		$this->load->library('template');
-		$this->load->helper('reader');
 		$this->template->set_layout('reader');
 	}
 
-	public function index() {
+
+	public function index()
+	{
 		$this->latest();
 	}
-	
+
+
 	function feeds($format = NULL)
 	{
-		if(is_null($format))
+		if (is_null($format))
 			redirect('reader/feeds/rss');
 		$this->load->helper('xml');
 		$chapters = new Chapter();
@@ -37,7 +40,7 @@ class Reader extends Public_Controller {
 			$result['chapters'] = array();
 			foreach ($chapters->all as $key => $chapter)
 			{
-				$result['chapters'][$key]['title'] = $chapter->comic->title().' '.$chapter->title();
+				$result['chapters'][$key]['title'] = $chapter->comic->title() . ' ' . $chapter->title();
 				$result['chapters'][$key]['thumb'] = $chapter->comic->get_thumb();
 				$result['chapters'][$key]['href'] = $chapter->href();
 				$result['chapters'][$key]['created'] = $chapter->created;
@@ -50,19 +53,21 @@ class Reader extends Public_Controller {
 		}
 		else
 			show_404();
-		
+
 		$data['encoding'] = 'utf-8';
 		$data['feed_name'] = get_setting('fs_gen_site_title');
 		$data['feed_url'] = site_url('feeds/rss');
 		$data['page_description'] = get_setting('fs_gen_site_title') . ' RSS feed';
-		$data['page_language'] = get_setting('fs_gen_lang')?get_setting('fs_gen_lang'):'en_EN';
+		$data['page_language'] = get_setting('fs_gen_lang') ? get_setting('fs_gen_lang') : 'en_EN';
 		//$data['creator_email'] = 'Derek Allard is at derek at derekallard dot com';
 		$data['posts'] = $result;
 		header("Content-Type: application/rss+xml");
 		$this->load->view('rss', $data);
 	}
 
-	public function team($stub = NULL) {
+
+	public function team($stub = NULL)
+	{
 		if (is_null($stub))
 			show_404();
 		$team = new Team();
@@ -79,7 +84,9 @@ class Reader extends Public_Controller {
 		$this->template->build('team');
 	}
 
-	public function lista($page = 1) {
+
+	public function lista($page = 1)
+	{
 		$this->template->title(_('Series list'));
 
 		$comics = new Comic();
@@ -87,7 +94,8 @@ class Reader extends Public_Controller {
 		 * @todo this needs filtering, though it looks good enough in browser
 		 */
 		$comics->order_by('name', 'ASC')->get_paged($page, 25);
-		foreach ($comics->all as $comic) {
+		foreach ($comics->all as $comic)
+		{
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
 		}
@@ -97,7 +105,9 @@ class Reader extends Public_Controller {
 		$this->template->build('list');
 	}
 
-	public function latest($page = 1) {
+
+	public function latest($page = 1)
+	{
 		$this->template->title(_('Series list'));
 		// Create a "Chapter" object. It can contain more than one chapter!
 		$chapters = new Chapter();
@@ -116,30 +126,38 @@ class Reader extends Public_Controller {
 		$this->template->build('latest');
 	}
 
-	public function read($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
+
+	public function read($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1)
+	{
 		$comice = new Comic();
 		$comice->where('stub', $comic)->get();
-		if ($comice->result_count() == 0) {
+		if ($comice->result_count() == 0)
+		{
 			set_notice('warn', 'This comic doesn\'t exist.');
 		}
 
-		if ($chapter == "") {
+		if ($chapter == "")
+		{
 			redirect('/reader/series/' . $comic);
 		}
 
 		$chaptere = new Chapter();
 		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
 
-		if (!is_int($subchapter) && $subchapter == 'page') {
+		if (!is_int($subchapter) && $subchapter == 'page')
+		{
 			$current_page = $team;
 		}
-		else {
+		else
+		{
 			$chaptere->where('subchapter', $subchapter);
 
 			if ($team == 'page')
 				$current_page = $joint;
-			else {
-				if ($team != 0) {
+			else
+			{
+				if ($team != 0)
+				{
 					$teame = new Team();
 					$teame->where('stub', $team)->get();
 					$chaptere->where('team_id', $teame->id);
@@ -148,13 +166,15 @@ class Reader extends Public_Controller {
 				if ($joint == 'page')
 					$current_page = $pagetext;
 
-				if ($joint != 0) {
+				if ($joint != 0)
+				{
 					$chaptere->where('joint_id', $joint);
 				}
 			}
 		}
 
-		if (!isset($current_page)) {
+		if (!isset($current_page))
+		{
 			if ($page != 1)
 				$current_page = $page;
 			else
@@ -162,13 +182,15 @@ class Reader extends Public_Controller {
 		}
 
 		$chaptere->get();
-		if ($chaptere->result_count() == 0) {
+		if ($chaptere->result_count() == 0)
+		{
 			show_404();
 		}
 
 
 		$pages = $chaptere->get_pages();
-		foreach($pages as $page) unset($page["object"]);
+		foreach ($pages as $page)
+			unset($page["object"]);
 		$next_chapter = $chaptere->next();
 
 		if ($current_page > count($pages))
@@ -178,10 +200,10 @@ class Reader extends Public_Controller {
 
 		$chapters = new Chapter();
 		$chapters->where('comic_id', $comice->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();
-		
+
 		$comics = new Comic();
 		$comics->order_by('name', 'ASC')->limit(100)->get();
-		
+
 		$this->template->set('is_reader', TRUE);
 		$this->template->set('comic', $comice);
 		$this->template->set('chapter', $chaptere);
@@ -193,33 +215,41 @@ class Reader extends Public_Controller {
 		$this->template->title($comice->name, _('Chapter') . ' ' . $chaptere->chapter, get_setting('fs_gen_site_title'));
 		$this->template->build('read');
 	}
-	
-	public function download($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1) {
-		if(!get_setting('fs_dl_enabled'))
+
+
+	public function download($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1)
+	{
+		if (!get_setting('fs_dl_enabled'))
 			show_404();
 		$comice = new Comic();
 		$comice->where('stub', $comic)->get();
-		if ($comice->result_count() == 0) {
+		if ($comice->result_count() == 0)
+		{
 			set_notice('warn', 'This comic doesn\'t exist.');
 		}
 
-		if ($chapter == "") {
+		if ($chapter == "")
+		{
 			redirect('/reader/comic/' . $comic);
 		}
 
 		$chaptere = new Chapter();
 		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
 
-		if (!is_int($subchapter) && $subchapter == 'page') {
+		if (!is_int($subchapter) && $subchapter == 'page')
+		{
 			$current_page = $team;
 		}
-		else {
+		else
+		{
 			$chaptere->where('subchapter', $subchapter);
 
 			if ($team == 'page')
 				$current_page = $joint;
-			else {
-				if ($team != 0) {
+			else
+			{
+				if ($team != 0)
+				{
 					$teame = new Team();
 					$teame->where('stub', $team)->get();
 					$chaptere->where('team_id', $teame->id);
@@ -228,13 +258,15 @@ class Reader extends Public_Controller {
 				if ($joint == 'page')
 					$current_page = $pagetext;
 
-				if ($joint != 0) {
+				if ($joint != 0)
+				{
 					$chaptere->where('joint_id', $joint);
 				}
 			}
 		}
 
-		if (!isset($current_page)) {
+		if (!isset($current_page))
+		{
 			if ($page != 1)
 				$current_page = $page;
 			else
@@ -242,13 +274,14 @@ class Reader extends Public_Controller {
 		}
 
 		$chaptere->get();
-		if ($chaptere->result_count() == 0) {
+		if ($chaptere->result_count() == 0)
+		{
 			show_404();
 		}
-		
+
 		$archive = new Archive();
 		$result = $archive->compress($chaptere);
-		if($this->input->is_cli_request())
+		if ($this->input->is_cli_request())
 		{
 			echo $result["server_path"];
 		}
@@ -258,27 +291,33 @@ class Reader extends Public_Controller {
 		}
 	}
 
+
 	/**
 	 * Replacing comic with serie, for deprecated "comic"...
 	 * 
 	 * @deprecated 0.7 30/07/2011
 	 * @author Woxxy
 	 */
-	public function comic($stub = NULL) {
-		redirect('/reader/series/'.$stub);
+	public function comic($stub = NULL)
+	{
+		redirect('/reader/series/' . $stub);
 	}
-	
+
+
 	/**
 	 * Replacing serie with series, for deprecated "serie"...
 	 * 
 	 * @deprecated 0.7 30/07/2011
 	 * @author Woxxy
 	 */
-	public function serie($stub = NULL) {
-		redirect('/reader/series/'.$stub);
+	public function serie($stub = NULL)
+	{
+		redirect('/reader/series/' . $stub);
 	}
-	
-	public function series($stub = NULL) {
+
+
+	public function series($stub = NULL)
+	{
 		if (is_null($stub))
 			show_404();
 		$comic = new Comic();
@@ -295,8 +334,11 @@ class Reader extends Public_Controller {
 		$this->template->build('comic');
 	}
 
-	public function search() {
-		if (!$this->input->post('search')) {
+
+	public function search()
+	{
+		if (!$this->input->post('search'))
+		{
 			$this->template->title(_('Search'), get_setting('fs_gen_site_title'));
 			$this->template->build('search_pre');
 			return TRUE;
@@ -307,7 +349,8 @@ class Reader extends Public_Controller {
 
 		$comics = new Comic();
 		$comics->ilike('name', $search)->limit(20)->get();
-		foreach ($comics->all as $comic) {
+		foreach ($comics->all as $comic)
+		{
 			$comic->latest_chapter = new Chapter();
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();
 		}
@@ -317,5 +360,21 @@ class Reader extends Public_Controller {
 		$this->template->set('comics', $comics);
 		$this->template->build('search');
 	}
+
+
+	public function _remap($method, $params = array())
+	{
+		if (method_exists($this->RC, $method))
+		{
+			return call_user_func_array(array($this->RC, $method), $params);
+		}
+		
+		if (method_exists($this, $method))
+		{
+			return call_user_func_array(array($this, $method), $params);
+		}
+		show_404();
+	}
+
 
 }

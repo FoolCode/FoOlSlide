@@ -4,8 +4,20 @@
 	<head>
 		<title><?php echo $template['title']; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-		<?php echo link_tag('content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/style.css') ?> 
-		<link rel="alternate" type="application/rss+xml" title="<?php echo get_setting('fs_gen_site_title') . ' RSS' ?>" href="<?php echo site_url('reader/feeds/rss') ?>" /> 
+		<?php
+		if ($this->config->item('theme_extends') != '' &&
+				$this->config->item('theme_extends') != get_setting('fs_theme_dir') &&
+				$this->config->item('theme_extends_css') === TRUE &&
+				file_exists('content/themes/' . $this->config->item('theme_extends') . '/style.css'))
+		{
+			echo link_tag('content/themes/' . $this->config->item('theme_extends') . '/style.css');
+		}
+		if (file_exists('content/themes/' . get_setting('fs_theme_dir') . '/style.css'))
+			echo link_tag('content/themes/' . get_setting('fs_theme_dir') . '/style.css');
+		?> 
+		<link rel="sitemap" type="application/xml" title="Sitemap" href="<?php echo site_url() ?>sitemap.xml" />
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo site_url() ?>rss.xml" />
+		<link rel="alternate" type="application/atom+xml" title="Atom" href="<?php echo site_url() ?>atom.xml" />
 		<link rel='index' title='<?php echo get_setting('fs_gen_site_title') ?>' href='<?php echo site_url() ?>' />
 		<meta name="generator" content="FoOlSlide <?php echo get_setting('fs_priv_version') ?>" />
 		<script src="<?php echo site_url() . 'assets/js/jquery.js' ?>"></script>

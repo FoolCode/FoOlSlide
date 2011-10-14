@@ -21,10 +21,10 @@
  * @package		DMZ-Included-Extensions
  */
 class DMZ_Json {
-	
+
 	/**
 	 * Convert a DataMapper model into JSON code.
-	 * 
+	 *
 	 * @param	DataMapper $object The DataMapper Object to convert
 	 * @param	array $fields Array of fields to include.  If empty, includes all database columns.
 	 * @param	boolean $pretty_print Format the JSON code for legibility.
@@ -39,7 +39,23 @@ class DMZ_Json {
 		$result = array();
 		foreach($fields as $f)
 		{
-			$result[$f] = $object->{$f};
+			// handle related fields
+			if(array_key_exists($f, $object->has_one) || array_key_exists($f, $object->has_many))
+			{
+				// each related item is stored as an array of ids
+				// Note: this method will NOT get() the related object.
+				$rels = array();
+				foreach($object->{$f} as $item)
+				{
+					$rels[] = $item->id;
+				}
+				$result[$f] = $rels;
+			}
+			else
+			{
+				// just the field.
+				$result[$f] = $object->{$f};
+			}
 		}
 		$json = json_encode($result);
 		if($json === FALSE)
@@ -52,10 +68,10 @@ class DMZ_Json {
 		}
 		return $json;
 	}
-	
+
 	/**
 	 * Convert the entire $object->all array result set into JSON code.
-	 * 
+	 *
 	 * @param	DataMapper $object The DataMapper Object to convert
 	 * @param	array $fields Array of fields to include.  If empty, includes all database columns.
 	 * @param	boolean $pretty_print Format the JSON code for legibility.
@@ -63,19 +79,10 @@ class DMZ_Json {
 	 */
 	public function all_to_json($object, $fields = '', $pretty_print = FALSE)
 	{
-		if(empty($fields))
-		{
-			$fields = $object->fields;
-		}
 		$result = array();
 		foreach($object as $o)
 		{
-			$temp = array();
-			foreach($fields as $f)
-			{
-				$temp[$f] = $o->{$f};
-			}
-			$result[] = $temp;
+			$result[] = $o->to_json($fields);
 		}
 		$json = json_encode($result);
 		if($json === FALSE)
@@ -88,10 +95,10 @@ class DMZ_Json {
 		}
 		return $json;
 	}
-	
+
 	/**
 	 * Convert a JSON object back into a DataMapper model.
-	 * 
+	 *
 	 * @param	DataMapper $object The DataMapper Object to save to.
 	 * @param	string $json_code A string that contains JSON code.
 	 * @param	array $fields Array of 'safe' fields.  If empty, only include the database columns.
@@ -116,7 +123,7 @@ class DMZ_Json {
 		}
 		return TRUE;
 	}
-	
+
 	/**
 	 * Sets the HTTP Content-Type header to application/json
 	 *
@@ -127,12 +134,12 @@ class DMZ_Json {
 		$CI =& get_instance();
 		$CI->output->set_header('Content-Type: application/json');
 	}
-	
+
 	/**
 	 * Formats a JSON string for readability.
 	 *
 	 * From @link http://php.net/manual/en/function.json-encode.php
-	 * 
+	 *
 	 * @param string $json Unformatted JSON
 	 * @return string Formatted JSON
 	 */
@@ -142,15 +149,15 @@ class DMZ_Json {
 		$new_json = "";
 		$indent_level = 0;
 		$in_string = false;
-	
+
 		$json_obj = json_decode($json);
-	
+
 		if($json_obj === false)
 			return false;
-	
+
 		$json = json_encode($json_obj);
 		$len = strlen($json);
-	
+
 		for($c = 0; $c < $len; $c++)
 		{
 			$char = $json[$c];
@@ -207,13 +214,13 @@ class DMZ_Json {
 					}
 				default:
 					$new_json .= $char;
-					break;                   
+					break;
 			}
 		}
-	
+
 		return $new_json;
 	}
-	
+
 }
 
 /* End of file json.php */

@@ -129,8 +129,17 @@ class Content extends MY_Controller
 		// first of all, does the image even exist? Since we're going to grab
 		// the image anyway if it exists, lets get ahead and grab it first
 		// uri_string starts with a slash, so we have to remove it
-		echo $this->file = $this->curl->simple_get($this->url . 'content/comics/' . $this->comic_stub . '_' . $this->comic_uniqid . '/' . $this->chapter_stub . '_' . $this->chapter_uniqid . '/' . $this->filename);
+		
+		$this->file = $this->curl->simple_get($this->url . 'content/comics/' . $this->comic_stub . '_' . $this->comic_uniqid . '/' . $this->chapter_stub . '_' . $this->chapter_uniqid . '/' . $this->filename);
 
+		$this->load->helper('file');
+		
+		
+		/**
+		 *  @todo this still doesn't work in chrome at first load, even with echo
+		 */
+		$this->output->set_content_type(get_mime_by_extension($this->filename))->_display($this->file);
+		
 		// if the file doesn't exist, let's not go through the rest of the mess
 		if (!$this->file)
 		{

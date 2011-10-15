@@ -371,7 +371,7 @@ class Members extends Admin_Controller
 		}
 		flash_notice('notice', _('User accepted into the team.'));
 		$team = new Team($team_id);
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
+		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
 
 
@@ -398,7 +398,7 @@ class Members extends Admin_Controller
 		$user = new User($user_id);
 		flash_notice('notice', sprintf(_('You have removed %s from the team.'), $user->username));
 		$team = new Team($team_id);
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
+		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
 
 
@@ -423,7 +423,7 @@ class Members extends Admin_Controller
 		$user = new User($user_id);
 		flash_notice('notice', sprintf(_('You have upgrade %s to team leader.'), $user->username));
 		$team = new Team($team_id);
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
+		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
 
 
@@ -475,7 +475,7 @@ class Members extends Admin_Controller
 		$user = new User($user_id);
 		flash_notice('notice', sprintf(_('You have stripped %s of their team leader position.'), $user->username));
 		$team = new Team($team_id);
-		echo json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub)));
+		$this->output->set_output(json_encode(array('href' => site_url('/admin/members/teams/' . $team->stub))));
 	}
 
 
@@ -497,8 +497,8 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 1))
 		{
-			flash_notice('notice', _('You have added this user to the administrators group.'));
-			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			flash_notice('notice', _('You have added the user to the admin group.'));
+			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
 		return false;
@@ -523,8 +523,8 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 0))
 		{
-			flash_notice('notice', _('You have removed this user from the administrators group.'));
-			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			flash_notice('notice', _('You have removed the user from the administrators group.'));
+			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
 		return false;
@@ -549,8 +549,8 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 3))
 		{
-			flash_notice('notice', _('You have added this user to the moderators group.'));
-			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			flash_notice('notice', _('You have added the user to the moderators group.'));
+			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
 		return false;
@@ -575,8 +575,8 @@ class Members extends Admin_Controller
 		$profile = new Profile();
 		if ($profile->change_group($user_id, 0))
 		{
-			flash_notice('notice', _('You have removed this user from the moderators group.'));
-			echo json_encode(array('href' => site_url('/admin/members/member/' . $user_id)));
+			flash_notice('notice', _('You have removed the user from the moderators group.'));
+			$this->output->set_output(json_encode(array('href' => site_url('/admin/members/member/' . $user_id))));
 			return true;
 		}
 		return false;

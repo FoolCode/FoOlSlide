@@ -98,7 +98,12 @@ class Archive extends DataMapper
 	{
 		$chapter = new Chapter($this->chapter_id);
 		$chapter->get_comic();
-		unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename);
+		if(!unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
+		{
+			log_message('error', 'remove: error when trying to unlink() the compressed ZIP');			
+			return FALSE;
+		}
+		
 		$this->delete();
 	}
 
@@ -202,4 +207,4 @@ class Archive extends DataMapper
 }
 
 /* End of file team.php */
-/* Location: ./application/models/team.php */
+/* Location: ./application/models/archive.php */

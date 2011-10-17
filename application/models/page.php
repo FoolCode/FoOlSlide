@@ -291,6 +291,8 @@ class Page extends DataMapper
 			$this->remove_page_file();
 			return false;
 		}
+		
+		$this->on_change($chapter_id);
 
 		// All good
 		return true;
@@ -308,7 +310,7 @@ class Page extends DataMapper
 	{
 		// Get chapter and comic to be sure they're set
 		$this->get_chapter();
-
+		$chapter_id = $this->chapter->id;
 		// Remove the files
 		if (!$this->remove_page_file())
 		{
@@ -322,6 +324,8 @@ class Page extends DataMapper
 			log_message('error', 'remove_page: failed to delete database entry');
 			return false;
 		}
+		
+		$this->on_change($chapter_id);
 
 		// Return both comic and chapter for comfy redirects
 		return $this->chapter;
@@ -537,6 +541,23 @@ class Page extends DataMapper
 
 
 	/**
+	 * Triggers the necessary calculations when a page is added, edited or removed
+	 * 
+	 * @author Woxxy
+	 */
+	public function on_change($chapter_id)
+	{
+		// cleanup the archive if there is one for this chapter
+		$archive = new Archive();
+		$archive->where('chapter_id', $chapter_id)->get();
+		if ($archive->result_count() == 1)
+		{
+			$archive->remove();
+		}
+	}
+
+
+	/**
 	 * Checks if the database entry reflects the files for the page
 	 *
 	 * @author Woxxy
@@ -545,17 +566,17 @@ class Page extends DataMapper
 	public function check($repair = FALSE)
 	{
 		// Let's make sure the chapter and comic is set
-		if($this->get_chapter() === FALSE)
+		if ($this->get_chapter() === FALSE)
 		{
 			$errors[] = 'page_chapter_entry_not_found';
-			set_notice('warning', _('Found a page entry without a chapter entry, ID: '.$this->id));
+			set_notice('warning', _('Found a page entry without a chapter entry, ID: ' . $this->id));
 			log_message('debug', 'check: page entry without chapter entry');
-			
-			if($repair)
+
+			if ($repair)
 			{
 				$this->remove_page_db();
 			}
-			
+
 			return FALSE;
 		}
 
@@ -593,7 +614,7 @@ class Page extends DataMapper
 				$this->rebuild_thumbnail();
 				return TRUE;
 			}
-			
+
 			if (in_array('missing_page', $errors))
 			{
 				// remove the thumbnail and the entry

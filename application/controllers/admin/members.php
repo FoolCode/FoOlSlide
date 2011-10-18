@@ -8,7 +8,7 @@ class Members extends Admin_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/members").'">' . _("Members") . '</a>';
+		$this->viewdata['controller_title'] = '<a href="' . site_url("admin/members") . '">' . _("Members") . '</a>';
 	}
 
 
@@ -106,7 +106,7 @@ class Members extends Admin_Controller
 		}
 
 		// set the subtitle
-		$this->viewdata["function_title"] = '<a href="'.site_url("admin/members").'">'._('Members').'</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url("admin/members") . '">' . _('Members') . '</a>';
 
 		// create a table with user login name and email
 		$table = ormer($user);
@@ -121,7 +121,7 @@ class Members extends Admin_Controller
 		$profile->where('user_id', $id)->get();
 		$profile_table = ormer($profile);
 		$data['profile'] = tabler($profile_table, TRUE, ($this->tank_auth->is_allowed() || $this->uri->segment(3) != 'you'));
-		
+
 		$this->viewdata["extra_title"][] = $user->username;
 		// print out
 		$this->viewdata["main_content_view"] = $this->load->view('admin/members/user', $data, TRUE);
@@ -144,14 +144,14 @@ class Members extends Admin_Controller
 
 			// we can use get_iterated on teams
 			$teams = new Team();
-			
+
 			// support filtering via search
 			if ($this->input->post())
 			{
 				$teams->ilike('name', $this->input->post('search'));
 				$this->viewdata['extra_title'][] = _('Searching') . " : " . $this->input->post('search');
 			}
-			
+
 			$teams->order_by('name', 'ASC')->get_iterated();
 			$rows = array();
 			// produce links for each team
@@ -194,6 +194,9 @@ class Members extends Admin_Controller
 			{
 				$post["id"] = $team->id;
 
+				// save the stub in case it's changed
+
+				$old_stub = $team->stub;
 				// don't allow editing of name for team leaders
 				if ($can_edit_limited)
 				{
@@ -205,11 +208,17 @@ class Members extends Admin_Controller
 
 				// green box to tell data is saved
 				set_notice('notice', _('Saved.'));
+
+				if ($team->stub != $old_stub)
+				{
+					flash_notice('notice', _('Saved.'));
+					redirect('admin/members/teams/' . $team->stub);
+				}
 			}
 
 
 			// subtitle
-			$this->viewdata["function_title"] = '<a href="'.site_url("admin/members/teams").'">'._('Teams').'</a>';
+			$this->viewdata["function_title"] = '<a href="' . site_url("admin/members/teams") . '">' . _('Teams') . '</a>';
 			// subsubtitle!
 			$this->viewdata["extra_title"][] = $team->name;
 
@@ -331,7 +340,7 @@ class Members extends Admin_Controller
 		$team = new Team();
 
 		// set title and subtitle
-		$this->viewdata["function_title"] = '<a href="'.site_url("/admin/members/teams").'">'._('Teams').'</a>';
+		$this->viewdata["function_title"] = '<a href="' . site_url("/admin/members/teams") . '">' . _('Teams') . '</a>';
 		$this->viewdata["extra_title"][] = _('Add New');
 
 		// transform the Datamapper array to a form
@@ -344,9 +353,6 @@ class Members extends Admin_Controller
 		$this->viewdata["main_content_view"] = $this->load->view('admin/form', $data, TRUE);
 		$this->load->view("admin/default", $this->viewdata);
 	}
-
-
-	 
 
 
 	/*

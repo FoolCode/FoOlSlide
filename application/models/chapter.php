@@ -322,7 +322,7 @@ class Chapter extends DataMapper
 	{
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
 		// the addition of the chapter.
-		if (!isset($data["subchapter"]) || !is_int($data["subchapter"]))
+		if (!isset($data["subchapter"]) || !is_natural($data["subchapter"]))
 			$data["subchapter"] = 0;
 
 		// Create a stub that is humanly readable, for the worst cases.

@@ -15,7 +15,7 @@ class Admin_Controller extends MY_Controller
 		$this->viewdata["sidebar"] = $this->sidebar();
 
 		// Check if the database is upgraded to the the latest available
-		if ($this->tank_auth->is_admin() && $this->uri->uri_string() != '/admin/database/upgrade' && $this->uri->uri_string() != '/admin/database/do_upgrade')
+		if ($this->tank_auth->is_admin() && $this->uri->uri_string() != 'admin/database/upgrade' && $this->uri->uri_string() != 'admin/database/do_upgrade')
 		{
 			$this->config->load('migration');
 			$config_version = $this->config->item('migration_version');

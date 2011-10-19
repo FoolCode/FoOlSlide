@@ -1105,6 +1105,12 @@ class Chapter extends DataMapper
 	}
 
 
+	/**
+	 * Returns the download href. This will create the shortest possible URL.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
 	public function download_href()
 	{
 		return site_url('/reader/download/' . $this->unique_href());

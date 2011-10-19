@@ -486,8 +486,10 @@ class Comic extends DataMapper
 			$data['licensed'] = array();
 		}
 
+		// update license data
 		$license = new License();
 		$license->update($this->id, $data['licensed']);
+		
 		// Good job!
 		return true;
 	}
@@ -991,10 +993,6 @@ class Comic extends DataMapper
 	 */
 	public function href()
 	{
-		// If we already used this function, no need to recalc it.
-		if (isset($this->href))
-			return $this->href;
-
 		return site_url('/reader/series/' . $this->stub);
 	}
 

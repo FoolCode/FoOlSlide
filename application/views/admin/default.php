@@ -168,20 +168,7 @@ if ($CI->agent->is_browser('MSIE'))
 
 				<div class="alerts">
 					<?php
-					if (isset($this->notices))
-						foreach ($this->notices as $key => $value)
-						{
-							echo '<div class="alert-message ' . $value["type"] . ' fade in" data-alert="alert"><a class="close" href="#">&times;</a><p>' . $value["message"] . '</p></div>';
-						}
-					if (isset($this->tank_auth))
-					{
-						$flashdata = $this->session->flashdata('notices');
-						if (!empty($flashdata))
-							foreach ($flashdata as $key => $value)
-							{
-								echo '<div class="alert-message ' . $value["type"] . ' fade in" data-alert="alert"><a class="close" href="#">&times;</a><p>' . $value["message"] . '</p></div>';
-							}
-					}
+						echo get_notices();
 					?>
 				</div>
 

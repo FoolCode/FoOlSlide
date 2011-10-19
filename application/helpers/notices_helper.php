@@ -30,6 +30,11 @@ if (!function_exists('get_notices'))
 
 if (!function_exists('clear_notices'))
 {
+	/*
+	 * Flushes flashdata and standard notices
+	 * 
+	 * @author Woxxy
+	 */
 	function clear_notices()
 	{
 		$CI = & get_instance();

@@ -9,7 +9,11 @@ class Admin_Controller extends MY_Controller
 	{
 		parent::__construct();
 
-		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
+		if(!$this->tank_auth->is_logged_in())
+		{
+			$this->session->set_userdata('login_redirect', $this->uri->uri_string());
+			redirect('/account/auth/login');
+		}
 		$this->tank_auth->is_allowed() or show_404();
 
 		$this->viewdata["sidebar"] = $this->sidebar();

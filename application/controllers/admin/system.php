@@ -36,7 +36,7 @@ class System extends Admin_Controller
 		$this->viewdata["function_title"] = _("Information");
 
 		// get current version from database
-		$data["current_version"] = get_setting('fs_priv_version');
+		$data["current_version"] = FOOLSLIDE_VERSION;
 		$data["form_title"] = _("Information");
 
 		$this->viewdata["main_content_view"] = $this->load->view("admin/system/information", $data, TRUE);
@@ -502,7 +502,7 @@ class System extends Admin_Controller
 		$this->viewdata["function_title"] = _("Upgrade FoOlSlide");
 
 		// get current version from database
-		$data["current_version"] = get_setting('fs_priv_version');
+		$data["current_version"] = FOOLSLIDE_VERSION;
 
 		// check if the user can upgrade by checking if files are writeable
 		$data["can_upgrade"] = $this->upgrade_model->check_files();

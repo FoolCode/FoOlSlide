@@ -52,7 +52,7 @@ class Archive extends DataMapper
 		$files = array();
 
 		$this->where('chapter_id', $chapter->id)->get();
-		if ($this->result_count() == 0)
+		if ($this->result_count() == 0 || !file_exists("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
 		{
 			$this->remove_old();
 			$CI = & get_instance();
@@ -98,12 +98,16 @@ class Archive extends DataMapper
 	{
 		$chapter = new Chapter($this->chapter_id);
 		$chapter->get_comic();
-		if(!unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
+
+		if (file_exists("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
 		{
-			log_message('error', 'remove: error when trying to unlink() the compressed ZIP');			
-			return FALSE;
+			if (!@unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
+			{
+				log_message('error', 'remove: error when trying to unlink() the compressed ZIP');
+				return FALSE;
+			}
 		}
-		
+
 		$this->delete();
 	}
 
@@ -129,11 +133,22 @@ class Archive extends DataMapper
 	 */
 	function remove_old()
 	{
+		$unlink_errors = 0;
 		while ($this->calculate_size() > (get_setting('fs_dl_archive_max') * 1024 * 1024))
 		{
 			$archive = new Archive();
-			$archive->order_by('lastdownload', 'ASC')->limit(1)->get();
-			$archive->remove();
+			$archive->order_by('lastdownload', 'ASC')->limit(1, $unlink_errors)->get();
+			if ($archive->result_count() == 1)
+			{
+				if (!$archive->remove())
+				{
+					$unlink_errors++;
+				}
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 

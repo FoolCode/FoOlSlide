@@ -207,7 +207,7 @@ class Admin_Controller extends MY_Controller
 			$last_check = get_setting('fs_cron_autoupgrade');
 
 			// hourly cron
-			if (time() - $last_check > 1)
+			if (time() - $last_check > 3600)
 			{
 				// update autoupgrade cron time
 				$this->db->update('preferences', array('value' => time()), array('name' => 'fs_cron_autoupgrade'));

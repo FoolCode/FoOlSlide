@@ -138,7 +138,6 @@
 		})
 		
 		index = jQuery('.input_hidden', box).val();
-alert(jQuery('.input_subchapter', box).val());
 		jQuery.post('<?php echo site_url('/admin/series/import/' . $comic->stub) ?>', {
 			action: 'execute',
 			type: 'single_compressed',

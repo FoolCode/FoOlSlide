@@ -63,8 +63,7 @@ class Chapter extends DataMapper
 		),
 		'description' => array(
 			'rules' => array(),
-			'label' => 'Description',
-			'type' => 'textarea'
+			'label' => 'Description'
 		),
 		'thumbnail' => array(
 			'rules' => array('max_length' => 512),
@@ -256,10 +255,15 @@ class Chapter extends DataMapper
 	public function get_comic()
 	{
 		if (isset($this->comic))
-			return true;
+			return TRUE;
 		$this->comic = new Comic($this->comic_id);
-		if ($this->comic->result_count() < 1)
+
+		if ($this->comic->result_count() == 0)
+		{
+			unset($this->comic);
 			return FALSE;
+		}
+
 		if (isset($this->all))
 			foreach ($this->all as $key => $item)
 			{
@@ -267,12 +271,15 @@ class Chapter extends DataMapper
 				{
 					$item->comic = new Comic($item->comic_id);
 					if ($item->comic->result_count() != 1)
+					{
+						unset($this->all[$key]->comic);
 						return FALSE;
+					}
 				}
 			}
 
 		// All good, return true.
-		return true;
+		return TRUE;
 	}
 
 
@@ -315,9 +322,9 @@ class Chapter extends DataMapper
 	{
 		// Let's make so subchapters aren't empty, so it's at least 0 for all
 		// the addition of the chapter.
-		if (!isset($data["subchapter"]) || !is_numeric($data["subchapter"]))
+		if (!isset($data["subchapter"]) || !is_natural($data["subchapter"]))
 			$data["subchapter"] = 0;
-		
+
 		// Create a stub that is humanly readable, for the worst cases.
 		$this->to_stub = $data['chapter'] . "_" . $data['subchapter'] . "_" . $data['name'];
 
@@ -723,6 +730,140 @@ class Chapter extends DataMapper
 	}
 
 
+	function check($repair = FALSE)
+	{
+		// make sure we got the comic
+		if ($this->get_comic() === FALSE)
+		{
+			$errors[] = 'chapter_comic_entry_not_found';
+			set_notice('warning', _('Found a chapter entry without a comic entry, Chapter ID: ' . $this->id));
+			log_message('debug', 'check: chapter entry without comic entry');
+
+			if ($repair)
+			{
+				$this->remove_chapter_db();
+			}
+
+			return FALSE;
+		}
+
+		$errors = array();
+
+		// check if the directory exists at all
+		$path = 'content/comics/' . $this->comic->directory() . '/' . $this->directory() . '/';
+		if (!is_dir($path))
+		{
+			$errors[] = 'chapter_directory_not_found';
+			set_notice('warning', _('No directory found for:') . ' ' . $this->comic->name . ' > ' . $this->title());
+			log_message('debug', 'check: chapter directory missing at ' . $path);
+
+			// the folder doesn't exist, so get rid of the entry from database
+			if ($repair)
+			{
+				$this->remove_chapter_db();
+			}
+
+			// there's no recovery from this, return the error codes
+			return $errors;
+		}
+
+		// check if there are extraneous files in the folder
+		$files = get_dir_file_info($path);
+		foreach ($files as $key => $file)
+		{
+			// check that the file is writable
+			if (!is_writable($file['relative_path']))
+			{
+				// non writable files are horrendous, send a notice and stop the machines
+				$errors[] = 'chapter_non_writable_file';
+				set_notice('warning', _('Found non writable files in the comics folder. Check your files permissions.'));
+				log_message('debug', 'check: non writable file: ' . $file['relative_path']);
+				return $errors;
+			}
+
+			// get the extension
+			$ext = strtolower(substr($file['name'], -4));
+
+			if (in_array($ext, array('.zip')))
+			{
+				// maybe it's just the zip created by the archive system
+				$archive = new Archive();
+				$archive->where('chapter_id', $this->id)->get();
+				if ($archive->result_count() == 1)
+				{
+					// we actually have an archive, but is it the same file?
+					if ($file['name'] == $archive->filename)
+					{
+						// same file, unset to confirm
+						unset($files[$key]);
+						continue;
+					}
+				}
+			}
+
+			if (in_array($ext, array('.png', '.jpg', 'jpeg', '.gif')))
+			{
+				$page = new Page();
+				$page->where('chapter_id', $this->id)->where('filename', $file['name'])->get();
+				if ($page->result_count() == 1)
+				{
+					// it's a simple page, unset to confirm
+					unset($files[$key]);
+					continue;
+				}
+
+				// probably it's just a thumbnail
+				$thumbnail = preg_replace('/^thumb_/', '', $file['name'], 1);
+
+				// check if it's actually different
+				if ($thumbnail != $file['name'])
+				{
+					$page = new Page();
+					$page->where('chapter_id', $this->id)->where('filename', $thumbnail)->get();
+
+					// if it's 1, it's a thumbnail, so let's unset it
+					if ($page->result_count() == 1)
+					{
+						// unset to confirm existence
+						unset($files[$key]);
+						continue;
+					}
+				}
+			}
+		}
+
+		// now we have an array with files that don't belong here
+		foreach ($files as $file)
+		{
+			$errors[] = 'chapter_unidentified_file';
+			set_notice('warning', _('Unidentified file found in:') . ' ' . $this->comic->name . ' > ' . $this->title() . ': ' . $file['name']);
+			log_message('debug', 'check: unidentified file ' . $file['relative_path'] . $file['name']);
+
+			// repairing this means getting rid of extraneous files
+			if ($repair)
+			{
+				// it's possible the file is not removeable
+				if (is_writable($file['relative_path'] . $file['name']))
+				{
+					// the files SHOULD be writable, we checked it earlier
+					if (is_dir($file['relative_path'] . $file['name']))
+					{
+						delete_files($file['relative_path'] . $file['name']);
+						rmdir($file['relative_path'] . $file['name']);
+					}
+					else
+					{
+						unlink($file['relative_path'] . $file['name']);
+					}
+				}
+			}
+		}
+
+		// everything's been checked. The errors are in the set_notice system
+		return $errors;
+	}
+
+
 	function get_dirsize()
 	{
 		$this->get_comic();
@@ -964,6 +1105,12 @@ class Chapter extends DataMapper
 	}
 
 
+	/**
+	 * Returns the download href. This will create the shortest possible URL.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
 	public function download_href()
 	{
 		return site_url('/reader/download/' . $this->unique_href());
@@ -1120,6 +1267,22 @@ class Chapter extends DataMapper
 		}
 		// Just remove everything after the page segment and readd it with proper number.
 		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
+	}
+	
+	
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '')
+	{
+		$result = parent::to_array($fields = '');
+		$result["href"] = $this->href();
+		$result["title"] = $this->title();
+		$result["download_href"] = $this->download_href();
+		return $result;
 	}
 
 

@@ -9,13 +9,17 @@ class Admin_Controller extends MY_Controller
 	{
 		parent::__construct();
 
-		$this->tank_auth->is_logged_in() or redirect('/account/auth/login');
+		if (!$this->tank_auth->is_logged_in())
+		{
+			$this->session->set_userdata('login_redirect', $this->uri->uri_string());
+			redirect('/account/auth/login');
+		}
 		$this->tank_auth->is_allowed() or show_404();
 
 		$this->viewdata["sidebar"] = $this->sidebar();
 
 		// Check if the database is upgraded to the the latest available
-		if ($this->tank_auth->is_admin() && $this->uri->uri_string() != '/admin/database/upgrade' && $this->uri->uri_string() != '/admin/database/do_upgrade')
+		if ($this->tank_auth->is_admin() && $this->uri->uri_string() != 'admin/database/upgrade' && $this->uri->uri_string() != 'admin/database/do_upgrade')
 		{
 			$this->config->load('migration');
 			$config_version = $this->config->item('migration_version');
@@ -126,7 +130,7 @@ class Admin_Controller extends MY_Controller
 				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
 				"preferences" => array("level" => "admin", "name" => _("Preferences") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 149),
 				"tools" => array("level" => "admin", "name" => _("Tools") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 351),
-				"upgrade" => array("level" => "admin", "name" => _("Upgrade") . ((get_setting('fs_cron_autoupgrade_version') && version_compare(get_setting('fs_priv_version'), get_setting('fs_cron_autoupgrade_version')) < 0) ? ' <span class="label success">' . _('New') . '</span>' : ''), "icon" => 353),
+				"upgrade" => array("level" => "admin", "name" => _("Upgrade") . ((get_setting('fs_cron_autoupgrade_version') && version_compare(FOOLSLIDE_VERSION, get_setting('fs_cron_autoupgrade_version')) < 0) ? ' <span class="label success">' . _('New') . '</span>' : ''), "icon" => 353),
 			)
 		);
 
@@ -192,6 +196,7 @@ class Admin_Controller extends MY_Controller
 	 * Controller for cron triggered by admin panel
 	 * Currently defaulted crons:
 	 * -check for updates
+	 * -remove one week old logs
 	 * 
 	 * @author Woxxy
 	 */
@@ -201,8 +206,8 @@ class Admin_Controller extends MY_Controller
 		{
 			$last_check = get_setting('fs_cron_autoupgrade');
 
-			// check for updates hourly
-			if (time() - $last_check > 3600)
+			// hourly cron
+			if (time() - $last_check > 1)
 			{
 				// update autoupgrade cron time
 				$this->db->update('preferences', array('value' => time()), array('name' => 'fs_cron_autoupgrade'));
@@ -217,6 +222,17 @@ class Admin_Controller extends MY_Controller
 				{
 					$this->db->update('preferences', array('value' => $versions[0]->version . '.' . $versions[0]->subversion . '.' . $versions[0]->subsubversion), array('name' => 'fs_cron_autoupgrade_version'));
 				}
+
+				// remove one week old logs
+				$files = glob($this->config->item('log_path') . 'log*.php');
+				foreach ($files as $file)
+				{
+					if (filemtime($file) < strtotime('-7 days'))
+					{
+						unlink($file);
+					}
+				}
+
 				// reload the settings
 				load_settings();
 			}

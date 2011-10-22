@@ -168,8 +168,8 @@ if (!defined('BASEPATH'))
 		jQuery('#pagelist .current').removeClass('current');
 		jQuery('#thumb_' + id).addClass('current');
 		
-		jQuery("#ads_top_banner iframe").attr("src", site_url + "content/ads/ads_top.html");
-		jQuery("#ads_bottom_banner iframe").attr("src", site_url + "content/ads/ads_bottom.html");
+		jQuery("#ads_top_banner.iframe iframe").attr("src", site_url + "content/ads/ads_top.html");
+		jQuery("#ads_bottom_banner.iframe iframe").attr("src", site_url + "content/ads/ads_bottom.html");
 		
 		return false;
 	}

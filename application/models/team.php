@@ -415,7 +415,32 @@ class Team extends DataMapper
 			$team = new Team($team_id);
 		return array($team);
 	}
+	
+	
+	/**
+	 * Returns the href to the reader. This will create the shortest possible URL.
+	 *
+	 * @author	Woxxy
+	 * @returns string href to reader.
+	 */
+	public function href()
+	{
+		return site_url('/reader/team/' . $this->stub);
+	}
+	
 
+	/**
+	 * Overwrites the original DataMapper to_array() to add some elements
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	public function to_array($fields = '')
+	{
+		$result = parent::to_array($fields = '');
+		$result["href"] = $this->href();
+		return $result;
+	}
 
 }
 

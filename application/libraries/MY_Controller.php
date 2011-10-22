@@ -22,6 +22,10 @@ class MY_Controller extends CI_Controller
 
 			// loads variables from database for get_setting()
 			load_settings();
+			
+			// create an array for the set_notice system
+			$this->notices = array();
+			$this->flash_notice_data = array();
 
 			// This is the first chance we get to load the right translation file
 			if (get_setting('fs_gen_lang'))

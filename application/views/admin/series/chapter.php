@@ -28,8 +28,8 @@ $this->buttoner[] = array(
 	<h3><?php echo _('Pages'); ?></h3>
 
 	<div id="fileupload" style="margin-right: 10px; padding-bottom: 10px">
-		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css?v=<?php echo get_setting('fs_priv_version') ?>" rel="stylesheet" id="theme" />
-		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css?v=<?php echo get_setting('fs_priv_version') ?>" rel="stylesheet" />
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery-ui.css?v=<?php echo FOOLSLIDE_VERSION ?>" rel="stylesheet" id="theme" />
+		<link href="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.css?v=<?php echo FOOLSLIDE_VERSION ?>" rel="stylesheet" />
 		<div class="fileupload-buttonbar">
 			<?php echo form_open_multipart("", array('style' => 'margin-bottom:0px;')); ?>
 			<label class="fileinput-button">
@@ -101,11 +101,11 @@ $this->buttoner[] = array(
         </td>
     </tr>
 </script>
-<script src="<?php echo site_url(); ?>assets/js/jquery-ui.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
-<script src="<?php echo site_url(); ?>assets/js/jquery.tmpl.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
-<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js?v=<?php echo get_setting('fs_priv_version') ?>"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery-ui.js?v=<?php echo FOOLSLIDE_VERSION ?>"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery.tmpl.js?v=<?php echo FOOLSLIDE_VERSION ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload.js?v=<?php echo FOOLSLIDE_VERSION ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.fileupload-ui.js?v=<?php echo FOOLSLIDE_VERSION ?>"></script>
+<script src="<?php echo site_url(); ?>assets/jquery-file-upload/jquery.iframe-transport.js?v=<?php echo FOOLSLIDE_VERSION ?>"></script>
 
 <script type="text/javascript">
 	jQuery(function () {

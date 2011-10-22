@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-02 23:47+0100\n"
-"PO-Revision-Date: 2011-10-02 23:50+0100\n"
+"POT-Creation-Date: 2011-10-13 21:28+0100\n"
+"PO-Revision-Date: 2011-10-13 21:30+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
@@ -150,26 +150,26 @@ msgstr ""
 msgid "If you made any changes, just refresh this page to recheck the directory permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:76
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:137
 msgid "Team"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:83
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:95
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:101
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:146
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:159
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:167
 msgid "Series list"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:115
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:181
 msgid "Latest releases"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:193
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:271
 msgid "Chapter"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:300
-#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:306
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:398
+#: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:404
 msgid "Search"
 msgstr ""
 
@@ -900,31 +900,44 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:265
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:272
 msgid "Your FoOlSlide database has been optimized."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:270
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:277
 msgid "An error occurred while optimizing the database."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:282
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:289
 msgid "There are no logs available."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:298
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:305
 msgid "There is no available log for this date."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:323
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:330
 msgid "Your FoOlSlide logs have been pruned."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:330
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:368
+msgid "You have to correct the errors above to continue."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:399
+#, php-format
+msgid "To repair automatically by removing the unidentified data and rebuilding the missing thumbnails, enter: %s"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:401
+msgid "Successfully repaired your library."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:502
 msgid "Upgrade FoOlSlide"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:372
+#: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:544
 msgid "Upgrade failed: check file permissions."
 msgstr ""
 
@@ -934,25 +947,25 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:70
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:98
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:290
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:353
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:329
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:391
 msgid "Team could not be found"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:39
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:166
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:38
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:163
 msgid "Comics could not be found"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:69
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:72
 msgid "You didn't use the necessary parameters"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:113
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:115
 msgid "Comic could not be found"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:212
+#: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:245
 msgid "Chapter could not be found"
 msgstr ""
 
@@ -968,15 +981,6 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/reader_helper.php:55
-#, php-format
-msgid "%sFollow us%s on Twitter"
-msgstr ""
-
-#: /Users/woxxy/github/FoOlSlide/application/helpers/reader_helper.php:92
-msgid "Come chat with us on"
-msgstr ""
-
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:22
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:87
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:131
@@ -987,19 +991,19 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:589
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:603
 msgid "First"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:590
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:604
 msgid "Prev"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:596
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:610
 msgid "Last"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:597
+#: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:611
 msgid "Next"
 msgstr ""
 
@@ -1058,223 +1062,260 @@ msgstr ""
 msgid "ID is not a valid number"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:946
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:947
 msgid "\"orderby\" tag wasn't correctly used."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:958
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:963
 msgid "\"orderby\" tag wasn't correctly used"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:983
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:988
 msgid "The \"page\" tag was not a valid number."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:1000
+#: /Users/woxxy/github/FoOlSlide/application/libraries/REST_Controller.php:1005
 msgid "You're trying to get a larger number of \"per_page\" results per request than allowed."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:128
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:105
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:127
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:109
 msgid "Name"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:129
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:128
 msgid "Insert the title of the chapter, if available."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:130
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:129
 msgid "Chapter Number"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:131
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:130
 msgid "Insert the chapter number."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:132
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:131
 msgid "Subchapter Number"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:133
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:132
 msgid "Insert a subchapter number to identify extra chapters. Zero for main chapter. Start counting subchapters from 1, not from 5."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:134
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:133
 msgid "Volume"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:135
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:134
 msgid "Insert the volume number."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:136
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:135
 msgid "Language"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:137
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:136
 msgid "Select the language of the chapter."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:138
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:107
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:137
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:111
 msgid "Description"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:139
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:108
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:138
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:112
 msgid "Insert a description."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:140
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:109
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:139
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:113
 msgid "Visibility"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:141
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:140
 msgid "Hide the chapter from public view."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:142
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:111
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:141
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:115
 msgid "Hidden"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:335
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:342
 msgid "The series you were adding the chapter to doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:381
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:388
 msgid "You're trying to delete something that doesn't even have a related series'?"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:427
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:434
 msgid "The chapter you tried to edit doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:449
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:456
 msgid "The series you were referring to doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:545
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:552
 msgid "The team you were referring this chapter to doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:553
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:560
 msgid "You must select at least one team for this chapter"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:562
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:569
 msgid "You haven't selected any team in relation to this chapter."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:575
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:469
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:582
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:473
 #: /Users/woxxy/github/FoOlSlide/application/models/joint.php:104
 #: /Users/woxxy/github/FoOlSlide/application/models/joint.php:136
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:413
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:414
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:257
 msgid "Check that you have inputted all the required fields."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:580
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:587
 msgid "Failed to save to database for unknown reasons."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:616
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:623
 msgid "Failed to remove the chapter from the database for unknown reasons."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:637
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:667
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:644
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:674
 msgid "No series related to this chapter."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:646
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:653
 msgid "Failed to create the chapter directory. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:678
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:685
 msgid "Failed to remove the files inside the chapter directory. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:687
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:694
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:278
 msgid "Failed to remove the chapter directory. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:838
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:739
+msgid "Found a chapter entry without a comic entry, Chapter ID: "
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:757
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:589
+msgid "No directory found for:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:779
+msgid "Found non writable files in the comics folder. Check your files permissions."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:839
+msgid "Unidentified file found in:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:979
 msgid "Vol."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:106
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:110
 msgid "Insert the title of the series."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:110
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:114
 msgid "Hide the series from public view."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:112
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:116
 msgid "Thumbnail"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:113
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:117
 msgid "Upload an image to use as thumbnail."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:114
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:118
 msgid "Custom Chapter Title"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:115
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:119
 msgid "Replace the default chapter title with a custom format. Example: \"{num}{ord} Stage\" returns \"2nd Stage\""
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:367
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:371
 msgid "The series you wanted to edit doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:474
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:478
 msgid "Failed saving the series to database for unknown reasons."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:516
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:520
 msgid "The series couldn't be removed from the database for unknown reasons."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:537
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:541
 msgid "The directory could not be created. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:559
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:563
 msgid "The files inside the series directory could not be removed. Please, check the file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:568
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:572
 msgid "The directory could not be removed. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:597
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:616
+msgid "Unidentified directory found at:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:632
+msgid "Unidentified file found at:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:670
+msgid "No database entry found for:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:728
+msgid "Found a non-writable directory."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:744
+msgid "Found a non-writable file."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:773
 msgid "Failed to create the thumbnail image for the series. Check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:621
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:797
 msgid "Failed to create the thumbnail image for the series. Resize function didn't work"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:636
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:812
 msgid "Failed to save the thumbnail image in the database."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:661
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:837
 msgid "Failed to remove the thumbnail's original image. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:669
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:845
 msgid "Failed to remove the thumbnail image. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:678
+#: /Users/woxxy/github/FoOlSlide/application/models/comic.php:854
 msgid "Failed to remove the thumbnail image from the database."
 msgstr ""
 
@@ -1302,51 +1343,67 @@ msgstr ""
 msgid "Couldn't remove the team from all the joints."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:354
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:355
 msgid "There isn't a page in the database related to this ID."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:364
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:365
 msgid "There was no selected chapter."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:373
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:374
 msgid "The selected chapter doesn't exist."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:418
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:419
 msgid "Failed to write to database for unknown reasons."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:442
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:443
 msgid "Failed to remove the page from the database."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:469
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:470
 msgid "Failed to add the page's file. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:490
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:491
 msgid "Failed to create the thumbnail of the page."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:520
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:521
 msgid "Failed to remove the page's file. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:528
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:529
 msgid "Failed to remove the page's thumbnail. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:553
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:551
+msgid "Found a page entry without a chapter entry, ID: "
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:570
+msgid "Page file not found in:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:577
+msgid "Thumbnail file not found in:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:619
+msgid "Page not found while creating thumbnail:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:630
 msgid "Failed to remove the thumbnail while rebuilding it. Please, check file permissions."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:575
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:652
 msgid "Failed to recreate the thumbnail of the page."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/models/page.php:585
+#: /Users/woxxy/github/FoOlSlide/application/models/page.php:662
 msgid "Failed to save the image compression method in the database."
 msgstr ""
 
@@ -1417,7 +1474,6 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/change_email_form.php:34
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/change_password_form.php:44
-#: /Users/woxxy/github/FoOlSlide/application/views/account/auth/unregister_form.php:21
 msgid "Back to profile"
 msgstr ""
 
@@ -1489,11 +1545,13 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_leadership.php:7
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_team.php:7
+#: /Users/woxxy/github/FoOlSlide/application/views/account/profile/teams.php:14
 msgid "Leave"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_leadership.php:11
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/leave_team.php:11
+#: /Users/woxxy/github/FoOlSlide/application/views/account/profile/request.php:29
 msgid "Back to your teams"
 msgstr ""
 
@@ -1583,23 +1641,23 @@ msgid "You have pending applications for the following teams:"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:4
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:104
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:115
 msgid "Control Panel"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:115
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:126
 msgid "Your Profile"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:185
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:198
 msgid "New upgrade available:"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:200
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:214
 msgid "No"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:201
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/default.php:215
 msgid "Yes"
 msgstr ""
 
@@ -1698,7 +1756,6 @@ msgid "Member Profile"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/members/users.php:11
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:17
 msgid "To search, write and hit enter"
 msgstr ""
 
@@ -1801,10 +1858,12 @@ msgid "Add Series"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:12
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:9
 msgid "Series Information"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:31
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:62
 msgid "Quick tools"
 msgstr ""
 
@@ -1813,10 +1872,12 @@ msgid "Do you really want to delete this serie and its chapters?"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:33
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:63
 msgid "Delete"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:34
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:66
 msgid "Read"
 msgstr ""
 
@@ -2100,97 +2161,172 @@ msgid "System Information"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:242
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:150
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:195
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:163
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:208
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:254
 msgid "Pastebin It!"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:254
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:203
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:216
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:387
 msgid "Note: This paste expires in 1 hour."
 msgstr ""
 
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:6
+msgid "Sitemap for search engines"
+msgstr ""
+
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:7
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:9
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:14
+msgid "You can submit your sitemap to the search engines to index your FoOlSlide better and faster. We suggest adding this to your Google Webmaster Tools admin panel."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:13
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:15
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:20
 msgid "Optimize Thumbnails"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:8
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:14
 msgid "Important"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:8
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:14
 #, php-format
 msgid "FoOlSlide has detected that your server is able to use a better compression algorithm for thumbnail generation. This optimization will create small thumbnails and reduce up to 10% bandwidth usage. However, regardless of this action, all thumbnails will be generated with this new algorithmn."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:18
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:24
 msgid "Pictures left to be processed:"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:22
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:28
 msgid "Optimize"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:23
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:29
 msgid "Stop Optimization"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:57
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:70
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:368
 msgid "Done."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:93
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:95
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:106
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:108
 msgid "Download Database Backup"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:94
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:107
 msgid "This will allow you to routinely download a copy of your FoOlSlide database. Furthermore, routine backups of the FoOlSlide directory is also required in case of a complete server failure for this file to be useful."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:101
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:106
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:114
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:119
 msgid "Optimize Database"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:102
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:115
 msgid "Performing database optimization from time to time will cause your FoOlSlide installation to be slightly faster."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:108
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:121
 msgid "Are you sure you want to optimize your FoOlSlide database?"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:118
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:131
 msgid "FoOlSlide Logs"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:119
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:132
 msgid "Daily logs are generated by FoOlSlide and contains information that will help developers debug your problems. If any actual errors are found, please report any serious errors to the FoOlSlide developers. However, do not report any 404 and missing cookie notices."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:120
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:137
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:133
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:150
 msgid "View Logs"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:124
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:128
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:137
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:141
 msgid "Prune Logs"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:126
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:139
 msgid "Are you sure you want to prune all FoOlSlide logs?"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:129
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:142
 msgid "FoOlSlide logs can often use a lot of space. This function will allow you to remove all logs to save space."
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:129
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:142
 msgid "Current Size"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:227
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:242
+msgid "Check and repair the library"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:228
+msgid "The repair function brutally edits your files and database. While it should be safe to use, you might lose data you actually want to save."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:229
+msgid "Suggestion"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:229
+msgid "Have a backup of your database and of your FoOlSlide directory before proceeding. Perform a check before clicking on repair."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:230
+msgid "It can happen that you or some server error mess with the FoOlSlide library. This will allow you to find broken database entries and missing files. The repair function will rebuild the missing thumbnails, remove the database entries for missing files and remove the unidentified files."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:231
+#, php-format
+msgid "You can also use this function via command line. Use the following line: %s"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:233
+msgid "Check library"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:234
+msgid "This is actually a dangerous operation. Always perform a check and make sure you have a backup of your data."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:234
+msgid "Repair library"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:278
+msgid "Checking the library"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:282
+msgid "Repairing the library"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:299
+msgid "Checking comics folder."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:309
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:344
+msgid "You must fix the errors before you can proceed."
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:323
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:373
+msgid "Chapters left to check:"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/application/views/admin/system/tools.php:373
+msgid "Pages left to check:"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/upgrade.php:12
@@ -2281,6 +2417,15 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/reader_functions.php:71
+#, php-format
+msgid "%sFollow us%s on Twitter"
+msgstr ""
+
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/reader_functions.php:108
+msgid "Come chat with us on"
+msgstr ""
+
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/comic.php:13
 msgid "Title"
 msgstr ""
@@ -2337,7 +2482,7 @@ msgid "Search series"
 msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/views/search_pre.php:10
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:62
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:74
 msgid "To search series, type and hit enter"
 msgstr ""
 
@@ -2375,7 +2520,7 @@ msgstr ""
 msgid "No members in this team"
 msgstr ""
 
-#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:76
+#: /Users/woxxy/github/FoOlSlide/content/themes/default/views/layouts/reader.php:88
 msgid "Go back to site"
 msgstr ""
 

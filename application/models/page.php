@@ -184,6 +184,7 @@ class Page extends DataMapper
 			if ($this->chapter->result_count() < 1)
 			{
 				log_message('error', 'get_chapter: chapter not found');
+				unset($this->chapter);
 				return FALSE;
 			}
 			if (!$this->chapter->get_comic())
@@ -290,6 +291,8 @@ class Page extends DataMapper
 			$this->remove_page_file();
 			return false;
 		}
+		
+		$this->on_change($chapter_id);
 
 		// All good
 		return true;
@@ -307,7 +310,7 @@ class Page extends DataMapper
 	{
 		// Get chapter and comic to be sure they're set
 		$this->get_chapter();
-
+		$chapter_id = $this->chapter->id;
 		// Remove the files
 		if (!$this->remove_page_file())
 		{
@@ -321,6 +324,8 @@ class Page extends DataMapper
 			log_message('error', 'remove_page: failed to delete database entry');
 			return false;
 		}
+		
+		$this->on_change($chapter_id);
 
 		// Return both comic and chapter for comfy redirects
 		return $this->chapter;
@@ -535,22 +540,109 @@ class Page extends DataMapper
 	}
 
 
+	/**
+	 * Triggers the necessary calculations when a page is added, edited or removed
+	 * 
+	 * @author Woxxy
+	 */
+	public function on_change($chapter_id)
+	{
+		// cleanup the archive if there is one for this chapter
+		$archive = new Archive();
+		$archive->where('chapter_id', $chapter_id)->get();
+		if ($archive->result_count() == 1)
+		{
+			$archive->remove();
+		}
+	}
+
+
+	/**
+	 * Checks if the database entry reflects the files for the page
+	 *
+	 * @author Woxxy
+	 * @return array with error codes (missing_page, missing_thumbnail)
+	 */
+	public function check($repair = FALSE)
+	{
+		// Let's make sure the chapter and comic is set
+		if ($this->get_chapter() === FALSE)
+		{
+			$errors[] = 'page_chapter_entry_not_found';
+			set_notice('warning', _('Found a page entry without a chapter entry, ID: ' . $this->id));
+			log_message('debug', 'check: page entry without chapter entry');
+
+			if ($repair)
+			{
+				$this->remove_page_db();
+			}
+
+			return FALSE;
+		}
+
+		$errors = array();
+		// check the files
+		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
+		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
+		// get paths and remove the thumb
+		if (!file_exists($path))
+		{
+			$errors[] = 'missing_page';
+			set_notice('warning', _('Page file not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('debug', 'check_page: page not found in ' . $path);
+		}
+
+		if (!file_exists($thumb_path))
+		{
+			$errors[] = 'missing_thumbnail';
+			set_notice('warning', _('Thumbnail file not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('error', 'check_page: there\'s a missing thumbnail in ' . $thumb_path);
+		}
+
+		if ($repair)
+		{
+			if (in_array('missing_page', $errors) && in_array('missing_thumbnail', $errors))
+			{
+				// no better suggestion than removing
+				$this->remove_page_db();
+				return TRUE;
+			}
+
+			if (in_array('missing_thumbnail', $errors))
+			{
+				// just rebuild the thumbnail
+				$this->rebuild_thumbnail();
+				return TRUE;
+			}
+
+			if (in_array('missing_page', $errors))
+			{
+				// remove the thumbnail and the entry
+				unlink($thumb_path);
+				$this->remove_page_db();
+				return TRUE;
+			}
+		}
+
+		return $errors;
+	}
+
+
 	public function rebuild_thumbnail()
 	{
 		// Let's make sure the chapter and comic is set
 		$this->get_chapter();
 
-
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
 		// get paths and remove the thumb
-		if (file_exists($thumb_path))
+		if (!file_exists($path))
 		{
-			set_message('warning', 'Missing page found while creating thumbnail: '.$this->chapter->comic->name.' > '.$this->chapter->title());
-			log_message('error', 'rebuild_thumbnail: there\'s a missing image in '. $path);
+			set_notice('warning', _('Page not found while creating thumbnail:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
+			log_message('error', 'rebuild_thumbnail: there\'s a missing image in ' . $path);
 			// don't stop the process
 			return TRUE;
 		}
-		
+
 		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
 		if (file_exists($thumb_path))
 		{
@@ -598,29 +690,6 @@ class Page extends DataMapper
 
 		// Good
 		return TRUE;
-	}
-
-
-	/**
-	 * Optimizes the selected image with optipng, if optipng is even available.
-	 * This function overwrites the existing images. Notice that this will be
-	 * a quite long-running function, but it will save you so much bandwidth
-	 * that it might be worth it.
-	 *
-	 * @todo complete this function and put it in the loop with some checkbox
-	 * @author	Woxxy
-	 * @return	boolean true if success, false if failure.
-	 */
-	public function optipng()
-	{
-		if ($this->mime != 'image/png')
-			return false;
-		$chapter = new Chapter($this->chapter_id);
-		$comic = new Comic($chapter->comic_id);
-		$rel = 'content/comics/"' . $comic->directory() . '/' . $chapter->directory() . '/' . $this->filename;
-		$abs = realpath($rel);
-		$output = array();
-		exec('optipng -o7 ' . $abs, $output);
 	}
 
 

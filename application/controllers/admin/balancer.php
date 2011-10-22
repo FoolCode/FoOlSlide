@@ -13,7 +13,7 @@ class Balancer extends Admin_Controller
 		$this->tank_auth->is_admin() or redirect('admin');
 
 		// title on top
-		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/balancer/balancers").'">' . _("Load Balancer") . '</a>';
+		$this->viewdata['controller_title'] = '<a href="' . site_url("admin/balancer/balancers") . '">' . _("Load Balancer") . '</a>';
 	}
 
 
@@ -103,7 +103,7 @@ class Balancer extends Admin_Controller
 					$this->db->insert('preferences', array('name' => 'fs_balancer_clients', 'value' => $result));
 				}
 			}
-			
+
 			if ($value = $this->input->post('fs_balancer_ips'))
 			{
 				if (is_array($value))
@@ -129,12 +129,27 @@ class Balancer extends Admin_Controller
 			}
 
 			load_settings();
-			
+
 			set_notice('notice', _('Updated settings.'));
 		}
 
-		$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));
-		$data["ips"] = unserialize(get_setting('fs_balancer_ips'));
+
+		if (get_setting('fs_balancer_clients'))
+		{
+			$data["balancers"] = unserialize(get_setting('fs_balancer_clients'));
+		}
+		else
+		{
+			$data["balancers"] = array();
+		}
+		if (get_setting('fs_balancer_ips'))
+		{
+			$data["ips"] = unserialize(get_setting('fs_balancer_ips'));
+		}
+		else
+		{
+			$data["ips"] = array();
+		}
 		$this->viewdata['function_title'] = _('Balancers');
 		$this->viewdata["main_content_view"] = $this->load->view("admin/loadbalancer/balancers_list.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);

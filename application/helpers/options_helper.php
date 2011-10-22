@@ -263,6 +263,9 @@ function icons($num, $size = '32', $icons = 'sweeticons2')
 	return site_url() . 'assets/icons/' . $icons . '/' . $size . '/' . $num . '.png';
 }
 
+function is_natural($str) {
+	return (bool) preg_match( '/^[0-9]+$/', $str);
+}
 
 function relative_date($time)
 {

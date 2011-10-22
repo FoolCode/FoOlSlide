@@ -103,6 +103,14 @@ class Tank_auth
 
 							$this->ci->users->update_login_info(
 									$user->id, $this->ci->config->item('login_record_ip', 'tank_auth'), $this->ci->config->item('login_record_time', 'tank_auth'));
+
+							// send back to the page that brought to the login interface
+							if ($this->ci->session->userdata('login_redirect'))
+							{
+								$login_redirect = $this->ci->session->userdata('login_redirect');
+								$this->ci->session->unset_userdata('login_redirect');
+								redirect($login_redirect);
+							}
 							return TRUE;
 						}
 					}
@@ -147,6 +155,11 @@ class Tank_auth
 	 */
 	function is_logged_in($activated = TRUE)
 	{
+		if ($this->ci->input->is_cli_request())
+		{
+			return TRUE;
+		}
+
 		return $this->ci->session->userdata('status') === ($activated ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED);
 	}
 
@@ -160,6 +173,11 @@ class Tank_auth
 	 */
 	function is_admin($user_id = NULL)
 	{
+		if ($this->ci->input->is_cli_request())
+		{
+			return TRUE;
+		}
+
 		// not logged users gonna login
 		if (!$this->is_logged_in() && is_null($user_id))
 			return FALSE;
@@ -238,7 +256,7 @@ class Tank_auth
 		{
 			$group = new Group();
 			$group->where('name', $group_name)->get();
-			if($group->result_count() != 1)
+			if ($group->result_count() != 1)
 			{
 				log_message('error', 'tank_auth:is_group: using non-existent group name');
 				return FALSE;

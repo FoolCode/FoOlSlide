@@ -32,7 +32,7 @@ class Upgrade_model extends CI_Model {
 
 		$new_versions = array();
 		foreach ($data->versions as $new) {
-			if (!$this->is_bigger_version(get_setting('fs_priv_version'), $new))
+			if (!$this->is_bigger_version(FOOLSLIDE_VERSION, $new))
 				break;
 			$new_versions[] = $new;
 		}
@@ -91,7 +91,7 @@ class Upgrade_model extends CI_Model {
 		$this->clean();
 		if (function_exists('curl_init')) {
 			$this->load->library('curl');
-			$zip = $this->curl->simple_post($url, array('url' => site_url(), 'version' => get_setting('fs_priv_version')));
+			$zip = $this->curl->simple_post($url, array('url' => site_url(), 'version' => FOOLSLIDE_VERSION));
 			if (!$zip) {
 				$zip = $this->curl->simple_get($direct_url);
 			}
@@ -213,6 +213,7 @@ class Upgrade_model extends CI_Model {
 			return FALSE;
 		}
 
+		// compatibility for FoOlSlide < 0.8.9 - By Woxxy at 20/10/2011
 		$this->db->update('preferences', array('value' => $latest->version . '.' . $latest->subversion . '.' . $latest->subsubversion), array('name' => 'fs_priv_version'));
 		$this->upgrade_model->clean();
 

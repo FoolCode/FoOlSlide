@@ -4,12 +4,24 @@
 	<head>
 		<title><?php echo $template['title']; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-		<?php echo link_tag('content/themes/' . (get_setting('fs_theme_dir') ? get_setting('fs_theme_dir') : 'default') . '/style.css') ?> 
-		<link rel="alternate" type="application/rss+xml" title="<?php echo get_setting('fs_gen_site_title') . ' RSS' ?>" href="<?php echo site_url('reader/feeds/rss') ?>" /> 
+		<?php
+		if ($this->config->item('theme_extends') != '' &&
+				$this->config->item('theme_extends') != get_setting('fs_theme_dir') &&
+				$this->config->item('theme_extends_css') === TRUE &&
+				file_exists('content/themes/' . $this->config->item('theme_extends') . '/style.css'))
+		{
+			echo link_tag('content/themes/' . $this->config->item('theme_extends') . '/style.css?v='.FOOLSLIDE_VERSION);
+		}
+		if (file_exists('content/themes/' . get_setting('fs_theme_dir') . '/style.css'))
+			echo link_tag('content/themes/' . get_setting('fs_theme_dir') . '/style.css?v='.FOOLSLIDE_VERSION);
+		?> 
+		<link rel="sitemap" type="application/xml" title="Sitemap" href="<?php echo site_url() ?>sitemap.xml" />
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo site_url() ?>rss.xml" />
+		<link rel="alternate" type="application/atom+xml" title="Atom" href="<?php echo site_url() ?>atom.xml" />
 		<link rel='index' title='<?php echo get_setting('fs_gen_site_title') ?>' href='<?php echo site_url() ?>' />
-		<meta name="generator" content="FoOlSlide <?php echo get_setting('fs_priv_version') ?>" />
-		<script src="<?php echo site_url() . 'assets/js/jquery.js' ?>"></script>
-		<script src="<?php echo site_url() . 'assets/js/jquery.plugins.js' ?>"></script>
+		<meta name="generator" content="FoOlSlide <?php echo FOOLSLIDE_VERSION ?>" />
+		<script src="<?php echo site_url() . 'assets/js/jquery.js?v='.FOOLSLIDE_VERSION ?>"></script>
+		<script src="<?php echo site_url() . 'assets/js/jquery.plugins.js?v='.FOOLSLIDE_VERSION ?>"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function(){
 <?php if ($this->agent->is_browser('MSIE'))
@@ -192,7 +204,7 @@
 					<?php echo get_setting('fs_gen_footer_text'); ?>
 				</div>
 				<div class="cp_link">
-					<a href="http://trac.foolrulez.com/foolslide" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
+					<a href="http://wiki.foolslide.org" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
 				</div>
 			</div>
 		</div>

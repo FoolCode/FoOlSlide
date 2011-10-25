@@ -339,7 +339,7 @@ class Reader extends Public_Controller
 		$result = $archive->compress($chaptere);
 		if ($this->input->is_cli_request())
 		{
-			echo $result["server_path"];
+			echo $result["server_path"].PHP_EOL;
 		}
 		else
 		{

@@ -285,6 +285,10 @@ class REST_Controller extends MY_Controller
 			header('Status: ' . $http_code);
 			header('Content-Length: ' . strlen($output));
 		}
+		else
+		{
+			$output .= PHP_EOL;
+		}
 		exit($output);
 	}
 

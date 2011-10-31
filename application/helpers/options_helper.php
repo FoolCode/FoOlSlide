@@ -110,7 +110,7 @@ function find_imagick()
 	$CI->fs_imagick->exec = FALSE;
 	$CI->fs_imagick->found = FALSE;
 	$CI->fs_imagick->available = FALSE;
-	$ini_disabled = explode(', ', ini_get('disable_functions'));
+	$ini_disabled = explode(',', ini_get('disable_functions'));
 	if (ini_get('safe_mode') || !in_array('exec', $ini_disabled))
 	{
 		$CI->fs_imagick->exec = TRUE;

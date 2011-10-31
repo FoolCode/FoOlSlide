@@ -74,7 +74,7 @@
 		result = "";
 		jQuery('.set_teams', '.teams_setter').each(function(index){
 			if (jQuery(this).val() != "")
-				result += "<input type='text' id='set_teams' class='set_teams' value='" + jQuery(this).val() + "' /><br/>";
+				result += "<input type='text' id='set_teams' class='set_teams' value=\"" + jQuery(this).val().replace('"', '\"') + "\" /><br/>";
 		});
 		
 		result += "<input type='text' id='set_teams' class='set_teams' value='' onKeyUp='addField(this);' />";

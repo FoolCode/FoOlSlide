@@ -66,7 +66,6 @@ if (!defined('BASEPATH'))
 
 	<div class="inner">
 		<a href="<?php echo $chapter->next_page($current_page); ?>" onClick="return nextPage();" >
-			<div class="preview"><img src="<?php echo $pages[$current_page - 1]['thumb_url'] ?>" /></div>
 			<img class="open" src="<?php echo $pages[$current_page - 1]['url'] ?>" />
 		</a>
 	</div>
@@ -91,7 +90,6 @@ if (!defined('BASEPATH'))
     </div>
 </div>
 
-<script src="<?php echo site_url(); ?>assets/js/jquery.plugins.js"></script>
 <script type="text/javascript">
 	
 	
@@ -102,7 +100,7 @@ if (!defined('BASEPATH'))
 
 	var next_chapter = "<?php echo $next_chapter; ?>";
 	
-	var preload_next = 7;
+	var preload_next = 5;
 
 	var preload_back = 2;
 
@@ -261,7 +259,6 @@ if (!defined('BASEPATH'))
 		{
 			if(id+i >= 0 && id+i < pages.length)
 			{
-				array.push(pages[(id+i)].thumb_url);
 				array.push(pages[(id+i)].url);
 				arraydata.push(id+i);
 			}
@@ -272,8 +269,8 @@ if (!defined('BASEPATH'))
 			enforceCache: true,
 			onComplete:function(data)
 			{
-				var idx = ((data.index/2).toFixed(0));
-				if(data.index/2 == page)
+				var idx = data.index;
+				if(data.index == page)
 					return false;
 				var page = arraydata[idx];
 				pages[page].loaded = true;
@@ -400,7 +397,7 @@ if (!defined('BASEPATH'))
 		
 		jQuery(window).bind('statechange',function(){
 			var State = History.getState();
-			url = State.url.substr(State.url.lastIndexOf('/')+1);
+			url = parseInt(State.url.substr(State.url.lastIndexOf('/')+1));
 			changePage(url-1, false, true);
 			document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
 		});

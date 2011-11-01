@@ -123,7 +123,7 @@ function find_imagick()
 			$imagick_path .= 'convert';
 		}
 
-		if (file_exists($imagick_path) || file_exists($imagick_path . '.exe'))
+		if (@file_exists($imagick_path) || @file_exists($imagick_path . '.exe'))
 		{
 			$CI->fs_imagick->found = $imagick_path;
 		}

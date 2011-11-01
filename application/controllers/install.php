@@ -382,7 +382,7 @@ class Install extends Install_Controller
 	function _exec_enabled()
 	{
 		$disabled = explode(',', ini_get('disable_functions'));
-		return!in_array('exec', $disabled);
+		return!in_array('exec', trim($disabled));
 	}
 
 

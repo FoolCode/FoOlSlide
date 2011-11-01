@@ -162,7 +162,7 @@ class Upgrade_model extends CI_Model {
 
 	function _exec_enabled() {
 		$disabled = explode(',', ini_get('disable_functions'));
-		return!in_array('exec', trim($disabled));
+		return!in_array('exec', $disabled);
 	}
 
 	/**

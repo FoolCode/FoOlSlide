@@ -282,6 +282,8 @@ class REST_Controller extends MY_Controller
 		if (!$this->input->is_cli_request())
 		{
 			header('HTTP/1.1: ' . $http_code);
+			// fake last modified!
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 			header('Status: ' . $http_code);
 			header('Content-Length: ' . strlen($output));
 		}

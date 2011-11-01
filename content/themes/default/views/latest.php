@@ -3,7 +3,6 @@
 <div class="list">
 	<div class="title">
 		<a href="<?php echo site_url('/reader/latest/') ?>"><?php echo _('Latest released chapters')?>:</a>
-		<img src="http://i.imgur.com/6v29q.png" style="position:absolute; right: 10px; top: -6px; height:64px; ">
 	</div>
      <?php
 		$current_comic = "";

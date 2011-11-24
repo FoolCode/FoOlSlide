@@ -1194,7 +1194,7 @@ class Chapter extends DataMapper
 				// Check if there's a chapter in the next volume.
 				// This works even if chapter goes vol2 33 -> vol3 34 or vol2 33 -> vol3 1
 				$chapter = new Chapter();
-				$chapter->where('comic_id', $this->comic->id)->having('volume > ', $this->volume)->where('language', $this->language)->order_by('chapter', 'asc')->order_by('subchapter', 'asc')->limit(1)->get();
+				$chapter->where('comic_id', $this->comic->id)->having('volume > ', $this->volume)->where('language', $this->language)->order_by('volume', 'asc')->order_by('chapter', 'asc')->order_by('subchapter', 'asc')->limit(1)->get();
 				if ($chapter->result_count() == 0)
 				{
 					// There's no next chapter. Redirect to the comic page.

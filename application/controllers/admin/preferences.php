@@ -148,7 +148,26 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
-				'values' => array('' => 'English', 'cs_CZ.utf8' => 'Czech', 'fr_FR.utf8' => 'French', 'de_DE.utf8' => 'German', 'it_IT.utf8' => 'Italian', 'pl_PL.utf8' => 'Polish', 'pt_PT.utf8' => 'Portuguese', 'pt_BR.utf8' => 'Portuguese (Brazil)', 'ru_RU.utf8' => 'Russian', 'es_ES.utf8' => 'Spanish', 'tr_TR.utf8' => 'Turkish'),
+				'values' => 
+					array(
+						'' => 'English', 
+						'as_SA.utf8' => 'Arab', 
+						'cs_CZ.utf8' => 'Czech', 
+						'fr_FR.utf8' => 'French', 
+						'de_DE.utf8' => 'German', 
+						'hr_HR.utf8' => 'Croatian', 
+						'it_IT.utf8' => 'Italian', 
+						'id_ID.utf8' => 'Indonesian',
+						'ja_JP.utf8' => 'Japanese',
+						'pl_PL.utf8' => 'Polish', 
+						'pt_PT.utf8' => 'Portuguese', 
+						'pt_BR.utf8' => 'Portuguese (Brazil)', 
+						'ru_RU.utf8' => 'Russian', 
+						'sl_SL.utf8' => 'Slovenian', 
+						'es_ES.utf8' => 'Spanish', 
+						'th_TH.utf8' => 'Thai',
+						'tr_TR.utf8' => 'Turkish'
+					),
 				'preferences' => 'fs_gen',
 				'help' => _('Changes the software language of FoOlSlide. Please contribute by translating this software on our <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">Transifex project</a>.')
 			)

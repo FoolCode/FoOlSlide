@@ -1,16 +1,22 @@
+# 
+# Translators:
+# Tea Horvatic <teahorvatic@yahoo.co.uk>, 2012.
+#   <teahorvatic@yahoo.co.uk>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: FoOlSlide\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: http://github.com/woxxy/FoOlSlide/issues\n"
 "POT-Creation-Date: 2012-01-23 16:21+0100\n"
-"PO-Revision-Date: 2012-01-23 16:22+0100\n"
+"PO-Revision-Date: 2012-01-23 16:53+0100\n"
 "Last-Translator: Woxxy <woxxy@foolrulez.org>\n"
 "Language-Team: FoOlRulez <gettext@foolrulez.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"Language: hr_HR\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Poedit-Basepath: /Users/woxxy/github/FoOlSlide\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: /Users/woxxy/github/FoOlSlide\n"
 
@@ -21,92 +27,92 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:40
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:187
 msgid "Database type"
-msgstr ""
+msgstr "Vrsta baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:47
 msgid "required"
-msgstr ""
+msgstr "obavezno"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:48
 msgid "The type of database you're going to use. Leave it on MySQL if using a standard installation"
-msgstr ""
+msgstr "Vrsta baze podataka koju ćete koristiti. Ostavite MySQL ako koristite standardnu instalaciju"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:52
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:188
 msgid "Database hostname"
-msgstr ""
+msgstr "Ime poslužitelja baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
 msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
-msgstr ""
+msgstr "Ime poslužitelja servera koji sadrži bazu podataka. U 99.8% slučajeva je to lokalni poslužitelj"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:189
 msgid "Database name"
-msgstr ""
+msgstr "Ime baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:74
 msgid "The name of the database"
-msgstr ""
+msgstr "Naziv baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:79
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:190
 msgid "Database username"
-msgstr ""
+msgstr "Korisničko ime baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:87
 msgid "The username of the user with permissions to the database"
-msgstr ""
+msgstr "Korisničko ime korisnika s dozvolama za bazu podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:92
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:191
 msgid "Database password"
-msgstr ""
+msgstr "Lozinka baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:100
 msgid "The password of the user with permissions to the database"
-msgstr ""
+msgstr "Lozinka korisnika s dozvolama za bazu podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:105
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:192
 msgid "Database prefix"
-msgstr ""
+msgstr "Prefiks baze podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:112
 msgid "Add a database prefix to avoid collisions, in example if you have other FoOlSlides"
-msgstr ""
+msgstr "Dodajte prefiks baze podataka kako biste izbjegli podudarnost, na primjer ako imate druge FoOISlides"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:117
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:193
 msgid "Administrator username"
-msgstr ""
+msgstr "Korisničko ime administratora"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:125
 msgid "The username of the administrator's account"
-msgstr ""
+msgstr "Korisničko ime administratorskog računa"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:130
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:194
 msgid "Administrator password"
-msgstr ""
+msgstr "Lozinka administratora"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:138
 msgid "The password of the administrator's account"
-msgstr ""
+msgstr "Lozinka administratorskog računa"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:143
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:195
 msgid "Administrator email"
-msgstr ""
+msgstr "Email administratora"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:151
 msgid "The email of the administrator's account"
-msgstr ""
+msgstr "Email administratorskog računa"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:227
 msgid "Connection with database not enstabilished: check the database fields."
-msgstr ""
+msgstr "Veza s bazom podataka nije uspostavljena: provjerite polja baze podataka."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:295
 msgid "FoOlSlide has installed successfully. Check the preferences and make sure you create a team for your own chapters."
@@ -119,7 +125,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:319
 #, php-format
 msgid "The file %s was removed. The installation can't continue without that file. You can find it in the FoOlSlide download."
-msgstr ""
+msgstr "Datoteka %s je uklonjena. Instalacija se ne može nastaviti bez te datoteke. Možete je pronaći u FoOlSlide download."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:326
 #, php-format
@@ -144,7 +150,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:362
 #, php-format
 msgid "If you can't do the above, after the installation you will be given a textfile to paste in config.php. More info after submitting."
-msgstr ""
+msgstr "Ukoliko ne možete izvršiti gore navedeno, nakon instalacije dobit ćete tekstualnu datoteku koju možete zalijepiti u config.php. Više informacija nakon predaje."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:369
 msgid "If you made any changes, just refresh this page to recheck the directory permissions."
@@ -152,13 +158,13 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:137
 msgid "Team"
-msgstr ""
+msgstr "Ekipa"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:146
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:159
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:167
 msgid "Series list"
-msgstr ""
+msgstr "Popis serija"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:181
 msgid "Latest releases"
@@ -170,49 +176,49 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:295
 msgid "Chapter"
-msgstr ""
+msgstr "Poglavlje"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:428
 #: /Users/woxxy/github/FoOlSlide/application/controllers/reader.php:434
 msgid "Search"
-msgstr ""
+msgstr "Pretraga"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:14
 msgid "Authorization"
-msgstr ""
+msgstr "Autorizacija"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:21
 msgid "Message"
-msgstr ""
+msgstr "Poruka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:100
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/oauth.php:235
 msgid "Login"
-msgstr ""
+msgstr "Prijava"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:199
 msgid "Register"
-msgstr ""
+msgstr "Registracija"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:237
 msgid "Resend activation email"
-msgstr ""
+msgstr "Ponovno pošalji email aktivacije"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:299
 msgid "Forgot password"
-msgstr ""
+msgstr "Zaboravili ste lozinku"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:347
 msgid "Reset password"
-msgstr ""
+msgstr "Ponovno postavi lozinku"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:380
 msgid "Change password"
-msgstr ""
+msgstr "Promijeni lozinku"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:419
 msgid "Change email"
-msgstr ""
+msgstr "Promijeni email"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/auth.php:472
 msgid "Unregister"
@@ -224,7 +230,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/index.php:25
 msgid "Teams"
-msgstr ""
+msgstr "Ekipe"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/index.php:50
 msgid "Display Name"
@@ -240,7 +246,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/index.php:77
 msgid "Your profile"
-msgstr ""
+msgstr "Vaš profil"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/account/index.php:109
 msgid "Your teams"
@@ -303,65 +309,65 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:20
 msgid "Database"
-msgstr ""
+msgstr "Baza podataka"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:48
 msgid "Upgrade"
-msgstr ""
+msgstr "Obnovi"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/database.php:74
 msgid "Successfully updated the database."
-msgstr ""
+msgstr "Baza podataka je uspješno obnovljena."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:11
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:43
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:70
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:109
 msgid "Members"
-msgstr ""
+msgstr "Članovi"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:51
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:152
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:39
 msgid "Searching"
-msgstr ""
+msgstr "Pretraga"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:210
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:214
 msgid "Saved."
-msgstr ""
+msgstr "Spremljeno."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:253
 msgid "Leader"
-msgstr ""
+msgstr "Vođa"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:253
 msgid "Member"
-msgstr ""
+msgstr "Član"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:260
 msgid "Remove member"
-msgstr ""
+msgstr "Ukloni člana"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:262
 msgid "Do you want to remove this team member?"
-msgstr ""
+msgstr "Želite li ukloniti ovog člana ekipe?"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:272
 msgid "Make leader"
-msgstr ""
+msgstr "Postavi vođu"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:274
 msgid "Do you want to make this user a team leader?"
-msgstr ""
+msgstr "Želite li postaviti ovog korisnika kao vođu ekipe?"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:281
 msgid "Remove leader"
-msgstr ""
+msgstr "Ukloni vođu"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:283
 msgid "Do you want to remove this user from the team leadership?"
-msgstr ""
+msgstr "Želite li ukloniti ovog korisnika iz vodstva ekipe?"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:344
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:185
@@ -376,15 +382,15 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:372
 msgid "Accepting into team..."
-msgstr ""
+msgstr "Prihvaća se u ekipu..."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:378
 msgid "User accepted into the team."
-msgstr ""
+msgstr "Korisnik je prihvaćen u ekipu."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:398
 msgid "Removing from team..."
-msgstr ""
+msgstr "Uklanja se iz ekipe..."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:405
 #, php-format
@@ -398,7 +404,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:452
 msgid "User not found."
-msgstr ""
+msgstr "Korisnik nije pronađen."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/members.php:458
 #, php-format
@@ -435,7 +441,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:91
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:165
 msgid "General"
-msgstr ""
+msgstr "Općenito"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:97
 msgid "Slide Title"
@@ -484,7 +490,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:182
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:259
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:187
 msgid "Select Theme"
@@ -533,7 +539,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:275
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:383
 msgid "Advertising"
-msgstr ""
+msgstr "Oglašavanje"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:280
 msgid "Top banner"
@@ -573,7 +579,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:394
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:451
 msgid "Registration"
-msgstr ""
+msgstr "Registracija"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:399
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:473
@@ -615,7 +621,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:468
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:503
 msgid "Reading"
-msgstr ""
+msgstr "Čitanje"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/preferences.php:479
 msgid "Enable Direct Downloads"
@@ -725,12 +731,12 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:271
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:305
 msgid "Series"
-msgstr ""
+msgstr "Serije"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:32
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:62
 msgid "Manage"
-msgstr ""
+msgstr "Upravljaj"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:57
 msgid "Sorry, the series you are looking for does not exist."
@@ -745,7 +751,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:214
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:317
 msgid "Insert the names of the teams who worked on this chapter."
-msgstr ""
+msgstr "Umetni imena ekipa koje su radile na ovom poglavlju."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:133
 #, php-format
@@ -755,7 +761,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:166
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:258
 msgid "Licensed in"
-msgstr ""
+msgstr "Licencirano u"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:171
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:263
@@ -770,7 +776,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:202
 msgid "Chapter in"
-msgstr ""
+msgstr "Poglavlje u"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:220
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:323
@@ -788,7 +794,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:407
 msgid "You can't delete chapters from outside the admin panel through this link."
-msgstr ""
+msgstr "Ne možete obrisati poglavlja izvan administratorske ploče putem ove poveznice."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:421
 #, php-format
@@ -811,11 +817,11 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:491
 msgid "Import"
-msgstr ""
+msgstr "Uvoz"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/series.php:497
 msgid "The directory you set does not exist."
-msgstr ""
+msgstr "Direktorij koji ste postavili ne postoji."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/admin/system.php:19
 msgid "System"
@@ -938,19 +944,19 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:32
 msgid "Teams could not be found"
-msgstr ""
+msgstr "Ekipe nisu pronađene"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:70
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/members.php:98
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:329
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:391
 msgid "Team could not be found"
-msgstr ""
+msgstr "Ekipa nije pronađena"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:38
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:163
 msgid "Comics could not be found"
-msgstr ""
+msgstr "Stripovni nisu pronađeni"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:72
 msgid "You didn't use the necessary parameters"
@@ -958,33 +964,33 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:115
 msgid "Comic could not be found"
-msgstr ""
+msgstr "Strip nije pronađen"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/api/reader.php:245
 msgid "Chapter could not be found"
-msgstr ""
+msgstr "Poglavlje nije pronađeno"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:279
 msgid "Today"
-msgstr ""
+msgstr "Danas"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:283
 msgid "Tomorrow"
-msgstr ""
+msgstr "Sutra"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/options_helper.php:287
 msgid "Yesterday"
-msgstr ""
+msgstr "Jučer"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:22
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:87
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:131
 msgid "Save"
-msgstr ""
+msgstr "Spremi"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:70
 msgid "Edit"
-msgstr ""
+msgstr "Uredi"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:603
 msgid "First"
@@ -992,7 +998,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:604
 msgid "Prev"
-msgstr ""
+msgstr "Prethodno"
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:610
 msgid "Last"
@@ -1000,7 +1006,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/helpers/tabler_helper.php:611
 msgid "Next"
-msgstr ""
+msgstr "Sljedeće"
 
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:56
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:97
@@ -1029,7 +1035,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:110
 msgid "Reader"
-msgstr ""
+msgstr "Čitač"
 
 #: /Users/woxxy/github/FoOlSlide/application/libraries/Admin_Controller.php:121
 msgid "Master"
@@ -1076,11 +1082,11 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:127
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:114
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:128
 msgid "Insert the title of the chapter, if available."
-msgstr ""
+msgstr "Umetni naslov poglavlja, ako postoji."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:129
 msgid "Chapter Number"
@@ -1088,7 +1094,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:130
 msgid "Insert the chapter number."
-msgstr ""
+msgstr "Umetni broj poglavlja."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:131
 msgid "Subchapter Number"
@@ -1108,7 +1114,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:135
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:136
 msgid "Select the language of the chapter."
@@ -1117,12 +1123,12 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:137
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:116
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:138
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:117
 msgid "Insert a description."
-msgstr ""
+msgstr "Umetni opis."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:139
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:118
@@ -1131,12 +1137,12 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:140
 msgid "Hide the chapter from public view."
-msgstr ""
+msgstr "Sakrij poglavlje od javnosti."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:141
 #: /Users/woxxy/github/FoOlSlide/application/models/comic.php:120
 msgid "Hidden"
-msgstr ""
+msgstr "Skriveno"
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:342
 msgid "The series you were adding the chapter to doesn't exist."
@@ -1148,7 +1154,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:434
 msgid "The chapter you tried to edit doesn't exist."
-msgstr ""
+msgstr "Poglavlje koje ste pokušali urediti ne postoji."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:456
 msgid "The series you were referring to doesn't exist."
@@ -1160,7 +1166,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:560
 msgid "You must select at least one team for this chapter"
-msgstr ""
+msgstr "Morate odabrati barem jednu ekipu za ovo poglavlje"
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:569
 msgid "You haven't selected any team in relation to this chapter."
@@ -1172,7 +1178,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/models/joint.php:136
 #: /Users/woxxy/github/FoOlSlide/application/models/page.php:418
 msgid "Check that you have inputted all the required fields."
-msgstr ""
+msgstr "Provjerite da ste unijeli sva obavezna polja."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/chapter.php:587
 msgid "Failed to save to database for unknown reasons."
@@ -1418,19 +1424,19 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:321
 msgid "There were no groups selected."
-msgstr ""
+msgstr "Nisu odabrane skupine."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:332
 msgid "There's no team under this ID."
-msgstr ""
+msgstr "Ne postoji ekipa pod ovim ID."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:349
 msgid "There's no teams under this ID."
-msgstr ""
+msgstr "Ne postoje ekipe pod ovim ID."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/team.php:367
 msgid "There's no group found with this ID."
-msgstr ""
+msgstr "Ne postoji skupina s ovim ID."
 
 #: /Users/woxxy/github/FoOlSlide/application/models/upgrade2_model.php:71
 msgid "We're currently upgrading FoOlSlide. This process usually takes few seconds or a couple minutes, check back soon!"
@@ -1451,7 +1457,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/default.php:4
 msgid "Control panel"
-msgstr ""
+msgstr "Upravljačka ploča"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/default.php:95
 msgid "Admin panel"
@@ -1459,7 +1465,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/default.php:103
 msgid "Logout"
-msgstr ""
+msgstr "Odjava"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/default.php:111
 msgid "Account"
@@ -1488,23 +1494,23 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/login_form.php:100
 msgid "Remember me"
-msgstr ""
+msgstr "Zapamti me"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/register_form.php:50
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/register_form.php:56
 msgid "Email Address"
-msgstr ""
+msgstr "Email adresa"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/register_form.php:61
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/register_form.php:66
 msgid "Confirm Password"
-msgstr ""
+msgstr "Potvrdi lozinku"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/auth/register_form.php:80
 msgid "Get another CAPTCHA"
@@ -1580,11 +1586,11 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/request.php:16
 msgid "Accept"
-msgstr ""
+msgstr "Prihvati"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/request.php:25
 msgid "Reject"
-msgstr ""
+msgstr "Odbaci"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/account/profile/teams.php:5
 msgid "You aren't part of any team."
@@ -1756,16 +1762,16 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:3
 msgid "Delete chapter"
-msgstr ""
+msgstr "Obriši poglavlje"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:5
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:63
 msgid "Do you really want to delete this chapter and its pages?"
-msgstr ""
+msgstr "Želite li zaista obrisati ovo poglavlje i njegove stranice?"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:9
 msgid "Read chapter"
-msgstr ""
+msgstr "Pročitaj poglavlje"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:15
 msgid "Chapter Information"
@@ -1773,7 +1779,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:28
 msgid "Pages"
-msgstr ""
+msgstr "Stranice"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/chapter.php:36
 msgid "Add files..."
@@ -1861,7 +1867,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:31
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:62
 msgid "Quick tools"
-msgstr ""
+msgstr "Brzi alati"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/manage.php:33
 msgid "Do you really want to delete this serie and its chapters?"
@@ -1891,7 +1897,7 @@ msgstr ""
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/series/series.php:38
 msgid "Chapters"
-msgstr ""
+msgstr "Poglavlja"
 
 #: /Users/woxxy/github/FoOlSlide/application/views/admin/system/information.php:7
 msgid "Output Server Information"
@@ -2416,7 +2422,7 @@ msgstr ""
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/reader_functions.php:71
 #, php-format
 msgid "%sFollow us%s on Twitter"
-msgstr ""
+msgstr "%sPratite nas%s na Twitteru"
 
 #: /Users/woxxy/github/FoOlSlide/content/themes/default/reader_functions.php:108
 msgid "Come chat with us on"

@@ -151,7 +151,7 @@ class Preferences extends Admin_Controller
 				'values' => 
 					array(
 						'' => 'English', 
-						'as_SA.utf8' => 'Arab', 
+						'ar_SA.utf8' => 'Arab', 
 						'cs_CZ.utf8' => 'Czech', 
 						'fr_FR.utf8' => 'French', 
 						'de_DE.utf8' => 'German', 

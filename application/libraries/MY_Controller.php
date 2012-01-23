@@ -45,8 +45,8 @@ class MY_Controller extends CI_Controller
 					setlocale(LC_MESSAGES, $locale);
 					setlocale(LC_CTYPE, "sk_SK.utf8");
 				}
-				bindtextdomain("default", FCPATH . "assets/locale");
-				textdomain("default");
+				bindtextdomain(substr($locale, 0, 5), FCPATH . "assets/locale");
+				textdomain(substr($locale, 0, 5));
 			}
 
 			// set the nationality where possible, and leave ignored ips without a nation

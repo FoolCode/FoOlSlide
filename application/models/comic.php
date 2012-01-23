@@ -40,6 +40,11 @@ class Comic extends DataMapper
 			'type' => 'upload',
 			'display' => 'image',
 		),
+		'adult' => array(
+			'rules' => array(),
+			'label' => 'Show adult notice',
+			'type' => 'checkbox'
+		),
 		'customchapter' => array(
 			'rules' => array(),
 			'label' => 'Custom chapter',

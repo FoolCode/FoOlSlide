@@ -181,6 +181,24 @@ class Reader extends Public_Controller
 		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
 	}
+	
+	public function _check_adult($comic)
+	{
+		if($this->input->post('adult') == 'true')
+		{
+			$this->session->set_userdata('adult', TRUE);
+		}
+		
+		if($comic->adult && !$this->agent->is_robot() && $this->session->userdata('adult') != TRUE)
+		{
+			$this->template->set('comic', $comic);
+			$this->template->title(_('Adult content notice'));
+			$this->template->build('adult');
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
 
 
 	public function read($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1)
@@ -197,6 +215,12 @@ class Reader extends Public_Controller
 			redirect('/reader/series/' . $comic);
 		}
 
+		if(!$this->_check_adult($comice))
+		{
+			// or this function won't stop
+			return FALSE;
+		}	
+		
 		$chaptere = new Chapter();
 		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
 
@@ -380,6 +404,12 @@ class Reader extends Public_Controller
 		$comic->where('stub', $stub)->get();
 		if ($comic->result_count() < 1)
 			show_404();
+		
+		if(!$this->_check_adult($comic))
+		{
+			// or this function won't stop
+			return FALSE;
+		}
 
 		$chapters = new Chapter();
 		$chapters->where('comic_id', $comic->id)->order_by('volume', 'desc')->order_by('chapter', 'desc')->order_by('subchapter', 'desc')->get_bulk();

@@ -419,6 +419,13 @@ input[type="text"]
     z-index:-1;
 }
 
+.large.comic.alert 
+{
+	color:#f5f5f5;
+	text-shadow:none;
+	background: rgba(255,0,0,0.4);
+}
+
 .large.comic .title
 {
 	font-size:20px;

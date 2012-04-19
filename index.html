@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="FoOlSlide : Online Comics Publishing Software for Authors and Teams" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>FoOlSlide</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/FoOlRulez/FoOlSlide">Fork Me on GitHub</a>
+
+          <h1 id="project_title">FoOlSlide</h1>
+          <h2 id="project_tagline">Online Comics Publishing Software for Authors and Teams</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/FoOlRulez/FoOlSlide/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/FoOlRulez/FoOlSlide/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>FoOlSlide is an Open Source online comic management software. Its easily the reader that readers like the most. FoOlSlide is licensed under Apache License 2.0 </p>
+
+<h4>Notice</h4>
+
+<p>FoOlSlide is not in active development at the time, and we don't have time to manage issues. We can still help you with it if you come over to our dev channel irc://irc.irchighway.net/fooldriver. We are glad to help.</p>
+
+<p><strong>We will not give support to people trying to abuse of FoOlSlide</strong> - as in example running funny business with it. Fan translators are OK of course. Please, come in our channel with a link to your FoOlSlide or site, else we won't give you attention.</p>
+
+<h2>Features</h2>
+
+<h4>Administrative Panel</h4>
+
+<p>FoOlSlide contains a very powerful and easy to use administrative panel to control and maintain your content with ease. As everything is accessible and managed via administrative panel, there is no need to make any modifications to the files directly.</p>
+
+<h4>API</h4>
+
+<p>FoOlSlide contains a fully compliant API protocol that can be used with external applications to obtain and display information regarding the contents stored on the installation.</p>
+
+<h4>Automatic Upgrade System</h4>
+
+<p>FoOlSlide contains its own upgrade system that is used to notify administrators when a new release of the software is available and to apply these new revisions without the need of manually upgrading the software via FTP.</p>
+
+<h4>Download System</h4>
+
+<p>FoOlSlide provides the option to enable downloads of content to be served by the software for archiving purposes. However, as there were concerns for space usage increasing due to this feature, we have implemented an intuitive archiving and downloading system that incorporates both on-the-fly ZIP compression and download caching to minimize space occupancy by the archive files.</p>
+
+<h4>License Filter System</h4>
+
+<p>FoOlSlide contains a filtering system that sets which countries holds a license for a series. Any series that is licensed in the same country that the content is being viewed in will be disabled and access is revoked. The objective is to protect both the original copyright owner and you. This system includes GeoLite data created by MaxMind which can be obtained from <a href="http://www.maxmind.com">http://www.maxmind.com</a></p>
+
+<h4>Multi-Language Interface</h4>
+
+<p>FoOlSlide supports many different interface languages and allows our own user-base to help localize the software in their own language with Transifex: <a href="https://www.transifex.net/projects/p/foolslide/resource/defaultpot/">https://www.transifex.net/projects/p/foolslide/resource/defaultpot/</a>
+This chart provides detailed information regarding the total number languages and the percentage of strings that have been completely localized in another language.</p>
+
+<h4>Load Balancer</h4>
+
+<p>FoOlSlide features an easy-to-use load balancer that allows the use of multiple servers to deliver your content faster or with more bandwidth. The only requirement is having another server with FoOlSlide installed in client-mode.</p>
+
+<h4>Themes</h4>
+
+<p>There's support for custom themes. You are able to build your themes like childs of the the original theme or roll out an entire theme of your own by creating a controller (a file that parses the URL and returns the correct page) where you can fully customize your viewer's experience.</p>
+
+<h4>Security</h4>
+
+<p>Built on the CodeIgniter Framework and custom Tank Auth library, FoOlSlide is able to deliver a great amount of security for protecting administrative and team-related functions from unauthorized personnel. We have in place strictly respected security standards through PHP, MySQL and Javascript, to ensure that it is impossible to run cross-scripting hacks, cross-site request forgeries or SQL injections on our software.</p>
+
+<p>Furthermore, there's no nonsense in the login system, such as security questions for password retrievals, or fallacies to come around changing emails.</p>
+
+<h4>Upload System</h4>
+
+<p>FoolSlide contains a HTML5 uploader that is compatible with any modern browser. It features support for multiple file upload, drag and drop support, an upload progress bar, cancel-able uploads, resume-able uploads, and much more. Unlike other Flash uploaders, the HTML5 uploader also allows FoOlSlide add a security layer to its system like any other function.</p>
+
+<h2>How to Install</h2>
+
+<h4>System requirements</h4>
+
+<p>FoOlSlide will run on any web server that supports PHP 5.2+ and MySQL 5+. On Apache you will need MOD_Rewrite to run.</p>
+
+<h4>Get yourself a database</h4>
+
+<p>FoOlSlide is a database driven software. Therefore, it requires a MySQL database to function. </p>
+
+<h6>cPanel</h6>
+
+<ul>
+<li>Login to cPanel</li>
+<li>Click on MySQL Database Wizard</li>
+<li>Create your database</li>
+<li>Create your login information for the database and write it down for later</li>
+</ul><h6>phpMyAdmin</h6>
+
+<ul>
+<li>Login to phpMyAdmin</li>
+<li>Click on “Databases” in the top navigation bar</li>
+<li>Create your database with “utf8_general_ci” as your collation and a name of your choice</li>
+<li>Click on “Privileges” in the top-right of the page</li>
+<li>Click on “Add a new user”</li>
+<li>Create your login information for the database and write it down for later</li>
+<li>Press “Go” at the bottom to create your login information for the database</li>
+</ul><h4>Installation</h4>
+
+<ul>
+<li>Download FoOlSlide</li>
+<li>Extract and Upload the files onto your server in a directory that is reachable via browser</li>
+<li>For example: /var/www/slide ⇒ <a href="http://foolrulez.org/slide">http://foolrulez.org/slide</a></li>
+<li>Install FoOlSlide via browser by visiting the /install URL (<a href="http://foolrulez.org/slide/install">http://foolrulez.org/slide/install</a>)
+
+<ul>
+<li>If it doesn't work, check the next chapter <em>If you can't reach the /install</em>
+</li>
+<li>On Nginx you will need to edit the Nginx configuration, check the next chapter <em>If you can't reach the /install</em>
+</li>
+<li>Note: The /install URL is a virtual folder and NOT a real folder.</li>
+</ul>
+</li>
+<li>Follow the on-screen alerts and suggestions</li>
+<li>Enter your database and login information</li>
+<li>Login to your FoOlSlide</li>
+<li>Create a new team</li>
+</ul><p><strong>Warning: After the installation is complete, do not touch the directory for FoOlSlide until further notice. Any modifications to files located inside the folder may break the installation.</strong></p>
+
+<h2>If you can't reach the /install</h2>
+
+<h4>If you're on Apache (if you don't know, you're on Apache)</h4>
+
+<p>You can try the following .htaccess files. First of all, make sure you have uploaded the one contained in the FoOlSlide download.</p>
+
+<p>Open your .htaccess file and try one of the following:</p>
+
+<p>Default:</p>
+
+<pre><code>DirectoryIndex index.php
+RewriteEngine on
+RewriteCond $1 !^(index\.php|assets|content|robots\.txt|favicon\.ico)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ ./index.php/$1 [L,QSA]
+</code></pre>
+
+<p>Compatibility:</p>
+
+<pre><code>AllowOverride All
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/system.*
+RewriteRule ^(.*)$ index.php?/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?/$1 [L]
+</code></pre>
+
+<p>x10hosting and other weird services which we don't suggest:</p>
+
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_URI} ^system.*
+  RewriteRule ^(.*)$ /index.php/$1 [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.php/$1 [L]
+&lt;/IfModule&gt;
+&lt;IfModule !mod_rewrite.c&gt;
+  ErrorDocument 404 /index.php
+&lt;/IfModule&gt;
+</code></pre>
+
+<h4>If you're on Nginx</h4>
+
+<p>Nginx absolutely needs you to edit the configuration files. If you use Nginx, I suppose you know how to fiddle with these at least a bit.</p>
+
+<p>If your FoOlSlide is in the root:</p>
+
+<pre><code>server {
+...
+  location / {
+    try_files $uri $uri/ /index.php;
+  }
+...
+}
+</code></pre>
+
+<p>If your FoOlSlide is in a directory:</p>
+
+<pre><code>server {
+...
+  location /directory/slide {
+    try_files $uri $uri/ /directory/slide/index.php;
+  }
+...
+}
+</code></pre>
+
+<p>Example of hotlink protection</p>
+
+<pre><code>server {
+...
+  location /slide {
+    location ~* ^.+\.(png|jpg|jpeg|gif|bmp)$ {
+      valid_referers none blocked foolrulez.com <a href="http://www.foolrulez.com">www.foolrulez.com</a>;
+      if ($invalid_referer) {
+          rewrite ^ <a href="http://foolrulez.com/slide/">http://foolrulez.com/slide/</a> permanent;
+      }          
+    }
+    try_files $uri $uri/ /slide/index.php;
+  }
+...
+}
+</code></pre>
+
+<h2>Upgrading</h2>
+
+<p>FoOlSlide has an internal upgrade system that you can access from the admin panel. In case it doesn't work, you will have to use manual upgrades.</p>
+
+<p><strong>Make always sure you have backups of the FoOlSlide folder and of your entire database when upgrading!</strong></p>
+
+<h4>If automatic upgrade doesn't work</h4>
+
+<p>Ensure that your FoOlSlide directory is writeable.</p>
+
+<ul>
+<li>Via FTP
+
+<ul>
+<li>Navigate to your FoOlSlide directory in your FTP client</li>
+<li>Modify your FoOlSlide directory's permissions to “777” or “0777”</li>
+</ul>
+</li>
+<li>Via SSH
+
+<ul>
+<li>Navigate to your FoOlSlide directory in your SSH client</li>
+<li>Type: cd /var/www/path/to/slide/</li>
+<li>Modify your FoOlSlide directory's permissions</li>
+<li>Type: chown -R www-data .</li>
+</ul>
+</li>
+</ul><p>If this worked, click “Upgrade FoOlSlide Automatically” and wait for it to finish</p>
+
+<h4>Manual upgrade</h4>
+
+<ul>
+<li>Download the Latest Version</li>
+<li>Backup your FoOlSlide directory and MySQL database</li>
+<li>Remove all contents in your FoOlSlide directory, EXCEPT the “contents” directory and “config.php” file</li>
+<li>Upload the files extracted from the ZIP into your FoOlSlide directory, EXCEPT the “contents” directory</li>
+<li>Remove the “default” directory located in ”/contents/themes/”</li>
+<li>Upload the contents in ”/content/themes/” located in your extracted ZIP into the ”/content/themes/” directory on your server</li>
+<li>Login to FoOlSlide and proceed with its prompt</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">FoOlSlide maintained by <a href="https://github.com/FoOlRulez">FoOlRulez</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

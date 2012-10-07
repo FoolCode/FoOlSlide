@@ -118,7 +118,7 @@ class Comic extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the series.');
-		$this->validation['name']['label'] = _('Status');
+		$this->validation['status']['label'] = _('Status');
 		$this->validation['status']['help'] = _('Select the status of the series.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');

@@ -29,6 +29,11 @@ class Comic extends DataMapper
 			'label' => 'Visibility',
 			'type' => 'checkbox'
 		),
+		'status' => array(
+			'rules' => array('required'),
+			'label' => 'Status',
+			'type' => 'dropdown',
+		),
 		'description' => array(
 			'rules' => array(),
 			'label' => 'Description',

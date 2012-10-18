@@ -32,7 +32,8 @@ class Comic extends DataMapper
 		'status' => array(
 			'rules' => array('required'),
 			'label' => 'Status',
-			'type' => 'dropdown',
+			'type' => 'dropdowner',
+			'values' => array('Ongoing' => 'Ongoing', 'Completed' => 'Completed', 'Dropped' => 'Dropped'),
 		),
 		'description' => array(
 			'rules' => array(),

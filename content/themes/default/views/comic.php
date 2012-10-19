@@ -12,6 +12,7 @@
 			<ul>
 				<li><?php echo '<b>'._('Title').'</b>: '.$comic->name; ?></li>
 				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
+				<li><?php echo '<b>'._('Status').'</b>: '.$comic->status; ?></li>
 			</ul>
 		</div>
 	</div>

@@ -12,7 +12,9 @@
 			<ul>
 				<li><?php echo '<b>'._('Title').'</b>: '.$comic->name; ?></li>
 				<li><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?></li>
+				<?php if ($comic->artist): ?>
 				<li><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?></li>
+				<?php endif; ?>
 				<li><?php echo '<b>'._('Status').'</b>: '.$comic->status; ?></li>
 				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
 				

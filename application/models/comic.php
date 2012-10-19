@@ -16,6 +16,16 @@ class Comic extends DataMapper
 			'type' => 'input',
 			'placeholder' => 'required',
 		),
+		'author' => array(
+			'rules' => array('required', 'max_length' => 256),
+			'label' => 'Author',
+			'type' => 'input'
+		),
+		'artist' => array(
+			'rules' => array('max_length' => 256),
+			'lable' => 'Artist',
+			'type' => 'input'
+		),
 		'stub' => array(
 			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
 			'label' => 'Stub'
@@ -119,6 +129,10 @@ class Comic extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the series.');
+		$this->validation['author']['label'] = _('Author');
+		$this->validation['author']['help'] = _('Insert the authors name of the series.');
+		$this->validation['artist']['label'] = _('Artist');
+		$this->validation['artist']['help'] = _('Insert the artist name of the series.');
 		$this->validation['status']['label'] = _('Status');
 		$this->validation['status']['help'] = _('Select the status of the series.');
 		$this->validation['description']['label'] = _('Description');

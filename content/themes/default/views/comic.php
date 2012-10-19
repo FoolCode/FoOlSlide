@@ -11,8 +11,11 @@
 		<div class="info">
 			<ul>
 				<li><?php echo '<b>'._('Title').'</b>: '.$comic->name; ?></li>
-				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
+				<li><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?></li>
+				<li><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?></li>
 				<li><?php echo '<b>'._('Status').'</b>: '.$comic->status; ?></li>
+				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
+				
 			</ul>
 		</div>
 	</div>

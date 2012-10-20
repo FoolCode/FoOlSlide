@@ -11,12 +11,19 @@
 		<div class="info">
 			<ul>
 				<li><?php echo '<b>'._('Title').'</b>: '.$comic->name; ?></li>
+				<?php if ($comic-altname): ?>
+				<li><?php echo '<b>'._('Alt. Title').'</b>: '.$comic->altname; ?><li>
+				<?php endif; ?>
 				<li><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?></li>
 				<?php if ($comic->artist): ?>
 				<li><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?></li>
 				<?php endif; ?>
 				<li><?php echo '<b>'._('Status').'</b>: '.$comic->status; ?></li>
 				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
+				<?php if ($comic->genres): ?>
+				<li><?php echo '<b>'._('Genres').'</b>: '.$comic-genres; ?></li>
+				<?php endif; ?>
+				<li><?php echo '<b>'._('Publisher').'</b>: '.$comic-publisher; ?></li>
 				
 			</ul>
 		</div>

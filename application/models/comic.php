@@ -16,6 +16,11 @@ class Comic extends DataMapper
 			'type' => 'input',
 			'placeholder' => 'required',
 		),
+		'altname' = > array(
+			'rules' => array('max_length' => 256),
+			'label' => 'Alt. Name',
+			'type' => 'input',
+		),
 		'author' => array(
 			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Author',
@@ -50,6 +55,17 @@ class Comic extends DataMapper
 			'label' => 'Description',
 			'type' => 'textarea',
 		),
+		'genres' => array(
+			'rules' => array(),
+			'label' => 'Genres',
+			'type' => 'input',
+		),
+		'publisher' => array(
+			'rules' => array('required'),
+			'label' => 'Publisher',
+			'type' => 'dropdowner',
+			'values' => array('Weekly Shounen Jump' => 'Weekly Shounen Jump', 'Weekly Shounen Magazine' => 'Weekly Shounen Magazine', 'Weekly Shounen Sunday' => 'Weekly Shounen Sunday', 'Bessatsu Shounen Magazine' => 'Bessatsu Shounen Magazine', 'Ulta Jump' => 'Ulta Jump', 'Shounen A' => 'Shounen A', 'Morning' => 'Morning', 'Beans Ace' => 'Beans Ace', 'Shuukan Shounen Champion' => 'Shuukan Shounen Champion', 'Shounen Gangan' => 'Shounen Gangan', 'Comic Blade' => 'Comic Blade', 'Young King Ours' => 'Young King Ours', 'Jump SQ' => 'Jump SQ', 'Monthly Shounen Magazine' => 'Monthly Shounen Magazine', 'Champion RED' => 'Champion RED', 'Dengeki Daioh' => 'Dengeki Daioh'),
+			),
 		'thumbnail' => array(
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail',

@@ -16,7 +16,7 @@ class Comic extends DataMapper
 			'type' => 'input',
 			'placeholder' => 'required',
 		),
-		'altname' = > array(
+		'altname' => array(
 			'rules' => array('max_length' => 256),
 			'label' => 'Alt. Name',
 			'type' => 'input'

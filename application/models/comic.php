@@ -129,6 +129,8 @@ class Comic extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the series.');
+		$this->validation['altname']['label'] = _('Alt. Name');
+		$this->validation['altname']['help'] = _('If the series has an alternative name enter it here.');
 		$this->validation['author']['label'] = _('Author');
 		$this->validation['author']['help'] = _('Insert the authors name of the series.');
 		$this->validation['artist']['label'] = _('Artist');
@@ -137,6 +139,10 @@ class Comic extends DataMapper
 		$this->validation['status']['help'] = _('Select the status of the series.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
+		$this->validation['genres']['label'] = _('Genres');
+		$this->validation['genres']['help'] = _('Type in the genres that apply to this series e.g Shounen, Ecchi, Comedy');
+		$this->validation['publisher']['label'] = _('Publisher');
+		$this->validation['publisher']['help'] = _('Select the magazine in which this series is published');
 		$this->validation['hidden']['label'] = _('Visibility');
 		$this->validation['hidden']['help'] = _('Hide the series from public view.');
 		$this->validation['hidden']['text'] = _('Hidden');

@@ -19,7 +19,7 @@ class Comic extends DataMapper
 		'altname' = > array(
 			'rules' => array('max_length' => 256),
 			'label' => 'Alt. Name',
-			'type' => 'input',
+			'type' => 'input'
 		),
 		'author' => array(
 			'rules' => array('required', 'max_length' => 256),
@@ -58,7 +58,7 @@ class Comic extends DataMapper
 		'genres' => array(
 			'rules' => array(),
 			'label' => 'Genres',
-			'type' => 'input',
+			'type' => 'input'
 		),
 		'publisher' => array(
 			'rules' => array('required'),

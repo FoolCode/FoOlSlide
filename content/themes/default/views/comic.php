@@ -23,7 +23,7 @@
 				<?php if ($comic->genres): ?>
 				<li><?php echo '<b>'._('Genres').'</b>: '.$comic-genres; ?></li>
 				<?php endif; ?>
-				<li><?php echo '<b>'._('Publisher').'</b>: '.$comic-publisher; ?></li>
+				<li><?php echo '<b>'._('Published in').'</b>: '.$comic-publisher; ?></li>
 				
 			</ul>
 		</div>

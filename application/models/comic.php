@@ -16,6 +16,21 @@ class Comic extends DataMapper
 			'type' => 'input',
 			'placeholder' => 'required',
 		),
+		'altname' => array(
+			'rules' => array('max_length' => 256),
+			'label' => 'Alt. Name',
+			'type' => 'input'
+		),
+		'author' => array(
+			'rules' => array('required', 'max_length' => 256),
+			'label' => 'Author',
+			'type' => 'input'
+		),
+		'artist' => array(
+			'rules' => array('max_length' => 256),
+			'lable' => 'Artist',
+			'type' => 'input'
+		),
 		'stub' => array(
 			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
 			'label' => 'Stub'
@@ -29,11 +44,28 @@ class Comic extends DataMapper
 			'label' => 'Visibility',
 			'type' => 'checkbox'
 		),
+		'status' => array(
+			'rules' => array('required'),
+			'label' => 'Status',
+			'type' => 'dropdowner',
+			'values' => array('Ongoing' => 'Ongoing', 'Completed' => 'Completed', 'Dropped' => 'Dropped'),
+		),
 		'description' => array(
 			'rules' => array(),
 			'label' => 'Description',
 			'type' => 'textarea',
 		),
+		'genres' => array(
+			'rules' => array(),
+			'label' => 'Genres',
+			'type' => 'input'
+		),
+		'publisher' => array(
+			'rules' => array('required'),
+			'label' => 'Publisher',
+			'type' => 'dropdowner',
+			'values' => array('Weekly Shounen Jump' => 'Weekly Shounen Jump', 'Weekly Shounen Magazine' => 'Weekly Shounen Magazine', 'Weekly Shounen Sunday' => 'Weekly Shounen Sunday', 'Bessatsu Shounen Magazine' => 'Bessatsu Shounen Magazine', 'Ulta Jump' => 'Ulta Jump', 'Shounen A' => 'Shounen A', 'Morning' => 'Morning', 'Beans Ace' => 'Beans Ace', 'Shuukan Shounen Champion' => 'Shuukan Shounen Champion', 'Shounen Gangan' => 'Shounen Gangan', 'Comic Blade' => 'Comic Blade', 'Young King Ours' => 'Young King Ours', 'Jump SQ' => 'Jump SQ', 'Monthly Shounen Magazine' => 'Monthly Shounen Magazine', 'Champion RED' => 'Champion RED', 'Dengeki Daioh' => 'Dengeki Daioh'),
+			),
 		'thumbnail' => array(
 			'rules' => array('max_length' => 512),
 			'label' => 'Thumbnail',
@@ -113,8 +145,20 @@ class Comic extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the series.');
+		$this->validation['altname']['label'] = _('Alt. Name');
+		$this->validation['altname']['help'] = _('If the series has an alternative name enter it here.');
+		$this->validation['author']['label'] = _('Author');
+		$this->validation['author']['help'] = _('Insert the authors name of the series.');
+		$this->validation['artist']['label'] = _('Artist');
+		$this->validation['artist']['help'] = _('Insert the artist name of the series.');
+		$this->validation['status']['label'] = _('Status');
+		$this->validation['status']['help'] = _('Select the status of the series.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
+		$this->validation['genres']['label'] = _('Genres');
+		$this->validation['genres']['help'] = _('Type in the genres that apply to this series e.g Shounen, Ecchi, Comedy');
+		$this->validation['publisher']['label'] = _('Publisher');
+		$this->validation['publisher']['help'] = _('Select the magazine in which this series is published');
 		$this->validation['hidden']['label'] = _('Visibility');
 		$this->validation['hidden']['help'] = _('Hide the series from public view.');
 		$this->validation['hidden']['text'] = _('Hidden');

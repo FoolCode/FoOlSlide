@@ -16,15 +16,15 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/FoOlRulez/FoOlSlide">Fork Me on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/FoolCode/FoOlSlide">View on GitHub</a>
 
           <h1 id="project_title">FoOlSlide</h1>
           <h2 id="project_tagline">Online Comics Publishing Software for Authors and Teams</h2>
 
-          <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/FoOlRulez/FoOlSlide/zipball/master">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="https://github.com/FoOlRulez/FoOlSlide/tarball/master">Download this project as a tar.gz file</a>
-          </section>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/FoolCode/FoOlSlide/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/FoolCode/FoOlSlide/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -116,7 +116,8 @@ This chart provides detailed information regarding the total number languages an
 <ul>
 <li>Download FoOlSlide</li>
 <li>Extract and Upload the files onto your server in a directory that is reachable via browser</li>
-<li>For example: /var/www/slide ⇒ <a href="http://foolrulez.org/slide">http://foolrulez.org/slide</a></li>
+<li>For example: /var/www/slide ⇒ <a href="http://foolrulez.org/slide">http://foolrulez.org/slide</a>
+</li>
 <li>Install FoOlSlide via browser by visiting the /install URL (<a href="http://foolrulez.org/slide/install">http://foolrulez.org/slide/install</a>)
 
 <ul>
@@ -210,9 +211,9 @@ RewriteRule ^(.+)$ index.php?/$1 [L]
 ...
   location /slide {
     location ~* ^.+\.(png|jpg|jpeg|gif|bmp)$ {
-      valid_referers none blocked foolrulez.com <a href="http://www.foolrulez.com">www.foolrulez.com</a>;
+      valid_referers none blocked foolrulez.com www.foolrulez.com;
       if ($invalid_referer) {
-          rewrite ^ <a href="http://foolrulez.com/slide/">http://foolrulez.com/slide/</a> permanent;
+          rewrite ^ http://foolrulez.com/slide/ permanent;
       }          
     }
     try_files $uri $uri/ /slide/index.php;
@@ -267,7 +268,7 @@ RewriteRule ^(.+)$ index.php?/$1 [L]
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">FoOlSlide maintained by <a href="https://github.com/FoOlRulez">FoOlRulez</a></p>
+        <p class="copyright">FoOlSlide maintained by <a href="https://github.com/FoolCode">FoolCode</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>

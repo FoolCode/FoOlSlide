@@ -35,13 +35,13 @@ class Archive extends DataMapper
 
 	function post_model_init($from_cache = FALSE)
 	{
-		
+
 	}
 
 
 	/**
 	 * Creates a compressed cache file for the chapter
-	 * 
+	 *
 	 * @author Woxxy
 	 * @return url to compressed file
 	 */
@@ -67,7 +67,7 @@ class Archive extends DataMapper
 				$filearray[] = "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"];
 			}
 
-			$v_list = $archive->create(implode(',', $filearray), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, $filename, PCLZIP_OPT_NO_COMPRESSION);
+			$v_list = $archive->create(implode(',', $filearray), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
 
 			$this->chapter_id = $chapter->id;
 			$this->filename = $filename . '.zip';
@@ -90,9 +90,9 @@ class Archive extends DataMapper
 
 	/**
 	 * Removes the compressed file from the disk and database
-	 * 
+	 *
 	 * @author Woxxy
-	 * @returns bool 
+	 * @returns bool
 	 */
 	function remove()
 	{
@@ -114,9 +114,9 @@ class Archive extends DataMapper
 
 	/**
 	 * Calculates the size of the currently stored ZIPs
-	 * 
+	 *
 	 * @author Woxxy
-	 * @returns int 
+	 * @returns int
 	 */
 	function calculate_size()
 	{
@@ -127,9 +127,9 @@ class Archive extends DataMapper
 
 	/**
 	 * Removes ZIPs that are over the specified size
-	 * 
+	 *
 	 * @author Woxxy
-	 * @returns bool 
+	 * @returns bool
 	 */
 	function remove_old()
 	{
@@ -155,9 +155,9 @@ class Archive extends DataMapper
 
 	/**
 	 * Removes all the ZIPs
-	 * 
+	 *
 	 * @author Woxxy
-	 * @returns bool 
+	 * @returns bool
 	 */
 	function remove_all()
 	{
@@ -172,9 +172,9 @@ class Archive extends DataMapper
 
 	/**
 	 * Creates the filename for the ZIP
-	 * 
+	 *
 	 * @author Woxxy
-	 * @returns bool 
+	 * @returns bool
 	 */
 	function filename_compressed($chapter)
 	{
@@ -183,7 +183,7 @@ class Archive extends DataMapper
 		$filename = "";
 		/*
 		 *  Proposal for guesser
-		 * 
+		 *
 		 *  %comic% just name
 		 *  %_comic% name with underscores
 		 * 	%volume% volume number
@@ -198,16 +198,18 @@ class Archive extends DataMapper
 		 *  %mid_group% print separator between groups
 		 */
 
+		$teams = array();
 		foreach ($chapter->teams as $team)
 		{
 			$filename .= "[" . $team->name . "]";
 		}
-		$filename .= $chapter->comic->name;
+
+		$filename .= trim($chapter->comic->name);
 		if ($chapter->volume !== FALSE && $chapter->volume != 0)
-			$filename .= '_v' . $chapter->volume;
-		$filename .= '_c' . $chapter->chapter;
+			$filename .= '_v' . str_pad($chapter->volume, 2, '0', STR_PAD_LEFT);
+		$filename .= '_c' . str_pad($chapter->chapter, 2, '0', STR_PAD_LEFT);
 		if ($chapter->subchapter !== FALSE && $chapter->subchapter != 0)
-			$filename .= '_s' . $chapter->subchapter;
+			$filename .= '_ex' . str_pad($chapter->subchapter, 2, '0', STR_PAD_LEFT);
 
 		$filename = str_replace(" ", "_", $filename);
 

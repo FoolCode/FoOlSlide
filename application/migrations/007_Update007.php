@@ -12,11 +12,11 @@ class Migration_Update007 extends CI_Migration {
 
 		$this->db->query("
 				ALTER TABLE `" . $this->db->dbprefix('pages') . "`
-					DROP COLUMN `description`
-					DROP COLUMN `thumbnail`
-					DROP COLUMN `grayscale`
-					DROP COLUMN `thumbheight`
-					DROP COLUMN `thumbwidth`
+					DROP COLUMN `description`,
+					DROP COLUMN `thumbnail`,
+					DROP COLUMN `grayscale`,
+					DROP COLUMN `thumbheight`,
+					DROP COLUMN `thumbwidth`,
 					DROP COLUMN `thumbsize`
 		");
 	}

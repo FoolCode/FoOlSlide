@@ -22,7 +22,7 @@ class System extends Admin_Controller
 
 	/*
 	 * A page telling if there's an ugrade available
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function index()
@@ -44,65 +44,11 @@ class System extends Admin_Controller
 	}
 
 
-	function preferences()
-	{
-		$this->viewdata["function_title"] = _("Preferences");
-
-		$form = array();
-
-		if (find_imagick())
-		{
-			$imagick_status = '<span class="label success">' . _('Found and Working') . '</span>';
-		}
-		else
-		{
-			if (!$this->fs_imagick->exec)
-				$imagick_status = '<span class="label important">' . _('Not Available') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must have Safe Mode turned off and the exec() function enabled to allow ImageMagick to process your images. Please check the information panel for more details.')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
-			else if (!$this->fs_imagick->found)
-				$imagick_status = '<span class="label important">' . _('Not Found') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(_('You must provide the correct path to the "convert" binary on your system. This is typically located under /usr/bin (Linux), /opt/local/bin (Mac OSX) or the installation directory (Windows).')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
-			else if (!$this->fs_imagick->available)
-				$imagick_status = '<span class="label important">' . _('Not Working') . '</span><a rel="popover-right" href="#" data-content="' . htmlspecialchars(sprintf(_('There has been an error encountered when testing your ImageMagick installation. To manually check for errors, access your server via shell or command line and type: %s'), '<br/><code>' . $this->fs_imagick->found . ' -version</code>')) . '" data-original-title="' . htmlspecialchars(_('Disabled Functions')) . '"><img src="' . icons(388, 16) . '" class="icon icon-small"></a>';
-		}
-
-
-		$form[] = array(
-			_('Path to ImageMagick') . ' ' . $imagick_status,
-			array(
-				'type' => 'input',
-				'name' => 'fs_serv_imagick_path',
-				'placeholder' => '/usr/bin',
-				'preferences' => 'fs_gen',
-				'help' => sprintf(_('FoOlSlide uses %s via command line to maximize the processor power for processing images. If ImageMagick %s automatically, enter the location of the "convert" binary on your server in the field above.'), '<a href="#" rel="popover-below" title="ImageMagick" data-content="' . _('This is a library used to dynamically create, edit, compose or convert images.') . '">ImageMagick</a>', '<a href="#" rel="popover-below" title="' . _('ImageMagick Binary') . '" data-content="' . htmlspecialchars(_('This is typically located under /usr/bin (Linux), /opt/local/bin (Mac OSX) or the installation directory (Windows).')) . '" >' . _('can\'t be found') . '</a>')
-			)
-		);
-
-
-		if ($post = $this->input->post())
-		{
-			$this->_submit($post, $form);
-			redirect('admin/system/preferences');
-		}
-
-		// create a form
-		$table = tabler($form, FALSE);
-		$data['table'] = $table;
-
-		// print out
-		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
-
-
-		$data["form_title"] = _("Preferences");
-
-		$this->viewdata["main_content_view"] = $this->load->view("admin/system/preferences", $data, TRUE);
-		$this->load->view("admin/default.php", $this->viewdata);
-	}
-
-
 	/*
 	 * _submit is a private function that submits to the "preferences" table.
 	 * entries that don't exist are created. the preferences table could get very large
 	 * but it's not really an issue as long as the variables are kept all different.
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function _submit($post, $form)
@@ -161,7 +107,7 @@ class System extends Admin_Controller
 		// get current version from database
 		$data["form_title"] = _("Tools");
 
-		$data["imagick_optimize"] = FALSE;
+		$data["imagick_optimize"] = FALSE;/*
 		if (find_imagick())
 		{
 			$page = new Page();
@@ -170,10 +116,10 @@ class System extends Admin_Controller
 			{
 				$data["imagick_optimize"] = TRUE;
 			}
-		}
+		}*/
 
 		$data["database_backup"] = strtolower($this->db->dbdriver) == "mysql";
-		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysql" || strtolower($this->db->dbdriver) == "mysqli";
+		$data["database_optimize"] = strtolower($this->db->dbdriver) == "mysqli" || strtolower($this->db->dbdriver) == "mysqli";
 
 		$logs = get_dir_file_info($this->config->item('log_path'));
 		$data["logs_space"] = 0;
@@ -523,7 +469,7 @@ class System extends Admin_Controller
 
 	/*
 	 * This just triggers the upgrade function in the upgrade model
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function do_upgrade()

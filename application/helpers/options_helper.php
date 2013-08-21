@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 /**
  * Function to get single options from the preferences database
- * 
+ *
  * @param string $option the code of the option
  * @author Woxxy
  * @return string the option
@@ -27,7 +27,7 @@ if (!function_exists('get_setting'))
 
 /**
  * Loads variables from database for get_setting()
- * 
+ *
  * @author Woxxy
  */
 if (!function_exists('load_settings'))
@@ -50,7 +50,7 @@ if (!function_exists('load_settings'))
 
 /**
  * Caches in a variable and returns the home team's object
- * 
+ *
  * @author Woxxy
  * @return object home team
  */
@@ -71,6 +71,7 @@ if (!function_exists('get_home_team'))
 			$team->limit(1)->get();
 		}
 
+        $CI->fs_loaded = new stdClass();
 		$CI->fs_loaded->home_team = $team;
 		return $team;
 	}
@@ -93,59 +94,12 @@ if (!function_exists('parse_irc'))
 		}
 		return $string;
 	}
-
-
-}
-/**
- * Locate ImageMagick and determine if it has been installed or not. 
- */
-function find_imagick()
-{
-	$CI = & get_instance();
-	if (isset($CI->fs_imagick->available))
-	{
-		return $CI->fs_imagick->available;
-	}
-
-	$CI->fs_imagick->exec = FALSE;
-	$CI->fs_imagick->found = FALSE;
-	$CI->fs_imagick->available = FALSE;
-	$ini_disabled = explode(',', ini_get('disable_functions'));
-	if (ini_get('safe_mode') || !in_array('exec', $ini_disabled))
-	{
-		$CI->fs_imagick->exec = TRUE;
-		$imagick_path = get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin';
-
-		if (!preg_match("/convert$/i", $imagick_path))
-		{
-			$imagick_path = rtrim($imagick_path, '/') . '/';
-
-			$imagick_path .= 'convert';
-		}
-
-		if (@file_exists($imagick_path) || @file_exists($imagick_path . '.exe'))
-		{
-			$CI->fs_imagick->found = $imagick_path;
-		}
-		else
-		{
-			return FALSE;
-		}
-		
-		exec($imagick_path . ' -version', $result);
-		if (preg_match('/ImageMagick/i', $result[0]))
-		{
-			$CI->fs_imagick->available = TRUE;
-			return TRUE;
-		}
-	}
-	return FALSE;
 }
 
 
 /**
  * Checks that the call is made from Ajax
- * 
+ *
  * @author Woxxy
  * @return bool true if ajax request
  */
@@ -201,7 +155,7 @@ function get_gravatar($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts 
 
 /**
  * Returns a random string
- * 
+ *
  * @todo this is returning only numbers for some reason
  * @param int length of string to generate
  * @return string random string
@@ -220,7 +174,7 @@ function random_string($length = 20)
 
 /**
  * Future function for load balancing the source of the images
- * 
+ *
  * @author Woxxy
  * @param string $string the url of the image
  * @return string the base url for the image server
@@ -313,7 +267,7 @@ function relative_date($time)
 
 
 /**
- * 
+ *
  */
 function HTMLpurify($dirty_html, $set = 'default')
 {

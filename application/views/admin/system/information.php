@@ -179,17 +179,12 @@
 					'title' => 'cURL',
 					'value' => (extension_loaded('curl')) ? _('Installed') : _('Not Installed'),
 					'text' => _('This is a library used to communicate with different types of servers with many types of protocols.')
-				),array(
+				),
+				array(
 					'name' => 'GD2',
 					'title' => 'GD2',
 					'value' => (extension_loaded('gd')) ? _('Installed') : _('Missing'),
 					'text' => _('This is a library used to dynamically create images and thumbnails.')
-				),
-				array(
-					'name' => 'ImageMagick',
-					'title' => 'ImageMagick',
-					'value' => (find_imagick()) ? _('Installed') : _('Not Installed'),
-					'text' => _('This is a library used to dynamically create, edit, compose or convert images.') . '<p class="vartext">' . _('Optional') . '</p>'
 				)
 			)
 		);
@@ -246,7 +241,7 @@
 </div>
 
 <script type="text/javascript">
-	
+
 	var pasteSystemInfo = function() {
 		var modalInfoOutput = jQuery("#modal-for-information");
 		jQuery.post('<?php echo site_url("admin/system/pastebin") ?>', { output: modalInfoOutput.find("#server-information-output").val() }, function(result) {
@@ -255,7 +250,7 @@
 			}
 		}, 'json');
 	}
-			
+
 	jQuery(document).ready(function() {
 		var modalInfoContainer = jQuery("#modal-for-information").find("#server-information-output");
 		modalInfoContainer.click(function() {

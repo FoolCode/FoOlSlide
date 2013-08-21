@@ -21,14 +21,6 @@ class Page extends DataMapper
 			'rules' => array(),
 			'label' => 'Hidden'
 		),
-		'description' => array(
-			'rules' => array(),
-			'label' => 'Description'
-		),
-		'thumbnail' => array(
-			'rules' => array('required', 'max_length' => 512),
-			'label' => 'Thumbnail'
-		),
 		'lastseen' => array(
 			'rules' => array(),
 			'label' => 'Lastseen'
@@ -53,25 +45,9 @@ class Page extends DataMapper
 			'rules' => array('required'),
 			'label' => 'Mime type'
 		),
-		'grayscale' => array(
-			'rules' => array('required'),
-			'label' => 'Is it grayscale?'
-		),
-		'thumbwidth' => array(
-			'rules' => array('required'),
-			'label' => 'Thumbnail width'
-		),
-		'thumbheight' => array(
-			'rules' => array('required'),
-			'label' => 'Thumbnail height'
-		),
 		'size' => array(
 			'rules' => array('required'),
 			'label' => 'Size'
-		),
-		'thumbsize' => array(
-			'rules' => array('required'),
-			'label' => 'Thumbnail size'
 		)
 	);
 
@@ -87,7 +63,7 @@ class Page extends DataMapper
 
 	function post_model_init($from_cache = FALSE)
 	{
-		
+
 	}
 
 
@@ -169,7 +145,7 @@ class Page extends DataMapper
 
 
 	/**
-	 * Sets the $this->chapter and $this->chapter->comic variables if it hasn't 
+	 * Sets the $this->chapter and $this->chapter->comic variables if it hasn't
 	 * been done before.
 	 *
 	 * @author	Woxxy
@@ -203,11 +179,11 @@ class Page extends DataMapper
 	 * Function to create a new page from a $filedata array. It deals with
 	 * processing the image data, checks if it's an image, puts values like
 	 * height in the variables, sends to database function and file function.
-	 * 
+	 *
 	 * This function fails silently for the user. For now.
 	 *
 	 * @author	Woxxy
-	 * @param	array|$filedata It's an array of data produced by CodeIgniter 
+	 * @param	array|$filedata It's an array of data produced by CodeIgniter
 	 * 			upload function
 	 * @param	int|$chapter_id The ID of the chapter
 	 * @param	int|$hidden NOT USED
@@ -216,7 +192,6 @@ class Page extends DataMapper
 	 */
 	public function add_page($path, $filename, $chapter_id)
 	{
-
 		// Check if that file is actually an image
 		if (!$imagedata = @getimagesize($path))
 		{
@@ -245,12 +220,6 @@ class Page extends DataMapper
 		// We need the dir to the chapter
 		$dir = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/";
 
-
-		// $imagedata = @getimagesize($filedata["server_path"]);
-		// We had set $imagedata before
-		// We already have the thumbnail! Get data for that too.
-		$thumbdata = @getimagesize($dir . "thumb_" . $filename);
-
 		// If a page in this chapter with the same filename exists, pick its ID and start updating it
 		// This makes so everything gets overwritten with no error
 		$page = new Page();
@@ -262,27 +231,11 @@ class Page extends DataMapper
 
 		// Prepare the variables
 		$this->filename = $filename;
-		$this->description = (find_imagick()) ? 'im' : '';
 		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
 		$this->size = filesize($dir . $filename);
 		$this->mime = image_type_to_mime_type($imagedata["2"]);
-		$this->thumbwidth = $thumbdata["0"];
-		$this->thumbheight = $thumbdata["1"];
-		$this->thumbsize = filesize($dir . "thumb_" . $filename);
-
-		// Check from the thumbnail if the image is in colors or not
-		$is_bw = $this->is_bw();
-		if ($is_bw == "bw")
-			$this->grayscale = 1;
-		else if ($is_bw == "rgb")
-			$this->grayscale = 0;
-		else
-		{
-			log_message('error', 'add_page: error while determining if black and white or RGB');
-			return false;
-		}
 
 		// Finally, save everything to database, and, in case of failure, remove the image files
 		if (!$this->update_page_db())
@@ -291,7 +244,7 @@ class Page extends DataMapper
 			$this->remove_page_file();
 			return false;
 		}
-		
+
 		$this->on_change($chapter_id);
 
 		// All good
@@ -324,7 +277,7 @@ class Page extends DataMapper
 			log_message('error', 'remove_page: failed to delete database entry');
 			return false;
 		}
-		
+
 		$this->on_change($chapter_id);
 
 		// Return both comic and chapter for comfy redirects
@@ -335,12 +288,12 @@ class Page extends DataMapper
 	/**
 	 * Handles both creating of new pages in the database and editing old ones.
 	 * It determines if it should update or not by checking if $this->id has
-	 * been set. It can get the values from both the $data array and direct 
+	 * been set. It can get the values from both the $data array and direct
 	 * variable assignation. Be aware that array > variables. The latter ones
 	 * will be overwritten. Particularly, the variables that the user isn't
 	 * allowed to set personally are unset and reset with the automated values.
 	 * It's quite safe to throw stuff at it.
-	 * 
+	 *
 	 * If you're overwriting an image, at this point the ID would be alreasy set.
 	 *
 	 * @author	Woxxy
@@ -392,16 +345,10 @@ class Page extends DataMapper
 		unset($data["creator"]);
 		unset($data["editor"]);
 		unset($data["filename"]);
-		unset($data["description"]);
-		unset($data["thumnail"]);
 		unset($data["mime"]);
 		unset($data["size"]);
 		unset($data["height"]);
 		unset($data["width"]);
-		unset($data["thumbheight"]);
-		unset($data["thumbwidth"]);
-		unset($data["thumbsize"]);
-
 
 		// Loop over the array and assign values to the variables.
 		foreach ($data as $key => $value)
@@ -455,10 +402,10 @@ class Page extends DataMapper
 	/**
 	 * Copies the image file (usually uploaded or in the cache) to the directory and
 	 * creates the thumbnail.
-	 * 
+	 *
 	 * This function doesn't remove the source file, that's done by the calling
 	 * function. We don't want to kill images in here!
-	 * 
+	 *
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
@@ -475,30 +422,6 @@ class Page extends DataMapper
 			log_message('error', 'add_page_file: failed to create/copy the image');
 			return false;
 		}
-
-		// Prepare the image library to create the thumbnail
-		$CI = & get_instance();
-		$CI->load->library('image_lib');
-		$img_config['image_library'] = (find_imagick()) ? 'ImageMagick' : 'GD2'; // Use GD2 as fallback
-		$img_config['library_path'] = (find_imagick()) ? (get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin') : ''; // If GD2, use none
-		$img_config['source_image'] = $path;
-		$img_config["new_image"] = $dir . "thumb_" . $filename;
-		$img_config['width'] = 250;
-		$img_config['height'] = 250;
-		$img_config['maintain_ratio'] = TRUE;
-		$img_config['master_dim'] = 'auto';
-		$CI->image_lib->initialize($img_config);
-
-		// Resize to create the thumbnail
-		if (!$CI->image_lib->resize())
-		{
-			set_notice('error', _('Failed to create the thumbnail of the page.'));
-			log_message('error', 'add_page_file: failed to create thumbnail');
-			return false;
-		}
-
-		// Clear the image library for who knows who else calls it
-		$CI->image_lib->clear();
 
 		// Good
 		return true;
@@ -542,7 +465,7 @@ class Page extends DataMapper
 
 	/**
 	 * Triggers the necessary calculations when a page is added, edited or removed
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	public function on_change($chapter_id)
@@ -627,151 +550,9 @@ class Page extends DataMapper
 		return $errors;
 	}
 
-
-	public function rebuild_thumbnail()
-	{
-		// Let's make sure the chapter and comic is set
-		$this->get_chapter();
-
-		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
-		// get paths and remove the thumb
-		if (!file_exists($path))
-		{
-			set_notice('warning', _('Page not found while creating thumbnail:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
-			log_message('error', 'rebuild_thumbnail: there\'s a missing image in ' . $path);
-			// don't stop the process
-			return TRUE;
-		}
-
-		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
-		if (file_exists($thumb_path))
-		{
-			if (!unlink($thumb_path))
-			{
-				set_notice('error', _('Failed to remove the thumbnail while rebuilding it. Please, check file permissions.'));
-				log_message('error', 'rebuild_thumbnail: failed to remove thumbnail while rebuilding');
-				return FALSE;
-			}
-		}
-
-		// Prepare the image library to create the thumbnail
-		$CI = & get_instance();
-		$CI->load->library('image_lib');
-		$img_config['image_library'] = (find_imagick()) ? 'ImageMagick' : 'GD2'; // Use GD2 as fallback
-		$img_config['library_path'] = (find_imagick()) ? (get_setting('fs_serv_imagick_path') ? get_setting('fs_serv_imagick_path') : '/usr/bin') : ''; // If GD2, use none
-		$img_config['source_image'] = $path;
-		$img_config["new_image"] = $thumb_path;
-		$img_config['width'] = 250;
-		$img_config['height'] = 250;
-		$img_config['maintain_ratio'] = TRUE;
-		$img_config['master_dim'] = 'auto';
-		$CI->image_lib->initialize($img_config);
-
-		// Resize to create the thumbnail
-		if (!$CI->image_lib->resize())
-		{
-			set_notice('error', _('Failed to recreate the thumbnail of the page.'));
-			log_message('error', 'rebuild_thumbnail: failed to recreate thumbnail');
-			return FALSE;
-		}
-
-		// update the kind of compression used and thumbnail filesize
-		$this->thumbsize = filesize($thumb_path);
-		$this->description = (find_imagick()) ? 'im' : '';
-		if (!$this->save())
-		{
-			set_notice('error', _('Failed to save the image compression method in the database.'));
-			log_message('error', 'rebuild_thumbnail: failed to save the image compression method');
-			return FALSE;
-		}
-
-		// Clear the image library for who knows who else calls it
-		$CI->image_lib->clear();
-
-		// Good
-		return TRUE;
-	}
-
-
 	/**
-	 * With a heavy pixel-per-pixel, it checks if the image is black and white.
-	 * For better performance, it uses the thumbnail to check on less pixels.
-	 * 
-	 * @author woxxy, and a loop taken from a site...
-	 * @return string "bw" if black and white, "rgb" if colors, false on failure 
-	 */
-	public function is_bw()
-	{
-		// Make sure the chapter and comic are selected
-		$this->get_chapter();
-
-		// Get the thumbnail
-		$rel = 'content/comics/' . $this->chapter->comic->directory() . '/' . $this->chapter->directory() . '/' . $this->thumbnail . $this->filename;
-
-		// We need to know the image type to spawn the right imagecreate function
-		switch ($this->mime)
-		{
-			case "image/jpeg":
-				$im = imagecreatefromjpeg($rel); //jpeg file
-				break;
-			case "image/gif":
-				$im = imagecreatefromgif($rel); //gif file
-				break;
-			case "image/png":
-				$im = imagecreatefrompng($rel); //png file
-				break;
-			default:
-				log_message('error', 'page.php/is_bw(): no mime found');
-				return false;
-		}
-
-		// Get image two sizes
-		$imgw = imagesx($im);
-		$imgh = imagesy($im);
-
-		$r = array();
-		$g = array();
-		$b = array();
-
-		$c = 0;
-
-		for ($i = 0; $i < $imgw; $i++)
-		{
-			for ($j = 0; $j < $imgh; $j++)
-			{
-
-				// get the rgb value for current pixel
-				$rgb = ImageColorAt($im, $i, $j);
-
-				// extract each value for r, g, b
-				$r[$i][$j] = ($rgb >> 16) & 0xFF;
-				$g[$i][$j] = ($rgb >> 8) & 0xFF;
-				$b[$i][$j] = $rgb & 0xFF;
-
-				// count gray pixels (r=g=b)
-				if ($r[$i][$j] == $g[$i][$j] && $r[$i][$j] == $b[$i][$j])
-				{
-					$c++;
-				}
-			}
-		}
-
-		// If every pixel is black and white, return bw
-		if ($c == ($imgw * $imgh))
-		{
-			return "bw";
-		}
-		else
-		{
-			// The image is in colors
-			return "rgb";
-		}
-	}
-
-
-	/**
-	 * Creates the href to the image. Set 
-	 * 
+	 * Creates the href to the image. Set
+	 *
 	 * @author woxxy
 	 * @param boolean|$thumbnail if TRUE function returns thumbnail
 	 * @return string href to the image

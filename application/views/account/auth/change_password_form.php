@@ -41,6 +41,6 @@
 		</div>
 	</div>
 	<?php echo form_close(); ?>
-	<a href="<? echo site_url('/account/profile/') ?>" class="button yellow"><?php echo _("Back to profile") ?></a>
+	<a href="<?php echo site_url('/account/profile/') ?>" class="button yellow"><?php echo _("Back to profile") ?></a>
 
 </div>

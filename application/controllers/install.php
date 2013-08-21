@@ -19,7 +19,7 @@ class Install extends Install_Controller
 	/*
 	 * This function shows and does everything on installation.
 	 * The rest are private functions.
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function index()
@@ -43,7 +43,7 @@ class Install extends Install_Controller
 				'name' => 'db_type',
 				'id' => 'db_type',
 				'values' => array('mysql' => 'MySQL', 'mssql' => 'MSSQL', 'mysqli' => 'MySQLi', 'oci8' => 'OCI8', 'obdc' => 'OBDC', 'postgre' => 'Postgre', 'sqlite' => 'SQLite'),
-				'value' => 'mysql',
+				'value' => 'mysqli',
 				'placeholder' => _('required'),
 				'help' => _('The type of database you\'re going to use. Leave it on MySQL if using a standard installation')
 			)
@@ -176,7 +176,7 @@ class Install extends Install_Controller
 
 	/*
 	 * Does the actual installation once data is submitted
-	 * 
+	 *
 	 * @autor Woxxy
 	 */
 	function _submit($post)
@@ -228,7 +228,7 @@ class Install extends Install_Controller
 			return false;
 		}
 
-		// pick the sample config and replace entries so we can insert the database 
+		// pick the sample config and replace entries so we can insert the database
 		$config = read_file('assets/config.sample.php');
 		$config = str_replace("\$db['default']['dbdriver'] = ''", "\$db['default']['dbdriver'] = '" . addslashes($post["db_type"]) . "'", $config);
 		$config = str_replace("\$db['default']['hostname'] = 'localhost'", "\$db['default']['hostname'] = '" . addslashes($post["db_hostname"]) . "'", $config);
@@ -300,7 +300,7 @@ class Install extends Install_Controller
 	/*
 	 * Checks that the necessary directories are writable and prepares suggestions to
 	 * be able to deliver autoupgrades.
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function _check()
@@ -376,7 +376,7 @@ class Install extends Install_Controller
 
 	/*
 	 * checks if exex is enabled
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function _exec_enabled()

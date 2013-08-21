@@ -8,6 +8,6 @@
 	</div>
 	<?php echo form_close(); ?>
 
-<a href="<? echo site_url('/account/teams') ?>" class="button yellow"><?php echo _("Back to your teams") ?></a>
+<a href="<?php echo site_url('/account/teams') ?>" class="button yellow"><?php echo _("Back to your teams") ?></a>
 
 </div>

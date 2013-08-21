@@ -1,8 +1,8 @@
 <div class="incontent login">
-	<?php 
+	<?php
 	if ($show_accept) echo _(sprintf("Accept or reject %s, who applied to the team:", $user_name)) . ' ' . $team_name;
 	else echo _(sprintf("Reject your application to team:", $user_name)) . ' ' . $team_name;
-	
+
 	?>
 
 	<br/><br/>
@@ -26,6 +26,6 @@
 	</div>
 	<?php echo form_close(); ?>
 
-	<a href="<? echo site_url('/account/teams') ?>" class="button yellow"><?php echo _("Back to your teams") ?></a>
+	<a href="<?php echo site_url('/account/teams') ?>" class="button yellow"><?php echo _("Back to your teams") ?></a>
 
 </div>

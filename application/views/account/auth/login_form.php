@@ -109,7 +109,7 @@
 <table>
 	<tr>
 		<td>
-			<a href="<? echo site_url('/account/auth/forgot_password/') ?>" class="button yellow"><?php echo _("Forgot password") ?></a>
+			<a href="<?php echo site_url('/account/auth/forgot_password/') ?>" class="button yellow"><?php echo _("Forgot password") ?></a>
 		</td>
 		<?php
 		if ($this->config->item('allow_registration', 'tank_auth'))

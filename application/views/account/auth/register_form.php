@@ -111,10 +111,10 @@
 } ?>
 <div class="formgroup">
 	<div></div>
-	<div><?php echo form_submit('register', _('Register')); ?></div>		
+	<div><?php echo form_submit('register', _('Register')); ?></div>
 </div>
 <?php echo form_close(); ?>
 
-<a href="<? echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
+<a href="<?php echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
 
 </div>

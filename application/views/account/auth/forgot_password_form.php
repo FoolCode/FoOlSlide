@@ -30,6 +30,6 @@
 	<?php echo form_close(); ?>
 	<div class="formgroup">
 		<div>
-			<a href="<? echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
+			<a href="<?php echo site_url('/account/auth/login/') ?>" class="button yellow"><?php echo _("Back to login") ?></a>
 		</div>
 	</div>

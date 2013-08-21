@@ -72,6 +72,8 @@ class Comic extends DataMapper
 		if (!is_null($id) && $comic = $this->get_cached($id))
 		{
 			parent::__construct();
+
+            $this->all[0] = new stdClass();
 			foreach ($comic->to_array() as $key => $c)
 			{
 				$this->$key = $c;
@@ -99,13 +101,13 @@ class Comic extends DataMapper
 
 	function post_model_init($from_cache = FALSE)
 	{
-		
+
 	}
 
 
 	/**
 	 * This function sets the translations for the validation values.
-	 * 
+	 *
 	 * @author Woxxy
 	 * @return void
 	 */
@@ -185,7 +187,7 @@ class Comic extends DataMapper
 
 	/**
 	 * Returns the series that have been already called before
-	 * 
+	 *
 	 * @author Woxxy
 	 * @param int $id team_id
 	 */
@@ -231,7 +233,7 @@ class Comic extends DataMapper
 	/**
 	 * Comodity get() function that fetches extra data for the series selected.
 	 * It doesn't get the chapters.
-	 * 
+	 *
 	 * CURRENTLY USELESS.
 	 *
 	 * @author	Woxxy
@@ -250,7 +252,7 @@ class Comic extends DataMapper
 		// For each item we fetched, add the data, beside the pages
 		foreach ($this->all as $item)
 		{
-			
+
 		}
 
 		return $result;
@@ -259,7 +261,7 @@ class Comic extends DataMapper
 
 	/**
 	 * Gets the nations where the series is licensed
-	 * 
+	 *
 	 * @author	Woxxy
 	 * @return	bool true on success
 	 */
@@ -353,7 +355,7 @@ class Comic extends DataMapper
 	/**
 	 * Handles both creating of new series in the database and editing old ones.
 	 * It determines if it should update or not by checking if $this->id has
-	 * been set. It can get the values from both the $data array and direct 
+	 * been set. It can get the values from both the $data array and direct
 	 * variable assignation. Be aware that array > variables. The latter ones
 	 * will be overwritten. Particularly, the variables that the user isn't
 	 * allowed to set personally are unset and reset with the automated values.
@@ -494,14 +496,14 @@ class Comic extends DataMapper
 		// update license data
 		$license = new License();
 		$license->update($this->id, $data['licensed']);
-		
+
 		// Good job!
 		return true;
 	}
 
 
 	/**
-	 * Removes the series from the database, but before it removes all the 
+	 * Removes the series from the database, but before it removes all the
 	 * related chapters and their pages from the database (not the files).
 	 *
 	 * @author	Woxxy
@@ -536,7 +538,7 @@ class Comic extends DataMapper
 
 	/**
 	 * Creates the necessary empty folder for the comic
-	 * 
+	 *
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
@@ -728,7 +730,7 @@ class Comic extends DataMapper
 		{
 			if (is_dir($path . $item))
 			{
-				// check if even the dir itself is writable 
+				// check if even the dir itself is writable
 				if (!is_writable($path . $item . '/'))
 				{
 					$errors[] = 'non_writable_directory';
@@ -1001,10 +1003,10 @@ class Comic extends DataMapper
 		return site_url('/reader/series/' . $this->stub);
 	}
 
-	
+
 	/**
 	 * Overwrites the original DataMapper to_array() to add some elements
-	 * 
+	 *
 	 * @param array $fields
 	 * @return array
 	 */

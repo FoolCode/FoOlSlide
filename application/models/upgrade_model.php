@@ -13,7 +13,7 @@ class Upgrade_model extends CI_Model {
 
 	/**
 	 * Connects to FoOlPod to retrieve which is the latest version from the API
-	 * 
+	 *
 	 * @param type $force forces returning the download even if FoOlSlide is up to date
 	 * @return type FALSE or the download URL
 	 */
@@ -41,16 +41,16 @@ class Upgrade_model extends CI_Model {
 
 		if($force)
 			return array($data->versions[0]);
-		
+
 		return FALSE;
 	}
 
 	/**
 	 * Compares two versions and returns TRUE if second parameter is bigger than first, else FALSE
-	 * 
+	 *
 	 * @param type $maybemin
 	 * @param type $maybemax
-	 * @return bool 
+	 * @return bool
 	 */
 	function is_bigger_version($maybemin, $maybemax) {
 		if (is_string($maybemin))
@@ -68,13 +68,15 @@ class Upgrade_model extends CI_Model {
 
 	/**
 	 * Converts the version from string separated by dots to object
-	 * 
+	 *
 	 * @author Woxxy
 	 * @param type $string
-	 * @return object 
+	 * @return object
 	 */
 	function version_to_object($string) {
 		$version = explode('.', $string);
+
+        $current = new stdClass();
 		$current->version = $version[0];
 		$current->subversion = $version[1];
 		$current->subsubversion = $version[2];
@@ -85,7 +87,7 @@ class Upgrade_model extends CI_Model {
 	 *
 	 * @author Woxxy
 	 * @param string $url
-	 * @return bool 
+	 * @return bool
 	 */
 	function get_file($url, $direct_url) {
 		$this->clean();
@@ -115,19 +117,19 @@ class Upgrade_model extends CI_Model {
 
 	/**
 	 * Checks files permissions before upgrading
-	 * 
+	 *
 	 * @author Woxxy
-	 * @return bool 
+	 * @return bool
 	 */
 	function check_files() {
 		if (!is_writable('.')) {
 			return FALSE;
 		}
-		
+
 		if (!is_writable('index.php')) {
 			return FALSE;
 		}
-		
+
 		if (!is_writable('application/models/upgrade2_model.php')) {
 			return FALSE;
 		}
@@ -168,18 +170,18 @@ class Upgrade_model extends CI_Model {
 	/**
 	 * Hi, I herd you liek upgrading, so I put an update for your upgrade, so you
 	 * can update the upgrade before upgrading.
-	 * 
+	 *
 	 * @author Woxxy
-	 * @return bool 
+	 * @return bool
 	 */
 	function update_upgrade() {
 		if (!file_exists('content/cache/upgrade/application/models/upgrade2_model.php')) {
 			return FALSE;
 		}
-		
+
 		unlink('application/models/upgrade2_model.php');
 		copy('content/cache/upgrade/application/models/upgrade2_model.php', 'application/models/upgrade2_model.php');
-		
+
 		return TRUE;
 	}
 
@@ -189,14 +191,14 @@ class Upgrade_model extends CI_Model {
 	 * from FoOlPod, and cleans up.
 	 *
 	 * @author Woxxy
-	 * @return bool 
+	 * @return bool
 	 */
 	function do_upgrade() {
 		if (!$this->check_files()) {
 			log_message('error', 'upgrade.php:_do_upgrade() check_files() failed');
 			return false;
 		}
-		
+
 		$new_versions = $this->upgrade_model->check_latest(TRUE);
 		if ($new_versions === FALSE)
 			return FALSE;
@@ -205,7 +207,7 @@ class Upgrade_model extends CI_Model {
 		$latest = $new_versions[0];
 
 		$this->upgrade_model->get_file($latest->download, $latest->direct_download);
-		
+
 		$this->upgrade_model->update_upgrade();
 
 		$this->load->model('upgrade2_model');
@@ -222,7 +224,7 @@ class Upgrade_model extends CI_Model {
 
 	/**
 	 * Cleans up the upgrade folder
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function clean() {

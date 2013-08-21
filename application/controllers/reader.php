@@ -18,7 +18,7 @@ class Reader extends Public_Controller
 	{
 		$this->latest();
 	}
-	
+
 	function sitemap()
 	{
 		$sitemap = array(
@@ -181,14 +181,14 @@ class Reader extends Public_Controller
 		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
 	}
-	
+
 	public function _check_adult($comic)
 	{
 		if($this->input->post('adult') == 'true')
 		{
 			$this->session->set_userdata('adult', TRUE);
 		}
-		
+
 		if($comic->adult && !$this->agent->is_robot() && $this->session->userdata('adult') != TRUE)
 		{
 			$this->template->set('comic', $comic);
@@ -196,7 +196,7 @@ class Reader extends Public_Controller
 			$this->template->build('adult');
 			return FALSE;
 		}
-		
+
 		return TRUE;
 	}
 
@@ -219,8 +219,8 @@ class Reader extends Public_Controller
 		{
 			// or this function won't stop
 			return FALSE;
-		}	
-		
+		}
+
 		$chaptere = new Chapter();
 		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
 
@@ -293,7 +293,16 @@ class Reader extends Public_Controller
 		$this->template->set('pages', $pages);
 		$this->template->set('next_chapter', $next_chapter);
 		$this->template->title($comice->name, _('Chapter') . ' ' . $chaptere->chapter, get_setting('fs_gen_site_title'));
-		$this->template->build('read');
+
+        switch ($comice->format) {
+            case 1:
+                $format = 'readtoon';
+                break;
+
+            default:
+                $format = 'read';
+        }
+		$this->template->build($format);
 	}
 
 
@@ -374,7 +383,7 @@ class Reader extends Public_Controller
 
 	/**
 	 * Replacing comic with serie, for deprecated "comic"...
-	 * 
+	 *
 	 * @deprecated 0.7 30/07/2011
 	 * @author Woxxy
 	 */
@@ -386,7 +395,7 @@ class Reader extends Public_Controller
 
 	/**
 	 * Replacing serie with series, for deprecated "serie"...
-	 * 
+	 *
 	 * @deprecated 0.7 30/07/2011
 	 * @author Woxxy
 	 */
@@ -404,7 +413,7 @@ class Reader extends Public_Controller
 		$comic->where('stub', $stub)->get();
 		if ($comic->result_count() < 1)
 			show_404();
-		
+
 		if(!$this->_check_adult($comic))
 		{
 			// or this function won't stop
@@ -454,7 +463,7 @@ class Reader extends Public_Controller
 		{
 			return call_user_func_array(array($this->RC, $method), $params);
 		}
-		
+
 		if (method_exists($this, $method))
 		{
 			return call_user_func_array(array($this, $method), $params);

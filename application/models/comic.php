@@ -40,6 +40,13 @@ class Comic extends DataMapper
 			'type' => 'upload',
 			'display' => 'image',
 		),
+		'format' => array(
+			'rules' => array('required'),
+			'label' => 'Comic Format',
+			'type' => 'dropdowner',
+			'values' => array('0' => 'Manga', '1' => 'Long Strip (Web Toons)'),
+			'value' => 0
+		),
 		'adult' => array(
 			'rules' => array(),
 			'label' => 'Show adult notice',
@@ -73,7 +80,7 @@ class Comic extends DataMapper
 		{
 			parent::__construct();
 
-            $this->all[0] = new stdClass();
+			$this->all[0] = new stdClass();
 			foreach ($comic->to_array() as $key => $c)
 			{
 				$this->$key = $c;

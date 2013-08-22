@@ -9,6 +9,10 @@ class Archive extends DataMapper
 	var $has_one = array();
 	var $has_many = array();
 	var $validation = array(
+		'volume_id' => array(
+			'rules' => array(),
+			'label' => 'Volume ID',
+		),
 		'chapter_id' => array(
 			'rules' => array(),
 			'label' => 'Chapter ID',
@@ -38,40 +42,90 @@ class Archive extends DataMapper
 
 	}
 
-
 	/**
 	 * Creates a compressed cache file for the chapter
 	 *
 	 * @author Woxxy
 	 * @return url to compressed file
 	 */
-	function compress($chapter)
+	function compress($comic, $language = 'en', $volume = null, $chapter = null, $subchapter = 0)
 	{
-		$chapter->get_comic();
-		$chapter->get_pages();
 		$files = array();
 
-		$this->where('chapter_id', $chapter->id)->get();
-		if ($this->result_count() == 0 || !file_exists("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
+		if (get_setting('fs_dl_volume_enabled') && $volume !== null && $chapter === null)
 		{
-			$this->remove_old();
-			$CI = & get_instance();
-
-			require_once(FCPATH . 'assets/pclzip/pclzip.lib.php');
-			$filename = $this->filename_compressed($chapter);
-			$archive = new PclZip("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename . '.zip');
-
-			$filearray = array();
-			foreach ($chapter->pages as $page)
+			if ($volume == 0)
 			{
-				$filearray[] = "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $page["filename"];
+				show_404();
 			}
 
-			$v_list = $archive->create(implode(',', $filearray), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
+			$chapters = new Chapter();
+			$chapters->where('comic_id', $comic->id)->where('volume', $volume)
+				->order_by('volume', 'asc')->order_by('chapter', 'asc')->order_by('subchapter', 'asc')
+				->get();
 
-			$this->chapter_id = $chapter->id;
+			if ($chapters->result_count() == 0)
+			{
+				show_404();
+			}
+
+			$volume_id = $volume;
+			$chapter_id = $chapters->id;
+
+			$filepath = $comic->directory();
+			$filename = $this->filename_chapters_compressed($chapters);
+
+			foreach ($chapters as $chaptere)
+			{
+				$pages = new Page();
+				$pages->where('chapter_id', $chaptere->id)->get();
+
+				foreach ($pages as $page)
+				{
+					$files[] = 'content/comics/' . $comic->directory() . '/' . $chaptere->directory() . '/' . $page->filename;
+				}
+			}
+		}
+		else
+		{
+			$chaptere = new Chapter();
+			$chaptere->where('comic_id', $comic->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->where('subchapter', $subchapter);
+			$chaptere->get();
+
+			if ($chaptere->result_count() == 0)
+			{
+				show_404();
+			}
+
+			$volume_id = null;
+			$chapter_id = $chaptere->id;
+			$filepath = $comic->directory() . '/' . $chaptere->directory();
+			$filename = $this->filename_chapter_compressed($chaptere);
+
+			$pages = new Page();
+			$pages->where('chapter_id', $chaptere->id)->get();
+
+			foreach ($pages as $page)
+			{
+				$files[] = 'content/comics/' . $comic->directory() . '/' . $chaptere->directory() . '/' . $page->filename;
+			}
+		}
+
+		$this->where('comic_id', $comic->id)->where('volume_id', $volume_id)->where('chapter_id', $chapter_id)->get();
+		if ($this->result_count() == 0 || !file_exists('content/comics/' . $filepath . '/' .$this->filename))
+		{
+			$this->remove_old();
+
+			require_once(FCPATH . 'assets/pclzip/pclzip.lib.php');
+
+			$archive = new PclZip('content/comics/' . $filepath . '/' . $filename . '.zip');
+			$z_list = $archive->create(implode(',', $files), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
+
+			$this->comic_id = $comic->id;
+			$this->volume_id = $volume_id;
+			$this->chapter_id = $chapter_id;
 			$this->filename = $filename . '.zip';
-			$this->size = filesize("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $filename . '.zip');
+			$this->size = filesize('content/comics/' . $filepath . '/' . $filename . '.zip');
 			$this->lastdownload = date('Y-m-d H:i:s', time());
 			$this->save();
 		}
@@ -82,8 +136,8 @@ class Archive extends DataMapper
 		}
 
 		return array(
-			"url" => site_url() . "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . urlencode($this->filename),
-			"server_path" => FCPATH . "content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename
+			"url" => site_url() . 'content/comics/' . $filepath . '/' . urlencode($this->filename),
+			"server_path" => FCPATH . 'content/comics/' . $filepath . '/' . $this->filename
 		);
 	}
 
@@ -104,7 +158,16 @@ class Archive extends DataMapper
 			if (!@unlink("content/comics/" . $chapter->comic->directory() . "/" . $chapter->directory() . "/" . $this->filename))
 			{
 				log_message('error', 'remove: error when trying to unlink() the compressed ZIP');
-				return FALSE;
+				return false;
+			}
+		}
+
+		if (file_exists("content/comics/" . $chapter->comic->directory() . "/" . $this->filename))
+		{
+			if (!@unlink("content/comics/" . $chapter->comic->directory() . "/" . $this->filename))
+			{
+				log_message('error', 'remove: error when trying to unlink() the compressed ZIP');
+				return false;
 			}
 		}
 
@@ -176,7 +239,7 @@ class Archive extends DataMapper
 	 * @author Woxxy
 	 * @returns bool
 	 */
-	function filename_compressed($chapter)
+	function filename_chapter_compressed($chapter)
 	{
 		$chapter->get_teams();
 		$chapter->get_comic();
@@ -216,6 +279,31 @@ class Archive extends DataMapper
 		$bad = array_merge(
 				array_map('chr', range(0, 31)), array("<", ">", ":", '"', "/", "\\", "|", "?", "*"));
 		$filename = str_replace($bad, "", $filename);
+
+		return $filename;
+	}
+
+	function filename_chapters_compressed($chapters)
+	{
+		$teams = array();
+		foreach ($chapters as $chapter)
+		{
+			$chapter->get_teams();
+			$chapter->get_comic();
+
+			foreach ($chapter->teams as $team)
+			{
+				if (!in_array($team->name, $teams))
+				{
+					$teams[] = $team->name;
+				}
+			}
+		}
+
+		$invalid = array_merge(array_map('chr', range(0, 31)), array("<", ">", ":", '"', "/", "\\", "|", "?", "*"));
+		$filename = '['.implode('][', $teams).']'.trim($chapter->comic->name).'_v'.str_pad($chapter->volume, 2, '0', STR_PAD_LEFT);
+		$filename = str_replace(" ", "_", $filename);
+		$filename = str_replace($invalid, "", $filename);
 
 		return $filename;
 	}

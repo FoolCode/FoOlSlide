@@ -294,82 +294,35 @@ class Reader extends Public_Controller
 		$this->template->set('next_chapter', $next_chapter);
 		$this->template->title($comice->name, _('Chapter') . ' ' . $chaptere->chapter, get_setting('fs_gen_site_title'));
 
-        switch ($comice->format) {
-            case 1:
-                $format = 'readtoon';
-                break;
+		switch ($comice->format) {
+			case 1:
+				$format = 'readtoon';
+				break;
 
-            default:
-                $format = 'read';
-        }
+			default:
+				$format = 'read';
+		}
 		$this->template->build($format);
 	}
 
-
-	public function download($comic, $language = 'en', $volume = 0, $chapter = "", $subchapter = 0, $team = 0, $joint = 0, $pagetext = 'page', $page = 1)
+	public function download($comic, $language = 'en', $volume = null, $chapter = null, $subchapter = 0)
 	{
 		if (!get_setting('fs_dl_enabled'))
+		{
 			show_404();
+		}
+
 		$comice = new Comic();
 		$comice->where('stub', $comic)->get();
+
 		if ($comice->result_count() == 0)
 		{
-			set_notice('warn', 'This comic doesn\'t exist.');
-		}
-
-		if ($chapter == "")
-		{
-			redirect('/reader/comic/' . $comic);
-		}
-
-		$chaptere = new Chapter();
-		$chaptere->where('comic_id', $comice->id)->where('language', $language)->where('volume', $volume)->where('chapter', $chapter)->order_by('subchapter', 'ASC');
-
-		if (!is_int($subchapter) && $subchapter == 'page')
-		{
-			$current_page = $team;
-		}
-		else
-		{
-			$chaptere->where('subchapter', $subchapter);
-
-			if ($team == 'page')
-				$current_page = $joint;
-			else
-			{
-				if ($team != 0)
-				{
-					$teame = new Team();
-					$teame->where('stub', $team)->get();
-					$chaptere->where('team_id', $teame->id);
-				}
-
-				if ($joint == 'page')
-					$current_page = $pagetext;
-
-				if ($joint != 0)
-				{
-					$chaptere->where('joint_id', $joint);
-				}
-			}
-		}
-
-		if (!isset($current_page))
-		{
-			if ($page != 1)
-				$current_page = $page;
-			else
-				$current_page = 1;
-		}
-
-		$chaptere->get();
-		if ($chaptere->result_count() == 0)
-		{
-			show_404();
+			set_notice('warn', 'This comic does not exist.');
 		}
 
 		$archive = new Archive();
-		$result = $archive->compress($chaptere);
+		$result = $archive->compress($comice, $language, $volume, $chapter, $subchapter);
+
 		if ($this->input->is_cli_request())
 		{
 			echo $result["server_path"].PHP_EOL;

@@ -112,13 +112,13 @@ class Chapter extends DataMapper
 
 	function post_model_init($from_cache = FALSE)
 	{
-		
+
 	}
 
 
 	/**
 	 * This function sets the translations for the validation values.
-	 * 
+	 *
 	 * @author Woxxy
 	 * @return void
 	 */
@@ -412,7 +412,7 @@ class Chapter extends DataMapper
 	/**
 	 * Handles both creating of new chapters in the database and editing old ones.
 	 * It determines if it should update or not by checking if $this->id has
-	 * been set. It can get the values from both the $data array and direct 
+	 * been set. It can get the values from both the $data array and direct
 	 * variable assignation. Be aware that array > variables. The latter ones
 	 * will be overwritten. Particularly, the variables that the user isn't
 	 * allowed to set personally are unset and reset with the automated values.
@@ -441,7 +441,7 @@ class Chapter extends DataMapper
 		}
 		else
 		{ // if we're here, it means that we're creating a new chapter
-			// Set the creator name if it's a new chapter.	
+			// Set the creator name if it's a new chapter.
 			if (!isset($this->comic_id))
 			{
 				set_notice('error', 'You didn\'t select a series to refer to.');
@@ -465,7 +465,7 @@ class Chapter extends DataMapper
 		// Always set the editor
 		$this->editor = $this->logged_id();
 
-		// Unset the sensible variables. 
+		// Unset the sensible variables.
 		// Not even admins should touch these, for database stability.
 		unset($data["creator"]);
 		unset($data["editor"]);
@@ -495,7 +495,7 @@ class Chapter extends DataMapper
 		// stub() is also able to restub the $this->stub. Already stubbed values won't change.
 		$this->stub = $this->stub();
 
-		// If the new stub is different from the old one (if the chapter was 
+		// If the new stub is different from the old one (if the chapter was
 		// already existing), rename the folder.
 		if (isset($old_stub) && $old_stub != $this->stub)
 		{
@@ -598,7 +598,7 @@ class Chapter extends DataMapper
 
 
 	/**
-	 * Removes the chapter from the database, but before it removes all the 
+	 * Removes the chapter from the database, but before it removes all the
 	 * related pages from the database (not the files).
 	 *
 	 * @author	Woxxy
@@ -632,7 +632,7 @@ class Chapter extends DataMapper
 
 	/**
 	 * Creates the necessary empty folder for a chapter
-	 * 
+	 *
 	 * @author	Woxxy
 	 * @return	boolean true if success, false if failure.
 	 */
@@ -787,16 +787,19 @@ class Chapter extends DataMapper
 			if (in_array($ext, array('.zip')))
 			{
 				// maybe it's just the zip created by the archive system
-				$archive = new Archive();
-				$archive->where('chapter_id', $this->id)->get();
-				if ($archive->result_count() == 1)
+				$archives = new Archive();
+				$archives->where('comic_id', $this->comic_id)->group_start()->where('chapter_id', $this->id)->or_where('volume_id', $this->volume)->group_end()->get();
+				if ($archive->result_count())
 				{
-					// we actually have an archive, but is it the same file?
-					if ($file['name'] == $archive->filename)
+					foreach ($archives as $archive)
 					{
-						// same file, unset to confirm
-						unset($files[$key]);
-						continue;
+						// we actually have an archive, but is it the same file?
+						if ($file['name'] == $archive->filename)
+						{
+							// same file, unset to confirm
+							unset($files[$key]);
+							continue;
+						}
 					}
 				}
 			}
@@ -929,7 +932,7 @@ class Chapter extends DataMapper
 
 	/**
 	 * Returns the date of release of the chapter WITHOUT hours, minutes and seconds
-	 * 
+	 *
 	 * @author Woxxy
 	 * @return string date d/m/y
 	 */
@@ -941,7 +944,7 @@ class Chapter extends DataMapper
 
 	/**
 	 * Returns a ready to use html <a> link that points to the reader
-	 * 
+	 *
 	 * @param $text string
 	 * @author	Woxxy
 	 * @return	string <a> to reader
@@ -1250,7 +1253,7 @@ class Chapter extends DataMapper
 	 * page-change in systems that don't support JavaScript.
 	 *
 	 * @author	Woxxy
-	 * @todo	this function has a quite rough method to work, though it saves 
+	 * @todo	this function has a quite rough method to work, though it saves
 	 * 			lots of calc power. Maybe it can be written more elegantly?
 	 * @return	string with href to next page
 	 */
@@ -1268,11 +1271,11 @@ class Chapter extends DataMapper
 		// Just remove everything after the page segment and readd it with proper number.
 		return substr(current_url(), 0, $post) . '/page/' . ($page + 1);
 	}
-	
-	
+
+
 	/**
 	 * Overwrites the original DataMapper to_array() to add some elements
-	 * 
+	 *
 	 * @param array $fields
 	 * @return array
 	 */

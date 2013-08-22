@@ -190,7 +190,7 @@ class Page extends DataMapper
 	 * @param	string|$description NOT USED
 	 * @return	boolean true on success, false on failure.
 	 */
-	public function add_page($path, $filename, $chapter_id)
+	public function add_page($path, $filename, $chapter)
 	{
 		// Check if that file is actually an image
 		if (!$imagedata = @getimagesize($path))
@@ -200,7 +200,7 @@ class Page extends DataMapper
 		}
 
 		// Let's set some variables
-		$this->chapter_id = $chapter_id;
+		$this->chapter_id = $chapter->id;
 
 		// Load the chapter and comic as soon as possible.
 		if (!$this->get_chapter())
@@ -244,7 +244,7 @@ class Page extends DataMapper
 			return false;
 		}
 
-		$this->on_change($chapter_id);
+		$this->on_change($chapter);
 
 		// All good
 		return true;
@@ -262,7 +262,6 @@ class Page extends DataMapper
 	{
 		// Get chapter and comic to be sure they're set
 		$this->get_chapter();
-		$chapter_id = $this->chapter->id;
 		// Remove the files
 		if (!$this->remove_page_file())
 		{
@@ -277,7 +276,7 @@ class Page extends DataMapper
 			return false;
 		}
 
-		$this->on_change($chapter_id);
+		$this->on_change($this->chapter);
 
 		// Return both comic and chapter for comfy redirects
 		return $this->chapter;
@@ -449,6 +448,8 @@ class Page extends DataMapper
 			return false;
 		}
 
+		$this->on_change($this->chapter);
+
 		// Good
 		return true;
 	}
@@ -459,14 +460,17 @@ class Page extends DataMapper
 	 *
 	 * @author Woxxy
 	 */
-	public function on_change($chapter_id)
+	public function on_change($chapter)
 	{
 		// cleanup the archive if there is one for this chapter
-		$archive = new Archive();
-		$archive->where('chapter_id', $chapter_id)->get();
-		if ($archive->result_count() == 1)
+		$archives = new Archive();
+		$archives->where('comic_id', $chapter->comic_id)->group_start()->where('chapter_id', $chapter->id)->or_where('volume_id', $chapter->volume)->group_end()->get();
+		if ($archives->result_count())
 		{
-			$archive->remove();
+			foreach ($archives as $archive)
+			{
+				$archive->remove();
+			}
 		}
 	}
 

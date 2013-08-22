@@ -15,9 +15,11 @@ class Files_model extends CI_Model
 	// This is just a plug to adapt the variable names for the comic_model
 	public function page($path, $filename, $chapter_id)
 	{
+		$chapter = new Chapter();
+		$chapter->where("id", $chapter_id)->get();
 
 		$page = new Page();
-		if (!$page->add_page($path, $filename, $chapter_id))
+		if (!$page->add_page($path, $filename, $chapter))
 		{
 			log_message('error', 'page: function add_page failed');
 			return false;
@@ -124,7 +126,7 @@ class Files_model extends CI_Model
 
 			$page = new Page();
 			$error = false;
-			if (!$page->add_page($value['server_path'], $value['name'], $chapter->id))
+			if (!$page->add_page($value['server_path'], $value['name'], $chapter))
 			{
 				log_message('error', 'compressed_chapter: one page in the loop failed being added');
 				$error = true;

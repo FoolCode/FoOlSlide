@@ -231,7 +231,6 @@ class Page extends DataMapper
 
 		// Prepare the variables
 		$this->filename = $filename;
-		$this->thumbnail = "thumb_";
 		$this->width = $imagedata["0"];
 		$this->height = $imagedata["1"];
 		$this->size = filesize($dir . $filename);
@@ -450,14 +449,6 @@ class Page extends DataMapper
 			return false;
 		}
 
-		// Remove the thumbnail
-		if (!unlink($dir . "thumb_" . $this->filename))
-		{
-			set_notice('error', _('Failed to remove the page\'s thumbnail. Please, check file permissions.'));
-			log_message('error', 'remove_page_file: failed to delete thumbnail');
-			return false;
-		}
-
 		// Good
 		return true;
 	}
@@ -506,7 +497,6 @@ class Page extends DataMapper
 		$errors = array();
 		// check the files
 		$path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->filename;
-		$thumb_path = "content/comics/" . $this->chapter->comic->directory() . "/" . $this->chapter->directory() . "/" . $this->thumbnail . $this->filename;
 		// get paths and remove the thumb
 		if (!file_exists($path))
 		{
@@ -515,33 +505,11 @@ class Page extends DataMapper
 			log_message('debug', 'check_page: page not found in ' . $path);
 		}
 
-		if (!file_exists($thumb_path))
-		{
-			$errors[] = 'missing_thumbnail';
-			set_notice('warning', _('Thumbnail file not found in:') . ' ' . $this->chapter->comic->name . ' > ' . $this->chapter->title());
-			log_message('error', 'check_page: there\'s a missing thumbnail in ' . $thumb_path);
-		}
-
 		if ($repair)
 		{
-			if (in_array('missing_page', $errors) && in_array('missing_thumbnail', $errors))
-			{
-				// no better suggestion than removing
-				$this->remove_page_db();
-				return TRUE;
-			}
-
-			if (in_array('missing_thumbnail', $errors))
-			{
-				// just rebuild the thumbnail
-				$this->rebuild_thumbnail();
-				return TRUE;
-			}
-
 			if (in_array('missing_page', $errors))
 			{
-				// remove the thumbnail and the entry
-				unlink($thumb_path);
+				// no better suggestion than removing
 				$this->remove_page_db();
 				return TRUE;
 			}

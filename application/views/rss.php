@@ -18,7 +18,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 		<description><?php echo $page_description; ?></description>
 		<dc:language><?php echo $page_language; ?></dc:language>
 
-		<admin:generatorAgent rdf:resource="http://trac.foolrulez.com/foolslide" />
+		<admin:generatorAgent rdf:resource="http://www.foolz.us/info/foolslide" />
 
 		<?php foreach ($posts["chapters"] as $entry): ?>
 
@@ -36,4 +36,4 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 
 <?php endforeach; ?>
 
-    </channel></rss> 
+    </channel></rss>

@@ -153,7 +153,7 @@ class Upgrade_model extends CI_Model {
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates. Use this command in your shell if possible: %s'), FCPATH, '<br/><b><code>chown -R ' . $whoami . ' ' . FCPATH . '</code></b>'));
 			else
 				set_notice('warn', sprintf(_('The %s directory would be better if writable, in order to deliver automatic updates.<br/>It was impossible to determine the user running PHP. Use this command in your shell if possible: %s where www-data is an example (usually it\'s www-data or Apache)'), FCPATH, '<br/><b><code>chown -R www-data ' . FCPATH . '</code></b><br/>'));
-			set_notice('warn', sprintf(_('If you can\'t do the above, you can follow the manual upgrade instructons at %sthis link%s.'), '<a href="http://trac.foolrulez.com/foolslide/wiki/installation_guide#Manualupgradeorifautomaticupgradebrokeeverything">', '</a>'));
+			set_notice('warn', sprintf(_('If you can\'t do the above, you can follow the manual upgrade instructons at %sthis link%s.'), '<a href="http://www.foolz.us/docs/foolslide">', '</a>'));
 			$prob = TRUE;
 		}
 

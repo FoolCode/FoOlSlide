@@ -84,7 +84,7 @@ class Admin_Controller extends MY_Controller
 			"icon" => 146,
 			"content" => array(
 				"manage" => array("level" => "mod", "name" => _("Manage"), "icon" => 184),
-				"add_new" => array("level" => "mod", "name" => _("Add New"), "icon" => 154),
+				"add_new" => array("level" => "mod", "name" => _("Add Series"), "icon" => 154),
 				"add_new_chapter" => array("level" => "mod", "name" => _("Add Chapter"), "icon" => 274)
 			)
 		);
@@ -135,11 +135,12 @@ class Admin_Controller extends MY_Controller
 
 		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
 			"level" => "member",
-			"default" => "http://ask.foolrulez.com",
+			"default" => "http://blog.foolz.us",
 			"icon" => 423,
 			"content" => array(
-				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ"), "icon" => 356),
-				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker"), "icon" => 312),
+				"http://archive.foolz.us/dev/" => array("level" => "member", "name" => _("Developer Community"), "icon" => 356),
+				"http://www.foolz.us" => array("level" => "member", "name" => _("Developer Site"), "icon" => 390),
+				"http://github.com/FoolCode/" => array("level" => "member", "name" => _("FoolCode GitHub"), "icon" => 154),
 			)
 		);
 

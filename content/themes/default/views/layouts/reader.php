@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<?php
 		if ($this->config->item('theme_extends') != '' &&
 				$this->config->item('theme_extends') != get_setting('fs_theme_dir') &&
@@ -14,7 +14,7 @@
 		}
 		if (file_exists('content/themes/' . get_setting('fs_theme_dir') . '/style.css'))
 			echo link_tag('content/themes/' . get_setting('fs_theme_dir') . '/style.css?v='.FOOLSLIDE_VERSION);
-		?> 
+		?>
 		<link rel="sitemap" type="application/xml" title="Sitemap" href="<?php echo site_url() ?>sitemap.xml" />
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo site_url() ?>rss.xml" />
 		<link rel="alternate" type="application/atom+xml" title="Atom" href="<?php echo site_url() ?>atom.xml" />
@@ -49,7 +49,7 @@
 				})
 			}); <?php } ?>
 	});
-			
+
 		</script>
 		<?php echo get_setting('fs_theme_header_code'); ?>
 
@@ -83,10 +83,10 @@
 					</ul>
 				</div>
 
-				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a> 
+				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a>
 				<?php if (get_setting('fs_gen_back_url'))
 					echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">' . _("Go back to site") . ' &crarr;</a></div>'; ?>
-				<div class="clearer"></div>	
+				<div class="clearer"></div>
 			</div>
 
 
@@ -204,7 +204,7 @@
 					<?php echo get_setting('fs_gen_footer_text'); ?>
 				</div>
 				<div class="cp_link">
-					<a href="http://wiki.foolslide.org" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
+					<a href="http://www.foolz.us/info/foolslide/" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
 				</div>
 			</div>
 		</div>

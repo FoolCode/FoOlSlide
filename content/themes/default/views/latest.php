@@ -31,5 +31,7 @@
 
 		// Closing the last comic group
 		echo '</div>';
+
+        echo prevnext('latest/', $chapters);
 	?>
 </div>

@@ -31,7 +31,7 @@ class Reader extends Public_Controller
 			),
 			array(
 				// release list page
-				'loc' => site_url('list'),
+				'loc' => site_url('directory'),
 				'lastmod' => '',
 				'changefreq' => 'weekly', // comics picked up don't change often
 				'priority' => '0.5'
@@ -141,7 +141,7 @@ class Reader extends Public_Controller
 	}
 
 
-	public function lista($page = 1)
+	public function directory($page = 1)
 	{
 		$this->template->title(_('Series list'));
 
@@ -156,7 +156,7 @@ class Reader extends Public_Controller
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get();
 		}
 
-		$this->template->title(_('Series list'), get_setting('fs_gen_site_title'));
+		$this->template->title(_('Series List'), get_setting('fs_gen_site_title'));
 		$this->template->set('show_sidebar', TRUE);
 		$this->template->set('comics', $comics);
 		$this->template->build('list');
@@ -170,10 +170,10 @@ class Reader extends Public_Controller
 		$chapters = new Chapter();
 
 		// Select the latest 25 released chapters
-		$chapters->order_by('created', 'DESC')->limit(25);
+		$chapters->order_by('created', 'DESC')->get_paged($page, 25);
 
 		// Get the chapters!
-		$chapters->get();
+		//$chapters->get();
 		$chapters->get_teams();
 		//$chapters->get_comic();
 

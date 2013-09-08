@@ -66,7 +66,7 @@
 							<a href="<?php echo site_url('') ?>"><?php echo _('Latest releases'); ?></a>
 						</li>
 						<li>
-							<a href="<?php echo site_url('list') ?>"><?php echo _('Series list'); ?></a>
+							<a href="<?php echo site_url('directory') ?>"><?php echo _('Series list'); ?></a>
 						</li>
 						<li style="">
 							<?php

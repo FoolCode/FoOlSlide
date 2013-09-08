@@ -241,28 +241,7 @@ function relative_date($time)
 		return _('Yesterday');
 	}
 
-	/* THIS SCREWS UP WITH THE GETTEXT
-	 * @todo fix the relative days' gettext
-	  if (abs($reldays) < 7) {
-	  if ($reldays > 0) {
-	  $reldays = floor($reldays);
-	  return 'In ' . $reldays . ' day' . ($reldays != 1 ? 's' : '');
-	  }
-	  else {
-	  $reldays = abs(floor($reldays));
-	  return $reldays . ' day' . ($reldays != 1 ? 's' : '') . ' ago';
-	  }
-	  }
-	 */
-
-	if (abs($reldays) < 182)
-	{
-		return date('jS F', $time ? $time : time());
-	}
-	else
-	{
-		return date('jS F, Y', $time ? $time : time());
-	}
+	return date('Y.m.d', $time ? $time : time());
 }
 
 

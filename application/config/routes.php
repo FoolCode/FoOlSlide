@@ -53,7 +53,7 @@ $route['account/leave_team/(:any)'] = "account/index/leave_team/$1";
 $route['account/request/(:any)'] = "account/index/request/$1";
 $route['account/leave_leadership/(:any)'] = "account/index/leave_leadership/$1";
 
-$route['^((?!\badmin\b|\baccount\b).*)$'] = "reader/$1";
+$route['^((?!\badmin\b|\baccount\b|\bapi\b).*)$'] = "reader/$1";
 
 $route['404_override'] = '';
 

@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 <div class="list series">
 	<div class="title">
-		<a href="<?php echo site_url('reader/list') ?>"><?php echo _('List of the available comics'); ?></a>
+		<a href="<?php echo site_url('list') ?>"><?php echo _('List of the available comics'); ?></a>
 	</div>
 	<?php
 	foreach ($comics as $key => $comic) {
@@ -25,6 +25,6 @@ if (!defined('BASEPATH'))
 				</div></div>';
 	}
 
-	echo prevnext('/reader/list/', $comics);
+	echo prevnext('list/', $comics);
 	?>
 </div>

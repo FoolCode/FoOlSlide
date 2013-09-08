@@ -31,7 +31,7 @@ class Reader extends Public_Controller
 			),
 			array(
 				// release list page
-				'loc' => site_url('reader/list'),
+				'loc' => site_url('list'),
 				'lastmod' => '',
 				'changefreq' => 'weekly', // comics picked up don't change often
 				'priority' => '0.5'
@@ -74,7 +74,7 @@ class Reader extends Public_Controller
 	function feeds($format = NULL)
 	{
 		//if (is_null($format))
-		//	redirect('reader/feeds/rss');
+		//	redirect('feeds/rss');
 		$this->load->helper('xml');
 		$chapters = new Chapter();
 
@@ -212,7 +212,7 @@ class Reader extends Public_Controller
 
 		if ($chapter == "")
 		{
-			redirect('/reader/series/' . $comic);
+			redirect('series/' . $comic);
 		}
 
 		if(!$this->_check_adult($comice))
@@ -342,7 +342,7 @@ class Reader extends Public_Controller
 	 */
 	public function comic($stub = NULL)
 	{
-		redirect('/reader/series/' . $stub);
+		redirect('series/' . $stub);
 	}
 
 
@@ -354,7 +354,7 @@ class Reader extends Public_Controller
 	 */
 	public function serie($stub = NULL)
 	{
-		redirect('/reader/series/' . $stub);
+		redirect('series/' . $stub);
 	}
 
 

@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 <div class="list">
 	<div class="title">
-		<?php echo '<a href="' . site_url('/reader/team/' . $team->stub) . '">' . _('Team\'s page') . ': ' . $team->name . '</a>'; ?>
+		<?php echo '<a href="' . site_url('team/' . $team->stub) . '">' . _('Team\'s page') . ': ' . $team->name . '</a>'; ?>
 	</div>
 
 	<?php

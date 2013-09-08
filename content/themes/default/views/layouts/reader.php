@@ -63,27 +63,27 @@
 				<div role="navigation" id="navig">
 					<ul>
 						<li>
-							<a href="<?php echo site_url('/reader/') ?>"><?php echo _('Latest releases'); ?></a>
+							<a href="<?php echo site_url('') ?>"><?php echo _('Latest releases'); ?></a>
 						</li>
 						<li>
-							<a href="<?php echo site_url('/reader/list') ?>"><?php echo _('Series list'); ?></a>
+							<a href="<?php echo site_url('list') ?>"><?php echo _('Series list'); ?></a>
 						</li>
 						<li style="">
 							<?php
-							echo form_open("/reader/search/");
+							echo form_open("search/");
 							echo form_input(array('name' => 'search', 'placeholder' => _('To search series, type and hit enter'), 'id' => 'searchbox', 'class' => 'fright'));
 							echo form_close();
 							?>
 						</li>
 						<li>
-							<a style="padding:0;" href="<?php echo site_url('reader/feeds/rss') ?>"><img height="28" width="28" style="position:relative; top:1px;" src="<?php echo site_url() . 'content/themes/default/images/feed-icon-28x28.png' ?>" /></a>
+							<a style="padding:0;" href="<?php echo site_url('feeds/rss') ?>"><img height="28" width="28" style="position:relative; top:1px;" src="<?php echo site_url() . 'content/themes/default/images/feed-icon-28x28.png' ?>" /></a>
 						</li>
 
 						<div class="clearer"></div>
 					</ul>
 				</div>
 
-				<a href="<?php echo site_url('/reader/') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a>
+				<a href="<?php echo site_url('') ?>"><div id="title"><?php echo get_setting('fs_gen_site_title') ?></div></a>
 				<?php if (get_setting('fs_gen_back_url'))
 					echo'<div class="home_url"><a href="' . get_setting('fs_gen_back_url') . '">' . _("Go back to site") . ' &crarr;</a></div>'; ?>
 				<div class="clearer"></div>

@@ -1007,7 +1007,7 @@ class Comic extends DataMapper
 	 */
 	public function href()
 	{
-		return site_url('/reader/series/' . $this->stub);
+		return site_url('series/' . $this->stub);
 	}
 
 

@@ -69,7 +69,7 @@ class Team extends DataMapper
 			parent::__construct();
 			foreach($team->to_array() as $key => $t) {
 				$this->$key = $t;
-				
+
 				// fill also the all array so result_count() is correctly 1
 				$this->all[0]->$key = $t;
 			}
@@ -81,7 +81,7 @@ class Team extends DataMapper
 
 	function post_model_init($from_cache = FALSE)
 	{
-		
+
 	}
 
 
@@ -118,7 +118,7 @@ class Team extends DataMapper
 
 	/**
 	 * Returns the teams that have been already called before
-	 * 
+	 *
 	 * @author Woxxy
 	 * @param int $id team_id
 	 */
@@ -415,8 +415,8 @@ class Team extends DataMapper
 			$team = new Team($team_id);
 		return array($team);
 	}
-	
-	
+
+
 	/**
 	 * Returns the href to the reader. This will create the shortest possible URL.
 	 *
@@ -425,13 +425,13 @@ class Team extends DataMapper
 	 */
 	public function href()
 	{
-		return site_url('/reader/team/' . $this->stub);
+		return site_url('team/' . $this->stub);
 	}
-	
+
 
 	/**
 	 * Overwrites the original DataMapper to_array() to add some elements
-	 * 
+	 *
 	 * @param array $fields
 	 * @return array
 	 */

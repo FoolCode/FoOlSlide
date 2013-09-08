@@ -1059,7 +1059,7 @@ class Chapter extends DataMapper
 		{
 			if ($key > 0)
 				$echo .= " | ";
-			$echo .= '<a href="' . site_url('/reader/team/' . $team->stub) . '" title="' . $team->name . '" >' . $team->name . '</a>';
+			$echo .= '<a href="' . site_url('team/' . $team->stub) . '" title="' . $team->name . '" >' . $team->name . '</a>';
 		}
 		return $echo;
 	}
@@ -1104,7 +1104,7 @@ class Chapter extends DataMapper
 	 */
 	public function href()
 	{
-		return site_url('/reader/read/' . $this->unique_href());
+		return site_url('read/' . $this->unique_href());
 	}
 
 
@@ -1116,7 +1116,7 @@ class Chapter extends DataMapper
 	 */
 	public function download_href()
 	{
-		return site_url('/reader/download/' . $this->unique_href());
+		return site_url('download/' . $this->unique_href());
 	}
 
 
@@ -1201,7 +1201,7 @@ class Chapter extends DataMapper
 				if ($chapter->result_count() == 0)
 				{
 					// There's no next chapter. Redirect to the comic page.
-					return site_url('/reader/read/' . $this->comic->stub);
+					return site_url('read/' . $this->comic->stub);
 				}
 			}
 		}

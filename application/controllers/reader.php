@@ -157,6 +157,7 @@ class Reader extends Public_Controller
 		}
 
 		$this->template->title(_('Series list'), get_setting('fs_gen_site_title'));
+		$this->template->set('show_sidebar', TRUE);
 		$this->template->set('comics', $comics);
 		$this->template->build('list');
 	}
@@ -177,6 +178,7 @@ class Reader extends Public_Controller
 		//$chapters->get_comic();
 
 		$this->template->set('chapters', $chapters);
+		$this->template->set('show_sidebar', TRUE);
 		$this->template->set('is_latest', true);
 		$this->template->title(_('Latest releases'), get_setting('fs_gen_site_title'));
 		$this->template->build('latest');
@@ -403,7 +405,7 @@ class Reader extends Public_Controller
 			$comic->latest_chapter->where('comic_id', $comic->id)->order_by('created', 'DESC')->limit(1)->get()->get_teams();
 		}
 
-
+		$this->template->set('show_sidebar', TRUE);
 		$this->template->set('search', $search);
 		$this->template->set('comics', $comics);
 		$this->template->build('search');

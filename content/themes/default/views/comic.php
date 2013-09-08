@@ -1,21 +1,26 @@
 <?php if (!defined('BASEPATH'))
 	exit('No direct script access allowed'); ?>
 
+    <div class="sidebar">
+		<?php if ($comic->get_thumb()): ?>
+            <div class="thumbnail">
+				<img src="<?php echo $comic->get_thumb(); ?>" />
+			</div>
+        <?php endif; ?>
+    </div>
+
 	<div class="large comic">
 		<h1 class="title">
 			<?php echo $comic->name; ?>
 		</h1>
-		<?php if ($comic->get_thumb()): ?><div class="thumbnail">
-				<img src="<?php echo $comic->get_thumb(); ?>" />
-			</div><?php endif; ?>
 		<div class="info">
 			<ul>
-				<li><?php echo '<b>'._('Title').'</b>: '.$comic->name; ?></li>
-				<li><?php echo '<b>'._('Description').'</b>: '.$comic->description; ?></li>
+                <?php if ($comic->author) : ?><li><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?></li><?php endif; ?>
+                <?php if ($comic->artist) : ?><li><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?></li><?php endif; ?>
+				<li><?php echo '<b>'._('Synopsis').'</b>: '.$comic->description; ?></li>
 			</ul>
 		</div>
 	</div>
-
 
 	<div class="list">
 		<div class="title">

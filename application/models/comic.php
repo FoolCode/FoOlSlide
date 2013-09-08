@@ -24,6 +24,16 @@ class Comic extends DataMapper
 			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Uniqid'
 		),
+		'author' => array(
+			'rules' => array(),
+			'label' => 'Author',
+			'type' => 'input'
+		),
+		'artist' => array(
+			'rules' => array(),
+			'label' => 'Artist',
+			'type' => 'input'
+		),
 		'description' => array(
 			'rules' => array(),
 			'label' => 'Description',
@@ -49,7 +59,7 @@ class Comic extends DataMapper
 		),
 		'customchapter' => array(
 			'rules' => array(),
-			'label' => 'Custom chapter',
+			'label' => 'Custom Chapter Title',
 			'type' => 'input'
 		),
 		'format' => array(
@@ -124,6 +134,10 @@ class Comic extends DataMapper
 	{
 		$this->validation['name']['label'] = _('Name');
 		$this->validation['name']['help'] = _('Insert the title of the series.');
+		$this->validation['author']['label'] = _('Author');
+		$this->validation['author']['help'] = _('Insert the author of this title.');
+		$this->validation['artist']['label'] = _('Artist');
+		$this->validation['artist']['help'] = _('Insert the artist of this title.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
 		$this->validation['adult']['label'] = _('Adult Notice');

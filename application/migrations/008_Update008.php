@@ -10,6 +10,12 @@ class Migration_Update008 extends CI_Migration {
 					ADD `comic_id` INT( 11 ) NOT NULL AFTER `id`,
 					ADD `volume_id` INT( 11 ) NOT NULL AFTER `comic_id`
 		");
+
+		$this->db->query("
+				ALTER TABLE `" . $this->db->dbprefix('comics') . "`
+					ADD COLUMN `author` VARCHAR(512) NOT NULL AFTER `hidden`,
+					ADD COLUMN `artist` VARCHAR(512) NOT NULL AFTER `author`;
+		");
 	}
 
 }

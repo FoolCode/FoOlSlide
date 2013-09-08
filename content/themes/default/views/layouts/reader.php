@@ -89,11 +89,7 @@
 				<div class="clearer"></div>
 			</div>
 
-
-
-
 			<article id="content">
-
 
 				<?php
 				if (!isset($is_reader) || !$is_reader)
@@ -105,7 +101,7 @@
 				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && get_setting('fs_ads_top_banner_reload'))
 					echo '<div class="ads iframe banner" id="ads_top_banner"><iframe marginheight="0" marginwidth="0" frameborder="0" src="' . site_url() . 'content/ads/ads_top.html' . '"></iframe></div>';
 
-				if (!isset($is_reader) || !$is_reader)
+				if (isset($show_sidebar))
 					echo get_sidebar();
 
 				if (isset($is_latest) && $is_latest)

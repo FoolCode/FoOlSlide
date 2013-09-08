@@ -965,7 +965,13 @@ class Chapter extends DataMapper
 	public function download_url($text = NULL, $class = "")
 	{
 		if (get_setting('fs_dl_enabled'))
-			return '<div class="icon_wrapper ' . $class . '"><a href="' . $this->download_href() . '"><img class="icon off" src="' . glyphish(67) . '" /><img class="icon on" src="' . glyphish(67, TRUE) . '" /></a></div>';
+			return '<div class="icon_wrapper ' . $class . '"><a href="' . $this->download_href() . '"><img class="icon off" src="' . glyphish(50) . '" /><img class="icon on" src="' . glyphish(50, TRUE) . '" /></a></div>';
+	}
+
+	public function download_volume_url($text = NULL, $class = "")
+	{
+		if (get_setting('fs_dl_volume_enabled'))
+			return '<div class="icon_wrapper ' . $class . '"><a href="' . $this->download_volume_href() . '"><img class="icon off" src="' . glyphish(50) . '" /><img class="icon on" src="' . glyphish(50, TRUE) . '" /></a></div>';
 	}
 
 
@@ -1119,6 +1125,11 @@ class Chapter extends DataMapper
 		return site_url('download/' . $this->unique_href());
 	}
 
+	public function download_volume_href()
+	{
+		return site_url('download/' . $this->unique_volume_href());
+	}
+
 
 	public function unique_href()
 	{
@@ -1166,6 +1177,24 @@ class Chapter extends DataMapper
 		}
 
 		return $this->unique_href;
+	}
+
+	public function unique_volume_href()
+	{
+		if (isset($this->unique_volume_href))
+			return $this->unique_volume_href;
+
+		// We need the comic
+		$this->get_comic();
+
+		// Identify the chapter through data, not ID. This allows us to find out if there are multiple similar chapters.
+		$chapter = new Chapter();
+		$chapter->where('comic_id', $this->comic->id)->where('volume', $this->volume)->where('chapter', $this->chapter)->where('language', $this->language)->where('subchapter', $this->subchapter)->get();
+
+		// This part of the URL won't change for sure.
+		$this->unique_volume_href = $this->comic->stub . '/' . $this->language . '/' . $this->volume . '/';
+
+		return $this->unique_volume_href;
 	}
 
 

@@ -39,11 +39,11 @@ if (!defined('BASEPATH'))
 
 <div id="page">
 	<div class="inner">
-		<a href="<?php echo $next_chapter; ?>" >
         <?php foreach ($pages as $n => $page) : ?>
-			<img class="page-<?php echo $n ?>" src="<?php echo $page['url'] ?>">
+			<a href="<?php echo $chapter->href() . 'page/' . ($n + 2) ?>" onClick="return changePage(<?php echo $n + 1 ?>);">
+                <img class="page-<?php echo $n ?>" src="<?php $page['url'] ?>">
+		    </a>
         <?php endforeach; ?>
-		</a>
 	</div>
 </div>
 
@@ -64,25 +64,21 @@ if (!defined('BASEPATH'))
 </div>
 
 <script type="text/javascript">
-
-
-
 	var title = document.title;
-
 	var pages = <?php echo json_encode($pages); ?>;
 
 	var next_chapter = "<?php echo $next_chapter; ?>";
+    var preload_next = 5;
+    var preload_prev = 2;
+    var current_page = <?php echo $current_page - 1; ?>;
 
 	var initialized = false;
 
-	var baseurl = '<?php echo $chapter->href() ?>';
-
+	var base_url = '<?php echo $chapter->href() ?>';
 	var site_url = '<?php echo site_url() ?>';
 
 	var gt_page = '<?php echo addslashes(_("Page")) ?>';
-
 	var gt_key_suggestion = '<?php echo addslashes(_("Use W-A-S-D or the arrow keys to navigate")) ?>';
-
 	var gt_key_tap = '<?php echo addslashes(_("Double-tap to change page")) ?>';
 
 	function changePage(id, noscroll, nohash)
@@ -107,17 +103,16 @@ if (!defined('BASEPATH'))
 			id = 0;
 		}
 
+        preload();
 		current_page = id;
 		next = parseInt(id+1);
 		jQuery("html, body").stop(true,true);
-		//if(!noscroll) jQuery.scrollTo('.panel', 430, {'offset':{'top':-6}});
-        jQuery.scrollTo('.page-' + id);
 
-		if(!nohash) History.pushState(null, null, baseurl+'page/' + (current_page + 1));
+        jQuery.scrollTo('.page-' + current_page);
+
+		if(!nohash) History.pushState(null, null, base_url+'page/' + (current_page + 1));
 		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
-		jQuery('#pagelist .images').scrollTo(jQuery('#thumb_' + id).parent(), 400);
-		jQuery('#pagelist .current').removeClass('current');
-		jQuery('#thumb_' + id).addClass('current');
+        jQuery("#page").css({'max-width' : (parseInt(pages[id].width) + 10) + 'px'});
 
 		jQuery("#ads_top_banner.iframe iframe").attr("src", site_url + "content/ads/ads_top.html");
 		jQuery("#ads_bottom_banner.iframe iframe").attr("src", site_url + "content/ads/ads_bottom.html");
@@ -136,6 +131,33 @@ if (!defined('BASEPATH'))
 		changePage(current_page-1);
 		return false;
 	}
+
+    function preload()
+    {
+        var array = [];
+        var arrayData = [];
+
+        for (var i = 0; i < pages.length; i++) {
+            array.push(pages[i].url);
+            arrayData.push(i);
+        }
+
+        jQuery.preload(array, {
+            threshold: 40,
+            enforceCache: true,
+            onComplete: function(data) {
+                var idx = data.index;
+
+                if (data.index == page) return false;
+
+                var page = arrayData[idx];
+                pages[page].loaded = true;
+
+                jQuery('.page-' + page).animate({'opacity':'1.0'}, 800);
+                jQuery('.page-' + page).attr('src', pages[page].url);
+            }
+        });
+    }
 
 	function chapters_dropdown()
 	{
@@ -228,7 +250,7 @@ if (!defined('BASEPATH'))
 		if(url < 1)
 			url = 1;
 		current_page = url-1;
-		History.pushState(null, null, baseurl+'page/' + (current_page+1));
+		History.pushState(null, null, base_url+'page/' + (current_page+1));
 		changePage(current_page, false, true);
 		document.title = gt_page+' ' + (current_page+1) + ' :: ' + title;
 	});

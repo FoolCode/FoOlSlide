@@ -91,19 +91,12 @@ if (!defined('BASEPATH'))
 </div>
 
 <script type="text/javascript">
-
-
-
 	var title = document.title;
-
 	var pages = <?php echo json_encode($pages); ?>;
 
 	var next_chapter = "<?php echo $next_chapter; ?>";
-
 	var preload_next = 5;
-
 	var preload_back = 2;
-
 	var current_page = <?php echo $current_page - 1; ?>;
 
 	var initialized = false;
@@ -112,9 +105,7 @@ if (!defined('BASEPATH'))
 	var site_url = '<?php echo site_url() ?>';
 
 	var gt_page = '<?php echo addslashes(_("Page")) ?>';
-
 	var gt_key_suggestion = '<?php echo addslashes(_("Use W-A-S-D or the arrow keys to navigate")) ?>';
-
 	var gt_key_tap = '<?php echo addslashes(_("Double-tap to change page")) ?>';
 
 	function changePage(id, noscroll, nohash)

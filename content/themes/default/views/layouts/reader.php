@@ -22,11 +22,9 @@
 		<meta name="generator" content="FoOlSlide <?php echo FOOLSLIDE_VERSION ?>" />
 		<script src="<?php echo site_url() . 'assets/js/jquery.js?v='.FOOLSLIDE_VERSION ?>"></script>
 		<script src="<?php echo site_url() . 'assets/js/jquery.plugins.js?v='.FOOLSLIDE_VERSION ?>"></script>
+		<?php if ($this->agent->is_browser('MSIE')) : ?>
 		<script type="text/javascript">
 			jQuery(document).ready(function(){
-<?php if ($this->agent->is_browser('MSIE'))
-{ ?>
-
 			// Let's make placeholders work on IE and old browsers too
 			jQuery('[placeholder]').focus(function() {
 				var input = jQuery(this);
@@ -47,12 +45,11 @@
 						input.val('');
 					}
 				})
-			}); <?php } ?>
-	});
-
+			});
+			});
 		</script>
+		<?php endif; ?>
 		<?php echo get_setting('fs_theme_header_code'); ?>
-
 	</head>
 	<body class="<?php if (isset($_COOKIE["night_mode"]) && $_COOKIE["night_mode"] == 1)
 			echo 'night '; ?>">
@@ -179,7 +176,6 @@
 
 				// here we output the body of the page
 				echo $template['body'];
-
 
 				if (get_setting('fs_ads_bottom_banner') && get_setting('fs_ads_bottom_banner_active') && !get_setting('fs_ads_bottom_banner_reload'))
 					echo '<div class="ads banner" id="ads_bottom_banner">' . get_setting('fs_ads_bottom_banner') . '</div>';

@@ -183,7 +183,6 @@ input[type="text"]
 {
     max-width: 960px;
     min-height:48px;
-    padding:20px 10px 19px;
     color: #666;
     margin:0 auto;
 }
@@ -194,7 +193,6 @@ input[type="text"]
 }
 
 #footer>*>div{
-    width:740px;
     float:left;
 }
 
@@ -293,7 +291,7 @@ input[type="text"]
     color:#333;
     text-shadow:1px 1px 0px #ccc;
     text-shadow:0px 1px 0px rgba(255,255,255,0.3);
-    width:1000px;
+    max-width:1000px;
     margin: 0 auto;
     font-size:14px;
 }
@@ -871,7 +869,7 @@ ul.dropdown li a
     margin:0px auto 10px;
     padding:2px 0;
     overflow:hidden;
-    width:1000px;
+    max-width:1000px;
     color:#ddd;
     background:#333;
     box-shadow: 0px 0px 1px #ddd, inset 0px 0px 8px #222;
@@ -885,9 +883,7 @@ ul.dropdown li a
 
 #bottombar .pagenumber{
     float:left;
-
     width:90px;
-
     margin-top:5px;
     margin-left:10px;
 

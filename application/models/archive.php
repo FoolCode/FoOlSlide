@@ -50,6 +50,7 @@ class Archive extends DataMapper
 	 */
 	function compress($comic, $language = 'en', $volume = null, $chapter = null, $subchapter = 0)
 	{
+		require_once(FCPATH . 'assets/pclzip/pclzip.lib.php');
 		$files = array();
 
 		if (get_setting('fs_dl_volume_enabled') && $volume !== null && $chapter === null)
@@ -82,7 +83,10 @@ class Archive extends DataMapper
 
 				foreach ($pages as $page)
 				{
-					$files[] = 'content/comics/' . $comic->directory() . '/' . $chaptere->directory() . '/' . $page->filename;
+					$files[] = array(
+						PCLZIP_ATT_FILE_NAME => 'content/comics/' . $comic->directory() . '/' . $chaptere->directory() . '/' . $page->filename,
+						PCLZIP_ATT_FILE_NEW_FULL_NAME => $this->filename_chapter_compressed($chaptere) . '/' . $page->filename
+					);
 				}
 			}
 		}
@@ -116,10 +120,8 @@ class Archive extends DataMapper
 		{
 			$this->remove_old();
 
-			require_once(FCPATH . 'assets/pclzip/pclzip.lib.php');
-
 			$archive = new PclZip('content/comics/' . $filepath . '/' . $filename . '.zip');
-			$z_list = $archive->create(implode(',', $files), PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
+			$z_list = $archive->create($files, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
 
 			$this->comic_id = $comic->id;
 			$this->volume_id = $volume_id;

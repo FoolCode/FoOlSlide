@@ -129,7 +129,7 @@ class Series extends Admin_Controller
 					return false;
 				}
 			}
-			
+
 			flash_notice('notice', sprintf(_('Updated series information for %s.'), $comic->name));
 			// Did we change the stub of the comic? We need to redirect to the new page then.
 			if (isset($old_comic_stub) && $old_comic_stub != $comic->stub)
@@ -157,7 +157,6 @@ class Series extends Admin_Controller
 
 		if ($comic->get_thumb())
 			$comic->thumbnail = $comic->get_thumb();
-
 		$table = ormer($comic);
 
 		$licenses = new License();
@@ -216,7 +215,6 @@ class Series extends Admin_Controller
 			);
 
 			$table = tabler($table, FALSE, TRUE);
-
 			$data["form_title"] = _('Add New Chapter');
 			$data["table"] = $table;
 
@@ -289,24 +287,24 @@ class Series extends Admin_Controller
 			}
 		}
 		$this->viewdata["extra_title"][] = _("Chapter");
-		
+
 		// Obtain All Comics
 		$comics = new Comic();
 		$comics->order_by('name', 'ASC')->get();
-		
+
 		// Generate Dropdown Array
 		$dropdown = array();
 		foreach ($comics->all as $comic) {
 			$dropdown[$comic->id] = $comic->name;
 		}
-		
+
 		// Setup Comics Dropdown
 		$chapter = new Chapter();
 		$chapter->validation['comic_id']['label'] = _('Series');
 		$chapter->validation['comic_id']['type'] = 'dropdowner';
 		$chapter->validation['comic_id']['values'] = $dropdown;
 		$chapter->validation['comic_id']['help'] = _('Add chapter to selected series.');
-		
+
 		$table = ormer($chapter);
 		$table[] = array(
 			_('Teams'),
@@ -327,7 +325,7 @@ class Series extends Admin_Controller
 		$this->load->view("admin/default.php", $this->viewdata);
 		return true;
 	}
-	
+
 	function upload()
 	{
 		$info = array();

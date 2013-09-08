@@ -50,14 +50,16 @@ if (!function_exists('tabler'))
 						$result[$rowk][$colk]["table"] = writize($column);
 						if (isset($column['type']))
 						{
-							$result[$rowk][$colk]["form"] = formize($column, $repopulate);
 							$result[$rowk][$colk]["type"] = $column['type'];
+							$result[$rowk][$colk]["form"] = formize($column, $repopulate);
+							$result[$rowk][$colk]['value'] = isset($column['values']) ? $column['values'] : $column['value'];
 						}
 					}
 					else
 					{
-						$result[$rowk][$colk]["table"] = writize($column);
 						$result[$rowk][$colk]["form"] = $column;
+						$result[$rowk][$colk]["table"] = writize($column);
+						$result[$rowk][$colk]["value"] = $column;
 					}
 				}
 			}
@@ -105,9 +107,21 @@ if (!function_exists('tabler'))
 									}
 								}
 								else if ($column['table'] == "")
+								{
 									$echo .= 'N/A';
+								}
 								else
-									$echo .= $column['table'];
+								{
+									if ($column['type'] == 'dropdowner' || $column['type'] == 'checkbox')
+									{
+										$echo .= $column['value'][$column['table']];
+									}
+									else
+									{
+										$echo .= $column['table'];
+									}
+								}
+
 								$echo .= '</span>';
 							}
 						}
@@ -235,6 +249,8 @@ if (!function_exists('formize'))
 			$column['id'] = $column['field'];
 		else
 			$column['id'] = $column['name'];
+		if ($type == 'checkbox' && isset($column['values']))
+			unset($column['values']);
 		unset($column['rules']);
 		unset($column['field']);
 		unset($column['type']);
@@ -372,13 +388,13 @@ if (!function_exists('lister'))
 				$row['smalltext'] = "";
 
 			$echo .= '<div class="item">
-                    <div class="title">' .
+					<div class="title">' .
 					$row['title'] .
 					'</div>
-                    <div class="smalltext info">' .
+					<div class="smalltext info">' .
 					$row['smalltext_r'] .
 					'</div>
-                    <div class="smalltext">' .
+					<div class="smalltext">' .
 					$row['smalltext'] .
 					'</div>';
 			$echo .= '</div>';

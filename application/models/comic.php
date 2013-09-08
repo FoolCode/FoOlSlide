@@ -24,11 +24,6 @@ class Comic extends DataMapper
 			'rules' => array('required', 'max_length' => 256),
 			'label' => 'Uniqid'
 		),
-		'hidden' => array(
-			'rules' => array('is_int'),
-			'label' => 'Visibility',
-			'type' => 'checkbox'
-		),
 		'description' => array(
 			'rules' => array(),
 			'label' => 'Description',
@@ -40,22 +35,29 @@ class Comic extends DataMapper
 			'type' => 'upload',
 			'display' => 'image',
 		),
-		'format' => array(
-			'rules' => array('required'),
-			'label' => 'Comic Format',
-			'type' => 'dropdowner',
-			'values' => array('0' => 'Manga', '1' => 'Long Strip (Web Toons)'),
-			'value' => 0
-		),
 		'adult' => array(
-			'rules' => array(),
-			'label' => 'Show adult notice',
-			'type' => 'checkbox'
+			'rules' => array('is_int'),
+			'label' => 'Adult Notice',
+			'type' => 'checkbox',
+			'values' => array('0' => 'No', '1' => 'Yes')
+		),
+		'hidden' => array(
+			'rules' => array('is_int'),
+			'label' => 'Visibility',
+			'type' => 'checkbox',
+			'values' => array('0' => 'Visible', '1' => 'Hidden')
 		),
 		'customchapter' => array(
 			'rules' => array(),
 			'label' => 'Custom chapter',
 			'type' => 'input'
+		),
+		'format' => array(
+			'rules' => array('required'),
+			'label' => 'Comic Format',
+			'type' => 'dropdowner',
+			'value' => 0,
+			'values' => array('0' => 'Manga', '1' => 'Long Strip (Web Toons)')
 		),
 		'lastseen' => array(
 			'rules' => array(),
@@ -124,6 +126,8 @@ class Comic extends DataMapper
 		$this->validation['name']['help'] = _('Insert the title of the series.');
 		$this->validation['description']['label'] = _('Description');
 		$this->validation['description']['help'] = _('Insert a description.');
+		$this->validation['adult']['label'] = _('Adult Notice');
+		$this->validation['adult']['text'] = _('Enable');
 		$this->validation['hidden']['label'] = _('Visibility');
 		$this->validation['hidden']['help'] = _('Hide the series from public view.');
 		$this->validation['hidden']['text'] = _('Hidden');
@@ -467,6 +471,8 @@ class Comic extends DataMapper
 		/**
 		 *  @todo make the checkbox work consistently across the whole framework
 		 */
+		if (!isset($data['adult']) || $data['adult'] != 1)
+			$this->adult = 0;
 		if (!isset($data['hidden']) || $data['hidden'] != 1)
 			$this->hidden = 0;
 

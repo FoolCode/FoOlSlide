@@ -981,11 +981,13 @@ class Chapter extends DataMapper
 	 * @author	Woxxy
 	 * @return	string the formatted title for the chapter, with chapter and subchapter
 	 */
-	public function title()
+	public function title($volume = true)
 	{
 		$echo = "";
-		if ($this->volume > 0)
+		if ($this->volume > 0 && $volume === true)
+		{
 			$echo .= _('Vol.') . $this->volume . ' ';
+		}
 		if ($this->chapter > 0) // if chapter == 0 it means this is a one-shot
 		{
 			if ($this->customchaptertitle()) // support for custom chapter titles

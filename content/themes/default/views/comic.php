@@ -32,11 +32,13 @@
 		{
 			if ($current_volume != $chapter->volume)
 			{
-				$current_volume = $chapter->volume;
 				if ($opendiv === true)
 				{
 					echo '</div>';
 				}
+
+                $current_volume = $chapter->volume;
+			    $opendiv = true;
 
 				echo '<div class="group">';
 				if ($current_volume > 0) {
@@ -47,11 +49,9 @@
 			}
 
 			echo '<div class="element">'.$chapter->download_url(NULL, 'fleft small').'
-					<div class="title">' . $chapter->url() . '</div>
+					<div class="title">' . $chapter->url($chapter->title(false)) . '</div>
 					<div class="meta_r">' . _('by') . ' ' . $chapter->team_url() . ', ' . $chapter->date() . ' ' . $chapter->edit_url() . '</div>
 				</div>';
-
-			$opendiv = true;
 		}
 
 		echo '</div>';

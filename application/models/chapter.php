@@ -970,7 +970,7 @@ class Chapter extends DataMapper
 
 	public function download_volume_url($text = NULL, $class = "")
 	{
-		if (get_setting('fs_dl_volume_enabled'))
+		if (get_setting('fs_dl_enabled') && get_setting('fs_dl_volume_enabled'))
 			return '<div class="icon_wrapper ' . $class . '"><a href="' . $this->download_volume_href() . '"><img class="icon off" src="' . glyphish(50) . '" /><img class="icon on" src="' . glyphish(50, TRUE) . '" /></a></div>';
 	}
 

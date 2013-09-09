@@ -19,7 +19,7 @@ class Preferences extends Admin_Controller
 
 	/*
 	 * Just redirects to general
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function index()
@@ -32,7 +32,7 @@ class Preferences extends Admin_Controller
 	 * _submit is a private function that submits to the "preferences" table.
 	 * entries that don't exist are created. the preferences table could get very large
 	 * but it's not really an issue as long as the variables are kept all different.
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function _submit($post, $form)
@@ -83,7 +83,7 @@ class Preferences extends Admin_Controller
 
 	/*
 	 * Generic info influcencing all of FoOlSlide
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function general()
@@ -148,23 +148,23 @@ class Preferences extends Admin_Controller
 			array(
 				'type' => 'dropdowner',
 				'name' => 'fs_gen_lang',
-				'values' => 
+				'values' =>
 					array(
-						'' => 'English', 
-						'ar_SA.utf8' => 'Arab', 
-						'cs_CZ.utf8' => 'Czech', 
-						'fr_FR.utf8' => 'French', 
-						'de_DE.utf8' => 'German', 
-						'hr_HR.utf8' => 'Croatian', 
-						'it_IT.utf8' => 'Italian', 
+						'' => 'English',
+						'ar_SA.utf8' => 'Arab',
+						'cs_CZ.utf8' => 'Czech',
+						'fr_FR.utf8' => 'French',
+						'de_DE.utf8' => 'German',
+						'hr_HR.utf8' => 'Croatian',
+						'it_IT.utf8' => 'Italian',
 						'id_ID.utf8' => 'Indonesian',
 						'ja_JP.utf8' => 'Japanese',
-						'pl_PL.utf8' => 'Polish', 
-						'pt_PT.utf8' => 'Portuguese', 
-						'pt_BR.utf8' => 'Portuguese (Brazil)', 
-						'ru_RU.utf8' => 'Russian', 
-						'sl_SL.utf8' => 'Slovenian', 
-						'es_ES.utf8' => 'Spanish', 
+						'pl_PL.utf8' => 'Polish',
+						'pt_PT.utf8' => 'Portuguese',
+						'pt_BR.utf8' => 'Portuguese (Brazil)',
+						'ru_RU.utf8' => 'Russian',
+						'sl_SL.utf8' => 'Slovenian',
+						'es_ES.utf8' => 'Spanish',
 						'th_TH.utf8' => 'Thai',
 						'tr_TR.utf8' => 'Turkish'
 					),
@@ -193,7 +193,7 @@ class Preferences extends Admin_Controller
 	/*
 	 * Allows setting basic variables for theme.
 	 * Does not yet allow adding more variables from current theme.
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function theme()
@@ -211,7 +211,7 @@ class Preferences extends Admin_Controller
 				'preferences' => 'fs_gen'
 			)
 		);
-		
+
 		$form[] = array(
 			_('Pre-Header Text'),
 			array(
@@ -222,7 +222,7 @@ class Preferences extends Admin_Controller
 				'help' => _("This will insert HTML code above before the header navigation block.")
 			)
 		);
-		
+
 		$form[] = array(
 			_('Header Text'),
 			array(
@@ -255,7 +255,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Inserts the text above in the footer such as disclaimers. (Note: If the content uploaded does not belong to you, do not write things like "All Rights Reserived&copy;" above. However, if you\'re releasing your own works, please consider using <a href="http://creativecommons.org/">Creative Commons Licenses</a> to protect them.)')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Footer Code'),
 			array(
@@ -286,7 +286,7 @@ class Preferences extends Admin_Controller
 
 	/*
 	 * Code boxes to add the ads' code, supporting top and bottom ads
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function advertising()
@@ -328,7 +328,7 @@ class Preferences extends Admin_Controller
 				'help' => _('')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Bottom banner'),
 			array(
@@ -358,7 +358,7 @@ class Preferences extends Admin_Controller
 						'preferences' => 'fs_ads',
 						'text' => _('Reload on Every Pageview')
 					)
-					
+
 				),
 				'help' => _('')
 			)
@@ -393,7 +393,7 @@ class Preferences extends Admin_Controller
 					flash_notice('error', _('Couldn\'t save the advertising code in the HTML'));
 				}
 			}
-			
+
 			redirect('admin/preferences/advertising');
 		}
 
@@ -479,7 +479,7 @@ class Preferences extends Admin_Controller
 
 	/*
 	 * Reader configuration
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function reader()
@@ -492,10 +492,19 @@ class Preferences extends Admin_Controller
 			_('Settings'),
 			array(
 				'type' => 'checkbox',
-				'name' => 'fs_dl_enabled',
-				'id' => 'enable_dl',
-				'preferences' => 'fs_dl',
-				'text' => _('Enable Direct Downloads'),
+				'name' => 'fs_dl_options',
+                'value' => array(
+                    array(
+                        'name' => 'fs_dl_enabled',
+                        'preferences' => 'fs_dl',
+                        'text' => _('Enable Direct Downloads')
+                    ),
+                    array(
+                        'name' => 'fs_dl_volume_enabled',
+                        'preferences' => 'fs_dl',
+                        'text' => _('Enable Volume Downloads'),
+                    )
+                ),
 				'help' => _('Note: Direct downloads usually increase bandwidth usage by one-third. The issue is whether you have enough space to keep both images and ZIP archives. FoOlSlide tries to avoid this problem by using on-the-fly ZIP compression and caching.')
 			)
 		);
@@ -526,12 +535,12 @@ class Preferences extends Admin_Controller
 		$this->viewdata["main_content_view"] = $this->load->view("admin/preferences/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
-	
-	
+
+
+
 	/*
 	 * Generic info influcencing all of FoOlSlide
-	 * 
+	 *
 	 * @author Woxxy
 	 */
 	function slideshow()
@@ -552,7 +561,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('1st URL'),
 			array(
@@ -573,7 +582,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('2nd Image URL'),
 			array(
@@ -584,7 +593,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('2nd URL'),
 			array(
@@ -605,7 +614,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('3rd Image URL'),
 			array(
@@ -616,7 +625,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('3rd URL'),
 			array(
@@ -637,7 +646,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Text that appears on bottom of the image. HTML accepted')
 			)
 		);
-		
+
 		$form[] = array(
 			_('4th Image URL'),
 			array(
@@ -648,7 +657,7 @@ class Preferences extends Admin_Controller
 				'help' => _('Image URL (don\'t forget "http://"). Suggested size: 690px width, 280px height')
 			)
 		);
-		
+
 		$form[] = array(
 			_('4th URL'),
 			array(

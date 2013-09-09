@@ -788,8 +788,8 @@ class Chapter extends DataMapper
 			{
 				// maybe it's just the zip created by the archive system
 				$archives = new Archive();
-				$archives->where('comic_id', $this->comic_id)->group_start()->where('chapter_id', $this->id)->or_where('volume_id', $this->volume)->group_end()->get();
-				if ($archive->result_count())
+				$archives->where('comic_id', $this->comic_id)->where('chapter_id', $this->id)->where('volume_id', 0)->get();
+				if ($archives->result_count())
 				{
 					foreach ($archives as $archive)
 					{
@@ -813,24 +813,6 @@ class Chapter extends DataMapper
 					// it's a simple page, unset to confirm
 					unset($files[$key]);
 					continue;
-				}
-
-				// probably it's just a thumbnail
-				$thumbnail = preg_replace('/^thumb_/', '', $file['name'], 1);
-
-				// check if it's actually different
-				if ($thumbnail != $file['name'])
-				{
-					$page = new Page();
-					$page->where('chapter_id', $this->id)->where('filename', $thumbnail)->get();
-
-					// if it's 1, it's a thumbnail, so let's unset it
-					if ($page->result_count() == 1)
-					{
-						// unset to confirm existence
-						unset($files[$key]);
-						continue;
-					}
 				}
 			}
 		}

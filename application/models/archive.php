@@ -101,7 +101,7 @@ class Archive extends DataMapper
 				show_404();
 			}
 
-			$volume_id = null;
+			$volume_id = 0;
 			$chapter_id = $chaptere->id;
 			$filepath = $comic->directory() . '/' . $chaptere->directory();
 			$filename = $this->filename_chapter_compressed($chaptere);
@@ -121,7 +121,7 @@ class Archive extends DataMapper
 			$this->remove_old();
 
 			$archive = new PclZip('content/comics/' . $filepath . '/' . $filename . '.zip');
-			$z_list = $archive->create($files, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
+			$archive->create($files, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION);
 
 			$this->comic_id = $comic->id;
 			$this->volume_id = $volume_id;

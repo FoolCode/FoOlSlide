@@ -663,6 +663,18 @@ class Comic extends DataMapper
 				{
 					if ($item != $this->thumbnail && $item != 'thumb_' . $this->thumbnail)
 					{
+						$ext = strtolower(substr($item, -4));
+
+						if (in_array($ext, array('.zip')))
+						{
+							$archive = new Archive();
+							$archive->where('comic_id', $this->id)->where('filename', $item)->get();
+							if ($archive->result_count())
+							{
+								continue;
+							}
+						}
+
 						// if it's not the thumbnail image, it's an unidentified file
 						$errors[] = 'comic_unidentified_file_found';
 						set_notice('warning', _('Unidentified file found at:') . ' ' . $item_path);

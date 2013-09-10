@@ -12,10 +12,6 @@
  * For more information, refer to the support sites linked in your admin panel.
  */
 
-
-
-
-
 /**
  * Returns the sidebar in the theme
  *
@@ -29,9 +25,8 @@ if(!function_exists('get_sidebar'))
 	{
 		$echo = '';
 		$echo .= '<ul class="sidebar">';
-		if(get_setting_irc())$echo .= '<li><h3>IRC</h3>'. get_irc_widget() .'</li>';
-		if(get_setting_twitter())$echo .= '<li><h3>Twitter</h3>'. get_twitter_widget() .'</li>';
-		if(get_setting_facebook())$echo .= '<li><h3>Facebook	</h3>'. get_facebook_widget() .'</li>';
+		if(get_setting_irc()&&get_setting_twitter())$echo .= '<li class="social_module"><h3>'._("Social Integration").'</h3><div class="social_text">'. get_twitter_widget() .'<br />'.get_irc_widget().'</div></li>';
+		if(get_setting_facebook())$echo .= '<li class="facebook_module"><h3>Facebook</h3><div class="social_text">'. get_facebook_widget() .'</div></li>';
 		$echo .= '</ul>';
 		return $echo;
 	}
@@ -68,9 +63,11 @@ if(!function_exists('get_twitter_widget'))
 	function get_twitter_widget($team = NULL)
 	{
 		$twitter = get_setting_twitter($team);
-		$echo = sprintf(_('%sFollow us%s on Twitter'),'<a href="http://twitter.com/intent/user?screen_name='.urlencode($twitter).'">', '<img src="'.site_url().'assets/images/bird_16_blue.png" /></a>' );
-		return '<div class="text">'.$echo.'</div>';
+
+		$echo = "<iframe allowtransparency='true' frameborder='0' scrolling='no' src=//platform.twitter.com/widgets/follow_button.html?screen_name=".urlencode($twitter)."&show_count=false&link_color=ffffff&text_color=ffffff' style='width:300px; height:20px; padding-left:10px'></iframe>";
+		return $echo;
 	}
+
 }
 
 /**
@@ -95,7 +92,7 @@ if(!function_exists('get_setting_irc'))
  * Returns IRC widget for the team
  * If $team is not set, it returns the home team's irc widget
  *
- * @param string team name
+ * @param string team namo
  * @author Woxxy
  * @return string irc widget for the team
  */
@@ -105,8 +102,8 @@ if(!function_exists('get_irc_widget'))
 	{
 		$irc = get_setting_irc($team);
 
-		$echo = _('Come chat with us on') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
-		return '<div class="text">'.$echo.'</div>';
+		$echo = _('Come chat with us on:<br />') . ' <a href="'.parse_irc($irc).'">' . $irc . '</a>';
+		return '<div class="irc-text">'.$echo.'</div>';
 	}
 }
 

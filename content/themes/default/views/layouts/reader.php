@@ -129,7 +129,7 @@
 										height:280px !important; /* Change this to your images height */
 										margin-bottom:10px;
 										overflow:hidden;
-										margin-left:5px;
+										margin-left:1px;
 									}
 									.nivoSlider img {
 										position:absolute;
@@ -196,7 +196,7 @@
 					<?php echo get_setting('fs_gen_footer_text'); ?>
 				</div>
 				<div class="cp_link">
-					<a href="http://www.foolz.us/info/foolslide/" target="_blank"><img src="<?php echo site_url() . 'content/themes/default/images/logo_footer.png' ?>" /></a>
+					<a href="http://www.foolz.us/info/foolslide/" target="_blank"><img src="<?php echo site_url() . 'content/themes/' . get_setting('fs_theme_dir') .'/images/logo_footer.png' ?>" /></a>
 				</div>
 			</div>
 		</div>

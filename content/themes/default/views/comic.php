@@ -1,25 +1,23 @@
 <?php if (!defined('BASEPATH'))
 	exit('No direct script access allowed'); ?>
 
-	<div class="sidebar">
+	<div class="comic info">
 		<?php if ($comic->get_thumb()): ?>
 			<div class="thumbnail">
 				<img src="<?php echo $comic->get_thumb(); ?>" />
 			</div>
 		<?php endif; ?>
-	</div>
 
-	<div class="large comic">
-		<h1 class="title">
-			<?php echo $comic->name; ?>
-		</h1>
-		<div class="info">
-			<ul>
-				<?php if ($comic->author) : ?><li><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?></li><?php endif; ?>
-				<?php if ($comic->artist) : ?><li><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?></li><?php endif; ?>
-				<li><?php echo '<b>'._('Synopsis').'</b>: '.$comic->description; ?></li>
-			</ul>
-		</div>
+        <div class="large comic">
+            <h1 class="title">
+                <?php echo $comic->name; ?>
+            </h1>
+            <div class="info">
+                    <?php if ($comic->author) : ?><?php echo '<b>'._('Author').'</b>: '.$comic->author; ?><br><?php endif; ?>
+                    <?php if ($comic->artist) : ?><?php echo '<b>'._('Artist').'</b>: '.$comic->artist; ?><br><?php endif; ?>
+                    <?php echo '<b>'._('Synopsis').'</b>: '.$comic->description; ?>
+            </div>
+        </div>
 	</div>
 
 	<div class="list">

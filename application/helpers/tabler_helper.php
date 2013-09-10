@@ -11,7 +11,6 @@ if (!function_exists('tabler'))
 		$result = array();
 		$CI = & get_instance();
 
-
 		$rows[] = array(
 			"",
 			array(
@@ -31,23 +30,31 @@ if (!function_exists('tabler'))
 			{
 				if ($colk == 0)
 				{
-					$result[$rowk][$colk]["table"] = $column;
 					$result[$rowk][$colk]["form"] = $column;
-					$result[$rowk][$colk]["field"] = $rows[$rowk][$colk + 1]['name'];
+					$result[$rowk][$colk]["table"] = $column;
+					$result[$rowk][$colk]["field"] = isset($rows[$rowk][$colk + 1]['name']) ? $rows[$rowk][$colk + 1]['name'] : $rows[$rowk][$colk + 1];
 				}
 				else
 				{
 					if (isset($column['list']) && is_array($column['list']))
 					{
 						foreach ($column['list'] as $key => $item)
+						{
 							if (!isset($column['list'][$key]['value']))
+							{
 								$column['list'][$key]['value'] = "";
+							}
+						}
 					}
-					elseif (!isset($column['value']))
+					elseif (!isset($column['value']) && is_array($column))
+					{
 						$column['value'] = "";
+					}
+
 					if (is_array($column))
 					{
 						$result[$rowk][$colk]["table"] = writize($column);
+
 						if (isset($column['type']))
 						{
 							$result[$rowk][$colk]["type"] = $column['type'];
@@ -611,23 +618,31 @@ if (!function_exists('prevnext'))
 
 	function prevnext($base_url, $item)
 	{
-		$echo = '<div class="prevnext">';
+		$echo = "";
 
-		if ($item->paged->has_previous)
+		if ($item->paged->has_previous || $item->paged->has_next)
 		{
-			$echo .= '<div class="prev">
-					<a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« ' . _('First') . '</a>
-					<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« ' . _('Prev') . '</a>
-				</div>';
+			$echo .= '<div class="prevnext">';
+
+			if ($item->paged->has_previous)
+			{
+				$echo .= '<div class="prev">
+						<a class="gbutton fleft" href="' . site_url($base_url . '1') . '">«« ' . _('First') . '</a>
+						<a class="gbutton fleft" href="' . site_url($base_url . $item->paged->previous_page) . '">« ' . _('Prev') . '</a>
+					</div>';
+			}
+
+			if ($item->paged->has_next)
+			{
+				$echo .= '<div class="next">
+						<a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">' . _('Last') . ' »»</a>
+						<a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">' . _('Next') . ' »</a>
+					</div>';
+			}
+
+			$echo .= '<div class="clearer"></div></div>';
 		}
-		if ($item->paged->has_next)
-		{
-			$echo .= '<div class="next">
-					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->total_pages) . '">' . _('Last') . ' »»</a>
-					<a class="gbutton fright" href="' . site_url($base_url . $item->paged->next_page) . '">' . _('Next') . ' »</a>
-				</div>';
-		}
-		$echo .= '<div class="clearer"></div></div>';
+
 
 		return $echo;
 	}

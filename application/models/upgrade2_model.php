@@ -9,12 +9,12 @@ class Upgrade2_model extends CI_Model {
 		// Call the Model constructor
 		parent::__construct();
 	}
-	
+
 	/**
 	 * A second file check, different from upgrade_model, this time updated.
 	 *
 	 * @author Woxxy
-	 * @return bool 
+	 * @return bool
 	 */
 	function check_files() {
 		if (!is_writable('.')) {
@@ -52,14 +52,14 @@ class Upgrade2_model extends CI_Model {
 	 * Actual upgrade for FoOlSlide, uses the check yet again and checks if all
 	 * the files needed from the ZIP were extracted. Then it swaps the original
 	 * files
-	 * 
+	 *
 	 * THIS DOESN'T UPGRADE THE DATABASE. That happens by default every time the
 	 * admin is in the admin panel, and gets asked for database update.
-	 * 
+	 *
 	 * FoOlSlide won't be working until the admin accepts the database upgrade,
 	 * for security reasons.
 	 *
-	 * @return type 
+	 * @return type
 	 */
 	function do_upgrade() {
 		if (!$this->check_files()) {
@@ -69,7 +69,7 @@ class Upgrade2_model extends CI_Model {
 
 		// Put FoOlSlide in maintenance
 		$this->db->update('preferences', array('value' => 'fs_priv_maintenance'), array('name' => _("We're currently upgrading FoOlSlide. This process usually takes few seconds or a couple minutes, check back soon!")));
-		
+
 		if (!file_exists('content/cache/upgrade')) {
 			return FALSE;
 		}
@@ -99,12 +99,9 @@ class Upgrade2_model extends CI_Model {
 		rename('content/cache/upgrade/assets', 'assets');
 		delete_files('content/themes/default/', TRUE);
 		rename('content/cache/upgrade/content/themes/default', 'content/themes/default');
-		
-		// delete the mobile folder for a while... 05/09/2011
-		//if (file_exists('content/themes/mobile')) {
-		//	delete_files('content/themes/mobile/', TRUE);
-		//}
-		
+		delete_files('content/themes/memochou/', TRUE);
+		rename('content/cache/upgrade/content/themes/memochou', 'content/themes/memochou');
+
 		return TRUE;
 	}
 

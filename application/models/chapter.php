@@ -59,7 +59,8 @@ class Chapter extends DataMapper
 		'hidden' => array(
 			'rules' => array('is_int'),
 			'label' => 'Hidden',
-			'type' => 'checkbox'
+			'type' => 'checkbox',
+			'values' => array('0' => 'Visible', '1' => 'Hidden')
 		),
 		'description' => array(
 			'rules' => array(),

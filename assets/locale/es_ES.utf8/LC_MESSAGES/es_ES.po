@@ -45,7 +45,7 @@ msgstr "Nombre del servidor de la base de datos"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
-msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgid "The hostname of the server hosting the database. 99.8%% of times is localhost"
 msgstr "El nombre del servidor del proveedor de la base de datos. El 99.8% de las veces es localhost"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66

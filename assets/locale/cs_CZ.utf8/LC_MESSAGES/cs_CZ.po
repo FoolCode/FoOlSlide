@@ -43,7 +43,7 @@ msgstr "Díky neznámé chybě se nepodařilo uložit spolupráci do databáze."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
-msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgid "The hostname of the server hosting the database. 99.8%% of times is localhost"
 msgstr "Nepodařilo se odstranit spolupráci."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66

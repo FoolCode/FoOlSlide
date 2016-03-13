@@ -43,7 +43,7 @@ msgstr "Adatbázis hostnév"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
-msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgid "The hostname of the server hosting the database. 99.8%% of times is localhost"
 msgstr "A szerver hostneve"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66

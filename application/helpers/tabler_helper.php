@@ -620,7 +620,12 @@ if (!function_exists('prevnext'))
 	{
 		$echo = "";
 
-		if ($item->paged->has_previous || $item->paged->has_next)
+		if (!isset($item))
+			return $echo;
+
+		if (isset($item->paged) && 
+			((property_exists($item->paged, "has_previous") 
+				&& $item->paged->has_previous) || (property_exists($item->paged, "has_next") && $item->paged->has_next)))
 		{
 			$echo .= '<div class="prevnext">';
 

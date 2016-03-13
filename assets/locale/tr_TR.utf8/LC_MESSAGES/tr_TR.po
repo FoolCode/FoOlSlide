@@ -45,7 +45,7 @@ msgstr "Veritabanı hostu"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
-msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgid "The hostname of the server hosting the database. 99.8%% of times is localhost"
 msgstr "Veritabanını barındıran sunucu adı.Genellikle 'localhost'dur."
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66

@@ -58,7 +58,7 @@ class Install extends Install_Controller
 				'placeholder' => 'required',
 				'required' => 'required',
 				'value' => 'localhost',
-				'help' => _('The hostname of the server hosting the database. 99.8% of times is localhost')
+				'help' => _('The hostname of the server hosting the database. 99.8%% of times is localhost')
 			)
 		);
 

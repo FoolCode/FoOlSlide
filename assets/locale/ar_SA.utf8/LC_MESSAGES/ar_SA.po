@@ -42,7 +42,7 @@ msgstr "اسم المضيف قاعدة البيانات"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:61
 #, php-format
-msgid "The hostname of the server hosting the database. 99.8% of times is localhost"
+msgid "The hostname of the server hosting the database. 99.8%% of times is localhost"
 msgstr "اسم المضيف للملقم الذي يستضيف قاعدة البيانات.99.8 ٪ من المرات هو localhost"
 
 #: /Users/woxxy/github/FoOlSlide/application/controllers/install.php:66

@@ -159,6 +159,7 @@ class Preferences extends Admin_Controller
 						'it_IT.utf8' => 'Italian',
 						'id_ID.utf8' => 'Indonesian',
 						'ja_JP.utf8' => 'Japanese',
+						'hu_HU.utf8' => 'Hungarian',
 						'pl_PL.utf8' => 'Polish',
 						'pt_PT.utf8' => 'Portuguese',
 						'pt_BR.utf8' => 'Portuguese (Brazil)',

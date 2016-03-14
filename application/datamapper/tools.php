@@ -4,8 +4,11 @@ class tools
 {
 	public function rule_stub($object, $field, $param = '')
 	{
+		$CI = & get_instance();
+		$CI->load->helper('inflector');
 		$object->$field = strtolower(str_replace(" ", "_", $object->$field));
-		$object->$field = preg_replace('/[^a-z0-9_]/i', '', $object->$field);
+		$object->$field = slugify($object->$field);
+		$object->$field = preg_replace('/[^a-z-0-9_]/i', '', $object->$field);
 	}
 
 	public function rule_checkbox($object, $field, $param = '')
@@ -15,11 +18,15 @@ class tools
 
 	public function stub($input)
 	{
+		$CI = & get_instance();
+		$CI->load->helper('inflector');
+		log_message('info', print_r($input, true));
 		if(isset($input->stub)) $val = $input->stub;
 		else if(isset($input->to_stub)) $val = $input->to_stub;
 		else $val = $input->name;
 		$val = strtolower(str_replace(" ", "_", trim($val)));
-		return preg_replace('/[^a-z0-9_]/i', '', $val);
+		$val = slugify($val);
+		return preg_replace('/[^a-z-0-9_]/i', '', $val);
 	}
 
 	public function logged_id()

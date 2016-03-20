@@ -18,8 +18,9 @@ class Comic extends DataMapper
 		),
 		'stub' => array(
 			'rules' => array('stub', 'unique', 'max_length' => 256),
-			'label' => 'Stub',
-			'type' => 'input'
+			'label' => 'URL Slug',
+			'type' => 'input',
+			'class' => 'uneditable-input jqslug'
 		),
 		'uniqid' => array(
 			'rules' => array('required', 'max_length' => 256),
@@ -151,33 +152,6 @@ class Comic extends DataMapper
 		$this->validation['customchapter']['label'] = _('Custom Chapter Title');
 		$this->validation['customchapter']['help'] = _('Replace the default chapter title with a custom format. Example: "{num}{ord} Stage" returns "2nd Stage"');
 	}
-
-	/**
-	 * This function sets the correct slug for the comic when the user specifies
-	 * a name with non italic letters.
-	 *
-	 * @author pushrbx
-	 * @return void
-	 */
-	private function fix_stub_for_foreign_name($input_name)
-	{
-		// if (!isset($input_name))
-		// 	return;
-
-		// if ($this->stub == '_' || preg_match('/^[-\' \p{L}]+$/u', $input_name) === 1)
-		// {
-		// 	$CI = &get_instance();
-		// 	$CI->load->helper('inflector');
-		// 	if ($input_name != "")
-		// 		$this->stub = slugify($input_name);
-
-		// 	if (str_replace(" ", "", $this->stub) == "")
-		// 	{
-		// 		$this->stub = $this->uniqid;
-		// 	}
-		// }
-	}
-
 
 	/**
 	 * Overwrite of the get() function to add filters to the search.
@@ -355,7 +329,8 @@ class Comic extends DataMapper
 		$this->uniqid = uniqid();
 
 		// in case the user specified a stub
-		if (array_key_exists('stub', $data) && isset($data['stub']) && $data['stub'] != "")
+		if (array_key_exists('has_custom_slug', $data) && $data['has_custom_slug'] == 1 
+			&& isset($data['stub']) && $data['stub'] != '')
 			$this->to_stub = $data['stub'];
 		
 		// stub() checks for to_stub and makes a stub.
@@ -454,11 +429,13 @@ class Comic extends DataMapper
 		// always set the editor name
 		$this->editor = $this->logged_id();
 		$input_stub = $data["stub"];
+		$has_custom_slug = isset($data["has_custom_slug"]) && $data["has_custom_slug"] == 1;
 
 		// Unset sensible variables
 		unset($data["creator"]);
 		unset($data["editor"]);
 		unset($data["uniqid"]);
+		unset($data["has_custom_slug"]);
 		unset($data["stub"]);
 
 		// Allow only admins and mods to arbitrarily change the release date
@@ -490,7 +467,7 @@ class Comic extends DataMapper
 		}
 
 		// stub changed by user
-		if ($input_stub != "" && ($this->stub != $input_stub || $old_stub != $input_stub))
+		if ($has_custom_slug & $input_stub != "" && ($this->stub != $input_stub || (isset($old_stub) && $old_stub != $input_stub)))
 		{
 			$this->stub = $input_stub;
 			$this->stub = $this->stub();

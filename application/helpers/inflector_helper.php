@@ -232,5 +232,49 @@ if ( ! function_exists('humanize'))
 	}
 }
 
+/**
+ * Slugify
+ *
+ * Takes a string and slugifies it. E.g Старый падуб -> Stariy-padub
+ *
+ * @access	public
+ * @param	string
+ * @author  pushrbx
+ * @return	str
+ */
+if(!function_exists('slugify'))
+{
+	function slugify($string, $replacement = '-')
+	{
+		if (defined('ENVIRONMENT') AND is_file(APPPATH.'config/'.ENVIRONMENT.'/foreign_chars.php'))
+		{
+			include(APPPATH.'config'.DS.ENVIRONMENT.DS.'foreign_chars.php');
+		}
+		elseif (is_file(APPPATH.'config'.DS.'foreign_chars.php'))
+		{
+			include(APPPATH.'config'.DS.'foreign_chars.php');
+		}
+
+		$string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+		$quotedReplacement = preg_quote($replacement, '/');
+
+		$map = array(
+			'/[^\s\p{Zs}\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
+			'/[\s\p{Zs}]+/mu' => $replacement,
+			sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => '',
+		);
+
+		$string = preg_replace(array_keys($map), array_values($map), $string);
+
+		if (isset($transliteration))
+			$string = str_replace(array_keys($transliteration), array_values($transliteration), $string);
+
+		if (isset($foreign_characters))
+			return preg_replace(array_keys($foreign_characters), array_values($foreign_characters), $string);
+
+		return strtolower($string);
+	}
+}
+
 /* End of file inflector_helper.php */
 /* Location: ./application/helpers/inflector_helper.php */

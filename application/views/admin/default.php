@@ -105,6 +105,10 @@ if ($CI->agent->is_browser('MSIE'))
 						});
 					});
 		</script>
+				<?php
+			if (isset($extra_script))
+				echo $extra_script;
+		 ?>
 		<script type="text/javascript">jQuery().alert();</script>
 	</head>
 

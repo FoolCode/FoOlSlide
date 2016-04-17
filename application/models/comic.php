@@ -17,8 +17,10 @@ class Comic extends DataMapper
 			'placeholder' => 'required',
 		),
 		'stub' => array(
-			'rules' => array('required', 'stub', 'unique', 'max_length' => 256),
-			'label' => 'Stub'
+			'rules' => array('stub', 'unique', 'max_length' => 256),
+			'label' => 'URL Slug',
+			'type' => 'input',
+			'class' => 'uneditable-input jqslug'
 		),
 		'uniqid' => array(
 			'rules' => array('required', 'max_length' => 256),
@@ -150,7 +152,6 @@ class Comic extends DataMapper
 		$this->validation['customchapter']['label'] = _('Custom Chapter Title');
 		$this->validation['customchapter']['help'] = _('Replace the default chapter title with a custom format. Example: "{num}{ord} Stage" returns "2nd Stage"');
 	}
-
 
 	/**
 	 * Overwrite of the get() function to add filters to the search.
@@ -326,6 +327,12 @@ class Comic extends DataMapper
 		$this->to_stub = $data['name'];
 		// Uniqid to prevent directory clash
 		$this->uniqid = uniqid();
+
+		// in case the user specified a stub
+		if (array_key_exists('has_custom_slug', $data) && $data['has_custom_slug'] == 1 
+			&& isset($data['stub']) && $data['stub'] != '')
+			$this->to_stub = $data['stub'];
+		
 		// stub() checks for to_stub and makes a stub.
 		$this->stub = $this->stub();
 
@@ -358,22 +365,27 @@ class Comic extends DataMapper
 	 */
 	public function remove()
 	{
+		$result = array();
 
 		// Remove the directory through function
 		if (!$this->remove_comic_dir())
 		{
 			log_message('error', 'remove_comic: failed to delete dir');
-			return false;
+			$result[] = false;
 		}
+		else
+			$result[] = true;
 
 		// Remove database entry through function
 		if (!$this->remove_comic_db())
 		{
 			log_message('error', 'remove_comic: failed to delete database entry');
-			return false;
+			$result[] = false;
 		}
+		else
+			$result[] = true;
 
-		return true;
+		return (bool)array_product($result);
 	}
 
 
@@ -416,11 +428,14 @@ class Comic extends DataMapper
 
 		// always set the editor name
 		$this->editor = $this->logged_id();
+		$input_stub = $data["stub"];
+		$has_custom_slug = isset($data["has_custom_slug"]) && $data["has_custom_slug"] == 1;
 
 		// Unset sensible variables
 		unset($data["creator"]);
 		unset($data["editor"]);
 		unset($data["uniqid"]);
+		unset($data["has_custom_slug"]);
 		unset($data["stub"]);
 
 		// Allow only admins and mods to arbitrarily change the release date
@@ -451,6 +466,12 @@ class Comic extends DataMapper
 			$this->stub = $this->stub();
 		}
 
+		// stub changed by user
+		if ($has_custom_slug & $input_stub != "" && ($this->stub != $input_stub || (isset($old_stub) && $old_stub != $input_stub)))
+		{
+			$this->stub = $input_stub;
+			$this->stub = $this->stub();
+		}
 
 		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
 		// In case this chapter already has a stub and it wasn't changed, don't change it!
@@ -479,7 +500,6 @@ class Comic extends DataMapper
 				}
 			}
 		}
-
 
 		// This is necessary to make the checkbox work.
 		/**

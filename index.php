@@ -19,6 +19,7 @@
  *
  */
 	define('ENVIRONMENT', 'production');
+	define('DS', DIRECTORY_SEPARATOR);
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

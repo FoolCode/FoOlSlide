@@ -95,7 +95,6 @@ class Install extends Install_Controller
 				'name' => 'db_password',
 				'id' => 'db_password',
 				'maxlength' => '200',
-				'required' => 'required',
 				'placeholder' => 'required',
 				'help' => _('The password of the user with permissions to the database')
 			)

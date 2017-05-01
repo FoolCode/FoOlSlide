@@ -5,3 +5,6 @@
 nbproject
 Thumbs.db
 Desktop.ini
+config.php
+
+content/*

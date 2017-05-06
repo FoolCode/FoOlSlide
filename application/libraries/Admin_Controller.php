@@ -88,6 +88,18 @@ class Admin_Controller extends MY_Controller
 				"add_new_chapter" => array("level" => "mod", "name" => _("Add Chapter"), "icon" => 274)
 			)
 		);
+
+		$sidebar["blog"] = array(
+			"name" => _("Blog"),
+			"level" => "mod",
+			"default" => "manage",
+			"icon" => 357,
+			"content" => array(
+				"manage" => array("level" => "mod", "name" => _("Manage Posts"), "icon" => 184),
+				"add_new" => array("level" => "mod", "name" => _("Add Post"), "icon" => 154)
+			)
+		);
+
 		$sidebar["members"] = array(
 			"name" => _("Members"),
 			"level" => "member",

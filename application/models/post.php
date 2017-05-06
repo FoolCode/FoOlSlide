@@ -207,7 +207,7 @@ class Post extends DataMapper
 		// GUI errors are inner to the function
 		if (!$this->update_post_db($data))
 		{
-			log_message('error', 'add_comic: failed writing to database');
+			log_message('error', 'add_post: failed writing to database');
 			return false;
 		}
 
@@ -331,7 +331,7 @@ class Post extends DataMapper
 			$i = 1;
 			$found = FALSE;
 
-			$posts = new Blog_Posts();
+			$posts = new Post();
 			$posts->where('stub', $this->stub)->get();
 			if ($posts->result_count() == 0)
 			{
@@ -342,7 +342,7 @@ class Post extends DataMapper
 			{
 				$i++;
 				$pre_stub = $this->stub . '_' . $i;
-				$posts = new Blog_Posts();
+				$posts = new Post();
 				$posts->where('stub', $pre_stub)->get();
 				if ($posts->result_count() == 0)
 				{

@@ -17,7 +17,7 @@ class Blog extends Admin_Controller
 
 		$this->load->model('files_model');
 		$this->load->library('pagination');
-		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/series").'">' . _("Series") . '</a>';;
+		$this->viewdata['controller_title'] = '<a href="'.site_url("admin/blog").'">' . _("Blog") . '</a>';;
 	}
 
 
@@ -52,8 +52,52 @@ class Blog extends Admin_Controller
 	{
 		$post = new Post();
 		$post->where("stub", $stub)->get();
-		
+
+		if ($post->result_count() == 0)
+		{
+			set_notice('warn', _('Sorry, the post you are looking for does not exist.'));
+			$this->manage();
+			return false;
+		}
+
+		$this->viewdata["function_title"] = '<a href="' . site_url('/admin/blog/manage/') . '">' . _('Manage') . '</a>';
+		if ($stub == "") $this->viewdata["extra_title"][] = $post->name;
+
+		if ($this->input->post())
+		{
+			// Prepare for stub change in case we have to redirect instead of just printing the view
+			$old_post_stub = $post->stub;
+			$post->update_post_db($this->input->post());
+
+			flash_notice('notice', sprintf(_('Updated series information for %s.'), $post->name));
+			// Did we change the stub of the comic? We need to redirect to the new page then.
+			if (isset($old_post_stub) && $old_post_stub != $post->stub)
+			{
+				redirect('/admin/blog/post/' . $post->stub);
+			}
+		}
+
 		$data["post"] = $post;
+
+		$custom_slug = array(array(
+			_('Custom URL Slug'),
+			array(
+				'name' => 'has_custom_slug',
+				'type' => 'checkbox',
+				'text' => _('Has Custom URL Slug'),
+				'help' => _('If you want to have a custom url slug or the comic\'s title is written with non-latin letters tick this.'),
+				'class' => 'jqslugcb'
+			)
+		));
+
+		$table = ormer($post);
+		array_splice($table, 2, 0, $custom_slug);
+		$table = tabler($table);
+		$data['table'] = $table;
+		
+		$this->viewdata["extra_script"] = '<script type="text/javascript" src="'.base_url().'assets/js/form-extra.js"></script>';
+		$this->viewdata["main_content_view"] = $this->load->view("admin/blog/post.php", $data, TRUE);
+		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
 
@@ -62,65 +106,22 @@ class Blog extends Admin_Controller
 		$this->viewdata["function_title"] = '<a href="#">'._("Add New").'</a>';
 
 		//$stub stands for $comic, but there's already a $comic here
-		if ($stub != "")
+		$post = new Post();
+		if ($this->input->post())
 		{
-			if ($this->input->post())
+			if ($post->add($this->input->post()))
 			{
-				$chapter = new Post();
-				if ($chapter->add($this->input->post()))
-				{
-					$subchapter = is_int($chapter->subchapter) ? $chapter->subchapter : 0;
-					flash_notice('notice', sprintf(_('Chapter %s has been added to %s.'), $chapter->chapter.'.'.$subchapter, $chapter->comic->name));
-					redirect('/admin/blog/post/' . $chapter->comic->stub . '/' . $chapter->id);
-				}
-			}
-			$comic = new Post();
-			$comic->where('stub', $stub)->get();
-			$this->viewdata["extra_title"][] = _("Chapter in") . ' ' . $comic->name;
+				$config['upload_path'] = 'content/cache/';
+				$config['allowed_types'] = 'jpg|png|gif';
+				$this->load->library('upload', $config);
+				$field_name = "thumbnail";
 
-			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
-			$this->load->view("admin/default.php", $this->viewdata);
-			return true;
+				flash_notice('notice', sprintf(_('The post %s has been added.'), $post->name));
+				redirect('/admin/blog/post/' . $post->stub);
+			}
 		}
-		else
-		{
-			$comic = new Post();
-			if ($this->input->post())
-			{
-				if ($comic->add($this->input->post()))
-				{
-					$config['upload_path'] = 'content/cache/';
-					$config['allowed_types'] = 'jpg|png|gif';
-					$this->load->library('upload', $config);
-					$field_name = "thumbnail";
-					if (count($_FILES) > 0 && $this->upload->do_upload($field_name))
-					{
-						$up_data = $this->upload->data();
-						if (!$this->files_model->comic_thumb($comic, $up_data))
-						{
-							log_message("error", "Controller: series.php/add_new: image failed being added to folder");
-						}
-						if (!unlink($up_data["full_path"]))
-						{
-							log_message('error', 'series.php/add_new: couldn\'t remove cache file ' . $data["full_path"]);
-							return false;
-						}
-					}
-					flash_notice('notice', sprintf(_('The series %s has been added.'), $comic->name));
-					redirect('/admin/blog/post/' . $comic->stub);
-				}
-			}
 
-			$table = ormer($comic);
-			$table[] = array(
-				_('Licensed in'),
-				array(
-					'name' => 'licensed',
-					'type' => 'nation',
-					'value' => array(),
-					'help' => _('Insert the nations where the series is licensed in order to limit the availability.'),
-				),
-			);
+			$table = ormer($post);
 
 			$custom_slug = array(array(
 				_('Custom URL Slug'),
@@ -128,21 +129,20 @@ class Blog extends Admin_Controller
 					'name' => 'has_custom_slug',
 					'type' => 'checkbox',
 					'text' => _('Has Custom URL Slug'),
-					'help' => _('If you want to have a custom url slug or the comic\'s title is written with non-latin letters tick this.'),
+					'help' => _('If you want to have a custom url slug or the post\'s title is written with non-latin letters tick this.'),
 					'class' => 'jqslugcb'
 				)
 			));
 			array_splice($table, 2, 0, $custom_slug);
 
 			$table = tabler($table, FALSE, TRUE);
-			$data["form_title"] = _('Add New') . ' ' . _('Series');
+			$data["form_title"] = _('Add New') . ' ' . _('Post');
 			$data['table'] = $table;
 
-			$this->viewdata["extra_title"][] = _("Series");
+			$this->viewdata["extra_title"][] = _("Post");
 			$this->viewdata["extra_script"] = '<script type="text/javascript" src="'.base_url().'assets/js/form-extra.js"></script>';
 			$this->viewdata["main_content_view"] = $this->load->view("admin/form.php", $data, TRUE);
 			$this->load->view("admin/default.php", $this->viewdata);
-		}
 	}
 
 

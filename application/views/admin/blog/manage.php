@@ -22,14 +22,14 @@ $CI->buttoner = array(
 	<hr class="clear"/>
 	<?php echo buttoner(); ?>
 
-	<div class="list comics">
+	<div class="list posts">
 		<?php
 		foreach ($posts as $post)
 		{
 			echo '<div class="item">
 				<div class="title"><a href="'.site_url("admin/blog/post/".$post->stub).'">'.$post->name.'</a></div>
 				<div class="smalltext">'._('Quick tools').':
-					<a href="'.site_url("admin/blog/delete/post/".$post->id).'" onclick="confirmPlug(\''.site_url("admin/blog/delete/post/".$post->id).'\', \''._('Do you really want to delete this serie and its chapters?').'\'); return false;">'._('Delete').'</a> |
+					<a href="'.site_url("admin/blog/delete/post/".$post->id).'" onclick="confirmPlug(\''.site_url("admin/blog/delete/post/".$post->id).'\', \''._('Do you really want to delete this post?').'\'); return false;">'._('Delete').'</a> |
 					<a href="'.site_url("blog/".$post->stub).'">'._('Read').'</a>
 				</div>';
 			echo '</div>';

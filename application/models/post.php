@@ -7,7 +7,7 @@ class Post extends DataMapper
 {
 
 	static $cached = array();
-	var $has_one = array('user');
+	var $has_one = array();
 	var $has_many = array();
 	var $validation = array(
 		'name' => array(
@@ -99,7 +99,7 @@ class Post extends DataMapper
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
-		// Check if the user is allowed to see protected chapters.
+		// Check if the user is allowed to see protected posts.
 		if (!$CI->tank_auth->is_allowed())
 		{
 			$this->where('hidden', 0);
@@ -168,7 +168,7 @@ class Post extends DataMapper
 		// Get the CodeIgniter instance, since it isn't set in this file.
 		$CI = & get_instance();
 
-		// Check if the user is allowed to see protected chapters.
+		// Check if the user is allowed to see protected posts.
 		if (!$CI->tank_auth->is_allowed())
 			$this->where('hidden', 0);
 
@@ -217,7 +217,7 @@ class Post extends DataMapper
 
 
 	/**
-	 * Removes series from database, all its pages, chapters, and its directory.
+	 * Removes posts from database.
 	 * There's no going back from this!
 	 *
 	 * @author	Woxxy
@@ -255,14 +255,9 @@ class Post extends DataMapper
 	 */
 	public function update_post_db($data = array())
 	{
-
-		// Check if we're updating or creating a new series by looking at $data["id"].
-		// False is returned if the chapter ID was not found.
-		if (isset($data["id"]) && $data['id'] != '')
-		{
+		if (isset($data["id"]) && $data['id'] != '') {
 			$this->where("id", $data["id"])->get();
-			if ($this->result_count() == 0)
-			{
+			if ($this->result_count() == 0) {
 				set_notice('error', _('The post you wanted to edit doesn\'t exist.'));
 				log_message('error', 'update_post_db: failed to find requested id');
 				return false;
@@ -270,9 +265,7 @@ class Post extends DataMapper
 			// Save the stub in a variable in case it gets changed, so we can change folder name
 			$old_stub = $this->stub;
 			$old_name = $this->name;
-		}
-		else
-		{
+		} else {
 			// let's set the creator name if it's a new entry
 			$this->creator = $this->logged_id();
 		}
@@ -325,7 +318,6 @@ class Post extends DataMapper
 		}
 
 		// Make so there's no intersecting stubs, and make a stub with a number in case of duplicates
-		// In case this chapter already has a stub and it wasn't changed, don't change it!
 		if ((!isset($this->id) || $this->id == '') || (isset($old_stub) && $old_stub != $this->stub))
 		{
 			$i = 1;
@@ -382,11 +374,10 @@ class Post extends DataMapper
 
 
 	/**
-	 * Removes the series from the database, but before it removes all the
-	 * related chapters and their pages from the database (not the files).
+	 * Removes the post from the database
 	 *
 	 * @author	Woxxy
-	 * @return	object a copy of the series that has been deleted
+	 * @return	object a copy of the posts that has been deleted
 	 */
 	public function remove_post_db()
 	{
@@ -402,191 +393,6 @@ class Post extends DataMapper
 		return $temp;
 	}
 
-
-	public function check($repair = FALSE, $recursive = FALSE)
-	{
-		$dir = "content/comics/" . $this->directory() . "/";
-		$errors = array();
-		if (!is_dir($dir))
-		{
-			$errors[] = 'comic_directory_not_found';
-			set_notice('warning', _('No directory found for:') . ' ' . $this->name . ' (' . $this->directory() . ')');
-			log_message('debug', 'check: comic directory missing at ' . $dir);
-
-			if ($repair)
-			{
-				// the best we can do is removing the database entry
-				$this->remove_comic_db();
-			}
-		}
-		else
-		{
-			// check that there are no unidentified files in the comic folder
-			$map = directory_map($dir, 1);
-			foreach ($map as $key => $item)
-			{
-				$item_path = $dir . $item;
-				if (is_dir($item_path))
-				{
-					// gotta split the directory to get stub and uniqid
-					$item_arr = explode('_', $item);
-					$uniqid = end($item_arr);
-					$stub = str_replace('_' . $uniqid, '', $item);
-					$chapter = new Chapter();
-					$chapter->where('stub', $stub)->where('uniqid', $uniqid)->get();
-					if ($chapter->result_count() == 0)
-					{
-						$errors[] = 'comic_unidentified_directory_found';
-						set_notice('warning', _('Unidentified directory found at:') . ' ' . $item_path);
-						log_message('debug', 'check: unidentified directory found at ' . $item_path);
-						if ($repair)
-						{
-							// you have to remove all the files in the folder first
-							delete_files($item_path, TRUE);
-							rmdir($item_path);
-						}
-					}
-				}
-				else
-				{
-					if ($item != $this->thumbnail && $item != 'thumb_' . $this->thumbnail)
-					{
-						$ext = strtolower(substr($item, -4));
-
-						if (in_array($ext, array('.zip')))
-						{
-							$archive = new Archive();
-							$archive->where('comic_id', $this->id)->where('filename', $item)->get();
-							if ($archive->result_count())
-							{
-								continue;
-							}
-						}
-
-						// if it's not the thumbnail image, it's an unidentified file
-						$errors[] = 'comic_unidentified_file_found';
-						set_notice('warning', _('Unidentified file found at:') . ' ' . $item_path);
-						log_message('debug', 'check: unidentified file found at ' . $item_path);
-						if ($repair)
-						{
-							unlink($item_path);
-						}
-					}
-				}
-			}
-		}
-
-		return $errors;
-	}
-
-
-	public function check_external($repair = FALSE, $recursive = FALSE)
-	{
-		$this->load->helper('directory');
-
-		// check if all that is inside is writeable
-		if (!$this->check_writable('content/comics/'))
-		{
-			return FALSE;
-		}
-
-		// check that every folder has a correpsonding comic
-		$map = directory_map('content/comics/', 1);
-		foreach ($map as $key => $item)
-		{
-			// gotta split the directory to get stub and uniqid
-			$item_arr = explode('_', $item);
-			$uniqid = end($item_arr);
-			$stub = str_replace('_' . $uniqid, '', $item);
-			$comic = new Comic();
-			$comic->where('stub', $stub)->where('uniqid', $uniqid)->get();
-			if ($comic->result_count() == 0)
-			{
-				$errors[] = 'comic_entry_not_found';
-				set_notice('warning', _('No database entry found for:') . ' ' . $stub);
-				log_message('debug', 'check: database entry missing for ' . $stub);
-				if ($repair)
-				{
-					if (is_dir('content/comics/' . $item))
-					{
-						// you have to remove all the files in the folder first
-						delete_files('content/comics/' . $item, TRUE);
-						rmdir('content/comics/' . $item);
-					}
-					else
-					{
-						unlink('content/comics/' . $item);
-					}
-				}
-			}
-		}
-
-		// check the database entries
-		$comics = new Comic();
-		$comics->get();
-		foreach ($comics->all as $key => $comic)
-		{
-			$comic->check($repair);
-		}
-
-		// if recursive, this will go through a through (and long) check of all chapters
-		if ($recursive)
-		{
-			$chapters = new Chapter();
-			$chapters->get_iterated();
-			foreach ($chapters as $chapter)
-			{
-				$chapter->check($repair);
-			}
-
-			// viceversa, check that all the database entries have a matching file
-			$pages = new Page();
-			$pages->get_iterated();
-			foreach ($pages as $page)
-			{
-				$page->check($repair);
-			}
-		}
-	}
-
-
-	private function check_writable($path)
-	{
-		$map = directory_map($path, 1);
-		foreach ($map as $key => $item)
-		{
-			if (is_dir($path . $item))
-			{
-				// check if even the dir itself is writable
-				if (!is_writable($path . $item . '/'))
-				{
-					$errors[] = 'non_writable_directory';
-					set_notice('warning', _('Found a non-writable directory.'));
-					log_message('debug', 'check: non-writable directory found: ' . $item);
-					return FALSE;
-				}
-
-				// use the recursive check function
-				if (!$this->check_writable($path . $item . '/'))
-				{
-					return FALSE;
-				}
-			}
-			else
-			{
-				if (!is_writable($path . $item))
-				{
-					$errors[] = 'comic_non_writable_file';
-					set_notice('warning', _('Found a non-writable file.'));
-					log_message('debug', 'check: non-writable file: ' . $item);
-					return FALSE;
-				}
-			}
-		}
-		return TRUE;
-	}
-
-
 	/**
 	 * Returns a ready to use html <a> link that points to the reader
 	 *
@@ -600,10 +406,10 @@ class Post extends DataMapper
 
 
 	/**
-	 * Returns a nicely built title for a chapter
+	 * Returns a nicely built title for a post
 	 *
 	 * @author	Woxxy
-	 * @return	string the formatted title for the chapter, with chapter and subchapter
+	 * @return	string the formatted title for the post
 	 */
 	public function title()
 	{
@@ -612,10 +418,10 @@ class Post extends DataMapper
 
 
 	/**
-	 * Returns the href to the chapter editing
+	 * Returns the href to the post editing
 	 *
 	 * @author	Woxxy
-	 * @return	string href to chapter editing
+	 * @return	string href to post editing
 	 */
 	public function edit_href()
 	{
@@ -627,10 +433,10 @@ class Post extends DataMapper
 
 
 	/**
-	 * Returns the url to the chapter editing
+	 * Returns the url to the post editing
 	 *
 	 * @author	Woxxy
-	 * @return	string <a> to chapter editing
+	 * @return	string <a> to post editing
 	 */
 	public function edit_url()
 	{
@@ -668,5 +474,5 @@ class Post extends DataMapper
 
 }
 
-/* End of file blogposts.php */
-/* Location: ./application/models/blogposts.php */
+/* End of file post.php */
+/* Location: ./application/models/post.php */

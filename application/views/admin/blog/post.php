@@ -15,7 +15,10 @@ $this->buttoner[] = array(
 		echo form_close();
 	?>
 </div>
-
+<script>
+	CKEDITOR.replace( 'description' );
+	CKEDITOR.config.width = '95%';
+</script>
 <br/>
 
 <?php

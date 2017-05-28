@@ -281,7 +281,7 @@ class V1 extends REST_Controller
 
 			// the pretty array gets pages too: [comic][chapter][teams][pages]
 			$result = array();
-			$result['comic'] = $chapter->comic->to_array();
+			//$result['comic'] = $chapter->comic->to_array();
 			$result['chapter'] = $chapter->to_array();
 			$result['teams'] = array();
 			foreach ($chapter->teams as $team)
@@ -448,12 +448,19 @@ class V1 extends REST_Controller
 		}
 	}
 
+	/**
+	 * Returns all post and sseleccted one by id and stub
+	 *
+	 * Available filters: page, per_page (default:30, max:100), orderby
+	 * 
+	 * @author dvaJi
+	 */
 	function blog_get() {
 		if ($this->get('id')) {
 			$this->_check_id();
 			$post = new Post();
 			$post->where('id', $this->get('id'))->limit(1)->get();
-			$posts->get_users();
+			$post->get_users();
 
 		} else if ($this->get('stub')) { 
 			$post = new Post();

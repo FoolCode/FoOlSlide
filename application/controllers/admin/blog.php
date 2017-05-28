@@ -11,7 +11,7 @@ class Blog extends Admin_Controller
 		if (!($this->tank_auth->is_allowed()))
 			redirect('account');
 
-		// if this is a load balancer, let's not allow people in the series tab
+		// if this is a load balancer, let's not allow people in the blog tab
 		if (get_setting('fs_balancer_master_url'))
 			redirect('/admin/members');
 
@@ -69,7 +69,7 @@ class Blog extends Admin_Controller
 			$old_post_stub = $post->stub;
 			$post->update_post_db($this->input->post());
 
-			flash_notice('notice', sprintf(_('Updated series information for %s.'), $post->name));
+			flash_notice('notice', sprintf(_('Updated post information for %s.'), $post->name));
 			// Did we change the stub of the post? We need to redirect to the new page then.
 			if (isset($old_post_stub) && $old_post_stub != $post->stub)
 			{
@@ -96,6 +96,7 @@ class Blog extends Admin_Controller
 		$data['table'] = $table;
 		
 		$this->viewdata["extra_script"] = '<script type="text/javascript" src="'.base_url().'assets/js/form-extra.js"></script>';
+		$this->viewdata["extra_script"] = '<script type="text/javascript" src="'.base_url().'assets/ckeditor/ckeditor.js"></script>';
 		$this->viewdata["main_content_view"] = $this->load->view("admin/blog/post.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}

@@ -44,6 +44,7 @@ $route['rss.xml'] = "reader/feeds";
 $route['atom.xml'] = "reader/feeds/atom";
 $route['admin'] = "admin/series";
 $route['admin/series/series/(:any)'] = "admin/series/serie/$1";
+$route['admin/blog/post/(:any)'] = "admin/blog/post/$1";
 $route['admin/upgrade'] = 'admin/system/upgrade';
 $route['admin/members/members'] = 'admin/members/membersa';
 $route['account'] = "account/index/profile";
